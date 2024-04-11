@@ -1,0 +1,38 @@
+name: App Files Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - deploy-files
+
+env:
+  PROJECT_NAME: files
+  CF_ACCOUNT_ID: 434ca9e3f1f004a03f446ff5a527f384
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: 21
+          cache: "yarn"
+
+      - name: Build
+        run: |
+          yarn install --immutable
+          yarn ${{ env.PROJECT_NAME }}:build
+
+      - name: Publish to Cloudflare Pages
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ env.CF_ACCOUNT_ID }}
+        run: |
+          yarn ${{ env.PROJECT_NAME }}:deploy --project-name="pages-${{ env.PROJECT_NAME }}"
