@@ -7,7 +7,8 @@
     "dev": "vite",
     "ts": "tsc --build --watch",
     "build": "tsc --build && vite build",
-    "prod": "vite preview"
+    "prod": "vite preview",
+    "deploy": "wrangler pages deploy './dist' --commit-dirty=true"
   },
   "dependencies": {
     "@baqhub/sdk-react": "*",
@@ -23,6 +24,7 @@
     "postcss": "8.4.38",
     "tailwindcss": "3.4.3",
     "typescript": "5.3.3",
-    "vite": "5.2.7"
+    "vite": "5.2.7",
+    "wrangler": "3.41.0"
   }
 }
