@@ -29,6 +29,7 @@ jobs:
           yarn lib-sdk-react:build
           yarn lib-sdk-react-dom:build
           yarn lib-cli:build
+          yarn lib-ui:build
 
       - name: Publish "lib-sdk"
         uses: JS-DevTools/npm-publish@v2
@@ -57,3 +58,10 @@ jobs:
           token: ${{ secrets.NPM_TOKEN }}
           access: public
           package: ./packages/lib-cli/
+
+      - name: Publish "lib-ui"
+        uses: JS-DevTools/npm-publish@v2
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          access: public
+          package: ./packages/lib-ui/

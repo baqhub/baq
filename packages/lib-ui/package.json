@@ -1,28 +1,33 @@
 {
   "name": "@baqhub/ui",
-  "private": true,
-  "version": "1.0.0",
+  "version": "0.1.8",
+  "description": "",
   "type": "module",
   "scripts": {
     "ts": "tsc --build --watch",
+    "build": "tsc --build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "main": "./build/src/index.js",
+  "types": "./build/src/index.d.ts",
   "exports": {
-    "./*": "./src/*"
+    ".": {
+      "import": "./build/src/index.js",
+      "require": "./build/src/index.js"
+    }
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Baqhub",
+  "license": "MIT",
   "dependencies": {
     "@baqhub/sdk": "^0.1.7",
     "@baqhub/sdk-react": "^0.1.7",
-    "@floating-ui/react": "0.26.10",
-    "lodash": "4.17.21",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "tailwind-styled-components": "2.2.0"
+    "@floating-ui/react": "^0.26.10",
+    "lodash": "^4.17.21",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwind-styled-components": "^2.2.0"
   },
   "devDependencies": {
-    "@baqhub/config-web": "*",
     "@types/lodash": "4.17.0",
     "@types/react": "18.2.73",
     "@types/react-dom": "18.2.23",

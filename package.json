@@ -20,6 +20,7 @@
     "lib-sdk-react-native:publish": "yarn workspace @baqhub/sdk-react-native publish",
     "lib-cli:build": "yarn workspace @baqhub/cli build",
     "lib-cli:test": "yarn workspace @baqhub/cli test",
+    "lib-ui:build": "yarn workspace @baqhub/ui build",
     "docs:dev": "yarn workspace @baqhub/docs-web dev",
     "docs:build": "yarn workspace @baqhub/docs-web build",
     "bird:dev": "yarn workspace @baqhub/bird-web dev",
@@ -37,7 +38,7 @@
     "messages:deploy": "yarn workspace @baqhub/messages-web deploy",
     "baq": "yarn workspace @baqhub/files-web baq && yarn workspace @baqhub/messages-web baq && yarn workspace @baqhub/bird-shared baq && yarn workspace @baqhub/emails-web baq && yarn workspace @baqhub/types baq"
   },
-  "author": "BaqHub",
+  "author": "Baqhub",
   "license": "MIT",
   "workspaces": [
     "packages/*"

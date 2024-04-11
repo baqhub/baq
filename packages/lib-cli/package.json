@@ -14,7 +14,7 @@
   "bin": {
     "baq": "./build/src/index.js"
   },
-  "author": "BaqHub",
+  "author": "Baqhub",
   "license": "MIT",
   "dependencies": {
     "@baqhub/sdk": "^0.1.5",

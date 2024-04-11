@@ -3,7 +3,7 @@
   "version": "0.1.1",
   "description": "",
   "type": "module",
-  "author": "BaqHub",
+  "author": "Baqhub",
   "license": "MIT",
   "dependencies": {
     "@baqhub/cli": "^0.1.3",

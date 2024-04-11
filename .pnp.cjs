@@ -1434,10 +1434,9 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./packages/lib-ui/",\
         "packageDependencies": [\
           ["@baqhub/ui", "workspace:packages/lib-ui"],\
-          ["@baqhub/config-web", "workspace:packages/lib-config-web"],\
           ["@baqhub/sdk", "workspace:packages/lib-sdk"],\
           ["@baqhub/sdk-react", "workspace:packages/lib-sdk-react"],\
-          ["@floating-ui/react", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:0.26.10"],\
+          ["@floating-ui/react", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:0.26.12"],\
           ["@types/lodash", "npm:4.17.0"],\
           ["@types/react", "npm:18.2.73"],\
           ["@types/react-dom", "npm:18.2.23"],\
@@ -2063,18 +2062,18 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@floating-ui/react", [\
-      ["npm:0.26.10", {\
-        "packageLocation": "../../../.yarn/berry/cache/@floating-ui-react-npm-0.26.10-7b2e81a708-10c0.zip/node_modules/@floating-ui/react/",\
+      ["npm:0.26.12", {\
+        "packageLocation": "../../../.yarn/berry/cache/@floating-ui-react-npm-0.26.12-0a0171b3c0-10c0.zip/node_modules/@floating-ui/react/",\
         "packageDependencies": [\
-          ["@floating-ui/react", "npm:0.26.10"]\
+          ["@floating-ui/react", "npm:0.26.12"]\
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:0.26.10", {\
-        "packageLocation": "./.yarn/__virtual__/@floating-ui-react-virtual-04d59a2a86/4/.yarn/berry/cache/@floating-ui-react-npm-0.26.10-7b2e81a708-10c0.zip/node_modules/@floating-ui/react/",\
+      ["virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:0.26.12", {\
+        "packageLocation": "./.yarn/__virtual__/@floating-ui-react-virtual-21233c25b2/4/.yarn/berry/cache/@floating-ui-react-npm-0.26.12-0a0171b3c0-10c0.zip/node_modules/@floating-ui/react/",\
         "packageDependencies": [\
-          ["@floating-ui/react", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:0.26.10"],\
-          ["@floating-ui/react-dom", "virtual:04d59a2a864c7d5afbb296b64ca0a63cf8b87e3a7d33dccc25cebf4ca25f64480206bf9ee1904099f734c07e9549e3c59114ecbe43ed66e3b589846886f9c277#npm:2.0.8"],\
+          ["@floating-ui/react", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:0.26.12"],\
+          ["@floating-ui/react-dom", "virtual:21233c25b2efa0811ff3e54e4ed6b7744de32f01f912f4441448e0d15f97f160df9d9c417c96234809a0474a182c6fb26b54feebfc64c4e5be16dd7bb042a2e3#npm:2.0.8"],\
           ["@floating-ui/utils", "npm:0.2.1"],\
           ["@types/react", "npm:18.2.73"],\
           ["@types/react-dom", "npm:18.2.23"],\
@@ -2099,10 +2098,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:04d59a2a864c7d5afbb296b64ca0a63cf8b87e3a7d33dccc25cebf4ca25f64480206bf9ee1904099f734c07e9549e3c59114ecbe43ed66e3b589846886f9c277#npm:2.0.8", {\
-        "packageLocation": "./.yarn/__virtual__/@floating-ui-react-dom-virtual-32c49f03bf/4/.yarn/berry/cache/@floating-ui-react-dom-npm-2.0.8-adede82f46-10c0.zip/node_modules/@floating-ui/react-dom/",\
+      ["virtual:21233c25b2efa0811ff3e54e4ed6b7744de32f01f912f4441448e0d15f97f160df9d9c417c96234809a0474a182c6fb26b54feebfc64c4e5be16dd7bb042a2e3#npm:2.0.8", {\
+        "packageLocation": "./.yarn/__virtual__/@floating-ui-react-dom-virtual-9c9a06342a/4/.yarn/berry/cache/@floating-ui-react-dom-npm-2.0.8-adede82f46-10c0.zip/node_modules/@floating-ui/react-dom/",\
         "packageDependencies": [\
-          ["@floating-ui/react-dom", "virtual:04d59a2a864c7d5afbb296b64ca0a63cf8b87e3a7d33dccc25cebf4ca25f64480206bf9ee1904099f734c07e9549e3c59114ecbe43ed66e3b589846886f9c277#npm:2.0.8"],\
+          ["@floating-ui/react-dom", "virtual:21233c25b2efa0811ff3e54e4ed6b7744de32f01f912f4441448e0d15f97f160df9d9c417c96234809a0474a182c6fb26b54feebfc64c4e5be16dd7bb042a2e3#npm:2.0.8"],\
           ["@floating-ui/dom", "npm:1.6.1"],\
           ["@types/react", "npm:18.2.73"],\
           ["@types/react-dom", "npm:18.2.23"],\

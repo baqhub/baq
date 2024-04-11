@@ -7,8 +7,7 @@
     "baseUrl": "./src"
   },
   "include": [
-    "src",
-    "tailwind.config.ts"
+    "src"
   ],
   "references": [
     {

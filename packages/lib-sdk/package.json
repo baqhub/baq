@@ -18,7 +18,7 @@
       "require": "./build/cjs/src/index.js"
     }
   },
-  "author": "BaqHub",
+  "author": "Baqhub",
   "license": "MIT",
   "dependencies": {
     "@noble/curves": "^1.4.0",
