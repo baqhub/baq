@@ -1,0 +1,48 @@
+export const metadata = {
+  id: "15c9fa81",
+  title: "HEAD entity",
+  summary:
+    "Perform discovery on an entity to get the Entity record.",
+};
+
+# HEAD entity
+
+Perform discovery on an [entity](deae588f#entity) to get the user's [Entity record](375c4ea9).
+
+```httpcli
+HEAD https://alice.baq.run
+```
+
+{props.toc}
+
+## Reference
+
+### Response
+
+This is a HEAD request, no response body is expected.
+
+#### Headers
+
+<props.properties>
+
+- **`Link: <...>; rel="https://baq.dev/rels/entity-record"`**
+
+  - Standard [Link header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Link) containing the URL to the user's Entity record.
+
+</props.properties>
+
+## Usage
+
+### Perform discovery on entity
+
+A HEAD request to an unknown entity is the first step to communicating with that user's server by finding its Entity record.
+
+```http
+HEAD / HTTP/2
+Host: alice.baq.run
+```
+
+```http
+HTTP/2 204 No Content
+Link: <https://baq.run/api/alice/records/simon.baq.run/529acdec9bcb48fc98c4be5271f0f698>; rel="https://baq.dev/rels/entity-record"
+```

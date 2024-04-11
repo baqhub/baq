@@ -1,0 +1,23 @@
+{
+  "name": "task",
+  "icon_name": "task_alt",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "content": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "description": "Title of the task.",
+            "type": "string",
+            "max_length": 128
+          },
+          "completed": {
+            "description": "Whether the task was completed.",
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}

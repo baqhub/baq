@@ -1,0 +1,11 @@
+export const Constants = {
+  schemasEntity: "schemas.baq.dev",
+  schemaTypeRecordId: "ba132234fc384e7b8d61bcd049e9f84f",
+  typesEntity: "types.baq.dev",
+  httpSignaturePrefix: "BAQ",
+  clientIdHeader: "X-Baq-Client-Id",
+  contentSha256Header: "X-Baq-Content-SHA256",
+  publicKeyHeader: "X-Baq-PublicKey",
+  lastEventIdHeader: "Last-Event-ID",
+  defaultPageSize: 20,
+};

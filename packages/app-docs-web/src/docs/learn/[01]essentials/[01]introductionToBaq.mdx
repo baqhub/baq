@@ -1,0 +1,82 @@
+export const metadata = {
+  id: "9ab92fc0",
+  title: "Introduction to BAQ",
+};
+
+# Introduction to BAQ
+
+BAQ (pronounced `/bAk/`, like "back") is a federated app platform. It lets developers build connected apps with little to no backend infrastructure while allowing end users to be in control of their own data. It's designed around the following principles:
+
+- **Keep users in control**. They decide what people, apps, and servers to trust with their data and can move or revoke that access whenever they please. Their preference of apps and servers do not dictate who they can communicate with.
+
+- **Help developers make great apps**. Apps built with the SDK are local-first, cloud-synchronized, and compatible across platforms. Developers can also re-use data from other apps instead of starting from scratch, all with familiar technology.
+
+- **Any data can be social**. With the flick of a switch, any piece of data can be shared with close friends, or with everyone else in the world! Build social apps just like any other app, at no extra cost to developers.
+
+## Terminology
+
+- **User**. Actor in the BAQ ecosystem, most often a single person.
+
+- **Entity**. Domain name that uniquely represents a user.
+
+- **Record**. Single structured data object, like a row or document in a database.
+
+- **Blob**. Single binary object.
+
+- **Link**. Relationship between a record and other records, blobs, and users.
+
+- **Server**. Web service responsible for hosting the user's records and propagating them to other servers as needed. A user can migrate from one server to another.
+
+- **App**. Client application or web service that communicates with the user's server to access its records.
+
+(Graph with every concept above.)
+
+## Types of BAQ apps
+
+BAQ can be used to build all kinds of apps, but our efforts so far have been focused on the three following use-cases:
+
+- **Sync privately**. Synchronize data between clients, and back it up to the cloud. Photos, savegames, settings sync.
+
+- **Share selectively**. Replicate data between two or more people. Messaging, collaboration on tasks/calendars/docs, turn-based games.
+
+- **Publish publicly**. Distribute data to everyone and subscribe to other people's feed. Blogs, podcasts, social networks.
+
+SDKs are available to help build [React and React Native apps](9b40fdec), but the [HTTP API](50c614b0) can be accessed with any tech stack to make web, desktop, and mobile apps.
+
+## What problem does it solve?
+
+Developers today are faced with a difficult choice when wanting to build new applications:
+
+1. Build a local app and miss out on many features expected from modern software.
+
+2. Use a platform-specific API like iCloud sync. This often works poorly and locks you into the corresponding ecosystem.
+
+3. Build on top of popular service and social networks. This is great to capitalize on existing data and network effects, but as we've seen with Twitter and Reddit it doesn't always end well.
+
+4. Use a backend as a service (BaaS) platform like Firebase. This requires a lot of trust in that one service continuing to exist and handling your users' data responsibly, while also involving some level of lock-in.
+
+5. Build a custom backend service. While this offers the most control, it can be _a lot of work_ and comes at a cost. It's also far from ideal for end users who start with a blank slate and end up with siloed data that's incompatible with other apps.
+
+These all require significant compromise in some of the following categories: time to market, developer control, developer and user lock-in, first time experience, user agency, and so on.
+
+BAQ strives to find the right balance between developers, server operators, and end users to enable a new generation of connected apps that are faster to build, benefit from other apps existing, and respect user privacy and choice.
+
+## Reasons to use BAQ
+
+Unique advantages when it comes to both developer productivity…
+
+- **Almost serverless**. Focus on building a great app, not on scaling infrastructure. And the best part: it doesn't cost a cent.
+
+- **Your app, your destiny**. Don't put your fate in the hands of a single third party. No one can take away the BAQ API access.
+
+- **Re-use existing data**. Don't start from scratch, re-use popular record types to share data with other apps and contribute to the virtuous cycle.
+
+…and user experience:
+
+- **Unified login**. No need for a new account for every app out there, everything goes through your BAQ server.
+
+- **Your data, your way**. Decide who to trust with your precious communications and memories, and use the apps that best suit your needs to access it all.
+
+- **One planet, one BAQ**. Say goodbye to walled gardens and interact with anyone else, regardless of their choices of apps and servers.
+
+Sounds exciting? Time to [find a server](2fd35386) and [build an app](04abc82e)!

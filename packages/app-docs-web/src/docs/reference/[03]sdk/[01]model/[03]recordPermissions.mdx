@@ -1,0 +1,116 @@
+export const metadata = {
+  id: "3d6c2ea8",
+  title: "RecordPermissions",
+  summary: "Who can read and write a record.",
+};
+
+# RecordPermissions
+
+Access control for a record.
+
+```ts
+const permissions = {
+  read: [{entity: "julie.baq.run"}],
+};
+```
+
+{props.toc}
+
+## Reference
+
+### `RecordPermissions`
+
+#### Static fields
+
+<props.properties>
+
+- **`public`** <props.pill>RecordPermissions</props.pill>
+
+  - Public permissions preset.
+
+  - ```json
+    {"read": "public"}
+    ```
+
+- **`private`** <props.pill>RecordPermissions</props.pill>
+
+  - Private permissions preset.
+
+- **<props.code>readonly(author: <props.pill href="deae588f#entity">Entity</props.pill>, others: <props.pill href="deae588f#entity">Entity[]</props.pill>)</props.code>**: <props.pill>RecordPermissions</props.pill>
+
+  - Create read-only permissions for specific users.
+
+- **<props.code>toReadEntities(permissions: <props.pill>RecordPermissions</props.pill>)</props.code>**: <props.pill href="deae588f#entity">Entity[]</props.pill>
+
+  - Find the entities with read access in a permissions object.
+
+</props.properties>
+
+#### Properties
+
+<props.properties>
+
+- **`read`** <props.pill href="880d482d">"public" | EntityLink[]</props.pill> _optional_
+
+  - Read permissions for the record.
+
+  - Accepts a special value of `"public"`.
+
+  - Defaults to the record's author.
+
+- **`write`** <props.pill href="880d482d">EntityLink[]</props.pill> _optional_
+
+  - Write (update / delete) permissions for the record.
+
+  - Every entity in `write` should be included in `read`.
+
+  - Default to the record's author.
+
+- **`notify`** <props.pill href="880d482d">EntityLink[]</props.pill> _optional_
+
+  - Entities to notify.
+
+  - Defaults to the entities in `read`.
+
+</props.properties>
+
+## Usage
+
+### Permissions preset
+
+For common use-cases, presets are provided on the `RecordPermissions` type. Here we create a public [Post record](/todo) visible to all.
+
+```ts
+import {RecordPermissions} from "@baqhub/sdk";
+import {PostRecord} from "./baq/postRecord.js";
+
+const postRecord = PostRecord.new(
+  "julie.baq.run",
+  {text: "Hi everyone!"},
+  {permissions: RecordPermissions.public}
+);
+```
+
+### Custom permissions
+
+For more advanced situations, permissions can be crafted by hand to fit the need. Here we create a [Task record](/todo) with read access for the author and more two people, but we only notify one of them.
+
+```ts
+import {TaskRecord} from "./baq/taskRecord.js";
+
+const taskRecord = TaskRecord.new(
+  "paul.baq.run",
+  {
+    title: "Make new BAQ app!",
+    completed: false,
+  },
+  {
+    read: [
+      {entity: "paul.baq.run"},
+      {entity: "henry.baq.run"},
+      {entity: "sean.baq.run"},
+    ],
+    notify: [{entity: "henry.baq.run"}],
+  }
+);
+```

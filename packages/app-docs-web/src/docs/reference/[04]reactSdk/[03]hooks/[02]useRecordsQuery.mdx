@@ -1,0 +1,245 @@
+export const metadata = {
+  id: "fb201974",
+  title: "useRecordsQuery",
+  summary: "Fetch dynamically updated records.",
+};
+
+# useRecordsQuery
+
+This is a React hook to get a dynamically updated list of records.
+
+```jsx
+const recordsQuery = useRecordsQuery({filter: {...}});
+```
+
+{props.toc}
+
+## Reference
+
+### `useRecordsQuery()`
+
+Call `useRecordsQuery` at the top level of your component to get records back.
+
+```jsx
+import {useRecordsQuery} from "./baq/store.js";
+import {TodoRecord} from "./baq/todoRecord.js";
+import {Q, Record} from "@baqhub/sdk";
+
+function TodoList() {
+  const {isLoading, records} = useRecordsQuery({
+    filter: Q.type(TodoRecord),
+  });
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  return (
+    <List>
+      {records.map(r => (
+        <Todo key={Record.toKey(r)} record={r} />
+      ))}
+    </List>
+  );
+}
+```
+
+#### Parameters
+
+<props.properties>
+
+- **`query`** <props.pill href="/todo">RecordQuery</props.pill>
+
+  - Query to run against the store and user's server.
+
+- **`options`** <props.pill href="#userecordsqueryoptions">UseRecordsQueryOptions</props.pill> _optional_
+
+  - Advanced controls over the behavior of the hook.
+
+</props.properties>
+
+#### Returns
+
+This hook returns a [`UseRecordsQueryResult`](#userecordsqueryresult) object.
+
+#### Notes
+
+- The hook automatically updates when records change.
+
+- If in `fetch` (default) or `sync` mode, a persistent connection to the user's server ensures realtime record updates.
+
+- Proxied queries are not supported.
+
+### `UseRecordsQueryOptions`
+
+<props.properties>
+
+- **`mode`** <props.pill>enum</props.pill> _optional_
+
+  - Control the behavior of the hook.
+
+    - `"fetch"` _default_ : Perform the query and listen for realtime updates after that.
+    - `"sync"`: Only listen for realtime updates without performing the initial query.
+    - `"local"`: Only query the local store.
+    - `"local-tracked"`: Only query the local store and mark this query as "loaded".
+
+</props.properties>
+
+### `UseRecordsQueryResult`
+
+<props.properties>
+
+- **`isLoading`** <props.pill>boolean</props.pill>
+
+  - Whether the query is currently being performed.
+
+- **`error`** <props.pill href="/todo">BaqError</props.pill> _optional_
+
+  - An error that happened while performing the query, if any.
+
+- **`records`** <props.pill href="/todo">Record[]</props.pill>
+
+  - Resulting array of records.
+
+    This always has a value from querying the local store.
+
+    The collection is updated when new records are fetched/received.
+
+- **`deferredRecords`** <props.pill href="/todo">Record[]</props.pill>
+
+  - Same as `records` but when the `query` changes it only gets updated after the request completes. This is helpful to keep the previous view on screen while loading new data.
+
+- **`getRecords`** <props.pill href="/todo">() => Record[]</props.pill>
+
+  - Same as `records`, but compatible with [React Suspense](https://react.dev/reference/react/Suspense).
+
+    This function throws a promise while the request is in flight.
+
+    The promise completes when the response is received.
+
+- **`getDeferredRecords`** <props.pill href="/todo">() => Record[]</props.pill>
+
+  - Same as `deferredRecords`, but compatible with [React Suspense](https://react.dev/reference/react/Suspense).
+
+</props.properties>
+
+## Usage
+
+### Listen for future changes
+
+The `useRecordsQuery` hook makes it simple to keep the user interface in sync with changes happening on the server or elsewhere in the app. This can be used to replicate data in between multiple clients, but also to implement social features like messaging.
+
+In this example, we list all message records. When new messages are received on the server, the component will re-render with the new content.
+
+```jsx
+import {useRecordsQuery} from "./baq/store.js";
+import {MessageRecord} from "./baq/messageRecord.js";
+import {Q, Record} from "@baqhub/sdk";
+
+function Conversation() {
+  const {isLoading, getRecords} = useRecordsQuery({
+    filter: Q.type(MessageRecord),
+  });
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  return (
+    <Messages>
+      {getRecords().map(r => (
+        <Message key={Record.toKey(r)} record={r} />
+      ))}
+    </Messages>
+  );
+}
+```
+
+### Navigate by updating the query
+
+When the provided query changes, the `useRecordsQuery` hook refreshes accordingly. This makes it possible to implement navigation within content of the same type by simply updating the content of the query.
+
+In this example, we keep track of the current folder in a folder hierarchy to display its content. When the user clicks on a sub-folder, we "navigate" to it by updating the query.
+
+```jsx
+import {useState} from "react";
+import {Q} from "@baqhub/sdk";
+import {useRecordsQuery} from "./baq/store.js";
+import {FolderRecord} from "./baq/folderRecord.js";
+import {FileRecord} from "./baq/fileRecordType.js";
+
+function FolderContent() {
+  // Keep track of the currently selected folder.
+  const [folderLink, setFolderLink] = useState();
+
+  const {isLoading, records} = useRecordsQuery({
+    filter: Q.and(
+      // Filter records by type to only get folders and files.
+      Q.or(Q.type(FolderRecord), Q.type(FileRecord)),
+      // Filter records whose parent is the current folder.
+      folderLink
+        ? Q.record("content.parent", folderLink)
+        : Q.empty("content.parent")
+    ),
+  });
+
+  // On click, "navigate" by updating the current folder.
+  const onFolderClick = folderRecord => {
+    setFolderLink(Record.toLink(folderRecord));
+  };
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  return (
+    <List>
+      {records.map(r =>
+        // Display records differently depending on their type.
+        Record.hasType(r, folderRecordType) ? (
+          <Folder
+            key={Record.toKey(r)}
+            record={r}
+            onClick={() => onFolderClick(r)}
+          />
+        ) : (
+          <File key={Record.toKey(r)} record={r} />
+        )
+      )}
+    </List>
+  );
+}
+```
+
+### Fallback with React Suspense
+
+Thanks to the integration with React Suspense, it's possible to use `useRecordsQuery` in combination with other Suspense goodies like `useDeferredQuery`.
+
+```jsx
+import {useRecordsQuery} from "./baq/store.js";
+import {TodoRecord} from "./baq/todoRecord.js";
+import {Q, Record} from "@baqhub/sdk";
+
+function TodoApp() {
+  const {getRecords} = useRecordsQuery({
+    filter: Q.type(TodoRecord),
+  });
+
+  return (
+    <Suspense fallback={<Loading />}>
+      <TodoList getRecords={getRecords} />
+    </Suspense>
+  );
+}
+
+function TodoList({getRecords}) {
+  const records = getRecords();
+  return (
+    <List>
+      {records.map(r => (
+        <Todo key={Record.toKey(r)} record={r} />
+      ))}
+    </List>
+  );
+}
+```

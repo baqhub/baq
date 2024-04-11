@@ -1,0 +1,293 @@
+export const metadata = {
+  id: "4d23cbf0",
+  title: "Authentication",
+  summary: "Different ways to authenticate HTTP requests.",
+};
+
+# Authentication
+
+Different ways to authenticate HTTP requests.
+
+{props.toc}
+
+## Reference
+
+### BAQ Authentication Scheme
+
+Apps create and hold a public/private key pair that they use to sign requests. The private key is never shared with anyone.
+
+<props.compactList>
+
+- An app generates a new key pair.
+
+- The public key is shared with the server during [registration](/todo).
+
+- Every request is signed with the private key.
+
+</props.compactList>
+
+### `Authorization` header
+
+This is the standard way to authenticate requests for the HTTP API. It follows the BAQ Authentication Scheme and should be a string with the following format:
+
+```http
+Authorization: BAQ algorithm="..." ts="..." nonce="..." id="..." headers="..." signature="..."
+```
+
+#### Parameters
+
+<props.properties>
+
+- **`id`** <props.pill>string</props.pill>
+
+  - Record ID of the [App record](02acb69c) for the requesting app.
+
+- **`algorithm`** <props.pill>enum</props.pill>
+
+  - Algorithm used to sign this request.
+
+    - `ed25519`: Only algorithm currently supported.
+
+- **`ts`** <props.pill>int</props.pill>
+
+  - Current time as a millisecond [UNIX timestamp](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#the_epoch_timestamps_and_invalid_date).
+
+- **`nonce`** <props.pill>string</props.pill>
+
+  - Random string unique to this request.
+
+  - Maximum of **10** characters.
+
+- **`headers`** <props.pill>string</props.pill>
+
+  - List of special headers used in this request.
+
+  - Lowercase and comma-separated.
+
+  - Accepted headers:
+
+    - `range`
+    - `x-baq-client-id`
+    - `x-baq-content-sha256`
+    - `x-baq-publickey`
+    - `last-event-id`
+
+- **`signature`** <props.pill>string</props.pill>
+
+  - Base64 encoded signature.
+
+</props.properties>
+
+#### Signature
+
+Signing the request is done by assembling a signature input string and running it through the signing algorithm. It has the following format:
+
+```
+baq.request
+{algorithm}
+{ts}
+{nonce}
+{authorization_id}
+{HTTP_METHOD}
+{path_and_query}
+{host}
+{port}
+{header1=value1}
+{header2=value2}
+
+```
+
+<props.compactList>
+
+- `authorization_id` is obtained through the [authorization flow](/todo).
+
+- `HTTP_METHOD` is all uppercase.
+
+- Each line ends with a newline `\n` character.
+
+- Each header has its own line.
+
+- Order of headers is the same as in `Authorization` value.
+
+</props.compactList>
+
+### Bearer token
+
+There are situations when it's not possible to supply a custom header value. For such cases, the protocol allows a `bearer` query string parameter to be generated that allows anyone in its possession to access the corresponding resource through a GET request for a limited time.
+
+<props.compactList>
+
+- _Example 1:_ Set the source of an `<img>` tag.
+
+- _Example 2:_ Make the browser download a file.
+
+- _Example 3:_ Allow a blob to be cached.
+
+</props.compactList>
+
+#### Token value
+
+The token itself is a Base64 encoded string with the following format:
+
+```
+{id}\{ts}\{signature}
+```
+
+#### Parameters
+
+<props.properties>
+
+- **`id`** <props.pill>string</props.pill>
+
+  - Record ID of the [App record](02acb69c) for the requesting app.
+
+- **`ts`** <props.pill>int</props.pill>
+
+  - Expiration time as a millisecond [UNIX timestamp](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#the_epoch_timestamps_and_invalid_date).
+
+- **`signature`** <props.pill>string</props.pill>
+
+  - Base64 encoded signature.
+
+</props.properties>
+
+#### Signature
+
+Signing the request is done by assembling a signature input string and running it through the signing algorithm. It has the following format:
+
+```
+baq.url
+{algorithm}
+{ts}
+
+{authorization_id}
+GET
+{path_and_query}
+{host}
+{port}
+
+```
+
+<props.compactList>
+
+- `authorization_id` is obtained through the [authorization flow](/todo).
+
+- Each line ends with a newline `\n` character.
+
+- The empty line is because tokens don't have a `nonce`.
+
+</props.compactList>
+
+## Usage
+
+### Build an Authorization header
+
+Most requests to the HTTP API are authenticated with the `Authorization` header. Here, we want to authenticate a request to fetch a single record.
+
+Initial data:
+
+```
++----------------------+----------------------------------------------+
+| App record ID        | 4bae3e86828a44fc96b78cd0d5a4b7ae             |
++----------------------+----------------------------------------------+
+| Authorization ID     | 430aaa3623da40c9a548182b80453656             |
++----------------------+----------------------------------------------+
+| Private key (Base64) | IaqavlYBOqnUpqGfZ0cSH/7WgA3fNjGwZNpf65cM9Hc= |
++----------------------+----------------------------------------------+
+| Timestamp            | 1710884802348                                |
++----------------------+----------------------------------------------+
+| Nonce                | 573hf2jg                                     |
++----------------------+----------------------------------------------+
+```
+
+From these, we build the signature input. We add a `X-Baq-Client-Id` header with a random value to uniquely identify our client.
+
+```
+baq.request
+ed25519
+1710884802348
+573hf2jg
+430aaa3623da40c9a548182b80453656
+GET
+/api/alice/records/alice.baq.run/430ed5e38a0c4002a62f81e497820c5c
+baq.run
+443
+x-baq-client-id=8fbf7696f25b4628bde73f46f4631d3f
+
+```
+
+We use the private key to sign that string, which results in:
+
+```
+wVdBX9VKGJHhWBWOwiT9NH5ELHgMYt36JFqN+aiPVbeCWyMT85KgjemVemKQxw2m0ZYMfsQ6kV92uraJkyUWCQ==
+```
+
+We can now perform the full request:
+
+```http
+GET /api/alice/records/alice.baq.run/430ed5e38a0c4002a62f81e497820c5c HTTP/2
+Host: baq.run
+X-Baq-Client-Id: 8fbf7696f25b4628bde73f46f4631d3f
+Authorization: id="4bae3e86828a44fc96b78cd0d5a4b7ae" algorithm="ed25519" ts="1710884802348" nonce="573hf2jg" headers="x-baq-client-id" signature="wVdBX9VKGJHhWBWOwiT9NH5ELHgMYt36JFqN+aiPVbeCWyMT85KgjemVemKQxw2m0ZYMfsQ6kV92uraJkyUWCQ=="
+```
+
+### Build a bearer token
+
+To set a blob as the source for an `<img>` tag and let the browser download it, we need to build a `bearer` token. Blobs can only be accessed through a record, so this will also be part of the URL.
+
+Initial data:
+
+```
++----------------------------+----------------------------------------------+
+| App record ID              | 4bae3e86828a44fc96b78cd0d5a4b7ae             |
++----------------------------+----------------------------------------------+
+| Authorization ID           | 430aaa3623da40c9a548182b80453656             |
++----------------------------+----------------------------------------------+
+| Private key (Base64)       | IaqavlYBOqnUpqGfZ0cSH/7WgA3fNjGwZNpf65cM9Hc= |
++----------------------------+----------------------------------------------+
+| Expiration timestamp (+2h) | 1710892002348                                |
++----------------------------+----------------------------------------------+
+```
+
+From these, we build the signature input.
+
+```
+baq.url
+ed25519
+1710892002348
+
+430aaa3623da40c9a548182b80453656
+GET
+/api/alice/records/alice.baq.run/430ed5e38a0c4002a62f81e497820c5c/blobs/66a045b452102c59d840ec097d59d9467e13a3f34f6494e539ffd32c1bb35f18/thumbnail.jpg
+baq.run
+443
+
+```
+
+We use the private key to sign that string, which results in:
+
+```
+XzYooYb6s1SxQp0EUrNDyg8KN6e84wX8FzKTQ3QTDbbFz7Y2j1MOJE+UlrXosxUw0dhDbRPB3ElozFs4RE79DA==
+```
+
+We can now build the `id\ts\signature` token:
+
+```
+4bae3e86828a44fc96b78cd0d5a4b7ae\1710892002348\XzYooYb6s1SxQp0EUrNDyg8KN6e84wX8FzKTQ3QTDbbFz7Y2j1MOJE+UlrXosxUw0dhDbRPB3ElozFs4RE79DA==
+```
+
+Once Base64 encoded this gives us:
+
+```
+NGJhZTNlODY4MjhhNDRmYzk2Yjc4Y2QwZDVhNGI3YWVcMTcxMDg5MjAwMjM0OFxYellvb1liNnMxU3hRcDBFVXJORHlnOEtONmU4NHdYOEZ6S1RRM1FURGJiRno3WTJqMU1PSkUrVWxyWG9zeFV3MGRoRGJSUEIzRWxvekZzNFJFNzlEQT09
+```
+
+Everything is now ready to display the image:
+
+```html
+<img
+  src="https://baq.run
+       /api/alice/records/alice.baq.run/430ed5e38a0c4002a62f81e497820c5c/blobs/66a045b452102c59d840ec097d59d9467e13a3f34f6494e539ffd32c1bb35f18/thumbnail.jpg
+       ?bearer=NGJhZTNlODY4MjhhNDRmYzk2Yjc4Y2QwZDVhNGI3YWVcMTcxMDg5MjAwMjM0OFxYellvb1liNnMxU3hRcDBFVXJORHlnOEtONmU4NHdYOEZ6S1RRM1FURGJiRno3WTJqMU1PSkUrVWxyWG9zeFV3MGRoRGJSUEIzRWxvekZzNFJFNzlEQT09"
+/>
+```

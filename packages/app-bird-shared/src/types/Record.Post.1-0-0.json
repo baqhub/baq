@@ -1,0 +1,171 @@
+{
+  "name": "post",
+  "icon_name": "rss_feed",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "content": {
+        "type": "union",
+        "schemas": [
+          {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string",
+                "min_length": 1,
+                "max_length": 500
+              },
+              "text_mentions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "mention": {
+                      "type": "entity_link",
+                      "min_permissions": [
+                        "read",
+                        "notify"
+                      ]
+                    },
+                    "index": {
+                      "type": "int",
+                      "min": 0,
+                      "description": "Start position of the mention in Unicode code points."
+                    },
+                    "length": {
+                      "type": "int",
+                      "min": 1,
+                      "description": "Length of the mention in Unicode code points."
+                    }
+                  }
+                },
+                "optional": true
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "images": {
+                "type": "array",
+                "min_items": 1,
+                "max_items": 4,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "small": {
+                      "type": "blob_link",
+                      "max_size": 81920,
+                      "content_types": [
+                        "image/jpeg"
+                      ]
+                    },
+                    "medium": {
+                      "type": "blob_link",
+                      "max_size": 614400,
+                      "content_types": [
+                        "image/jpeg"
+                      ]
+                    },
+                    "large": {
+                      "type": "blob_link",
+                      "max_size": 2097152,
+                      "content_types": [
+                        "image/jpeg"
+                      ]
+                    },
+                    "width": {
+                      "type": "int",
+                      "min": 1
+                    },
+                    "height": {
+                      "type": "int",
+                      "min": 1
+                    },
+                    "size": {
+                      "type": "int",
+                      "min": 0
+                    }
+                  }
+                }
+              },
+              "image_mentions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "mention": {
+                      "type": "entity_link",
+                      "min_permissions": [
+                        "read"
+                      ]
+                    },
+                    "position": {
+                      "type": "object",
+                      "properties": {
+                        "x": {
+                          "type": "int",
+                          "min": 0
+                        },
+                        "y": {
+                          "type": "int",
+                          "min": 0
+                        }
+                      }
+                    }
+                  }
+                },
+                "optional": true
+              }
+            }
+          },
+          {
+            "type": "union",
+            "strict": true,
+            "schemas": [
+              {
+                "type": "object",
+                "properties": {
+                  "reply_to_post": {
+                    "type": "record_link",
+                    "record_types": [
+                      {
+                        "entity": "{var:entity}",
+                        "record_id": "{var:record_id}"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "quote_post": {
+                    "type": "record_link",
+                    "record_types": [
+                      {
+                        "entity": "{var:entity}",
+                        "record_id": "{var:record_id}"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "permissions": {
+        "type": "object",
+        "properties": {
+          "read": {
+            "type": "tag_link",
+            "enum": [
+              "public"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

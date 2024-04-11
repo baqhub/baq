@@ -1,0 +1,192 @@
+export const metadata = {
+  id: "ee55634d",
+  title: "PUT record",
+  summary: "Update an existing record.",
+};
+
+# PUT record
+
+Update an existing record.
+
+```httpcli
+PUT https://baq.run/api/alice/records/{entity}/{record_id}
+```
+
+{props.toc}
+
+## Reference
+
+### Request
+
+Build the request URL by replacing the `{entity}` and `{record_id}` variables in the `record` endpoint URL template.
+
+#### Content
+
+<props.properties>
+
+- **`version`** <props.pill>object</props.pill> _optional_
+
+  - Version-specific properties:
+
+    <props.properties>
+
+    - **`parent_hash`** <props.pill href="deae588f#versionhash">VersionHash</props.pill> _optional_
+
+      - Hash of the record version to update.
+
+      - Defaults to the most recent version if missing.
+
+    - **`created_at`** <props.pill href="deae588f#recorddate">RecordDate</props.pill> _optional_
+
+      - Creation date of the record version.
+
+      - Defaults to the current date if missing.
+
+    </props.properties>
+
+- **`permissions`** <props.pill href="01735953#recordpermissions">RecordPermissions</props.pill> _optional_
+
+  - Permissions for the new record version.
+
+  - Defaults to the parent's permissions if missing.
+
+- **`type`** <props.pill href="041ee052">VersionLink</props.pill> _optional_
+
+  - Link to the [Type record](27a5d157) defining the record's schema.
+
+  - Defaults to the parent's type if missing.
+
+- **`content`** <props.pill>object</props.pill>
+
+  - Type-dependent content of the record.
+
+</props.properties>
+
+#### Parameters
+
+<props.properties>
+
+- **`include_links`** <props.pill>string[]</props.pill> _optional_
+
+  - Paths of links to include in the response (comma-separated).
+
+  - Supports the following special values:
+
+    - `entity`: Entity records for all entity links.
+
+    - `existential`: All records for existential record links.
+
+  - Defaults to `entity,existential`.
+
+</props.properties>
+
+#### Notes
+
+- Optimistic concurrency can be achieve by providing `version.parent_hash`: the request will fail if another version was published in the meantime.
+
+- This endpoint is idempotent if the following properties are provided:
+
+  <props.compactList>
+
+  - `version.parent_hash`
+
+  - `version.created_at`
+
+  </props.compactList>
+
+- All links in a new record will be validated and must point to existing and accessible entities, records, and blobs.
+
+- This endpoint is atomic and the record is guaranteed to be visible in all other queries once the request completes.
+
+### Response
+
+#### Content
+
+<props.properties>
+
+- **`record`** <props.pill href="01735953">Record</props.pill>
+
+  - Newly updated record.
+
+- **`linked_records`** <props.pill href="01735953">Record[]</props.pill>
+
+  - Linked records requested with `include_links`.
+
+</props.properties>
+
+## Usage
+
+### Update an existing record
+
+Only `content` is required to update a record. Other properties like `type` and `permissions` will inherit the parent record's values if omitted.
+
+```http
+PUT /api/alice/records/alice.baq.run/867deccbe7ac4adca4efc07fbe08af87 HTTP/2
+Host: baq.run
+Content-Type: application/json
+
+{
+  "content": {
+    "text": "Bye everyone!"
+  }
+}
+```
+
+We can see in the response that the server used the most recent version as `parent_hash` since we didn't provide one.
+
+```http
+HTTP/2 200 OK
+Content-Type: application/json
+
+{
+  "record": {
+    "author": {
+      "entity": "alice.baq.run"
+    },
+    "id": "867deccbe7ac4adca4efc07fbe08af87",
+    "source": "self",
+    "created_at": "2024-03-05T16:50:17.9080000Z",
+    "received_at": "2024-03-05T16:50:20.4850000Z",
+    "version": {
+      "author": {
+        "entity": "alice.baq.run"
+      },
+      "parent_hash": "563bebcafec0aea26d88384564d721b3026b27a42263200f7aee09366763630d",
+      "hash": "7cf11b6fc0444a4189153974124dc4dd20fe913dd23041c7a1595ce5bdb4383e",
+      "created_at": "2024-03-10T16:50:17.9080000Z",
+      "received_at": "2024-03-10T16:50:20.4850000Z"
+    },
+    "permissions": {
+      "read": "public"
+    },
+    "type": {
+      "entity": "types.baq.dev",
+      "record_id": "6ee7f69a90154b849bac528daa942bcd",
+      "version_hash": "93ca1149e00ab963ea4b29772769e20330c356bb4b6ae787d3af9168e81d1687"
+    },
+    "content": {
+      "text": "Bye everyone!"
+    }
+  },
+  "linked_records": []
+}
+```
+
+### Optimistic concurrency control
+
+To make sure we're not updating a record that was already updated by another client since the last time we fetched it, we can explicitly specify `parent_hash`. The request will now fail if the record was updated in the meantime.
+
+```http
+PUT /api/alice/records/alice.baq.run/867deccbe7ac4adca4efc07fbe08af87 HTTP/2
+Host: baq.run
+Content-Type: application/json
+
+{
+  "version": {
+    "parent_hash": "563bebcafec0aea26d88384564d721b3026b27a42263200f7aee09366763630d"
+  },
+  "content": {
+    "text": "Bye everyone!"
+  }
+}
+```

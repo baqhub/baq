@@ -1,0 +1,21 @@
+{
+  "name": "Files",
+  "type": "ts-react",
+  "path": "src/baq",
+  "record_types": {
+    "folder": {
+      "path": "src/types/Record.Folder.1-0-0.json",
+      "record_id": "3050fc130d4142a9994af0ef7c89099e",
+      "version_hash": "e8129092dd4d493b51c68e58e95d84fa67fbb0b58eafd00a11ce3ee6bc2eddd8",
+      "content_hash": "a54ea1137eeddc3d42ab2f869c45cabc"
+    },
+    "file": {
+      "path": "src/types/Record.File.1-0-0.json",
+      "record_id": "2b6f7bc8ffd54c8db8062700c040e04f",
+      "version_hash": "896f618da076825066710437f1c3b8115f4fdc636d3acab14669b29d525ce384",
+      "content_hash": "b96445976ae77724e66882fb52b2b451"
+    }
+  },
+  "description": "Manage your files in the cloud with ease.",
+  "website_url": "https://files.baq.dev"
+}

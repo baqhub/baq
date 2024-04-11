@@ -1,0 +1,155 @@
+export const metadata = {
+  id: "02acb69c",
+  title: "App Record",
+  summary: "Metadata and scope request for an application.",
+};
+
+# App Record
+
+Metadata and scope request for an application.
+
+```json
+{
+  "name": "Bird",
+  "description": "Micro-blogging client",
+  "icon": {...},
+  "uris": {...},
+  "scope_request": {...}
+}
+```
+
+{props.toc}
+
+## Reference
+
+### `AppRecord`
+
+A private [Record](01735953) that an application creates to identify itself with a server.
+
+#### Properties
+
+<props.properties>
+
+- **`name`** <props.pill>string</props.pill>
+
+  - Name of the application.
+
+- **`description`** <props.pill>string</props.pill> _optional_
+
+  - Short description of what the application does.
+
+- **`icon`** <props.pill href="70af90d6">BlobLink</props.pill> _optional_
+
+  - Icon of the application.
+
+  - Maximum size of **20kB**.
+
+- **`uris`** <props.pill href="#apprecorduris">AppRecordUris</props.pill>
+
+  - Map of endpoints the server should use to interact with the application.
+
+- **`scope_request`** <props.pill href="#apprecordscoperequest">AppRecordScopeRequest</props.pill>
+
+  - Authorization scope sought by this application.
+
+</props.properties>
+
+#### Notes
+
+- The App record is created by an application prior to the authorization flow.
+
+- An application can only update its own App record.
+
+### `AppRecordUris`
+
+#### Properties
+
+<props.properties>
+
+- **`redirect`** <props.pill href="deae588f#uri">URI</props.pill>
+
+  - URI to redirect to after the authorization flow.
+
+  - URL template variables:
+
+    - `{authorization_id}`: ID of the authorization record on flow success.
+
+- **`notify`** <props.pill href="deae588f#uri">URI</props.pill>
+
+  - Webhook URL to call when new records are available.
+
+- **`website`** <props.pill href="deae588f#uri">URI</props.pill>
+
+  - User-facing public website of the application.
+
+</props.properties>
+
+### `AppRecordScopeRequest`
+
+#### Properties
+
+<props.properties>
+
+- **`read`** <props.pill href="6fda79e8">RecordLink[]</props.pill> _optional_
+
+  - Record types to be allowed to read.
+
+- **`write`** <props.pill href="6fda79e8">RecordLink[]</props.pill> _optional_
+
+  - Record types to be allowed to write.
+
+- **`subscribe`** <props.pill href="6fda79e8">RecordLink[]</props.pill> _optional_
+
+  - Record types to be allowed to subscribe to.
+
+- **`import`** <props.pill href="6fda79e8">RecordLink[]</props.pill> _optional_
+
+  - Record types to be allowed to [import](/todo).
+
+- **`notify`** <props.pill href="6fda79e8">RecordLink[]</props.pill> _optional_
+
+  - Record types to be notified about (webhook).
+
+</props.properties>
+
+## Examples
+
+### Full App record
+
+This is what the full content of an App record might look like.
+
+```json
+{
+  "name": "Bird",
+  "description": "Simple short-form social network.",
+  "icon": {
+    "hash": "9deb36508836ad7d278f6a91f997f5f32c7075b82b51e37c1ebaaa0ea9ea7942",
+    "type": "image/png",
+    "name": "icon"
+  },
+  "uris": {
+    "redirect": "https://bird.baq.dev/auth{/authorization_id}",
+    "website": "https://bird.baq.dev"
+  },
+  "scope_request": {
+    "read": [
+      {
+        "entity": "types.baq.dev",
+        "record_id": "6ee7f69a90154b849bac528daa942bcd"
+      }
+    ],
+    "write": [
+      {
+        "entity": "types.baq.dev",
+        "record_id": "6ee7f69a90154b849bac528daa942bcd"
+      }
+    ],
+    "subscribe": [
+      {
+        "entity": "types.baq.dev",
+        "record_id": "6ee7f69a90154b849bac528daa942bcd"
+      }
+    ]
+  }
+}
+```

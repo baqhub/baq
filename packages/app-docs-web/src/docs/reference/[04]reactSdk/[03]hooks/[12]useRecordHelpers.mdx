@@ -1,0 +1,152 @@
+export const metadata = {
+  id: "033f969c",
+  title: "useRecordHelpers",
+  summary:
+    "Current user's entity, client, and direct access functions.",
+};
+
+# useRecordHelpers
+
+This is a React hook to access data from the record store.
+
+```jsx
+const helpers = useRecordHelpers();
+```
+
+{props.toc}
+
+## Reference
+
+### `useRecordHelpers()`
+
+Call `useRecordHelpers` at the top level of your component to access the helper properties and functions.
+
+#### Returns
+
+This hook returns a [`RecordHelpers`](#recordhelpers) object.
+
+#### Notes
+
+- This hook will not re-render when the store changes. Hook versions of these functions are available to always render up-to-date data.
+
+- These functions provide synchronous access to the latest store data. This data can be temporarily different from the data used in the latest render. To render consistent UI, prefer the hook versions.
+
+### `RecordHelpers`
+
+<props.properties>
+
+- **`entity`** <props.pill>string</props.pill>
+
+  - Entity of the current authenticated user.
+
+- **`client`** <props.pill href="/todo">Client</props.pill>
+
+  - An authenticated [`Client`](/docs/reference/client) to make requests against the user's BAQ server.
+
+- **<props.code>recordByVersion\<T\>(version: <props.pill href="deae588f#versionhash">VersionHash\<T\></props.pill>)</props.code>**: <props.pill>T</props.pill>
+
+  - Find a record already in the store by its [`Version`](deae588f#versionhash).
+
+    Throws an error if the record could not be found.
+
+    The return type is inferred from the version type.
+
+- **<props.code>recordByKey\<T\>(key: <props.pill href="4b9504a7#recordkey">RecordKey\<T\></props.pill>)</props.code>**: <props.pill>T</props.pill>
+
+  - Find a record already in the store by its [`Key`](4b9504a7#recordkey).
+
+    Throws an error if the record could not be found.
+
+    The return type is inferred from the key type.
+
+- **<props.code>findRecordByKey\<T\>(key: <props.pill href="4b9504a7#recordkey">RecordKey\<T\></props.pill>)</props.code>**: <props.pill>T | undefined</props.pill>
+
+  - Find a record already in the store by its [`Key`](4b9504a7#recordkey).
+
+    Returns `undefined` if the record could not be found.
+
+    The return type is inferred from the key type.
+
+- **<props.code>findRecordByQuery\<T\>(query: <props.pill href="/todo">RecordQuery\<T\></props.pill>)</props.code>**: <props.pill>T | undefined</props.pill>
+
+  - Find the first matching record already in the store from a [`Query`](/docs/reference/recordquery).
+
+    Returns `undefined` if no matching record could be found.
+
+    The return type is inferred from the query type.
+
+- **<props.code>buildBlobUrl(record: <props.pill href="/todo">Record</props.pill>, blob: <props.pill href="/todo">BlobLink</props.pill>, expIn?: <props.pill>number</props.pill>)</props.code>**: <props.pill>string</props.pill>
+
+  - Build an authenticated URL for the requested blob in the requested record.
+
+    The expiry is expressed in seconds from now.
+
+    When no expiry time is specified, the resulting URL will be stable over future calls from anywhere between 0 and 90 days. This makes it possible to leverage browser caching of private blobs.
+
+</props.properties>
+
+## Usage
+
+### Finding a record by Key
+
+Keys are convenient to pass in between components to reference records known to exist in the store. `findRecordByKey` is synchronous and indexed, making it practical to use without restrictions.
+
+```jsx
+import {useRecordHelpers} from "./baq/store.js";
+
+function Item({itemKey}) {
+  const {findRecordByKey} = useRecordHelpers();
+  const itemRecord = findRecordByKey(itemKey);
+
+  return <li>{itemRecord.content.title}</li>;
+}
+```
+
+### Finding a record by Query
+
+Using a query is a good way to find adjacent records that are known to be in the store. In this example, we find the [`EntityRecord`](/docs/reference/entityrecord) for the provided entity in order to display its name.
+
+{/* prettier-ignore */}
+```jsx
+import {useRecordHelpers} from "./baq/store.js";
+
+function RecipientName({recipientEntity}) {
+  const {tryFindRecordByQuery} = useRecordHelpers();
+  const recipientEntityRecord = tryFindRecordByQuery({
+    filter: queryAnd(
+      queryType(entityRecordType),
+      queryAuthor(recipientEntity)
+    )
+  });
+
+  if (!recipientEntityRecord) {
+    return <span>{recipientEntity}</span>;
+  }
+
+  return (
+    <span>
+      {recipientEntityRecord.content.profile.name}
+    </span>
+  );
+}
+```
+
+### Display a blob as an image
+
+Using `buildBlobUrl` makes it possible to synchronously build authenticated URLs for public and private blobs. In this example, the blob is a user's profile avatar that we display in an `img` tag.
+
+```jsx
+import {useRecordHelpers} from "./baq/store.js";
+
+function UserAvatar({entityRecord}) {
+  const {blobUrlBuilder} = useRecordHelpers();
+  const {avatar} = entityRecord.content.profile;
+
+  if (!avatar) {
+    return <Placeholder />;
+  }
+
+  const avatarUrl = buildBlobUrl(entityRecord, avatar);
+  return <img src={avatarUrl} />;
+}
+```

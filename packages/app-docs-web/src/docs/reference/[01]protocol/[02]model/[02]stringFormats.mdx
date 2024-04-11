@@ -1,0 +1,129 @@
+export const metadata = {
+  id: "deae588f",
+  title: "String Formats",
+  summary: "Specialized strings used when building records.",
+};
+
+# String Formats
+
+When building records, some string fields expect a specific format.
+
+## Reference
+
+### `Entity`
+
+A user's unique domain name.
+
+```
+username.host.com
+```
+
+<props.compactList>
+
+- Supports the following characters: `a-z0-9.-`.
+
+- Allows a maximum of **252** characters.
+
+- Unicode characters should be transformed using [IDNA2008 encoding](https://datatracker.ietf.org/doc/html/rfc5895).
+
+</props.compactList>
+
+### `RecordId`
+
+A record's 128-bit identifier.
+
+```
+63bc5149fa784b749a3d6d404dfcb3c9
+```
+
+<props.compactList>
+
+- Hex-encoded, all-lowercase, without any spaces.
+
+- Uniquely identifies a record from a given entity.
+
+</props.compactList>
+
+### `RecordDate`
+
+A precise point in time.
+
+```
+2024-02-19T15:20:51.3590000Z
+```
+
+<props.compactList>
+
+- Follows [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339) with no offset (UTC).
+
+- Always interpreted with millisecond precision.
+
+</props.compactList>
+
+### `VersionHash`
+
+SHA256 hash of a record.
+
+```
+d195f2608d34c61e7de8d82116806bf104ca47fdd16f58198ab37dec544b430b
+```
+
+<props.compactList>
+
+- Hash of a [canonical representation (JCS)](https://datatracker.ietf.org/doc/html/rfc8785) of the record.
+
+- Hex-encoded, all-lowercase, without any spaces.
+
+- Uniquely identifies a record version globally.
+
+</props.compactList>
+
+### `BlobHash`
+
+SHA256 hash of a blob.
+
+```
+752f11f6d795a8ca8b501843aa4340493b63cdb867b3e464b386e3fce8230d3e
+```
+
+<props.compactList>
+
+- Hex-encoded, all-lowercase, without any spaces.
+
+- Uniquely identifies a blob globally.
+
+</props.compactList>
+
+### `URI`
+
+Standard absolute URI.
+
+```
+http://baq.dev/docs/reference?theme=dark#usage
+```
+
+<props.compactList>
+
+- In the `scheme://authority/path?query#fragment` format.
+
+- Maximum length of **2000** unicode code points.
+
+</props.compactList>
+
+### `TagLink`
+
+Queryable string field.
+
+```
+Any Value
+```
+
+<props.compactList>
+
+- Supports unicode.
+
+- Allows a maximum of **100** characters.
+
+- Can be queried through the [`/records`](/docs/reference/http-endpoints/records) endpoints.
+
+</props.compactList>

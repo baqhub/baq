@@ -1,0 +1,31 @@
+{
+  "name": "@baqhub/sdk-react-dom",
+  "version": "0.1.7",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "ts": "tsc --build --watch",
+    "build": "tsc --build ./tsconfig.cjs.json ./tsconfig.json && tsconfig-to-dual-package",
+    "build:clean": "rm -rf ./build",
+    "publish": "yarn npm publish",
+    "test": "yarn node --experimental-vm-modules --no-warnings $(yarn bin jest)"
+  },
+  "main": "./build/cjs/src/index.js",
+  "types": "./build/cjs/src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./build/esm/src/index.js",
+      "require": "./build/cjs/src/index.js"
+    }
+  },
+  "author": "BaqHub",
+  "license": "MIT",
+  "dependencies": {
+    "@baqhub/sdk-react": "^0.1.7",
+    "tslib": "^2.6.2"
+  },
+  "devDependencies": {
+    "tsconfig-to-dual-package": "1.2.0",
+    "typescript": "5.3.3"
+  }
+}

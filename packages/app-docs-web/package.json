@@ -1,0 +1,52 @@
+{
+  "name": "@baqhub/docs-web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -r 'yarn next-dev' 'yarn watch-docs'",
+    "next-dev": "next dev -p 5178",
+    "watch-docs": "node ./watcher.cjs",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@baqhub/ui": "*",
+    "@heroicons/react": "2.1.3",
+    "@next/mdx": "14.1.4",
+    "default-import": "1.1.5",
+    "dom-serializer": "2.0.0",
+    "domutils": "3.1.0",
+    "htmlparser2": "9.1.0",
+    "lodash": "4.17.21",
+    "next": "14.1.4",
+    "react": "18.2.0",
+    "react-children-utilities": "2.10.0",
+    "react-dom": "18.2.0",
+    "refractor": "4.8.1",
+    "slugify": "1.6.6"
+  },
+  "devDependencies": {
+    "@mdx-js/loader": "3.0.1",
+    "@mdx-js/react": "3.0.1",
+    "@types/lodash": "4.17.0",
+    "@types/mdx": "2.0.12",
+    "@types/node": "20.12.2",
+    "@types/react": "18.2.73",
+    "@types/react-dom": "18.2.23",
+    "@types/ws": "^8.5.10",
+    "autoprefixer": "10.4.19",
+    "chokidar": "3.6.0",
+    "concurrently": "8.2.2",
+    "eslint": "8.56.0",
+    "postcss": "8.4.38",
+    "rehype-prism-plus": "2.0.0",
+    "remark-smartypants": "2.1.0",
+    "sharp": "0.33.3",
+    "tailwindcss": "3.4.3",
+    "typescript": "5.3.3",
+    "webpack": "5.90.1",
+    "ws": "8.16.0"
+  }
+}

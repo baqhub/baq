@@ -1,0 +1,82 @@
+export const metadata = {
+  id: "36a96563",
+  title: "GET record_blob",
+  summary: "Get a single blob from a record.",
+};
+
+# GET record_blob
+
+Get a single blob from a record.
+
+```httpcli
+GET https://baq.run/api/alice/records/{entity}/{record_id}/blobs/{blob_hash}/{file_name}
+```
+
+{props.toc}
+
+## Reference
+
+### Request
+
+A blob can only be downloaded through a record that has a [Blob link](70af90d6) to it.
+
+Build the request URL by replacing the following variables in the `record_blob` endpoint URL template:
+
+- `{entity}` and `{record_id}`: Record that links to the blob.
+
+- `{blob_hash}`: Hash of the blob to download.
+
+- `{file_name}`: File name of the blob within the record. This is useful when the same blob might appear multiple times in the same record under different names and content types.
+
+### Response
+
+The blob to download is the sole content of the response.
+
+#### Headers
+
+<props.properties>
+
+- **`Content-Length`** <props.pill>int</props.pill>
+
+  - Size of the blob in bytes.
+
+- **`Content-Type`** <props.pill>string</props.pill>
+
+  - Content type of the blob link for the requested file name.
+
+- **`Content-Disposition: attachment; filename={file_name}`**
+
+  - Requested file name.
+
+- **`Cache-Control`** <props.pill>string</props.pill>
+
+  - Depends on the record permissions:
+
+    - Public record: 1 year private, 2h shared.
+    - Private record with standard authentication: 1 year private.
+    - Private record with bearer token: bearer validity (max 2h), shared.
+
+</props.properties>
+
+## Usage
+
+### Download a blob
+
+We get a single `hello.txt` blob that was linked in one of our user's records.
+
+```http
+GET /api/alice/records/alice.baq.run/867deccbe7ac4adca4efc07fbe08af87/blobs/66a045b452102c59d840ec097d59d9467e13a3f34f6494e539ffd32c1bb35f18/hello.txt HTTP/2
+Host: baq.run
+```
+
+The response includes a `Content-Disposition` header so that browsers know how to name the file after downloading it.
+
+```http
+HTTP/2 200 OK
+Content-Length: 6
+Content-Type: text/plain
+Content-Disposition: attachment; filename=hello.txt
+Cache-Control: max-age=6309262, s-maxage=7200, immutable
+
+Hello\n
+```

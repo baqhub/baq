@@ -1,0 +1,264 @@
+export const metadata = {
+  id: "25c0e097",
+  title: "QueryFilter",
+  summary: "Record conditions for queries.",
+};
+
+# QueryFilter
+
+Record conditions for queries
+
+```ts
+const filter = Q.and(
+  Q.author("alice.baq.run"),
+  Q.tag("content.category", "books")
+);
+```
+
+{props.toc}
+
+## Reference
+
+### `QueryFilter`
+
+Recursive record condition, represented as a tuple. \
+Matches the [`filter`](a29bdfea#filter) parameter expected by the server. \
+Also exported as `Q` for ease of use.
+
+#### Values
+
+<props.properties>
+
+- **<props.code>["link", link: <props.pill href="#querylink">QueryLink</props.pill>]</props.code>**
+
+  - Require records to have a set value for a given link.
+
+- **<props.code>["and", filters: <props.pill>QueryFilter[]</props.pill>]</props.code>**
+
+  - Require all provided filters to match.
+
+  - An empty filters array validates the condition.
+
+- **<props.code>["or", filters: <props.pill>QueryFilter[]</props.pill>]</props.code>**
+
+  - Require at least one of the provided filters to match.
+
+  - An empty filters array does not validate the condition.
+
+</props.properties>
+
+#### Static builders
+
+Filter builders are provided for common use-cases.
+
+<props.properties>
+
+- **<props.code>link(queryLink: <props.pill href="#querylink">QueryLink</props.pill>)</props.code>**: <props.pill>QueryFilter</props.pill>
+
+  - Create a new filter on a link.
+
+- **<props.code>and(...filters: <props.pill>QueryFilter[]</props.pill>)</props.code>**: <props.pill>QueryFilter</props.pill>
+
+  - Combine multiple filters in a single one.
+
+  - All of the provided filters must match to validate the condition.
+
+- **<props.code>or(...filters: <props.pill>QueryFilter[]</props.pill>)</props.code>**: <props.pill>QueryFilter</props.pill>
+
+  - Combine multiple filters in a single one.
+
+  - At least one of the provided filters must match to validate the condition.
+
+- **<props.code>tag(path: <props.pill>string</props.pill>, tag: <props.pill href="deae588f#taglink">TagLink</props.pill>)</props.code>**: <props.pill>QueryFilter</props.pill>
+
+  - Create a new filter on a tag link at the given path.
+
+- **<props.code>entity(path: <props.pill>string</props.pill>, entity: <props.pill href="deae588f#entity">Entity</props.pill>)</props.code>**: <props.pill>QueryFilter</props.pill>
+
+  - Create a new filter on an entity link at the given path.
+
+- **<props.code>record(path: <props.pill>string</props.pill>, recordLink: <props.pill href="c20d7b98">RecordLink</props.pill>)</props.code>**: <props.pill>QueryFilter</props.pill>
+
+  - Create a new filter on a record link at the given path.
+
+- **<props.code>version(path: <props.pill>string</props.pill>, versionLink: <props.pill href="8a6f1bed">VersionLink</props.pill>)</props.code>**: <props.pill>QueryFilter</props.pill>
+
+  - Create a new filter on a version link at the given path.
+
+- **<props.code>id(recordId: <props.pill href="deae588f#recordid">RecordId</props.pill>)</props.code>**: <props.pill>QueryFilter</props.pill>
+
+  - Create a new filter on a record's ID.
+
+- **<props.code>source(source: <props.pill href="4b9504a7#recordsource">RecordSource</props.pill>)</props.code>**: <props.pill>QueryFilter</props.pill>
+
+  - Create a new filter on a record's source.
+
+- **<props.code>author(entity: <props.pill href="deae588f#entity">Entity</props.pill>)</props.code>**: <props.pill>QueryFilter</props.pill>
+
+  - Create a new filter on a record's author.
+
+- **<props.code>type(recordType: <props.pill>RecordType</props.pill>)</props.code>**: <props.pill>QueryFilter</props.pill>
+
+  - Create a new filter on a record's type.
+
+- **<props.code>empty(path: <props.pill>string</props.pill>)</props.code>**: <props.pill>QueryFilter</props.pill>
+
+  - Create a new filter on no link having a value at the given path.
+
+</props.properties>
+
+#### Other static methods
+
+<props.properties>
+
+- **<props.code>isMatch\<T\>(record: <props.pill href="4b9504a7">Record</props.pill>, filter: <props.pill>QueryFilter\<T\></props.pill>)</props.code>**: <props.pill>boolean</props.pill>
+
+  - Check whether a record matches the given filter.
+
+  - Acts as a type guard for `record` as `T`.
+
+</props.properties>
+
+### `QueryLink`
+
+Single record condition on a link, represented as a tuple.
+
+#### Values
+
+<props.properties>
+
+- **<props.code>["link", value: <props.pill href="#querylinkvalue">QueryLinkValue</props.pill>]</props.code>**
+
+  - Require any of the record's links to have the specified value.
+
+- **<props.code>["path_link", path: <props.pill>string</props.pill>, value: <props.pill href="#querylinkvalue">QueryLinkValue</props.pill>]</props.code>**
+
+  - Require a link at the given path to have the specified value.
+
+- **<props.code>["empty_path_link", path: <props.pill>string</props.pill>]</props.code>**
+
+  - Require no value for the link at the given path.
+
+</props.properties>
+
+#### Static builders
+
+<props.properties>
+
+- **<props.code>link(value: <props.pill href="#querylinkvalue">QueryLinkValue</props.pill>)</props.code>**: <props.pill>QueryLink</props.pill>
+
+  - Create a new link condition at any path for the given value.
+
+- **<props.code>pathLink(path: <props.pill>string</props.pill>, value: <props.pill href="#querylinkvalue">QueryLinkValue</props.pill>)</props.code>**: <props.pill>QueryLink</props.pill>
+
+  - Create a new link condition at a path for the given value.
+
+- **<props.code>emptyPathLink(path: <props.pill>string</props.pill>)</props.code>**: <props.pill>QueryLink</props.pill>
+
+  - Create a new empty link condition a the given path.
+
+</props.properties>
+
+### `QueryLinkValue`
+
+Link value for a record condition, represented as a tuple.
+
+#### Values
+
+<props.properties>
+
+- **<props.code>["tag", value: <props.pill href="deae588f#taglink">TagLink</props.pill>]</props.code>**
+
+  - Require a tag link of the specified value.
+
+- **<props.code>["entity", value: <props.pill href="880d482d">EntityLink</props.pill>]</props.code>**
+
+  - Require an entity link of the specified value.
+
+- **<props.code>["record", value: <props.pill href="c20d7b98">RecordLink</props.pill>]</props.code>**
+
+  - Require a record link of the specified value.
+
+- **<props.code>["version", value: <props.pill href="8a6f1bed">VersionLink</props.pill>]</props.code>**
+
+  - Require a version link of the specified value.
+
+</props.properties>
+
+#### Static builders
+
+<props.properties>
+
+- **<props.code>tag(tag: <props.pill href="deae588f#taglink">TagLink</props.pill>)</props.code>**: <props.pill>QueryLinkValue</props.pill>
+
+  - Create a new tag link condition value.
+
+- **<props.code>entity(entity: <props.pill href="deae588f#entity">Entity</props.pill>)</props.code>**: <props.pill>QueryLinkValue</props.pill>
+
+  - Create a new entity link condition value.
+
+- **<props.code>record(recordLink: <props.pill href="c20d7b98">RecordLink</props.pill>)</props.code>**: <props.pill>QueryLinkValue</props.pill>
+
+  - Create a new record link condition value.
+
+- **<props.code>version(versionLink: <props.pill href="8a6f1bed">VersionLink</props.pill>)</props.code>**: <props.pill>QueryLinkValue</props.pill>
+
+  - Create a new version link condition value.
+
+</props.properties>
+
+## Usage
+
+### Single filter
+
+Filters don't need to be combined nor wrapped to work in a [Query](c4e4e2a0). Here we want all records that have user Natalie as `publisher` entity link in their `content` and only need the one filter to make it work.
+
+```ts
+import {Q} from "@baqhub/sdk";
+
+const query = {
+  filter: Q.entity("content.publisher", "natalie.baq.run");
+}
+```
+
+### Author and type filter
+
+A common use-case for a query filter is to restrict the records by author and type. In this example, we want all of the [File records](/todo) created by user Alice.
+
+```ts
+import {Q} from "@baqhub/sdk";
+import {FileRecord} from "./baq/fileRecord.js";
+
+const filter = Q.and(
+  Q.author("alice.baq.run"),
+  Q.type(FileRecord)
+);
+
+// Next step:
+// Use the filter in a Query.
+```
+
+### Advanced filter
+
+Filter conditions can be combined through multiple levels of `AND` and `OR` grouping, similar to an SQL query.
+
+Here we want all [files](/todo) and [folders](/todo) in a given parent folder. We filter by author and type, but also require the link at `content.parent` to either be empty (root folder) or to point to the provided folder record.
+
+```ts
+import {Q} from "@baqhub/sdk";
+import {FolderRecord} from "./baq/folderRecord.js";
+import {FileRecord} from "./baq/fileRecord.js";
+
+function listFolderContent(folderLink) {
+  const filter = Q.and(
+    Q.author("alice.baq.run"),
+    Q.or(Q.type(FolderRecord), Q.type(FileRecord)),
+    folderLink
+      ? Q.record("content.parent", folderLink)
+      : Q.empty("content.parent")
+  );
+
+  // Next step:
+  // Use the filter in a Query.
+}
+```

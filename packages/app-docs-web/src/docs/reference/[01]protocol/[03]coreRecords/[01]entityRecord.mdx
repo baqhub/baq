@@ -1,0 +1,286 @@
+export const metadata = {
+  id: "375c4ea9",
+  title: "Entity Record",
+  summary:
+    "Entrypoint and profile for a single user on the network.",
+};
+
+# Entity Record
+
+Entrypoint and profile for a single user on the BAQ network.
+
+```json
+{
+  "entity": "maggie.baq.run",
+  "previous_entities": [],
+  "profile": {
+    "name": "Maggie Blum"
+  },
+  "servers": [...]
+}
+```
+
+{props.toc}
+
+## Reference
+
+### `EntityRecord`
+
+A public [Record](01735953) that is returned during the [discovery process](/todo). It contains a user's entity, public profile, and server endpoints.
+
+#### Properties
+
+<props.properties>
+
+- **`entity`** <props.pill href="deae588f#entity">Entity</props.pill>
+
+  - Current entity representing the user.
+
+- **`previous_entities`** <props.pill href="deae588f#entity">Entity[]</props.pill>
+
+  - Every previous entity assumed by this user.
+
+- **`profile`** <props.pill href="#entityrecordprofile">EntityRecordProfile</props.pill>
+
+  - Simple public profile for this user.
+
+- **`servers`** <props.pill href="#entityrecordserver">EntityRecordServer[]</props.pill>
+
+  - Servers to contact to interact with this user.
+
+  - Should contain at least one server.
+
+  - Items within should be presented in order of preference.
+
+</props.properties>
+
+#### Notes
+
+- There can be only one Entity record for a given user.
+
+- The Entity record is the entrypoint to a user's BAQ data. When a user moves to a new server, the Entity record is updated and propagated on the network.
+
+- The Entity record is created by the user's server during initial sign-up.
+
+### `EntityRecordProfile`
+
+#### Properties
+
+<props.properties>
+
+- **`avatar`** <props.pill href="70af90d6">BlobLink</props.pill> _optional_
+
+  - Public avatar for this user.
+
+  - Maximum size of **256kB**.
+
+- **`name`** <props.pill>string</props.pill> _optional_
+
+  - Display name for this user.
+
+  - Maximum length of **40** unicode code points.
+
+- **`bio`** <props.pill>string</props.pill> _optional_
+
+  - Short introduction for this user.
+
+  - Maximum length of **160** unicode code points.
+
+- **`website`** <props.pill href="deae588f#uri">URI</props.pill> _optional_
+
+  - External website or social media profile for this user.
+
+- **`location`** <props.pill>string</props.pill> _optional_
+
+  - Physical location of the user in the world.
+
+</props.properties>
+
+### `EntityRecordServer`
+
+#### Properties
+
+<props.properties>
+
+- **`version`** <props.pill>string</props.pill>
+
+  - Version of the API supported by this server.
+
+  - Currently, all servers are version `1.0.0`.
+
+- **`endpoints`** <props.pill href="#entityrecordserverendpoints">EntityRecordServerEndpoints</props.pill>
+
+  - HTTP endpoints to communicate with this server.
+
+</props.properties>
+
+### `EntityRecordServerEndpoints`
+
+The various HTTP endpoints to interact with the BAQ server.
+
+#### Properties
+
+<props.properties>
+
+- **`auth`** <props.pill href="deae588f#uri">URI</props.pill>
+
+  - Authentication flow entrypoint.
+
+  - URL template variables:
+
+    - `{record_id}`: ID of the application record to authenticate.
+
+- **`new_record`** <props.pill href="deae588f#uri">URI</props.pill>
+
+  - Create a new record.
+
+- **`records`** <props.pill href="deae588f#uri">URI</props.pill>
+
+  - Query, filter, and sort records.
+
+- **`record`** <props.pill href="deae588f#uri">URI</props.pill>
+
+  - Fetch or update a single record.
+
+  - URL template variables:
+
+    - `{entity}`: Entity of the record's author.
+
+    - `{record_id}`: ID of the record.
+
+- **`record_versions`** <props.pill href="deae588f#uri">URI</props.pill>
+
+  - List record versions in chronological order.
+
+  - URL template variables:
+
+    - `{entity}`: Entity of the record's author.
+
+    - `{record_id}`: ID of the record.
+
+- **`record_version`** <props.pill href="deae588f#uri">URI</props.pill>
+
+  - Fetch a single record version.
+
+  - URL template variables:
+
+    - `{entity}`: Entity of the record's author.
+
+    - `{record_id}`: ID of the record.
+
+    - `{version_hash}`: Hash of the version.
+
+- **`new_blob`** <props.pill href="deae588f#uri">URI</props.pill>
+
+  - Upload a new blob.
+
+- **`record_blob`** <props.pill href="deae588f#uri">URI</props.pill>
+
+  - Fetch a single blob from a record.
+
+  - URL template variables:
+
+    - `{entity}`: Entity of the record's author.
+
+    - `{record_id}`: ID of the record.
+
+    - `{blob_hash}`: Hash of the blob.
+
+    - `{file_name}`: Name of the file as specified in the record.
+
+- **`record_version_blob`** <props.pill href="deae588f#uri">URI</props.pill>
+
+  - Fetch a single blob from a record version.
+
+  - URL template variables:
+
+    - `{entity}`: Entity of the record's author.
+
+    - `{record_id}`: ID of the record.
+
+    - `{version_hash}`: Hash of the version.
+
+    - `{blob_hash}`: Hash of the blob.
+
+    - `{file_name}`: Name of the file as specified in the record.
+
+- **`events`** <props.pill href="deae588f#uri">URI</props.pill>
+
+  - Subscribe to [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) to receive new and updated records.
+
+- **`new_notification`** <props.pill href="deae588f#uri">URI</props.pill>
+
+  - Propagate a record in between servers.
+
+- **`server_info`** <props.pill href="deae588f#uri">URI</props.pill>
+
+  - Server metadata, including rate-limiting status.
+
+</props.properties>
+
+#### Notes
+
+- The endpoint format can vary from one server to another. [URI Template](https://datatracker.ietf.org/doc/html/rfc6570) variables are used to build to actual URL to query. Each of these are valid values for the `record` endpoint:
+
+  ```
+  https://baq.run/api/julie/records/{entity}/{record_id}
+  https://julie.baqhost.org/records?entity={entity}&record={record_id}
+  https://freebaq.org/users/julie/{entity}/record?id={record_id}
+  ```
+
+## Examples
+
+### Full Entity record
+
+This is what the full content of an Entity record might look like.
+
+```json
+{
+  "entity": "julie.baq.run",
+  "previous_entities": [],
+  "profile": {
+    "avatar": {
+      "hash": "401599ca6e41cef5625b48ba38f1e3cc4d68fecf0b45109bcbb1e4f7ba22c5e4",
+      "type": "image/jpeg",
+      "name": "avatar.jpg"
+    },
+    "name": "Julie"
+  },
+  "servers": [
+    {
+      "version": "1.0.0",
+      "preference": 0,
+      "endpoints": {
+        "auth": "https://baq.run/julie/auth/{record_id}",
+        "records": "https://baq.run/api/julie/records",
+        "record": "https://baq.run/api/julie/records/{entity}/{record_id}",
+        "record_versions": "https://baq.run/api/julie/records/{entity}/{record_id}/versions",
+        "record_version": "https://baq.run/api/julie/records/{entity}/{record_id}/versions/{version_hash}",
+        "new_record": "https://baq.run/api/julie/records",
+        "record_blob": "https://baq.run/api/julie/records/{entity}/{record_id}/blobs/{blob_hash}/{file_name}",
+        "record_version_blob": "https://baq.run/api/julie/records/{entity}/{record_id}/versions/{version_hash}/blobs/{blob_hash}/{file_name}",
+        "new_blob": "https://baq.run/api/julie/blobs",
+        "events": "https://baq.run/api/julie/events",
+        "new_notification": "https://baq.run/api/julie/notifications",
+        "server_info": "https://baq.run/api/julie/server"
+      }
+    }
+  ]
+}
+```
+
+### Use a server endpoint
+
+To fetch a record, we use the endpoints map to build the URL to query. Here's an example of how this could be done (the JavaScript SDK handles this automatically).
+
+```ts
+function fetchRecord(entityRecord, entity, recordId) {
+  const server = entityRecord.content.servers[0];
+  const endpoint = server.endpoints.record;
+  const url = endpoint
+    .replaceAll("{entity}", entity)
+    .replaceAll("{record_id}", recordId);
+
+  return fetch(url);
+}
+```

@@ -1,0 +1,60 @@
+export const metadata = {
+  id: "fa939df0",
+  title: "Entity Link",
+  summary: "Reference a user.",
+};
+
+# Entity Link
+
+Reference a user within the BAQ network.
+
+```json
+{
+  "entity": "pierre.baq.run"
+}
+```
+
+{props.toc}
+
+## Reference
+
+### `EntityLink`
+
+This object can appear both within the record envelope (e.g. `author`) and record content, depending on the record type.
+
+#### Properties
+
+<props.properties>
+
+- **`entity`** <props.pill href="deae588f#entity">Entity</props.pill>
+
+  - Entity currently representing the target user.
+
+- **`original_entity`** <props.pill href="deae588f#entity">Entity</props.pill> _optional_
+
+  - Target user's entity at the time the record version was created, if different.
+
+</props.properties>
+
+## Examples
+
+### Link to user on different server
+
+A link can be to a BAQ user on any compatible server, identified by their entity.
+
+```json
+{
+  "entity": "julie.freebaq.org"
+}
+```
+
+### Link to user who changed entity
+
+When a user changes entity, the entity that was active at the time of the record version creation is returned as the `original_entity`. This allows clients and servers to validate a record's `version_hash`.
+
+```json
+{
+  "entity": "pierre.baq.run",
+  "original_entity": "pierre.baqtest.dev"
+}
+```

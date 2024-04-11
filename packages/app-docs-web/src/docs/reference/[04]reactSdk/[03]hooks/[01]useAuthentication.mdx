@@ -1,0 +1,318 @@
+export const metadata = {
+  id: "00491e8c",
+  title: "useAuthentication",
+  summary: "Manage the BAQ authentication state.",
+};
+
+# useAuthentication
+
+This is a React hook to manage the authentication state of your app.
+
+```jsx
+const authentication = useAuthentication(authorizationId);
+```
+
+{props.toc}
+
+## Reference
+
+### `buildAuthentication()`
+
+Call `buildAuthentication` outside of your component to configure the hook.
+
+```jsx
+import {buildAuthentication} from "../baq/authentication.js";
+import {localStorageAdapter} from "@baqhub/sdk-react-dom";
+
+const {useAuthentication} = buildAuthentication({
+  storage: localStorageAdapter,
+});
+```
+
+#### Options
+
+<props.properties>
+
+- **`storage`** <props.pill href="a4abc6d8">StorageAdapter</props.pill>
+
+  - Storage adapter to use for local authentication data.
+
+- **`secureStorage`** <props.pill href="a4abc6d8">StorageAdapter</props.pill> _optional_
+
+  - Storage adapter to use for the sensitive authentication private key. If not specified, the `storage` adapter will be used for everything.
+
+</props.properties>
+
+### `useAuthentication()`
+
+Call `useAuthentication` at the top level of your component to manage the authentication lifecycle.
+
+```jsx
+import {buildAuthentication} from "../baq/authentication.js";
+
+const {useAuthentication} = buildAuthentication({...});
+
+function App() {
+  const authentication = useAuthentication();
+
+  switch (authentication.status) {
+    case "unauthenticated":
+      return <LoginUI />;
+
+    case "authenticated":
+      return <AppUI />;
+  }
+}
+```
+
+#### Options
+
+<props.properties>
+
+- **`appIconUrl`** <props.pill>string</props.pill> _optional_
+
+  - Publicly accessible URL of an image to use as the app icon when registering with the user's server. See [App Icons](/docs/learn/app-icons) for more.
+
+- **`authorizationId`** <props.pill>string</props.pill> _optional_
+
+  - String value returned by the user's server in the redirect URL when the authentication flow completes. See [Authentication Flow](/docs/learn/authentication-flow) for more.
+
+</props.properties>
+
+#### Returns
+
+This hook returns an [`AuthenticationState`](#authenticationstate) object.
+
+#### Notes
+
+- The `useAuthentication` hook should only be used once within a given React application as it does not synchronize state between instances. The resulting `AuthenticationState` can be passed to various components using Props and Context.
+
+### `AuthenticationState`
+
+<props.properties>
+
+- **`status`** <props.pill>enum</props.pill>
+
+  - Current state of the authentication system. Other properties depend on this.
+
+    - `"unauthenticated"`: The current user is not authenticated.
+    - `"authenticated"`: The current user had a valid session with a BAQ server.
+
+</props.properties>
+
+#### Properties when `"unauthenticated"`
+
+<props.properties>
+
+- **`connectStatus`** <props.pill>enum</props.pill>
+
+  - Current state of the authentication form.
+
+    - `"idle"`: Awaiting entity input from the user.
+    - `"connecting"`: Connecting to the user's server.
+    - `"waiting_on_flow"`: User needs to be redirected to their server's authentication flow.
+
+- **<props.code>onConnectRequest(entity: <props.pill>string</props.pill>)</props.code>**
+
+  - Initiate the authentication process.
+
+    Only call when `connectStatus="idle"`.
+
+    _Parameters:_
+
+    - **`entity`** <props.pill>string</props.pill> : The entity of the user to initiate the authentication process for.
+
+- **`error`** <props.pill>enum</props.pill>
+
+  - An error that happened while initiating authentication with the user's server.
+
+    Only has a value when `connectStatus="idle"`.
+
+    - `"entity_not_found"`: The provided entity could not be resolved.
+    - `"bad_app_record"`: The provided app record was refused by the server.
+    - `"other"`: Other server or network error.
+
+- **`flowUrl`** <props.pill>string</props.pill>
+
+  - URL to redirect the user to for the next step of the authentication flow.
+
+    Only has a value when `connectStatus="waiting_on_flow"`.
+
+- **<props.code>onAuthorizationResult(authorizationId?: string)</props.code>**
+
+  - Provide the result of the authentication flow.
+
+    Only call when `connectStatus="waiting_on_flow"`.
+
+    This is only needed when the app was not restarted during the authentication flow (e.g. if it happened in a different window).
+
+    _Parameters:_
+
+    - **`authorizationId`** <props.pill>string</props.pill> _optional_ : The string value returned by the user's server in the redirect URL when the authentication flow completes. Can be undefined if the authorization failed.
+
+</props.properties>
+
+#### Properties when `"authenticated"`
+
+<props.properties>
+
+- **`identity`** <props.pill href="f0829f85">StoreIdentity</props.pill>
+
+  - Identity of the authenticated user. It exposes the following properties:
+
+    - `entityRecord`: The user's [`EntityRecord`](/reference/entityrecord)
+    - `client`: A [`Client`](/reference/client) to interact with the user's server.
+
+    These can either be used directly to interact with the user's server, or they can be provided to a [`Store`](/reference/store) to fully take advantage of the SDK when building the rest of the app.
+
+- **`disconnect()`**
+
+  - A function to logout the current user.
+
+</props.properties>
+
+## Usage
+
+### Decide what to display
+
+Use the `status` to decide whether to display a login page or the app itself.
+
+```jsx
+import {buildAuthentication} from "../baq/authentication.js";
+import {localStorageAdapter} from "@baqhub/sdk-react-dom";
+
+const {useAuthentication} = buildAuthentication({
+  storage: localStorageAdapter,
+});
+
+function App() {
+  const authentication = useAuthentication();
+
+  switch (authentication.status) {
+    case "unauthenticated":
+    // Display login UI.
+
+    case "authenticated":
+    // Display app UI.
+  }
+}
+```
+
+### Implement a login form
+
+When `unauthenticated` the properties of the `AuthenticationState` can be used to build a login form.
+
+```jsx
+import {buildAuthentication} from "../baq/authentication.js";
+
+const {useAuthentication} = buildAuthentication({...});
+
+function App() {
+  const authentication = useAuthentication();
+  const [entity, setEntity] = useState("");
+
+  if (authentication.status !== "unauthenticated") {
+    // We're authenticated, yay!
+    return;
+  }
+
+  // Redirect to the authentication flow when needed.
+  useEffect(() => {
+    if (authentication.connectStatus !== "waiting_on_flow") {
+      return;
+    }
+
+    window.location.href = authentication.flowUrl;
+  }, [authentication]);
+
+  // Disable the connect button while connection is in progress.
+  const canConnect = authentication.connectStatus === "idle";
+  const onConnectClick = canConnect
+    ? () => authentication.connectStart(entity)
+    : undefined;
+
+  return (
+    <>
+      <input value={entity} onChange={setEntity} />
+      <button disabled={!canConnect} onClick={onConnectStart}>
+        Connect
+      </button>
+    </>
+  );
+}
+```
+
+### Receive the `authorizationId`
+
+Assuming a redirect URL with the format `/auth/{authorization_id}`, here's how the `authorizationId` could be parsed and provided to the hook.
+
+```jsx
+import {buildAuthentication} from "../baq/authentication.js";
+import {useConstant} from "@baqhub/sdk-react";
+
+const {useAuthentication} = buildAuthentication({...});
+
+const authPrefix = "/auth/";
+
+function App() {
+  const authorizationId = useConstant(() => {
+    const url = new URL(window.location.href);
+    if (!url.pathname.startsWith(authPrefix)) {
+      return undefined;
+    }
+
+    return url.pathname.slice(authPrefix.length) || undefined;
+  });
+
+  const authentication = useAuthentication(authorizationId);
+}
+```
+
+This is only one way to achieve this. How `authorizationId` is retrieved has been kept flexible to accommodate different hosting scenarios. Here are a few examples:
+
+- A backend server could retrieve the `authorizationId` from the URL and expose it directly in the HTML it generates.
+
+- A mobile app could register a custom scheme and use it to build the redirect URL. The app would then parse the `authorizationId` within it's launch arguments. The same could apply to a desktop app.
+
+- The redirect URL could request for the `authorizationId` to be within the `path`, `query`, or `hash`, depending on what is most convenient for that particular app.
+
+### Use an async storage adapter
+
+When configured with an asynchronous storage adapter, `useAuthentication` should be wrapped in a `<Suspense>` boundary to prevent errors and display loading UI while the storage is being accessed.
+
+```jsx
+import {buildAuthentication} from "../baq/authentication.js";
+import {
+  asyncStorageAdapter,
+  secureStorageAdapter,
+} from "@baqhub/sdk-expo";
+
+const {useAuthentication} = buildAuthentication({
+  storage: asyncStorageAdapter,
+  secureStorage: secureStorageAdapter,
+});
+
+function App() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <AppContent />
+    </Suspense>
+  );
+}
+
+function Loading() {
+  // Display loading UI.
+}
+
+function AppContent() {
+  const authentication = useAuthentication();
+
+  switch (authentication.status) {
+    case "unauthenticated":
+    // Display login UI.
+
+    case "authenticated":
+    // Display app UI.
+  }
+}
+```

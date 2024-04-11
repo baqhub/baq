@@ -1,0 +1,108 @@
+export const metadata = {
+  id: "6d998664",
+  title: "App Authorization Record",
+  summary:
+    "Authorization scope granted by the user to an application.",
+};
+
+# App Authorization Record
+
+Authorization scope granted by the user to an application.
+
+```json
+{
+  "app": {...},
+  "scope_grant": {...}
+}
+```
+
+{props.toc}
+
+## Reference
+
+### `AppAuthorizationRecord`
+
+A private [Record](01735953) created as a result of the authorization flow.
+
+#### Properties
+
+<props.properties>
+
+- **`app`** <props.pill href="6fda79e8">RecordLink</props.pill>
+
+  - App record of the authorized application.
+
+- **`scope_grant`** <props.pill href="#appauthorizationscopegrant">AppAuthorizationScopeGrant</props.pill>
+
+  - Authorization scope granted to this application.
+
+</props.properties>
+
+#### Notes
+
+- The App Authorization record is created by the server.
+
+- The granted scope may differ from what was requested by the application.
+
+### `AppAuthorizationScopeGrant`
+
+#### Properties
+
+<props.properties>
+
+- **`read`** <props.pill href="6fda79e8">RecordLink[]</props.pill> _optional_
+
+  - Record types allowed to be read.
+
+- **`write`** <props.pill href="6fda79e8">RecordLink[]</props.pill> _optional_
+
+  - Record types allowed to be written.
+
+- **`subscribe`** <props.pill href="6fda79e8">RecordLink[]</props.pill> _optional_
+
+  - Record types allowed to subscribe to.
+
+- **`import`** <props.pill href="6fda79e8">RecordLink[]</props.pill> _optional_
+
+  - Record types allowed to be [imported](/todo).
+
+- **`notify`** <props.pill href="6fda79e8">RecordLink[]</props.pill> _optional_
+
+  - Record types the application will be notified about (webhook).
+
+</props.properties>
+
+## Examples
+
+### Full App Authorization record
+
+This is what the full content of an App Authorization record might look like.
+
+```json
+{
+  "app": {
+    "entity": "sean.baq.run",
+    "record_id": "13051c3b8913490489f4889421c2a23c"
+  },
+  "scope_request": {
+    "read": [
+      {
+        "entity": "types.baq.dev",
+        "record_id": "6ee7f69a90154b849bac528daa942bcd"
+      }
+    ],
+    "write": [
+      {
+        "entity": "types.baq.dev",
+        "record_id": "6ee7f69a90154b849bac528daa942bcd"
+      }
+    ],
+    "subscribe": [
+      {
+        "entity": "types.baq.dev",
+        "record_id": "6ee7f69a90154b849bac528daa942bcd"
+      }
+    ]
+  }
+}
+```

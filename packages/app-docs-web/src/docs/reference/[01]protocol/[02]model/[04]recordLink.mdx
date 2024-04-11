@@ -1,0 +1,67 @@
+export const metadata = {
+  id: "6fda79e8",
+  title: "Record Link",
+  summary: "Reference a record.",
+};
+
+# Record Link
+
+Reference a record within the BAQ network.
+
+```json
+{
+  "entity": "pierre.baq.run",
+  "record_id": "652093513e40443ca9377e660269c3b5"
+}
+```
+
+{props.toc}
+
+## Reference
+
+### `RecordLink`
+
+This object can appear both within the record envelope (e.g. `app`) and record content, depending on the record type.
+
+#### Properties
+
+<props.properties>
+
+- **`entity`** <props.pill href="deae588f#entity">Entity</props.pill>
+
+  - Current entity representing the target record's initial author.
+
+- **`original_entity`** <props.pill href="deae588f#entity">Entity</props.pill> _optional_
+
+  - Entity that represented the target record's initial author at the time the referencing record version was created, if different.
+
+- **`record_id`** <props.pill href="deae588f#recordid">RecordId</props.pill>
+
+  - Unique identifier of the record within the scope of its initial author.
+
+</props.properties>
+
+## Examples
+
+### Link to record on different server
+
+A link can be to a record on any compatible server, identified by the author's entity.
+
+```json
+{
+  "entity": "julie.freebaq.org",
+  "record_id": "2758ee128ec245ffb783216fcf3ada14"
+}
+```
+
+### Link with new record author entity
+
+When a user changes entity, the entity that was active at the time of the referencing record version creation is returned as the `original_entity`. This allows clients and server to validate a record's `version_hash`.
+
+```json
+{
+  "entity": "pierre.baq.run",
+  "original_entity": "pierre.baqtest.dev",
+  "record_id": "652093513e40443ca9377e660269c3b5"
+}
+```

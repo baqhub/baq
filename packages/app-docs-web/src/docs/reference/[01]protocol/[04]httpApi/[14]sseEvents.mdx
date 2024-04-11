@@ -1,0 +1,200 @@
+export const metadata = {
+  id: "97c0b7ee",
+  title: "SSE events",
+  summary: "Listen for record updates.",
+};
+
+# SSE events
+
+Listen for record updates.
+
+```httpcli
+GET https://baq.run/api/alice/records
+GET https://baq.run/api/alice/records?filter=$['source']="self"
+```
+
+This is a [Server-Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) endpoint.
+
+{props.toc}
+
+## Reference
+
+### Request
+
+#### Parameters
+
+<props.properties>
+
+- **`min`** <props.pill>string</props.pill> _optional_
+
+  - Minimum bound for `version.received_at`, exclusive.
+
+  - Can be at most **20s** in the past.
+
+  - Defaults to **20s** in the past.
+
+- **`filter`** <props.pill href="#filter">Filter</props.pill> _optional_
+
+  - Conditions to filter the records with.
+
+  - Multiple `filter` parameters are allowed. They're combined as `OR`.
+
+- **`include_links`** <props.pill>string[]</props.pill> _optional_
+
+  - Paths of links to include in the response (comma-separated).
+
+  - Supports the following special values:
+
+    - `entity`: Entity records for all entity links.
+
+    - `existential`: All records for existential record links.
+
+  - Defaults to `entity,existential`.
+
+- **`include_deleted`** <props.pill>boolean</props.pill> _optional_
+
+  - Whether to include deleted records in the response.
+
+  - Defaults to `false`.
+
+</props.properties>
+
+#### Headers
+
+<props.properties>
+
+- **`Last-Event-Id`** <props.pill>string</props.pill> _optional_
+
+  - ID of the last received event.
+
+  - Used to receive all missed updates on reconnection.
+
+</props.properties>
+
+#### Notes
+
+- Records that are within the requested time window will be immediately returned as the request is received. This makes it possible to guarantee that no updates are missed between an initial [GET records](a29bdfea) request and the subsequent subscription to the events endpoint.
+
+- If too many (more than **100**) record updates are available to send when the connection is first established, the request will fail with error code `too_many_events`. The parameters should be adjusted until that number is under the threshold.
+
+### Filter
+
+A filter is a comma-separated list of conditions.
+
+Conditions apply to the following record properties:
+
+<props.compactList>
+
+- `id`
+
+- `source`
+
+- Any link property (e.g. `$['author']`).
+
+</props.compactList>
+
+Conditions can have one of three different formats:
+
+- **`$['path']=`**: The record should have no value at that path.
+
+- **`$['path']=value`**: The record should have the specified value at that path.
+
+- **`value`**: The record should have at least one link with the specified value.
+
+Condition values have a specific format depending on their value:
+
+- **`entity`**: Entity link.
+
+- **`entity+record_id`**: Record link.
+
+- **`entity+record_id+version_hash`**: Version link.
+
+- **`"value"`**: Tag link.
+
+Conditions at the top level are combined using the `AND` operator. Parentheses can be used to create more advanced conditions: each level of grouping flips the operator. For example:
+
+- **`c1,c2`**: `c1 AND c2`
+
+- **`c1,(c2,c3)`**: `c1 AND (c2 OR c3)`
+
+- **`c1,(c2,(c3,c4))`**: `c1 AND (c2 OR (c3 AND c4))`
+
+### Response
+
+#### Headers
+
+<props.properties>
+
+- **`Content-Type: text/event-stream`**
+
+  - Standard type for a [SSE](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) endpoint.
+
+</props.properties>
+
+#### Event
+
+<props.properties>
+
+- **`id`** <props.pill>string</props.pill>
+
+  - Identifier of the event.
+
+  - Opaque, should be provided as `Last-Event-Id` header on reconnect.
+
+- **`event`** <props.pill>enum</props.pill>
+
+  - Type of the event.
+
+  - Only events of type `record` are of interest. Other event types may be sent to help keep the connection open, they can be ignored.
+
+- **`data`** <props.pill href="01735953">Record</props.pill>
+
+  - New or updated record.
+
+</props.properties>
+
+## Usage
+
+### Receive record events
+
+Subscribing to real-time record updates is similar to a [GET records](a29bdfea) request.
+
+```http
+GET /api/alice/events?min=2024-02-19T15:20:51.3590000Z HTTP/2
+Host: baq.run
+```
+
+The response is an event-stream. It can be consumed in the browser with the help of an [EventSource](https://developer.mozilla.org/en-US/docs/Web/API/EventSource).
+
+The server might send some events right away if records were updated since the provided `min` cutoff.
+
+```http
+HTTP/2 200 OK
+Content-Type: text/event-stream
+
+id: 050ef3db581e43e9b5261f086cc35546
+event: record
+data: {author: {...}, ...}
+
+id:c043145295a548b881e13ae74e99257f
+event: record
+data: {author: {...}, ...}
+```
+
+The connection won't be closed however and further events will be received as new records are created and updated.
+
+```http
+id: ace998430d9142e8be861a396fc8e5ae
+event: record
+data: {author: {...}, ...}
+```
+
+### Catch-up on reconnection
+
+When the connection is interrupted for any reason, the `Last-Event-Id` header can be used on reconnection to let the server know what events we may have missed.
+
+```http
+GET /api/alice/events HTTP/2
+Host: baq.run
+Last-Event-Id: ace998430d9142e8be861a396fc8e5ae
+```

@@ -1,0 +1,172 @@
+export const metadata = {
+  id: "f8677e46",
+  title: "2. Build the UI",
+};
+
+# 2. Build the UI
+
+In this guide we will be adding static components to our Todo app and we'll run it in the browser to verify everything works as expected.
+
+Code to follow this guide can be found on [Github](https://github.com/baqhub/app-demo-todo/tree/1-setup-project) or [StackBlitz](https://stackblitz.com/~/github.com/baqhub/app-demo-todo/tree/1-setup-project).
+
+{props.toc}
+
+## Components
+
+These files will go in a new `src/components` folder.
+
+### `<Header>`
+
+In this `Header.tsx` component we display a title for the app and below it a text input to create a new task.
+
+```tsx
+import {FC} from "react";
+
+export const Header: FC = () => {
+  return (
+    <header className="header">
+      <h1>BAQ Todos</h1>
+      <form>
+        <input
+          name="task"
+          type="text"
+          className="new-todo"
+          placeholder="What needs to be done?"
+          autoFocus
+        />
+      </form>
+    </header>
+  );
+};
+```
+
+Pressing "enter" is how the new task gets created, so we handle `onSubmit` on the form to extract the input value and reset it for the next task.
+
+```diff-tsx
+-import {FC} from "react";
++import {FC, FormEvent} from "react";
+
+export const Header: FC = () => {
++  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
++    e.preventDefault();
++
++    // Read the form data and reset it.
++    const form = e.currentTarget;
++    const formData = new FormData(form);
++    form.reset();
++
++    // Read the task title.
++    const newTaskTitle = formData.get("task")?.toString();
++    if (!newTaskTitle) {
++      return;
++    }
++
++    console.log("Got task:", newTaskTitle);
++  };
+
+  return (
+    <header className="header">
+      <h1>BAQ Todos</h1>
+-      <form>
++      <form onSubmit={onSubmit}>
+      ...
+```
+
+### `<Task>`
+
+In this `Task.tsx` component we display a single task with two possible interactions: a checkbox to mark it as completed and a button to delete it.
+
+```tsx
+import {FC} from "react";
+
+interface TaskProps {
+  title: string;
+  completed: boolean;
+}
+
+export const Task: FC<TaskProps> = props => {
+  const {title, completed} = props;
+
+  const onCompletedChange = () => console.log("Completed!");
+  const onDeleteClick = () => console.log("Deleted!");
+
+  return (
+    <li className={completed ? "completed" : undefined}>
+      <div className="view">
+        <input
+          type="checkbox"
+          className="toggle"
+          checked={completed}
+          onChange={onCompletedChange}
+        />
+        <label>{title}</label>
+        <button className="destroy" onClick={onDeleteClick} />
+      </div>
+    </li>
+  );
+};
+```
+
+### `<TaskList>`
+
+In this `TaskList.tsx` component we display a list of tasks with the `<Task>` component we just created. For now we provide static titles to preview what it'll look like.
+
+```tsx
+import {FC} from "react";
+import {Task} from "./Task";
+
+export const TaskList: FC = () => {
+  return (
+    <main className="main">
+      <ul className="todo-list">
+        <Task title="Setup the project" completed={true} />
+        <Task title="Build the UI" completed={false} />
+      </ul>
+    </main>
+  );
+};
+```
+
+### `<App>`
+
+Finally, we update the `App.tsx` component to add our newly created `<Header>` and `<TaskList>` components.
+
+```diff-tsx
+import {FC} from "react";
++import {Header} from "./components/Header";
++import {TaskList} from "./components/TaskList";
+
+export const App: FC = () => {
+-  return null;
++  return (
++    <section className="todoapp">
++      <Header />
++      <TaskList />
++    </section>
++  );
+};
+```
+
+## Run the app
+
+Start the dev server if it's not running already:
+
+```cli
+npm run dev
+```
+
+Navigating to `http://localhost:5173/` should display the following:
+
+![The static app UI.](firstAppBuildUI)
+
+## Next step
+
+We're now done building our app UI.
+
+<props.compactList>
+
+- The code at this state can be found on [Github](https://github.com/baqhub/app-demo-todo/tree/2-build-ui) or [StackBlitz](https://stackblitz.com/~/github.com/baqhub/app-demo-todo/tree/2-build-ui).
+
+- Next: [Add the data model](8fa128c6).
+
+</props.compactList>

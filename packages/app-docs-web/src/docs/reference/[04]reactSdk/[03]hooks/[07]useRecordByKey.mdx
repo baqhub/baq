@@ -1,0 +1,83 @@
+export const metadata = {
+  id: "0015e9c8",
+  title: "useRecordByKey",
+  summary: "Get a single record from the store from its key.",
+};
+
+# useRecordByKey
+
+This is a React hook to get the latest version of a record from the store.
+
+```jsx
+const record = useRecordByKey(key);
+```
+
+{props.toc}
+
+## Reference
+
+### `useRecordByKey()`
+
+Call `useRecordByKey` at the top level of your component to find a record.
+
+```jsx
+function Todo({todoKey}) {
+  const todoRecord = useRecordByKey(todoKey);
+  return <div>{todoRecord.content.title}</div>;
+}
+```
+
+#### Parameters
+
+<props.properties>
+
+- **`key`** <props.pill href="4b9504a7#recordkey">RecordKey</props.pill>
+
+  - Key (entity + id) of the record to get.
+
+</props.properties>
+
+#### Returns
+
+This hook returns a [`Record`](/docs/reference/record)
+
+#### Notes
+
+- Throws an error if no matching record is found.
+
+- Always returns the latest version of the record with this key available in the store. The hook automatically updates when a new version becomes available.
+
+## Usage
+
+### Display record from key
+
+It might be convenient for some components to only receive the key of the record to display instead of the full record. An example of this might be cases where we need the record to always be up-to-date with its latest version.
+
+Here, we have an app that lets the user select a Todo record and display its details.
+
+```jsx
+import {useState} from "react";
+import {useRecordKey} from "./baq/store.js";
+
+function TodoList() {
+  const [selectedTodoKey, setSelectedTodoKey] = useState();
+  return (
+    <>
+      {/* Display a list of Todos and select on click... */}
+      {selectedTodoKey && (
+        <TodoDetails todoKey={selectedTodoKey} />
+      )}
+    </>
+  );
+}
+
+function TodoDetails({todoKey}) {
+  const {content} = useRecordByKey(todoKey);
+  return (
+    <div>
+      <div>Title: {content.title}</div>
+      <div>Completed: {content.completed}</div>
+    </div>
+  );
+}
+```

@@ -1,0 +1,57 @@
+name: Lib Publish
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: 21
+          cache: "yarn"
+
+      - name: Build
+        run: |
+          yarn install --immutable
+          yarn lib-sdk:build
+          yarn lib-sdk-react:build
+          yarn lib-sdk-react-dom:build
+          yarn lib-cli:build
+
+      - name: Publish "lib-sdk"
+        uses: JS-DevTools/npm-publish@v2
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          access: public
+          package: ./packages/lib-sdk/
+
+      - name: Publish "lib-sdk-react"
+        uses: JS-DevTools/npm-publish@v2
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          access: public
+          package: ./packages/lib-sdk-react/
+
+      - name: Publish "lib-sdk-react-dom"
+        uses: JS-DevTools/npm-publish@v2
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          access: public
+          package: ./packages/lib-sdk-react-dom/
+
+      - name: Publish "lib-cli"
+        uses: JS-DevTools/npm-publish@v2
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          access: public
+          package: ./packages/lib-cli/

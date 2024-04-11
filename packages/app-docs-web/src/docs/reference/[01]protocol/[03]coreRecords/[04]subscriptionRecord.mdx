@@ -1,0 +1,65 @@
+export const metadata = {
+  id: "5609fae1",
+  title: "Subscription Record",
+  summary:
+    "Request to be notified of new public records from another user.",
+};
+
+# Subscription Record
+
+Request to be notified of new public records from another user.
+
+```json
+{
+  "publisher": {...},
+  "record_type": {...}
+}
+```
+
+{props.toc}
+
+## Reference
+
+### `SubscriptionRecord`
+
+A public or private [Record](01735953) to subscribe to new public records of a specific type from another user.
+
+#### Properties
+
+<props.properties>
+
+- **`publisher`** <props.pill href="fa939df0">EntityLink</props.pill>
+
+  - User to subscribe to.
+
+- **`record_type`** <props.pill href="6fda79e8">RecordLink</props.pill>
+
+  - Type of record to subscribe to.
+
+</props.properties>
+
+#### Notes
+
+- There can only be one subscription for a given combination of publisher and record type.
+
+- Apps can create subscriptions if they request the `subscribe` scope.
+
+- Deletion of this record signals the end of the subscription.
+
+## Examples
+
+### Full Subscription record
+
+This is what the full content of a Subscription record might look like.
+
+```json
+{
+  "publisher": {
+    "entity": "paul.baq.run"
+  },
+  "record_type": {
+    "entity": "types.baq.dev",
+    "record_id": "6ee7f69a90154b849bac528daa942bcd"
+  }
+}
+```

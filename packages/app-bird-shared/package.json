@@ -1,0 +1,24 @@
+{
+  "name": "@baqhub/bird-shared",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "ts": "tsc --build --watch"
+  },
+  "exports": {
+    "./*": "./src/*"
+  },
+  "dependencies": {
+    "@baqhub/cli": "*",
+    "@baqhub/sdk": "*",
+    "@baqhub/sdk-react": "*",
+    "lodash": "4.17.21",
+    "react": "18.2.0"
+  },
+  "devDependencies": {
+    "@types/lodash": "4.17.0",
+    "@types/react": "18.2.73",
+    "typescript": "5.3.3"
+  }
+}

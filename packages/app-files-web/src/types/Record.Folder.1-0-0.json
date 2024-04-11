@@ -1,0 +1,38 @@
+{
+  "name": "folder",
+  "icon_name": "folder",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "content": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name of the folder.",
+            "type": "string",
+            "max_length": 100
+          },
+          "parent": {
+            "description": "Folder in which this folder is located.",
+            "type": "record_link",
+            "record_types": [
+              {
+                "entity": "{var:entity}",
+                "record_id": "{var:record_id}"
+              }
+            ],
+            "existential": true,
+            "optional": true
+          }
+        }
+      }
+    }
+  },
+  "unique_by": {
+    "domain": "025d28438d2d4cecbcff8109d6d71421",
+    "values": [
+      "/content/parent",
+      "/content/name"
+    ]
+  }
+}

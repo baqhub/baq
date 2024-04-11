@@ -1,0 +1,145 @@
+export const metadata = {
+  id: "06fc3177",
+  title: "Project file",
+};
+
+# Project file
+
+Describes a BAQ app project and the types it uses.
+
+This file can be created and managed with the help of the [BAQ CLI](6bf5f232), but it can also be edited by hand when needed.
+
+This file is always named `baq.json`.
+
+```json
+{
+  "name": "Super App 3000",
+  "type": "ts-react",
+  "path": "src/baq",
+  "record_types": {...}
+}
+```
+
+{props.toc}
+
+## Reference
+
+### `Project`
+
+#### Properties
+
+<props.properties>
+
+- **`name`** <props.pill>string</props.pill>
+
+  - Name of the app.
+
+- **`type`** <props.pill>enum</props.pill>
+
+  - Project type. One of the following:
+
+    - `js`: JavaScript project.
+    - `js-react`: JavaScript + React project.
+    - `ts`: TypeScript project.
+    - `ts-react`: TypeScript + React project.
+
+- **`path`** <props.pill>string</props.pill>
+
+  - Filesystem path where files should be generated.
+
+- **`description`** <props.pill>string</props.pill> _optional_
+
+  - Brief overview of the app.
+
+- **`website_url`** <props.pill href="deae588f#uri">URL</props.pill> _optional_
+
+  - Public website of the app.
+
+- **`record_types`** : <props.code>\{[string]: <props.pill href="#recordtype">RecordType</props.pill>\}</props.code>
+
+  - Record types used by the app.
+
+  - The keys will be the friendly names used when generating types.
+
+</props.properties>
+
+### `RecordType`
+
+Union of [LocalRecordType](#localrecordtype) and [RemoteRecordType](#remoterecordtype).
+
+### `LocalRecordType`
+
+New record type created for the app and available as a local file.
+
+#### Properties
+
+<props.properties>
+
+- **`path`** <props.pill>string</props.pill>
+
+  - Filesystem path to the local [Type record](27a5d157) in JSON format.
+
+- **`record_id`** <props.pill href="deae588f#recordid">RecordId</props.pill>
+
+  - Unique identifier for this record type.
+
+- **`version_hash`** <props.pill href="deae588f#versionhash">VersionHash</props.pill> _optional_
+
+  - Hash of the latest published version.
+
+- **`content_hash`** <props.pill>string</props.pill> _optional_
+
+  - Truncated SHA256 hash of the latest published type record.
+
+  - Used to detect changes and publish a new version if needed.
+
+</props.properties>
+
+### `RemoteRecordType`
+
+Existing public record type published outside of the app.
+
+#### Properties
+
+<props.properties>
+
+- **`entity`** <props.pill href="deae588f#entity">Entity</props.pill>
+
+  - Entity of the record type's author.
+
+- **`record_id`** <props.pill href="deae588f#recordid">RecordId</props.pill>
+
+  - Unique identifier of this record type.
+
+- **`version_hash`** <props.pill href="deae588f#versionhash">VersionHash</props.pill>
+
+  - Hash of the record type version currently in use in the app.
+
+</props.properties>
+
+## Examples
+
+### Full project file
+
+This is what the full content of a BAQ project file might look like. Here we have an app that manages tasks (local record type), while also accessing the user's files (remote record type).
+
+```json
+{
+  "name": "Daily Todo",
+  "type": "ts-react",
+  "path": "src/baq",
+  "description": "Manage your daily tasks with ease.",
+  "website_url": "https://dailytodo.com",
+  "record_types": {
+    "task": {
+      "path": "src/types/record.task.json",
+      "record_id": "4ad29d48f55a409e8d25b0d03b23b6eb"
+    },
+    "file": {
+      "entity": "types.baq.run",
+      "record_id": "2b6f7bc8ffd54c8db8062700c040e04f",
+      "version_hash": "8f41675ff4f0165c2768b4b7f829df5768e8cd1d21e3cd0b3c9cd0fd73c7f151"
+    }
+  }
+}
+```

@@ -1,0 +1,22 @@
+@import "code";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  /* Set the background color for iOS Safari UI. */
+  @apply h-full bg-white dark:bg-zinc-800;
+}
+
+body {
+  /* Set the background color for iOS Safari UI. */
+  @apply h-full bg-white dark:bg-zinc-800;
+  min-width: 320px;
+}
+
+@layer utilities {
+  .ligatures-none {
+    font-variant-ligatures: none;
+  }
+}

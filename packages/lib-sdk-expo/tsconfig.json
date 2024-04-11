@@ -1,0 +1,27 @@
+{
+  "extends": [
+    "../../tsconfig.base"
+  ],
+  "compilerOptions": {
+    "outDir": "./build/esm",
+    "baseUrl": "./src",
+    "declaration": true,
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../lib-sdk"
+    },
+    {
+      "path": "../lib-sdk-react"
+    },
+    {
+      "path": "../lib-sdk-react-native"
+    }
+  ]
+}

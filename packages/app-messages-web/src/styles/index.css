@@ -1,0 +1,26 @@
+@import "fonts";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  @apply w-full h-full bg-white dark:bg-neutral-900;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow: hidden;
+}
+
+#root {
+  @apply h-full min-w-0 grid;
+}
+
+.no-scrollbars *::-webkit-scrollbar {
+  display: none;
+}

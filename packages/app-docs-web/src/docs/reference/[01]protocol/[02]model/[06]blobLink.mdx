@@ -1,0 +1,64 @@
+export const metadata = {
+  id: "70af90d6",
+  title: "Blob Link",
+  summary: "Reference non-record data (image, video, file...)",
+};
+
+# Blob Link
+
+Reference a blob within the BAQ network.
+
+```json
+{
+  "hash": "8456fcfc74e54a91aa7729d7c3d52bfc3406aca5d4ec49f087c5b9b45a686e99",
+  "type": "image/jpeg",
+  "name": "vacation.jpg"
+}
+```
+
+{props.toc}
+
+## Reference
+
+### `BlobLink`
+
+This object can appear within the record content, depending on the record type.
+
+#### Properties
+
+<props.properties>
+
+- **`hash`** <props.pill href="deae588f#blobhash">BlobHash</props.pill>
+
+  - SHA256 hash of the blob content.
+
+- **`type`** <props.pill>string</props.pill>
+
+  - MIME type to use when serving the blob.
+
+- **`name`** <props.pill>string</props.pill>
+
+  - Filename to use when serving the blob.
+
+</props.properties>
+
+## Examples
+
+### Linking the same blob multiple times
+
+The same blob may be used at different places within the same record. A different `name` can be used in that case. A different `type` is allowed as well for the rare cases where it might make sense.
+
+```json
+{
+  "profile_avatar": {
+    "hash": "8456fcfc74e54a91aa7729d7c3d52bfc3406aca5d4ec49f087c5b9b45a686e99",
+    "type": "image/jpeg",
+    "name": "avatar.jpg"
+  },
+  "profile_banner": {
+    "hash": "8456fcfc74e54a91aa7729d7c3d52bfc3406aca5d4ec49f087c5b9b45a686e99",
+    "type": "image/jpeg",
+    "name": "banner.jpg"
+  }
+}
+```

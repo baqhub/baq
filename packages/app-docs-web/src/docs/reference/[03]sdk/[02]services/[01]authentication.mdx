@@ -1,0 +1,127 @@
+export const metadata = {
+  id: "831f781d",
+  title: "Authentication",
+  summary: "Register an app to start the authentication flow.",
+};
+
+# Authentication
+
+Register an app to start the authentication flow.
+
+```ts
+Authentication.register("alice.baq.run", {...});
+```
+
+{props.toc}
+
+## Reference
+
+### `Authentication`
+
+#### Static methods
+
+<props.properties>
+
+- **<props.code>register(entity, appContent, options?)</props.code>**: <props.code>Promise\<<props.pill>object</props.pill>\></props.code>
+
+  - Start registration of the app with the user's server.
+
+  - _Parameters_
+
+    <props.properties>
+
+    - `entity` <props.pill href="deae588f#entity">Entity</props.pill>
+
+      - Entity of the user to register with.
+
+    - `appContent` <props.pill href="02acb69c#apprecord">AppRecordContent</props.pill>
+
+      - Content of the [App record](02acb69c) to create.
+
+    - `options` <props.pill>object</props.pill> _optional_
+
+      - `icon` <props.pill href="https://developer.mozilla.org/en-US/docs/Web/API/Blob">Blob</props.pill> _optional_ : Image to use as app icon.
+
+      - `signal` <props.pill href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal">AbortSignal</props.pill> _optional_ : Abort the registration process.
+
+    </props.properties>
+
+  - _Return value properties_
+
+    <props.properties>
+
+    - `flowUrl` <props.pill>string</props.pill>
+
+      - URL to redirect navigate to in order to start the authorization flow.
+
+    - `state` <props.pill href="#authenticationstate">AuthenticationState</props.pill>
+
+      - Authentication state to create [authenticated clients](e1ca2823).
+
+    </props.properties>
+
+</props.properties>
+
+### `AuthenticationState`
+
+Authentication data to persist locally. \
+Contains the private key used to sign requests.
+
+#### Properties
+
+<props.properties>
+
+- **`entityRecord`** <props.pill href="375c4ea9">EntityRecord</props.pill>
+
+  - Entity record of the authenticated user.
+
+- **`appRecord`** <props.pill href="02acb69c">AppRecord</props.pill>
+
+  - App record for the current app.
+
+- **`credentialsRecord`** <props.pill href="c3198045">CredentialsRecord</props.pill>
+
+  - Public/private key pair used to sign requests.
+
+- **`serverPublicKey`** <props.pill>string</props.pill>
+
+  - Base64 encoded server-issued public key.
+
+  - Used to validate server responses.
+
+- **`authorizationId`** <props.pill>string</props.pill> _optional_
+
+  - ID of the authorization record resulting from a successful flow.
+
+</props.properties>
+
+## Usage
+
+### Register app with server
+
+The first step to getting an app authenticated with a user's server is to register the app. This creates a new [App record](02acb69c) that describes the app and the permissions it wishes to be granted. In this example, we want to register a task management application that needs read and write access to task records.
+
+```ts
+import {Authentication} from "@baqhub/sdk";
+import {TaskRecord} from "./baq/taskRecord.js";
+
+const {flowUrl, state} = await Authentication.register(
+  "alice.baq.run",
+  {
+    name: "BAQ Todo",
+    description: "Manage your daily tasks with ease.",
+    uris: {
+      website: "https://baqtodo.app",
+      redirect: "https://baqtodo.app/auth{/authorization_id}",
+    },
+    scopeRequest: {
+      read: [TaskRecord.link],
+      write: [TaskRecord.link],
+    },
+  }
+);
+
+// Next steps:
+// 1. Persist local state.
+// 2. Navigate user to "flowUrl" for the authorization flow.
+```

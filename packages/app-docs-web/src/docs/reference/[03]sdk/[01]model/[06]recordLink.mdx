@@ -1,0 +1,76 @@
+export const metadata = {
+  id: "c20d7b98",
+  title: "RecordLink",
+  summary: "Reference a record.",
+};
+
+# RecordLink
+
+Reference a record.
+
+```ts
+const recordLink = {
+  entity: "alice.baq.run",
+  recordId: "012a494c14154f2c91e35f34e077e5be",
+};
+```
+
+{props.toc}
+
+## Reference
+
+### Static methods
+
+<props.properties>
+
+- **<props.code>new(entity: <props.pill href="deae588f#entity">Entity</props.pill>, recordId: <props.pill href="deae588f#recordid">RecordId</props.pill>)</props.code>**: <props.pill>RecordLink</props.pill>
+
+  - Create a new record link from an entity and record ID.
+
+- **<props.code>toKey(recordLink: <props.pill>RecordLink</props.pill>)</props.code>**: <props.pill href="4b9504a7#recordkey">RecordKey</props.pill>
+
+  - Get the corresponding key from a record link.
+
+- **<props.code>isRecord(record: <props.pill href="4b9504a7">Record</props.pill>, recordLink: <props.pill>RecordLink</props.pill>)</props.code>**: <props.pill>boolean</props.pill>
+
+  - Check whether a record link matches the provided record.
+
+</props.properties>
+
+### Properties
+
+<props.properties>
+
+- **`entity`** <props.pill href="deae588f#entity">Entity</props.pill>
+
+  - Current entity representing the target record's initial author.
+
+- **`originalEntity`** <props.pill href="deae588f#entity">Entity</props.pill> _optional_
+
+  - Entity that represented the target record's initial author at the time the referencing record version was created, if different.
+
+- **`recordId`** <props.pill href="deae588f#recordid">RecordId</props.pill>
+
+  - Unique identifier of the record within the scope of its initial author.
+
+</props.properties>
+
+## Usage
+
+### Use record link in record
+
+Once created, a record link can be used in the content of a record that accepts a link of the same type. In this example, we create a [Folder record](/todo) with another folder as `parent`.
+
+```ts
+import {Record} from "@baqhub/sdk";
+import {FolderRecord} from "./baq/folderRecord.js";
+
+function createSubFolder(entity, name, parent) {
+  const parentLink = Record.toLink(parent);
+
+  return FolderRecord.new(entity, {
+    name,
+    parent: parentLink,
+  });
+}
+```

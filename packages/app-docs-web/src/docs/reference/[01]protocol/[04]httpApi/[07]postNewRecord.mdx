@@ -1,0 +1,204 @@
+export const metadata = {
+  id: "d80a9260",
+  title: "POST new_record",
+  summary: "Create a new record.",
+};
+
+# POST new_record
+
+Create a new record.
+
+```httpcli
+POST https://baq.run/api/alice/records
+```
+
+{props.toc}
+
+## Reference
+
+### Request
+
+#### Content
+
+<props.properties>
+
+- **`id`** <props.pill href="deae588f#recordid">RecordId</props.pill> _optional_
+
+  - Unique identifier of the record.
+
+  - Defaults to a new random ID if missing.
+
+- **`created_at`** <props.pill href="deae588f#recorddate">RecordDate</props.pill> _optional_
+
+  - Creation date of the record.
+
+  - Defaults to the current date if missing.
+
+- **`permissions`** <props.pill href="01735953#recordpermissions">RecordPermissions</props.pill> _optional_
+
+  - Permissions for the record.
+
+  - Defaults to [private permissions](/todo) if missing.
+
+- **`type`** <props.pill href="041ee052">VersionLink</props.pill>
+
+  - Link to the [Type record](27a5d157) defining the record's schema.
+
+- **`content`** <props.pill>object</props.pill>
+
+  - Type-dependent content of the record.
+
+</props.properties>
+
+#### Parameters
+
+<props.properties>
+
+- **`include_links`** <props.pill>string[]</props.pill> _optional_
+
+  - Paths of links to include in the response (comma-separated).
+
+  - Supports the following special values:
+
+    - `entity`: Entity records for all entity links.
+
+    - `existential`: All records for existential record links.
+
+  - Defaults to `entity,existential`.
+
+</props.properties>
+
+#### Notes
+
+- This endpoint is idempotent if the following properties are provided:
+
+  <props.compactList>
+
+  - `id`
+
+  - `created_at`
+
+  </props.compactList>
+
+- All links in a new record will be validated and must point to existing and accessible entities, records, and blobs.
+
+- This endpoint is atomic and the record is guaranteed to be visible in all other queries once the request completes.
+
+### Response
+
+#### Content
+
+<props.properties>
+
+- **`record`** <props.pill href="01735953">Record</props.pill>
+
+  - Newly created record.
+
+- **`linked_records`** <props.pill href="01735953">Record[]</props.pill>
+
+  - Linked records requested with `include_links`.
+
+</props.properties>
+
+#### Headers
+
+<props.properties>
+
+- **`X-Baq-PublicKey: ...`** _optional_
+
+  - Base64 encoded public key.
+
+  - Only part of the response when creating a new [App](02acb69c) or [Relationship](d15903e4) record.
+
+</props.properties>
+
+## Usage
+
+### Create a new Post record
+
+Creating a new record only requires a `type` and `content`. Here, we create a new [Post record](/todo) with a short text message, and we make it `public` for everyone to read.
+
+```http
+POST /api/alice/records HTTP/2
+Host: baq.run
+Content-Type: application/json
+
+{
+  "type": {
+    "entity": "types.baq.dev",
+    "record_id": "6ee7f69a90154b849bac528daa942bcd",
+    "version_hash": "93ca1149e00ab963ea4b29772769e20330c356bb4b6ae787d3af9168e81d1687"
+  },
+  "content": {
+    "text": "Hi everyone!"
+  },
+  "permissions": {
+    "read": "public"
+  }
+}
+```
+
+In the response, the server has assigned the record a random ID and set the current date where needed. A hash of the record was also generated to uniquely identify this version of it.
+
+```http
+HTTP/2 200 OK
+Content-Type: application/json
+
+{
+  "record": {
+    "author": {
+      "entity": "alice.baq.run"
+    },
+    "id": "867deccbe7ac4adca4efc07fbe08af87",
+    "source": "self",
+    "created_at": "2024-03-05T16:50:17.9080000Z",
+    "received_at": "2024-03-05T16:50:20.4850000Z",
+    "version": {
+      "author": {
+        "entity": "alice.baq.run"
+      },
+      "hash": "563bebcafec0aea26d88384564d721b3026b27a42263200f7aee09366763630d",
+      "created_at": "2024-03-05T16:50:17.9080000Z",
+      "received_at": "2024-03-05T16:50:20.4850000Z"
+    },
+    "permissions": {
+      "read": "public"
+    },
+    "type": {
+      "entity": "types.baq.dev",
+      "record_id": "6ee7f69a90154b849bac528daa942bcd",
+      "version_hash": "93ca1149e00ab963ea4b29772769e20330c356bb4b6ae787d3af9168e81d1687"
+    },
+    "content": {
+      "text": "Hi everyone!"
+    }
+  },
+  "linked_records": []
+}
+```
+
+### Create a record idempotently
+
+Specifying the `id` and `created_at` fields in the request makes it possible to replay it multiple times without creating multiple records. The server will always return the exact same response.
+
+```http
+POST /api/alice/records HTTP/2
+Host: baq.run
+Content-Type: application/json
+
+{
+  "id": "4c093b447c834e3ba62bc69c7ca7069f",
+  "created_at": "2024-03-05T16:50:17.9080000Z",
+  "type": {
+    "entity": "types.baq.dev",
+    "record_id": "6ee7f69a90154b849bac528daa942bcd",
+    "version_hash": "93ca1149e00ab963ea4b29772769e20330c356bb4b6ae787d3af9168e81d1687"
+  },
+  "content": {
+    "text": "Hi everyone!"
+  },
+  "permissions": {
+    "read": "public"
+  }
+}
+```

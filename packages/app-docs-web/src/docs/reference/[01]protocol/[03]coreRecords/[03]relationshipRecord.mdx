@@ -1,0 +1,56 @@
+export const metadata = {
+  id: "d15903e4",
+  title: "Relationship Record",
+  summary: "Communication channel between two users.",
+};
+
+# Relationship Record
+
+Communication channel between two users.
+
+```json
+{
+  "participants": [{"entity": "..."}, {"entity": "..."}]
+}
+```
+
+{props.toc}
+
+## Reference
+
+### `RelationshipRecord`
+
+A private [Record](01735953) that represents a communication channel between two users. This is then used to authenticate requests and update the status of that relationship (e.g. block another user).
+
+#### Properties
+
+<props.properties>
+
+- **`participants`** <props.pill href="fa939df0">EntityLink[]</props.pill> _unique_
+
+  - Two users taking part in this relationship.
+
+</props.properties>
+
+#### Notes
+
+- There can be only one Relationship record for a given set of two users.
+
+- This record can never be updated after its initial creation.
+
+- Relationship records are automatically created by the server when establishing first contact with another user's server.
+
+## Examples
+
+### Full Relationship record
+
+This is what the content of a Relationship record might look like.
+
+```json
+{
+  "participants": [
+    {"entity": "sean.baq.run"},
+    {"entity": "maggie.baq.run"}
+  ]
+}
+```

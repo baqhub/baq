@@ -1,0 +1,44 @@
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+import {
+  AnyBlobLink,
+  AnyRecordLink,
+  AnyTagLink,
+  BlobLink,
+  EntityLink,
+  ExclusiveUnion,
+  IO,
+  Record,
+  RecordKey,
+  RecordLink,
+  RecordLinkOf,
+  RecordType,
+  SchemaIO,
+  TagLink,
+  VersionHash
+} from "@baqhub/sdk";
+
+//
+// Model.
+//
+
+{contentTs}
+
+const R{namePascalCase}RecordContent: IO.RType<{namePascalCase}RecordContent> = {contentIo};
+
+const [{nameCamelCase}RecordType, R{namePascalCase}RecordType] = RecordType.full(
+  "{typeEntity}",
+  "{typeRecordId}",
+  "{typeVersionHash}",
+  R{namePascalCase}RecordContent
+);
+
+const R{namePascalCase}Record = Record.io({nameCamelCase}RecordType, R{namePascalCase}RecordType, R{namePascalCase}RecordContent);
+
+export interface {namePascalCase}Record extends IO.TypeOf<typeof R{namePascalCase}Record> {}
+export const {namePascalCase}Record = Record.ioClean<{namePascalCase}Record>(R{namePascalCase}Record);
+export type {namePascalCase}RecordLink = RecordLink<{namePascalCase}Record>;
+export type {namePascalCase}RecordKey = RecordKey<{namePascalCase}Record>;
+export type {namePascalCase}VersionHash = VersionHash<{namePascalCase}Record>;

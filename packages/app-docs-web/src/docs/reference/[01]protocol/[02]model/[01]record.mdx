@@ -1,0 +1,376 @@
+export const metadata = {
+  id: "01735953",
+  title: "Record",
+  summary: "Everything in BAQ is a record.",
+};
+
+# Record
+
+The core unit of data of the BAQ network.
+
+```json
+{
+  "author": {
+    "entity": "maggie.baq.run"
+  },
+  "id": "bdfb0c15ebb9491d97f90ec0138f4509",
+  "created_at": "2023-09-05T09:42:05+00:00",
+  "version": {
+    "author": {
+      "entity": "maggie.baq.run"
+    },
+    "hash": "63c5b5c54c014f498ac19d20335f5c18bdc10d089de64489952fcf1f79adcb06",
+    "created_at": "2023-09-05T09:42:05+00:00"
+  },
+  "permissions": {
+    "read": "public"
+  },
+  "type": {
+    "entity": "types.baq.dev",
+    "record_id": "bf48729e2b984bb29c67e9da9683cdce",
+    "version_hash": "2bdcebd2206ae6d1d3fe2c1937d4d3585ca50be8b09bdf8010c90713fd809781"
+  },
+  "content": {...}
+}
+```
+
+{props.toc}
+
+## Reference
+
+### `Record`
+
+#### Properties
+
+<props.properties>
+
+- **`author`** <props.pill href="fa939df0">EntityLink</props.pill>
+
+  - Entity link to the initial author of the record.
+
+- **`id`** <props.pill href="deae588f#recordid">RecordId</props.pill>
+
+  - Unique identifier of the record within the scope of its initial author.
+
+- **`created_at`** <props.pill href="deae588f#recorddate">RecordDate</props.pill>
+
+  - Date at which the record was initially created according to its initial author.
+
+- **`version`** <props.pill href="#recordversion">RecordVersion</props.pill>
+
+  - Version-specific details.
+
+- **`permissions`** <props.pill href="#recordpermissions">RecordPermissions</props.pill>
+
+  - Access control information.
+
+- **`type`** <props.pill href="041ee052">VersionLink</props.pill>
+
+  - Version link to the type record defining the record's schema.
+
+- **`content`** _optional_
+
+  - Content of the record, must conform to the record's schema.
+
+- **`no_content`** <props.pill href="#recordnocontent">RecordNoContent</props.pill> _optional_
+
+  - Record tombstone after deletion.
+
+    Mutually exclusive with `content`.
+
+</props.properties>
+
+#### User-dependent properties
+
+These are not part of the original record and are added by the server to provide additional information to the user.
+
+<props.properties>
+
+- **`source`** <props.pill>enum</props.pill>
+
+  - Where the record came from.
+
+  - Possible values from highest to lowest priority:
+
+    - `self` : Created by the server's user.
+
+    - `proxy` : [Proxied](/todo) record.
+
+    - `subscription` : Received through a [subscription](/todo).
+
+    - `notification` : Received through a [notification](/todo).
+
+    - `resolution` : Record downloaded from a link.
+
+  - When two values apply, the highest priority takes precedence.
+
+- **`received_at`** <props.pill href="deae588f#recorddate">RecordDate</props.pill>
+
+  - Date at which the record was received by the server.
+
+</props.properties>
+
+#### Notes
+
+- The record envelope is the same for every record.
+
+- The expected `content` changes depending on the `type`.
+
+- A record is uniquely identified by it's `author` and `id`.
+
+### `RecordVersion`
+
+Versioning information specific to a given version of the record.
+
+#### Properties
+
+<props.properties>
+
+- **`author`** <props.pill href="fa939df0">EntityLink</props.pill>
+
+  - Entity link to the author of the record version.
+
+- **`hash`** <props.pill href="deae588f#versionhash">VersionHash</props.pill>
+
+  - SHA256 hash of the [canonical JSON representation](/docs/learn/recordversion) of the record.
+
+- **`created_at`** <props.pill href="deae588f#recorddate">RecordDate</props.pill>
+
+  - Date at which the record version was created according to the author.
+
+- **`parent_hash`** <props.pill>string</props.pill> _optional_
+
+  - Version hash of this version's parent, if any.
+
+</props.properties>
+
+#### User-dependent properties
+
+These are not part of the original record version and are added by the server to provide additional information to the user.
+
+<props.properties>
+
+- **`received_at`** <props.pill href="deae588f#recorddate">RecordDate</props.pill>
+
+  - Date at which the record version was received by the server.
+
+</props.properties>
+
+### `RecordPermissions`
+
+Access control information for the record.
+
+#### Properties
+
+<props.properties>
+
+- **`read`** <props.pill>"public" | EntityLink[]</props.pill> _optional_
+
+  - Read permissions for the record.
+
+    `"public"` exposes it to everyone, including unauthenticated requests.
+
+    Defaults to `[{author}]`.
+
+- **`write`** <props.pill href="fa939df0">EntityLink[]</props.pill> _optional_
+
+  - Write permissions for the record.
+
+    Must be a subset of `read`.
+
+    Defaults to `[{author}]`.
+
+- **`notify`** <props.pill href="fa939df0">EntityLink[]</props.pill> _optional_
+
+  - Entities to notify about the record.
+
+    Must be a subset of `read`.
+
+    Defaults to every entity in `read`.
+
+</props.properties>
+
+#### Notes
+
+- Because of the default values for `read`, `write`, and `notify`, the empty object `{}` represents private permissions where only the `author` can access the record.
+
+### `RecordNoContent`
+
+Record tombstone after deletion.
+
+Includes information that makes it possible to query the tombstone for synchronization purposes.
+
+#### Properties
+
+<props.properties>
+
+- **`action`** <props.pill>enum</props.pill>
+
+  - Action that resulted in the record being deleted.
+
+    - `"delete"`
+    - `"local"`
+    - `"leave"`
+
+- **`links`** <props.pill href="/todo">BonusLink[]</props.pill>
+
+  - Links that were in the record's `content` prior to deletion.
+
+</props.properties>
+
+## Examples
+
+### Private file record
+
+This record has empty permissions and can only be accessed by its author. The content matches the [`File`](/docs/reference/filerecordtype) record type.
+
+```json
+{
+  "author": {
+    "entity": "sean.baq.run"
+  },
+  "id": "bdfb0c15ebb9491d97f90ec0138f4509",
+  "created_at": "2023-09-05T09:42:05+00:00",
+  "version": {
+    "author": {
+      "entity": "sean.baq.run"
+    },
+    "hash": "63c5b5c54c014f498ac19d20335f5c18bdc10d089de64489952fcf1f79adcb06",
+    "created_at": "2023-09-05T09:42:05+00:00"
+  },
+  "permissions": {},
+  "type": {
+    "entity": "types.baq.dev",
+    "record_id": "bf48729e2b984bb29c67e9da9683cdce",
+    "version_hash": "2bdcebd2206ae6d1d3fe2c1937d4d3585ca50be8b09bdf8010c90713fd809781"
+  },
+  "content": {
+    "blob": {
+      "hash": "efeffbbafe60450d8217acec395386932dadb8f146c24a7f91491aa80429d6a5",
+      "type": "audio/mpeg",
+      "name": "soundtrack.mp3"
+    },
+    "size": 3554267
+  }
+}
+```
+
+### Shared message record
+
+This record is shared between the author and one other entity. That entity was notified upon creation of the record. The content matches the [`Message`](/docs/reference/messagerecordtype) record type.
+
+```json
+{
+  "author": {
+    "entity": "andersen.baq.run"
+  },
+  "id": "bdfb0c15ebb9491d97f90ec0138f4509",
+  "created_at": "2023-09-05T09:42:05+00:00",
+  "version": {
+    "author": {
+      "entity": "andersen.baq.run"
+    },
+    "hash": "63c5b5c54c014f498ac19d20335f5c18bdc10d089de64489952fcf1f79adcb06",
+    "created_at": "2023-09-05T09:42:05+00:00"
+  },
+  "permissions": {
+    "read": [
+      {"entity": "andersen.baq.run"},
+      {"entity": "samantha.baq.run"}
+    ]
+  },
+  "type": {
+    "entity": "types.baq.dev",
+    "record_id": "91c81f5e1f124f55a3483d50845dd8d8",
+    "version_hash": "863debdf824ab35e1f41fefc507492beeb65841832711fb01dcf3000e5ab83b6"
+  },
+  "content": {
+    "conversation": {
+      "entity": "andersen.baq.run",
+      "record_id": "4e5da49d38b44ea7804817bd42e43768"
+    },
+    "text": "Hey Sam, how's it going?"
+  }
+}
+```
+
+### Public blog post record
+
+This record is publicly accessible and can be fetched with a simple unauthenticated HTTP request. The content matches the [`Article`](/docs/reference/article) record type.
+
+```json
+{
+  "author": {
+    "entity": "samantha.baq.run"
+  },
+  "id": "bdfb0c15ebb9491d97f90ec0138f4509",
+  "created_at": "2023-09-05T09:42:05+00:00",
+  "version": {
+    "author": {
+      "entity": "samantha.baq.run"
+    },
+    "hash": "63c5b5c54c014f498ac19d20335f5c18bdc10d089de64489952fcf1f79adcb06",
+    "created_at": "2023-09-05T09:42:05+00:00"
+  },
+  "permissions": {
+    "read": "public"
+  },
+  "type": {
+    "entity": "types.baq.dev",
+    "record_id": "6a6d633527b1429db700161c24e356cf",
+    "version_hash": "03679484a55b476f99b883c81b7cc30b92876f5cd00144b5972f7196e4174977"
+  },
+  "content": {
+    "title": "Federated content in 2024",
+    "summary": "...",
+    "content": "...",
+    "published_at": "2023-09-05T14:42:05+00:00"
+  }
+}
+```
+
+### Deleted record
+
+This record was deleted by its author. It remains as a tombstone for synchronization purposes. The `content` was replaced by a `no_content` object that carries over the links the record previously had. This makes it possible for clients to fetch the tombstone even when filtering by link.
+
+```json
+{
+  "author": {
+    "entity": "andersen.baq.run"
+  },
+  "id": "bdfb0c15ebb9491d97f90ec0138f4509",
+  "created_at": "2023-09-05T09:42:05+00:00",
+  "version": {
+    "author": {
+      "entity": "andersen.baq.run"
+    },
+    "hash": "99f85638200443138dc7a8166aeecb2e87fd5b0ae7fb46d8aaa461c4ef1d88e4",
+    "parent_hash": "63c5b5c54c014f498ac19d20335f5c18bdc10d089de64489952fcf1f79adcb06",
+    "created_at": "2023-09-05T09:42:05+00:00"
+  },
+  "permissions": {
+    "read": [
+      {"entity": "andersen.baq.run"},
+      {"entity": "samantha.baq.run"}
+    ]
+  },
+  "type": {
+    "entity": "types.baq.dev",
+    "record_id": "91c81f5e1f124f55a3483d50845dd8d8",
+    "version_hash": "863debdf824ab35e1f41fefc507492beeb65841832711fb01dcf3000e5ab83b6"
+  },
+  "no_content": {
+    "action": "delete",
+    "links": [
+      {
+        "path": "$['content']['conversation']",
+        "type": "record",
+        "link": {
+          "entity": "andersen.baq.run",
+          "record_id": "4e5da49d38b44ea7804817bd42e43768"
+        }
+      }
+    ]
+  }
+}
+```

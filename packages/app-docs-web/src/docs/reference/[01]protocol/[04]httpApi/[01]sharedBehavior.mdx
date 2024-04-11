@@ -1,0 +1,162 @@
+export const metadata = {
+  id: "2cdaf087",
+  title: "Shared behavior",
+  summary: "Common properties of the various endpoints.",
+};
+
+# Shared behavior
+
+Common properties of the various endpoints.
+
+{props.toc}
+
+## Reference
+
+### HTTPS
+
+The HTTP API is only available over HTTPS. Servers should actively refuse non-secure connections, or must at the very least redirect to the corresponding secure endpoint.
+
+Client libraries can assume all requests will always be over HTTPS.
+
+The protocol currently supports TLS 1.2 and TLS 1.3.
+
+### HTTP/2
+
+Due to the generic nature of the protocol, client apps may often need to perform multiple queries to populate a single view. This, combined with a heavy use of [SSE](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events), meant that the browser connection limit of HTTP/2 was too limiting. As a result [HTTP/2](https://developer.mozilla.org/en-US/docs/Glossary/HTTP_2) (or 3) support is required to serve the HTTP API.
+
+### CORS
+
+The HTTP API is designed to be available to web applications hosted on domains that differ from the API domain. As a result [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) is a requirement and is enabled for all origins on all endpoints.
+
+```http
+Access-Control-Allow-Headers: Authorization,Content-Type,X-Baq-Client-Id,Last-Event-Id,X-Baq-PublicKey
+Access-Control-Allow-Methods: HEAD,GET,POST,PUT,DELETE,OPTIONS
+Access-Control-Allow-Origin: *
+Access-Control-Max-Age: 43200
+```
+
+### Headers
+
+The following headers can be used on all endpoints.
+
+#### `X-Baq-Client-Id`
+
+Random, transient, 128-bit identifier of the current client.
+
+<props.compactList>
+
+- Hex-encoded, all-lowercase, without any spaces.
+
+- Used to filter out events sent through the [SSE events](97c0b7ee) endpoint when they result from actions performed by the same client.
+
+- Strongly recommended on all calls for apps that use server events.
+
+</props.compactList>
+
+#### `X-Baq-Content-SHA256`
+
+SHA256 hash of the request content, hex-encoded.
+
+<props.compactList>
+
+- Makes it possible to sign the request content.
+
+- Optional in protocol version `1.0`.
+
+</props.compactList>
+
+### Cache control
+
+The HTTP API is designed to always provide up-to-date data. Therefore all endpoints, with the exception of [GET record_blob](36a96563), will always return the following:
+
+```http
+Cache-Control: no-cache
+```
+
+### Content negotiation
+
+Content negotiation with the help of the `Accept` header is unavailable and ignored throughout the entire HTTP API.
+
+For all endpoints except [POST new_blob](934f5c75) and [GET record_blob](36a96563), the only expected content format is the following:
+
+```http
+Content-Type: application/json
+```
+
+### Errors
+
+All endpoints return errors that follow [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457). They return a standardized JSON object that makes it easier to handle errors programmatically.
+
+#### Properties
+
+<props.properties>
+
+- **`type`** <props.pill href="deae588f#uri">URI</props.pill>
+
+  - Unique identifier for this type of error.
+
+  - Must be among the documented protocol error types.
+
+  - Also a valid HTTP URL to learn more about the error.
+
+- **`status`** <props.pill>int</props.pill>
+
+  - HTTP status code of the response.
+
+- **`title`** <props.pill>string</props.pill>
+
+  - Human-readable title of the error.
+
+</props.properties>
+
+#### Error types
+
+_Coming in protocol version `1.1`._
+
+## Examples
+
+### OPTIONS request
+
+The HTTP API accepts the `OPTIONS` verb on all endpoints to support CORS. This includes the user's entity domain itself.
+
+```http
+OPTIONS /api/alice/records/alice.baq.run/7b1540ef89214c0da205144ab9a457fb HTTP/2
+Host: baq.run
+Access-Control-Request-Headers: x-baq-client-id
+Access-Control-Request-Method: GET
+```
+
+The server then returns the appropriate `Access-Control` headers.
+
+```http
+HTTP/2 204 No Content
+Access-Control-Allow-Headers: Authorization,Content-Type,X-Baq-Client-Id,Last-Event-Id,X-Baq-PublicKey
+Access-Control-Allow-Methods: HEAD,GET,POST,PUT,DELETE,OPTIONS
+Access-Control-Allow-Origin: *
+Access-Control-Max-Age: 43200
+```
+
+### Bad request error
+
+Trying to create a new record with an empty object will fail.
+
+```http
+POST /api/alice/records HTTP/2
+Host: baq.run
+Content-Type: application/json
+
+{}
+```
+
+The server returns a unique error type for this problem, and a general explanation of what happened.
+
+```http
+HTTP/2 400 Bad Request
+Content-Type: application/problem+json
+
+{
+  "type": "https://baq.dev/error-types/new-record/400-missing-properties",
+  "status": 400,
+  "title": "The record creation request is missing some required properties."
+}
+```

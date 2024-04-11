@@ -1,0 +1,67 @@
+export const metadata = {
+  id: "880d482d",
+  title: "EntityLink",
+  summary: "Reference an entity.",
+};
+
+# EntityLink
+
+Reference an entity.
+
+```ts
+const entityLink = {
+  entity: "alice.baq.run",
+};
+```
+
+{props.toc}
+
+## Reference
+
+### `EntityLink`
+
+#### Static methods
+
+<props.properties>
+
+- **<props.code>new(entity: <props.pill href="deae588f#entity">Entity</props.pill>)</props.code>**: <props.pill>EntityLink</props.pill>
+
+  - Create a new entity link from a user entity.
+
+</props.properties>
+
+#### Properties
+
+<props.properties>
+
+- **`entity`** <props.pill href="deae588f#entity">Entity</props.pill>
+
+  - Entity currently representing the target user.
+
+- **`originalEntity`** <props.pill href="deae588f#entity">Entity</props.pill> _optional_
+
+  - Target user's entity at the time the record version was created, if different.
+
+</props.properties>
+
+## Usage
+
+### Use entity link in record
+
+Once created, an entity link can be used in the content of a record. In this example we create a [Post record](/todo) that mentions other users with the help of entity links.
+
+```ts
+import {EntityLink} from "@baqhub/sdk";
+import {PostRecord} from "./baq/postRecord.js";
+
+const entityLink1 = EntityLink.new("henry.baq.run");
+const entityLink2 = EntityLink.new("sean.baq.run");
+
+const postRecord = PostRecord.new("paul.baq.run", {
+  text: "Where are you going this weekend? @henry.baq.run @sean.baq.run",
+  textMentions: [
+    {mention: entityLink1, index: 34, length: 14},
+    {mention: entityLink2, index: 49, length: 13},
+  ],
+});
+```

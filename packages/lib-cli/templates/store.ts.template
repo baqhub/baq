@@ -1,0 +1,26 @@
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+import {IO} from "@baqhub/sdk";
+import {createStore} from "@baqhub/sdk-react";
+{recordTypesImport}
+
+export const {
+  RKnownRecord,
+  Store,
+  ProxyStore,
+  wrapInProxyStore,
+  useRecordsQuery,
+  useStaticRecordsQuery,
+  useRecordQuery,
+  useStaticRecordQuery,
+  useRecordHelpers,
+  useRecordByVersion,
+  useRecordByKey,
+  useFindRecordByKey,
+  useFindRecordByQuery,
+  useFindEntityRecord,
+} = createStore({recordTypesArg});
+
+export type KnownRecord = IO.TypeOf<typeof RKnownRecord>;

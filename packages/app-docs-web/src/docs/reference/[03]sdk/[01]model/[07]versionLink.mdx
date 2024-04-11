@@ -1,0 +1,75 @@
+export const metadata = {
+  id: "8a6f1bed",
+  title: "VersionLink",
+  summary: "Reference a specific version of a record.",
+};
+
+# VersionLink
+
+Reference a specific version of a record.
+
+{/* prettier-ignore */}
+```ts
+const versionLink = {
+  entity: "alice.baq.run",
+  recordId: "23f2e13ee0424209a471a6bc3b7819f9",
+  versionHash: "55f91f26ce2d4ca9836fff702a4ac38c84274f12fa6a40528f039e3b78b9bd47",
+};
+```
+
+{props.toc}
+
+## Reference
+
+### Static methods
+
+<props.properties>
+
+- **<props.code>new(entity, recordId, versionHash)</props.code>**: <props.pill>VersionLink</props.pill>
+
+  - Create a new version link from an entity, record ID, and version hash.
+
+</props.properties>
+
+### Properties
+
+<props.properties>
+
+- **`entity`** <props.pill href="deae588f#entity">Entity</props.pill>
+
+  - Current entity representing the target record's initial author.
+
+- **`originalEntity`** <props.pill href="deae588f#entity">Entity</props.pill> _optional_
+
+  - Entity that represented the target record's initial author at the time the referencing record version was created, if different.
+
+- **`recordId`** <props.pill href="deae588f#recordid">RecordId</props.pill>
+
+  - Unique identifier of the record within the scope of its initial author.
+
+- **`versionHash`** <props.pill href="deae588f#versionhash">VersionHash</props.pill>
+
+  - SHA256 hash of the [canonical JSON representation](/docs/learn/recordversion) of the record.
+
+</props.properties>
+
+## Usage
+
+### Use version link in record
+
+Linking to a specific version is useful when we want the linked data to be immutable. Here we create a [Bookmark record](/todo) with a link to a specific version of a blog post record.
+
+```ts
+import {VersionLink} from "@baqhub/sdk";
+import {BookmarkRecord} from "./baq/bookmarkRecord.js";
+
+const blogVersionLink = VersionLink.new(
+  "baq.news.io",
+  "46edb6353d83434caa7d297668ec057e",
+  "8fa743e7285f46cfbd4532b39cfdc8bcde4acbe054f04cc98e2bf16517255459"
+);
+
+const bookmarkRecord = BookmarkRecord.new("taylor.baq.run", {
+  target: blogVersionLink,
+});
+```

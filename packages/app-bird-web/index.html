@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="preload" href="/fonts/inter-roman-3-19.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+  <link rel="preload" href="/fonts/inter-italic-3-19.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bird</title>
+  <script>
+    const hasExistingTheme = "theme" in localStorage;
+    const existingThemeSetting = String(localStorage.theme);
+
+    if (
+      existingThemeSetting === "dark" ||
+      (!hasExistingTheme &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  </script>
+</head>
+
+<body>
+  <div id="background"></div>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>

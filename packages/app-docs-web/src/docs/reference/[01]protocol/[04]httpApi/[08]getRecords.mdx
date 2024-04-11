@@ -1,0 +1,212 @@
+export const metadata = {
+  id: "a29bdfea",
+  title: "GET records",
+  summary: "List, filter, and sort records.",
+};
+
+# GET records
+
+List, filter, and sort records.
+
+```httpcli
+GET https://baq.run/api/alice/records
+GET https://baq.run/api/alice/records?page_size=20
+GET https://baq.run/api/alice/records?filter=$['source']="self"
+```
+
+{props.toc}
+
+## Reference
+
+### Request
+
+#### Parameters
+
+<props.properties>
+
+- **`sort`** <props.pill>string</props.pill> _optional_
+
+  - Property on which to sort, and sort order.
+
+  - Possible property values:
+
+    - `$['received_at']`
+
+    - `$['created_at']`
+
+    - `$['version.received_at']`
+
+    - `$['version.created_at']`
+
+    - JSON path of a [Tag link](c64170ca#taglinkschema) marked as `sort_property` to sort on.
+
+  - Possible sort order values:
+
+    - `desc`: Descending.
+
+    - `asc`: Ascending.
+
+  - Defaults to `$['received_at']+desc`.
+
+- **`min`** <props.pill>string</props.pill> _optional_
+
+  - Minimum bound for the sort property, exclusive.
+
+- **`max`** <props.pill>string</props.pill> _optional_
+
+  - Maximum bound for the sort property, exclusive.
+
+- **`page_start`** <props.pill>string</props.pill> _optional_
+
+  - Starting point of the sort property for the current page, exclusive.
+
+- **`page_size`** <props.pill>int</props.pill> _optional_
+
+  - Desired number of records.
+
+  - Accepts values between **1** and **200**, inclusive.
+
+  - Default to **20**.
+
+- **`distinct`** <props.pill>string</props.pill> _optional_
+
+  - JSON path of a [Tag link](c64170ca#taglinkschema) marked as `sort_property` to deduplicate on.
+
+- **`filter`** <props.pill href="#filter">Filter</props.pill> _optional_
+
+  - Conditions to filter the records with.
+
+  - Multiple `filter` parameters are allowed. They're combined as `OR`.
+
+- **`include_links`** <props.pill>string[]</props.pill> _optional_
+
+  - Paths of links to include in the response (comma-separated).
+
+  - Supports the following special values:
+
+    - `entity`: Entity records for all entity links.
+
+    - `existential`: All records for existential record links.
+
+  - Defaults to `entity,existential`.
+
+- **`include_deleted`** <props.pill>boolean</props.pill> _optional_
+
+  - Whether to include deleted records in the response.
+
+  - Defaults to `false`.
+
+- **`proxy_to`** <props.pill href="deae588f#entity">Entity</props.pill> _optional_
+
+  - Other user's entity to proxy the request to.
+
+</props.properties>
+
+### Filter
+
+A filter is a comma-separated list of conditions.
+
+Conditions apply to the following record properties:
+
+<props.compactList>
+
+- `id`
+
+- `source`
+
+- Any link property (e.g. `$['author']`).
+
+</props.compactList>
+
+Conditions can have one of three different formats:
+
+- **`$['path']=`**: The record should have no value at that path.
+
+- **`$['path']=value`**: The record should have the specified value at that path.
+
+- **`value`**: The record should have at least one link with the specified value.
+
+Condition values have a specific format depending on their value:
+
+- **`entity`**: Entity link.
+
+- **`entity+record_id`**: Record link.
+
+- **`entity+record_id+version_hash`**: Version link.
+
+- **`"value"`**: Tag link.
+
+Conditions at the top level are combined using the `AND` operator. Parentheses can be used to create more advanced conditions: each level of grouping flips the operator. For example:
+
+- **`c1,c2`**: `c1 AND c2`
+
+- **`c1,(c2,c3)`**: `c1 AND (c2 OR c3)`
+
+- **`c1,(c2,(c3,c4))`**: `c1 AND (c2 OR (c3 AND c4))`
+
+### Response
+
+#### Content
+
+<props.properties>
+
+- **`records`** <props.pill href="01735953">Records[]</props.pill>
+
+  - Resulting list of records.
+
+- **`linked_records`** <props.pill href="01735953">Records[]</props.pill>
+
+  - Linked records requested with `include_links`.
+
+- **`next_page`** <props.pill>string</props.pill> _optional_
+
+  - Query string to fetch the next page of results.
+
+  - Empty if this is the end of the requested range.
+
+</props.properties>
+
+## Usage
+
+### List first 30 records
+
+Without any filter, the `records` endpoints will return all the records the requester has access to. Here we specify the `page_size` to retrieve the first 30.
+
+```http
+GET /api/alice/records?page_size=30 HTTP/2
+Host: baq.run
+```
+
+Because this queries all records without filter, we get a `next_page` to let us easily paginate over the results.
+
+```http
+HTTP/2 200 OK
+Content-Type: application/json
+
+{
+  "records": [...],
+  "linked_records": [...],
+  "next_page": "?page_size=30&page_start=2023-12-15T11:20:01.2240000Z"
+}
+```
+
+### Filter by type and author
+
+Querying all records is rarely useful, instead we may want add a filter to only get records of a specific type. Here we add a filter for [Post records](/todo) created by the user with entity `cyril.baq.run`.
+
+```http
+GET /api/alice/records?filter=$['type']=types.baq.dev+6ee7f69a90154b849bac528daa942bcd,$['author']=cyril.baq.run HTTP/2
+Host: baq.run
+```
+
+In this case, because only a small number of records match this filter, it is the only page and we don't get a `next_page` property.
+
+```http
+HTTP/2 200 OK
+Content-Type: application/json
+
+{
+  "records": [...],
+  "linked_records": [...]
+}
+```

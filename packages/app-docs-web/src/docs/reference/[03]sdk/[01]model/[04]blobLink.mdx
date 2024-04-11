@@ -1,0 +1,76 @@
+export const metadata = {
+  id: "6cbe48da",
+  title: "BlobLink",
+  summary: "Reference a blob.",
+};
+
+# BlobLink
+
+Reference a blob.
+
+```ts
+const blobLink = {
+  hash: "2c29c30097484dad91d5b4f1e4c4560c0b1ffdeda4c447e396fea6ce38004583",
+  type: "image/jpeg",
+  name: "thumbnail.jpg",
+};
+```
+
+{props.toc}
+
+## Reference
+
+### `BlobLink`
+
+#### Static methods
+
+<props.properties>
+
+- **<props.code>new(response: <props.pill href="e1ca2823#blobresponse">BlobResponse</props.pill>, type: <props.pill>string</props.pill>, name: <props.pill>string</props.pill>)</props.code>**: <props.pill>BlobLink</props.pill>
+
+  - Create a new blob link from a blob upload response.
+
+</props.properties>
+
+#### Properties
+
+<props.properties>
+
+- **`hash`** <props.pill href="deae588f#blobhash">BlobHash</props.pill>
+
+  - SHA256 hash of the blob content.
+
+- **`type`** <props.pill>string</props.pill>
+
+  - MIME type to use when serving the blob.
+
+- **`name`** <props.pill>string</props.pill>
+
+  - Filename to use when serving the blob.
+
+</props.properties>
+
+#### Notes
+
+- A given record can link to the same blob multiple times with different `type` and `name` attributes. Those will be used to correctly serve the blob when requested.
+
+## Usage
+
+### Use blob link in record
+
+Once created, a blob link can immediately be used in the content of a record that accepts a link of the same type. In this example, we upload a [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File) and create a [File record](/todo).
+
+```ts
+import {BlobLink} from "@baqhub/sdk";
+import {FileRecord} from "./baq/fileRecord.js";
+
+async function uploadFile(client, entity, file) {
+  const response = await client.uploadBlob(file);
+  const blobLink = BlobLink.new(response, file.type, file.name);
+
+  return FileRecord.new(entity, {
+    blob: blobLink,
+    size: response.size,
+  });
+}
+```

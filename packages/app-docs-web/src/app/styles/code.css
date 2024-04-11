@@ -1,0 +1,221 @@
+/*
+ * Based on Plugin: Syntax Highlighter CB
+ * Plugin URI: http://wp.tutsplus.com/tutorials/plugins/adding-a-syntax-highlighter-shortcode-using-prism-js
+ * Description: Highlight your code snippets with an easy to use shortcode based on Lea Verou's Prism.js.
+ * Version: 1.0.0
+ * Author: c.bavota
+ * Author URI: http://bavotasan.comhttp://wp.tutsplus.com/tutorials/plugins/adding-a-syntax-highlighter-shortcode-using-prism-js/ */
+/* http://cbavota.bitbucket.org/syntax-highlighter/  */
+
+/* =====   ===== */
+/* code[class*="language-"],
+pre[class*="language-"] {
+  text-shadow: 0 1px 1px #000;
+  direction: ltr;
+  text-align: left;
+  word-spacing: normal;
+  white-space: pre;
+  word-wrap: normal;
+  line-height: 1.4;
+  background: none;
+  border: 0;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+  @apply text-white;
+} */
+
+/* pre[class*="language-"] code {
+  float: left;
+  padding: 0 15px 0 0;
+} */
+
+/* pre[class*="language-"],
+:not(pre) > code[class*="language-"] {
+} */
+
+/* Code blocks */
+/* pre[class*="language-"] {
+	padding: 15px;
+	margin: 1em 0;
+	overflow: auto;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+} */
+
+/* Inline code */
+/* :not(pre) > code[class*="language-"] {
+	padding: 5px 10px;
+	line-height: 1;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+} */
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  @apply text-zinc-400;
+}
+
+.token.selector,
+.token.punctuation {
+  @apply text-white;
+}
+
+.token.namespace {
+  opacity: 0.7;
+}
+
+.token.tag,
+.token.boolean {
+  @apply text-cyan-400;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.hex,
+.token.string {
+  @apply text-yellow-400;
+}
+
+.token.property {
+  @apply text-lime-400;
+}
+
+.token.variable {
+  @apply text-fuchsia-400;
+}
+
+.token.entity,
+.token.url,
+.token.attr-name,
+.token.keyword,
+.token.operator {
+  @apply text-rose-400;
+}
+
+.token.regex {
+  color: #9b71c6;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+.token.function,
+.token.constant,
+.token.class-name {
+  @apply text-teal-400;
+}
+
+.token.number {
+  @apply text-purple-400;
+}
+
+.token.important,
+.token.deliminator {
+  color: #e45734;
+}
+
+/* Line highlight plugin */
+/* .line-highlight.line-highlight {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.line-highlight.line-highlight:before,
+.line-highlight.line-highlight[data-end]:after {
+  top: 0.3em;
+  background-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  border-radius: 8px;
+} */
+
+/* .code-highlight {
+  float: left;
+  min-width: 100%;
+} */
+
+.code-line {
+  display: block;
+  line-height: 24px;
+  @apply px-6 sm:px-5;
+}
+
+pre > code[class*="language-cli"] > .code-line::before {
+  content: "> ";
+  @apply text-rose-400;
+}
+
+.code-line.inserted {
+  @apply bg-green-500/25;
+}
+
+.code-line.deleted {
+  @apply bg-red-500/25;
+}
+
+.code-line.inserted,
+.code-line.deleted {
+  position: relative;
+  @apply pl-[calc(1.5rem+1ch)] sm:pl-[calc(1.25rem+1ch)];
+}
+
+.code-line.inserted::first-letter,
+.code-line.deleted::first-letter {
+  @apply invisible;
+}
+
+pre > code[class*="language-diff"] > .code-line::before {
+  content: "  ";
+}
+
+pre > code[class*="language-diff"] > .code-line.inserted::before,
+pre > code[class*="language-diff"] > .code-line.deleted::before {
+  display: none;
+}
+
+pre > code[class*="language-diff"] > .code-line.inserted::after {
+  content: "+";
+  position: absolute;
+  left: 20px;
+  top: 0;
+}
+
+pre > code[class*="language-diff"] > .code-line.deleted::after {
+  content: "-";
+  position: absolute;
+  left: 20px;
+  top: 0;
+}
+
+/* .code-line.inserted > span:first-child,
+.code-line.deleted > span:first-child {
+  display: none;
+} */
+
+/* for line numbers */
+/* span instead of span:before for a two-toned border */
+.line-numbers .line-numbers-rows > span {
+  border-right: 3px #d9d336 solid;
+}
+
+.line-number::before {
+  display: inline-block;
+  width: 1rem;
+  text-align: right;
+  margin-right: 10px;
+  margin-left: -10px;
+  content: attr(line);
+  @apply text-zinc-400;
+}

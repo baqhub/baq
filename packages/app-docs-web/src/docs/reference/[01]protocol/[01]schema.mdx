@@ -1,0 +1,697 @@
+export const metadata = {
+  id: "c64170ca",
+  title: "Schema",
+};
+
+# Schema
+
+The BAQ Schema format was inspired by [JSON Schema](https://json-schema.org/) and [JSON Type Definition](https://jsontypedef.com/). It should look familiar to anyone with experience with either. This new format was introduced to meet the following design goals:
+
+- **Strictness**. No additional properties or items. Self-contained schema documents. No implicit behavior: each schema has a well-identified type.
+- **Schema evolution**. Two versions of a schema can be programmatically compared to ensure forward compatibility.
+- **Code generation**. Closely match the TypeScript type system to automatically generate accurate type definitions.
+
+{props.toc}
+
+## Reference
+
+### `Schema`
+
+A BAQ Schema is a union of all the possible schema types. The `type` is the union discriminator. These properties are common to all schemas:
+
+#### Properties
+
+<props.properties>
+
+- **`type`** <props.pill>enum</props.pill>
+
+  - Type of schema this object represents.
+
+    Values: [`"object"`](#objectschema), [`"array"`](#arrayschema), [`"boolean"`](#booleanschema), [`"string"`](#stringschema), [`"int"`](#intschema), [`"number"`](#numberschema), [`"null"`](#nullschema), [`"tag_link"`](#taglinkschema), [`"blob_link"`](#bloblinkschema), [`"entity_link"`](#entitylinkschema), [`"record_link"`](#recordlinkschema), [`"version_link"`](#versionlinkschema), [`"map"`](#mapschema), [`"union"`](#unionschema), [`"intersection"`](#intersectionschema), [`"ref"`](#refschema), [`"never"`](#neverschema)
+
+- **`definitions`** <props.pill>\{[string]: Schema\}</props.pill> _optional_
+
+  - Named schemas that can be used by any child [`RefSchema`](#refschema).
+
+    This is useful to avoid duplication and to define recursive schemas.
+
+</props.properties>
+
+### `ObjectSchema`
+
+Schema for a JSON object with known properties.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "hello": {
+      "type": "string"
+    },
+    "world": {
+      "type": "string",
+      "optional": true
+    }
+  }
+}
+```
+
+#### Properties
+
+<props.properties>
+
+- **`type`** <props.pill>enum</props.pill>
+
+  - Value: `"object"`
+
+- **`properties`** <props.pill>\{[string]: Schema\}</props.pill>
+
+  - Properties of the represented object, and their corresponding schemas.
+
+    Each property value is a [`Schema`](#schema) with this additional property:
+
+    <props.properties>
+
+    - **`optional`** <props.pill>boolean</props.pill> _optional_
+
+      - Allow the property to be omitted.
+
+        Default: `false`
+
+    </props.properties>
+
+</props.properties>
+
+### `ArraySchema`
+
+Schema for a JSON array.
+
+```json
+{
+  "type": "array",
+  "items": {
+    "type": "string"
+  }
+}
+```
+
+#### Properties
+
+<props.properties>
+
+- **`type`** <props.pill>enum</props.pill>
+
+  - Value: `"array"`
+
+- **`items`** <props.pill href="#schema">Schema</props.pill>
+
+  - Schema for the values in the array.
+
+- **`min_items`** <props.pill>int</props.pill> _optional_
+
+  - Minimum number of items in the array (inclusive).
+
+- **`max_items`** <props.pill>int</props.pill> _optional_
+
+  - Maximum number of items in the array (inclusive).
+
+- **`distinct_items`** <props.pill>boolean</props.pill> _optional_
+
+  - Require all items in the array to have distinct values.
+
+    Default: `false`
+
+</props.properties>
+
+### `BooleanSchema`
+
+Schema for a JSON boolean value.
+
+```json
+{
+  "type": "boolean"
+}
+```
+
+#### Properties
+
+<props.properties>
+
+- **`type`** <props.pill>enum</props.pill>
+
+  - Value: `"boolean"`
+
+- **`enum`** <props.pill>boolean[]</props.pill> _optional_
+
+  - Allowed boolean values.
+
+</props.properties>
+
+### `StringSchema`
+
+Schema for a JSON string value.
+
+```json
+{
+  "type": "string"
+}
+```
+
+#### Properties
+
+<props.properties>
+
+- **`type`** <props.pill>enum</props.pill>
+
+  - Value: `"string"`
+
+- **`enum`** <props.pill>string[]</props.pill> _optional_
+
+  - Allowed string values.
+
+- **`min_length`** <props.pill>int</props.pill> _optional_
+
+  - Minimum length of the string (inclusive).
+
+- **`max_length`** <props.pill>int</props.pill> _optional_
+
+  - Maximum length of the string (inclusive).
+
+</props.properties>
+
+#### Notes
+
+- All strings must be normalized in [Unicode Normalization Form C (NFC)](https://unicode.org/reports/tr15/#Norm_Forms).
+
+- All lengths are in Unicode code points.
+
+### `IntSchema`
+
+Schema for a JSON integer number.
+
+```json
+{
+  "type": "int"
+}
+```
+
+#### Properties
+
+<props.properties>
+
+- **`type`** <props.pill>enum</props.pill>
+
+  - Value: `"int"`
+
+- **`enum`** <props.pill>int[]</props.pill> _optional_
+
+  - Allowed integer values.
+
+- **`min`** <props.pill>int</props.pill> _optional_
+
+  - Minimum value of the integer (inclusive).
+
+- **`max`** <props.pill>int</props.pill> _optional_
+
+  - Maximum value of the integer (inclusive).
+
+</props.properties>
+
+#### Notes
+
+- Only supports [JavaScript Safe Integers](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger) between -(2<sup>53</sup> - 1) and 2<sup>53</sup> - 1, inclusive.
+
+### `NumberSchema`
+
+Schema for a JSON floating-point number.
+
+```json
+{
+  "type": "number"
+}
+```
+
+#### Properties
+
+<props.properties>
+
+- **`type`** <props.pill>enum</props.pill>
+
+  - Value: `"number"`
+
+- **`enum`** <props.pill>number[]</props.pill> _optional_
+
+  - Allowed number values.
+
+- **`min`** <props.pill>number</props.pill> _optional_
+
+  - Minimum value of the number (inclusive).
+
+- **`max`** <props.pill>number</props.pill> _optional_
+
+  - Maximum value of the number (inclusive).
+
+</props.properties>
+
+### `NullSchema`
+
+Schema for a JSON `null` value.
+
+```json
+{
+  "type": "null"
+}
+```
+
+#### Properties
+
+<props.properties>
+
+- **`type`** <props.pill>enum</props.pill>
+
+  - Value: `"null"`
+
+</props.properties>
+
+### `TagLinkSchema`
+
+Schema for a BAQ Tag Link.
+
+```json
+{
+  "type": "tag_link"
+}
+```
+
+#### Properties
+
+<props.properties>
+
+- **`type`** <props.pill>enum</props.pill>
+
+  - Value: `"tag_link"`
+
+- **`enum`** <props.pill>string[]</props.pill> _optional_
+
+  - Allowed tag values.
+
+- **`min_length`** <props.pill>int</props.pill> _optional_
+
+  - Minimum length of the tag (inclusive).
+
+- **`max_length`** <props.pill>int</props.pill> _optional_
+
+  - Maximum length of the tag (inclusive).
+
+- **`sort_property`** <props.pill>boolean</props.pill> _optional_
+
+  - Allow sorting of records on this property.
+
+    Default: `false`
+
+</props.properties>
+
+#### Notes
+
+- Tags must be between 1 and 100 characters in length.
+
+### `BlobLinkSchema`
+
+Schema for a BAQ Blob Link.
+
+```json
+{
+  "type": "blob_link"
+}
+```
+
+#### Properties
+
+<props.properties>
+
+- **`type`** <props.pill>enum</props.pill>
+
+  - Value: `"blob_link"`
+
+- **`max_size`** <props.pill>int</props.pill> _optional_
+
+  - Maximum size in bytes of the linked blob.
+
+- **`content_types`** <props.pill>string[]</props.pill> _optional_
+
+  - Allowed MIME `content_type` of the linked blob.
+
+</props.properties>
+
+### `EntityLinkSchema`
+
+Schema for a BAQ Entity Link.
+
+```json
+{
+  "type": "entity_link"
+}
+```
+
+#### Properties
+
+<props.properties>
+
+- **`type`** <props.pill>enum</props.pill>
+
+  - Value: `"entity_link"`
+
+</props.properties>
+
+### `RecordLinkSchema`
+
+Schema for a BAQ Record Link.
+
+```json
+{
+  "type": "record_link"
+}
+```
+
+#### Properties
+
+<props.properties>
+
+- **`type`** <props.pill>enum</props.pill>
+
+  - Value: `"record_link"`
+
+- **`record_types`** <props.pill>RecordLink[]</props.pill> _optional_
+
+  - Allowed types of the linked record.
+
+- **`existential`** <props.pill>boolean</props.pill> _optional_
+
+  - Make the record's existence depend on the linked record.
+
+    Default: `false`
+
+</props.properties>
+
+### `VersionLinkSchema`
+
+Schema for a BAQ Version Link.
+
+```json
+{
+  "type": "version_link"
+}
+```
+
+#### Properties
+
+<props.properties>
+
+- **`type`** <props.pill>enum</props.pill>
+
+  - Value: `"version_link"`
+
+- **`record_types`** <props.pill>RecordLink[]</props.pill> _optional_
+
+  - Allowed types of the linked record.
+
+- **`existential`** <props.pill>boolean</props.pill> _optional_
+
+  - Make the record's existence depend on the linked record.
+
+    Default: `false`
+
+</props.properties>
+
+### `MapSchema`
+
+Schema for a JSON object with generic properties.
+
+```json
+{
+  "type": "map",
+  "values": {
+    "type": "string"
+  }
+}
+```
+
+#### Properties
+
+<props.properties>
+
+- **`type`** <props.pill>enum</props.pill>
+
+  - Value: `"map"`
+
+- **`values`** <props.pill href="#schema">Schema</props.pill>
+
+  - Schema for all the property values in the object.
+
+</props.properties>
+
+### `UnionSchema`
+
+Union of multiple schemas. Valid if at least one of the sub-schemas is valid.
+
+```json
+{
+  "type": "union",
+  "schemas": [{"type": "string"}, {"type": "int"}]
+}
+```
+
+#### Properties
+
+<props.properties>
+
+- **`type`** <props.pill>enum</props.pill>
+
+  - Value: `"union"`
+
+- **`schemas`** <props.pill href="#schema">Schema[]</props.pill>
+
+  - Schemas in the union.
+
+    It must contain a minimum of two schemas.
+
+</props.properties>
+
+### `IntersectionSchema`
+
+Intersection of multiple schemas. Valid if all sub-schemas are valid.
+
+```json
+{
+  "type": "intersection",
+  "schemas": [
+    {
+      "type": "object",
+      "properties": {"hello": {"type": "string"}}
+    },
+    {
+      "type": "object",
+      "properties": {"world": {"type": "string"}}
+    }
+  ]
+}
+```
+
+#### Properties
+
+<props.properties>
+
+- **`type`** <props.pill>enum</props.pill>
+
+  - Value: `"intersection"`
+
+- **`schemas`** <props.pill href="#schema">Schema[]</props.pill>
+
+  - Schemas in the intersection.
+
+    It must contain a minimum of two schemas.
+
+</props.properties>
+
+### `RefSchema`
+
+Re-use a schema defined in a `definitions` property somewhere upstream.
+
+```json
+{
+  "definitions": {
+    "name": {"type": "string"}
+  },
+  "type": "ref",
+  "ref": "name"
+}
+```
+
+#### Properties
+
+<props.properties>
+
+- **`type`** <props.pill>enum</props.pill>
+
+  - Value: `"ref"`
+
+- **`ref`** <props.pill>string</props.pill>
+
+  - Name of the schema to use.
+
+    In case of duplicate naming, the schema closest to the ref is used.
+
+    Refs can be recursive.
+
+</props.properties>
+
+### `NeverSchema`
+
+Schema that always fails validation.
+
+```json
+{
+  "type": "never"
+}
+```
+
+#### Properties
+
+<props.properties>
+
+- **`type`** <props.pill>enum</props.pill>
+
+  - Value: `"never"`
+
+</props.properties>
+
+## Usage
+
+### Basic schema example
+
+Define a schema for a user profile object:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "min_length": 1,
+      "max_length": 100
+    },
+    "birth_year": {
+      "type": "int",
+      "min": 1900
+    },
+    "favorite_color": {
+      "type": "string",
+      "enum": ["red", "green", "blue"]
+    }
+  }
+}
+```
+
+Valid JSON:
+
+```json
+{
+  "name": "Tony Stark",
+  "birth_year": 1970,
+  "favorite_color": "red"
+}
+```
+
+### DRY with schema definitions
+
+To avoid repeating the same schema again and again, use `definitions` and `ref` schemas. A `ref` schema can point to any upstream definition.
+
+```json
+{
+  "definitions": {
+    "name": {
+      "type": "string",
+      "min_length": 1,
+      "max_length": 100
+    }
+  },
+  "type": "object",
+  "properties": {
+    "mother_name": {
+      "type": "ref",
+      "ref": "name"
+    },
+    "father_name": {
+      "type": "ref",
+      "ref": "name"
+    },
+    "sibling_names": {
+      "type": "array",
+      "items": {"type": "ref", "ref": "name"}
+    }
+  }
+}
+```
+
+Valid JSON:
+
+```json
+{
+  "mother_name": "Maria",
+  "father_name": "Howard",
+  "sibling_names": ["Paul", "Henry"]
+}
+```
+
+### Recursive schema
+
+A `ref` schema can also be used to define a recursive schema. In this example, a user profile can have `friends` that are each also represented by a user profile (and can have `friends` of their own, and so on).
+
+```json
+{
+  "definitions": {
+    "profile": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "min_length": 1,
+          "max_length": 100
+        },
+        "friends": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "profile"
+          }
+        }
+      }
+    }
+  },
+  "type": "ref",
+  "ref": "profile"
+}
+```
+
+Valid JSON:
+
+```json
+{
+  "name": "Maggie",
+  "friends": [
+    {
+      "name": "Sean",
+      "friends": []
+    },
+    {
+      "name": "Andersen",
+      "friends": [
+        {
+          "name": "Samantha",
+          "friends": []
+        }
+      ]
+    }
+  ]
+}
+```

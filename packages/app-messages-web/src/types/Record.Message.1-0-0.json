@@ -1,0 +1,121 @@
+{
+  "name": "message",
+  "icon_name": "chat",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "content": {
+        "type": "intersection",
+        "schemas": [
+          {
+            "type": "object",
+            "properties": {
+              "conversation": {
+                "description": "Conversation this belongs to.",
+                "type": "record_link",
+                "record_types": [
+                  {
+                    "entity": "{var:entity}",
+                    "record_id": "c4094303fe334bd18de6a1f1929c3cad"
+                  }
+                ],
+                "existential": true
+              },
+              "replying_to": {
+                "description": "Other message this message is replying to.",
+                "type": "record_link",
+                "record_types": [
+                  {
+                    "entity": "{var:entity}",
+                    "record_id": "{var:record_id}"
+                  }
+                ],
+                "optional": true
+              }
+            }
+          },
+          {
+            "type": "union",
+            "schemas": [
+              {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "min_length": 1,
+                    "max_length": 4096,
+                    "optional": true
+                  },
+                  "images": {
+                    "type": "array",
+                    "min_items": 1,
+                    "max_items": 20,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "small": {
+                          "type": "blob_link",
+                          "max_size": 81920,
+                          "content_types": ["image/jpeg"]
+                        },
+                        "medium": {
+                          "type": "blob_link",
+                          "max_size": 614400,
+                          "content_types": ["image/jpeg"]
+                        },
+                        "large": {
+                          "type": "blob_link",
+                          "max_size": 2097152,
+                          "content_types": ["image/jpeg"]
+                        },
+                        "original": {
+                          "type": "blob_link",
+                          "max_size": 12582912,
+                          "content_types": ["image/jpeg"]
+                        },
+                        "width": {
+                          "type": "int",
+                          "min": 1
+                        },
+                        "height": {
+                          "type": "int",
+                          "min": 1
+                        },
+                        "size": {
+                          "type": "int",
+                          "min": 0
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "min_length": 1,
+                    "max_length": 4096
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "permissions": {
+        "type": "object",
+        "properties": {
+          "read": {
+            "type": "array",
+            "min_items": 1,
+            "items": {
+              "type": "entity_link"
+            }
+          }
+        }
+      }
+    }
+  }
+}

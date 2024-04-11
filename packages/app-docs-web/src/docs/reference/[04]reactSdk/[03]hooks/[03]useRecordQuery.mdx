@@ -1,0 +1,177 @@
+export const metadata = {
+  id: "53716cd7",
+  title: "useRecordQuery",
+  summary: "Fetch a single dynamically updated record.",
+};
+
+# useRecordQuery
+
+This is a React hook to dynamically get a single record from a query.
+
+```jsx
+const {record} = useRecordQuery({filter: {...}});
+```
+
+{props.toc}
+
+## Reference
+
+### `useRecordQuery()`
+
+Call `useRecordQuery` at the top level of your component to get a record back.
+
+```jsx
+function ThemePreference() {
+  const {isLoading, record} = useRecordQuery({
+    filter: queryType(AppPreferencesRecord),
+  });
+
+  if (isLoading || !record) {
+    // Render fallback.
+  }
+
+  return <div>Theme: {record.content.theme}</div>;
+}
+```
+
+#### Parameters
+
+<props.properties>
+
+- **`query`** <props.pill href="/todo">RecordQuery</props.pill>
+
+  - Query to run against the store and user's server.
+
+- **`options`** <props.pill href="#userecordqueryoptions">UseRecordQueryOptions</props.pill> _optional_
+
+  - Advanced controls over the behavior of the hook.
+
+</props.properties>
+
+#### Returns
+
+This hook returns a [`UseRecordQueryResult`](#userecordqueryresult) object.
+
+#### Notes
+
+- The hook only returns a record if the query matches one and only one record.
+
+- A matching record may be returned immediately while the request is in flight.
+
+- If in `fetch` (default) or `sync` mode, a persistent connection to the user's server ensures realtime record updates.
+
+- Proxied queries are not supported.
+
+### `UseRecordQueryOptions`
+
+<props.properties>
+
+- **`mode`** <props.pill>enum</props.pill> _optional_
+
+  - Control the behavior of the hook.
+
+    - `"fetch"` _default_ : Perform the query and listen for realtime updates after that.
+    - `"sync"`: Only listen for realtime updates without performing the initial query.
+    - `"local"`: Only query the local store.
+    - `"local-tracked"`: Only query the local store and mark this query as "loaded".
+
+</props.properties>
+
+### `UseRecordQueryResult`
+
+<props.properties>
+
+- **`isLoading`** <props.pill>boolean</props.pill>
+
+  - Whether the query is currently being performed.
+
+- **`error`** <props.pill href="/todo">BaqError</props.pill> _optional_
+
+  - An error that happened while performing the query, if any.
+
+- **`record`** <props.pill href="/todo">Record</props.pill> _optional_
+
+  - Resulting record, if found.
+
+    The record is updated when a new version is fetched/received.
+
+- **`deferredRecord`** <props.pill href="/todo">Record</props.pill> _optional_
+
+  - Same as `record` but when the `query` changes it only gets updated after the request completes. This is helpful to keep the previous view on screen while loading new data.
+
+- **`getRecord`** <props.pill href="/todo">() => Record | undefined</props.pill>
+
+  - Same as `record`, but compatible with [React Suspense](https://react.dev/reference/react/Suspense).
+
+    This function throws a promise while the request is in flight.
+
+    The promise completes when the response is received.
+
+- **`getDeferredRecord`** <props.pill href="/todo">() => Record | undefined</props.pill>
+
+  - Same as `deferredRecord`, but compatible with [React Suspense](https://react.dev/reference/react/Suspense).
+
+</props.properties>
+
+## Usage
+
+### Listen for future changes
+
+The `useRecordQuery` hook makes it simple to keep the user interface in sync with changes happening on the server or elsewhere in the app.
+
+In this example we display the status of a subscription to another user's public Post records. Subscription records are unique for a given publisher/type, and this hook can be used to check if a subscription record exists for a given combination.
+
+The component will update automatically to display the correct status if a subscription record is created or deleted, either locally or remotely.
+
+```jsx
+import {Q, SubscriptionRecord} from "@baqhub/sdk";
+import {useRecordQuery} from "./baq/store.js";
+import {PostRecord} from "./baq/postRecord.js";
+
+function SubscriptionStatus({publisherEntity}) {
+  const {isLoading, record} = useRecordQuery({
+    filter: Q.and(
+      Q.type(SubscriptionRecord),
+      Q.author(entity),
+      Q.entity("content.publisher", publisherEntity),
+      Q.record("content.recordType", PostRecord.link)
+    ),
+  });
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  const isSubscribed = Boolean(record);
+  const statusText = isSubscribed ? "Subscribed" : "Unsubscribed";
+
+  return <div>Status: {statusText}</div>;
+}
+```
+
+### Fetch a single record by ID
+
+There are multiple hooks to get a single record from the store. But when it's a record that might not be in the store yet, `useRecordQuery` is a convenient way to fetch it and keep it updated from that moment on.
+
+In this example we fetch a Todo record using its [Key](4b9504a7#recordkey) (entity + id) and we display its title. If the record is already in the store, it will be displayed right away without an intermediate loading screen.
+
+```jsx
+import {Query} from "@baqhub/sdk";
+import {useRecordQuery} from "./baq/store.js";
+
+function Todo({todoKey}) {
+  const {isLoading, record} = useRecordQuery(
+    Query.ofKey(postKey)
+  );
+
+  if (!record && isLoading) {
+    return <Loading />;
+  }
+
+  if (!record) {
+    return <NotFound />;
+  }
+
+  return <div>Todo: {record.content.title}</div>;
+}
+```

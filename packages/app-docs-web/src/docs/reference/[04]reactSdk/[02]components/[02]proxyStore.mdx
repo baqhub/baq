@@ -1,0 +1,75 @@
+export const metadata = {
+  id: "9ffb46ef",
+  title: "ProxyStore",
+  summary:
+    "Provide a different BAQ entity scope to all components inside.",
+};
+
+# ProxyStore
+
+Wrap children in a different BAQ scope.
+
+{/* prettier-ignore */}
+```jsx
+<ProxyStore entity="...">
+  ...
+</ProxyStore>
+```
+
+{props.toc}
+
+## Reference
+
+### `<ProxyStore>`
+
+Set the BAQ scope for all components inside. This is useful when displaying data from proxied queries.
+
+#### Props
+
+<props.properties>
+
+- **`entity`** <props.pill>string</props.pill>
+
+  - Entity of the proxied user.
+
+</props.properties>
+
+#### Notes
+
+- If the entity of the authenticated user is provided, this resets the scope to main store.
+
+## Usage
+
+### Display a proxied record
+
+When dealing with proxied records, we want the data access hooks like [`useRecordByKey`](0015e9c8) to search within the scope of the proxied entity. Here, we want to display a Post record that may be from a proxied query (e.g. when listing posts from another user).
+
+```jsx
+import {
+  ProxyStore,
+  useRecordByKey,
+  useFindEntityRecord,
+} from "./baq/store.js";
+
+function Post({proxyEntity, postKey}) {
+  return (
+    <ProxyStore entity={proxyEntity}>
+      <PostContent postKey={postKey} />
+    </ProxyStore>
+  );
+}
+
+function PostContent({postKey}) {
+  // These hooks will look into the correct scope
+  // if needed to find the requested data.
+  const post = useRecordByKey(postKey);
+  const author = useFindEntityRecord(post.author.entity);
+
+  return (
+    <div>
+      <div>From: {author.content.profile.name}</div>
+      <div>{post.content.text}</div>
+    </div>
+  );
+}
+```

@@ -1,0 +1,20 @@
+{
+  "extends": [
+    "../../tsconfig.base"
+  ],
+  "compilerOptions": {
+    "outDir": "./build",
+    "baseUrl": "./src",
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../lib-sdk"
+    },
+    {
+      "path": "../lib-sdk-react"
+    }
+  ]
+}

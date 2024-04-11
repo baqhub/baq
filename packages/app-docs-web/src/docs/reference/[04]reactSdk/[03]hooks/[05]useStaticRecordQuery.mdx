@@ -1,0 +1,155 @@
+export const metadata = {
+  id: "a88164a4",
+  title: "useStaticRecordQuery",
+  summary: "Fetch a single static record.",
+};
+
+# useStaticRecordQuery
+
+This is a React hook to get a single static record.
+
+```jsx
+const {record} = useStaticRecordQuery({filter: {...}});
+```
+
+{props.toc}
+
+## Reference
+
+### `useStaticRecordQuery()`
+
+Call `useStaticRecordQuery` at the top level of your component to get a record back.
+
+```jsx
+function Profile() {
+  const {isLoading, record} = useRecordQuery({
+    filter: queryType(ProfileRecord),
+  });
+
+  if (isLoading || !record) {
+    // Render fallback.
+  }
+
+  return <div>Occupation: {record.content.occupation}</div>;
+}
+```
+
+#### Parameters
+
+<props.properties>
+
+- **`query`** <props.pill href="/todo">RecordQuery</props.pill>
+
+  - Query to run against the store and user's server.
+
+</props.properties>
+
+#### Returns
+
+This hook returns a [`UseStaticRecordQueryResult`](#usestaticrecordqueryresult) object.
+
+#### Notes
+
+- The hook only returns a record if the query matches one and only one record.
+
+- A matching record may be returned immediately while the request is in flight.
+
+- After the request completes, the record will not change until the query changes.
+
+- Proxied queries are supported.
+
+### `UseStaticRecordQueryResult`
+
+<props.properties>
+
+- **`isLoading`** <props.pill>boolean</props.pill>
+
+  - Whether the query is currently being performed.
+
+- **`error`** <props.pill href="/todo">BaqError</props.pill> _optional_
+
+  - An error that happened while performing the query, if any.
+
+- **`record`** <props.pill href="/todo">Record</props.pill> _optional_
+
+  - Resulting record, if found.
+
+- **`deferredRecord`** <props.pill href="/todo">Record</props.pill> _optional_
+
+  - Same as `record` but when the `query` changes it only gets updated after the request completes. This is helpful to keep the previous view on screen while loading new data.
+
+- **`getRecord`** <props.pill href="/todo">() => Record | undefined</props.pill>
+
+  - Same as `record`, but compatible with [React Suspense](https://react.dev/reference/react/Suspense).
+
+    This function throws a promise while the request is in flight.
+
+    The promise completes when the response is received.
+
+- **`getDeferredRecord`** <props.pill href="/todo">() => Record | undefined</props.pill>
+
+  - Same as `deferredRecord`, but compatible with [React Suspense](https://react.dev/reference/react/Suspense).
+
+</props.properties>
+
+## Usage
+
+### Query a proxied record
+
+Proxied static queries allow listing public records on other users' servers.
+
+Here, we use the proxying capability to fetch the Entity record for a given entity. Entity records are unique for a given author, which make them a good candidate for `useStaticRecordQuery`.
+
+```jsx
+import {Q, EntityRecord} from "@baqhub/sdk";
+import {useStaticRecordQuery} from "./baq/store.js";
+
+function Name({entity}) {
+  const {isLoading, record} = useStaticRecordQuery({
+    filter: Q.and(Q.type(EntityRecord), Q.author(entity)),
+    proxyTo: entity,
+  });
+
+  if (!record && isLoading) {
+    return <Loading />;
+  }
+
+  if (!record) {
+    return <NotFound />;
+  }
+
+  return <div>Name: {record.content.profile.name}</div>;
+}
+```
+
+### Fetch a single record by ID
+
+There are multiple hooks to get a single record from the store. But when it's a record that might not be in the store yet, `useStaticRecordQuery` is a convenient way to fetch it.
+
+In this example we fetch a Post record and we display its content. If the record is already in the store, it will be displayed right away without an intermediate loading screen.
+
+```jsx
+import {Query} from "@baqhub/sdk";
+import {useStaticRecordQuery} from "./baq/store.js";
+
+function Post({postKey}) {
+  const {isLoading, record} = useStaticRecordQuery(
+    Query.ofKey(postKey, {proxyTo: entity})
+  );
+
+  if (!record && isLoading) {
+    return <Loading />;
+  }
+
+  if (!record) {
+    return <NotFound />;
+  }
+
+  return (
+    <div>
+      <div>Author: {record.author.entity}</div>
+      <div>Content: {record.content.text}</div>
+    </div>
+  );
+}
+```

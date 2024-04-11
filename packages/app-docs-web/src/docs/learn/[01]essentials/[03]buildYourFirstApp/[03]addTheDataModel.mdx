@@ -1,0 +1,255 @@
+export const metadata = {
+  id: "8fa128c6",
+  title: "3. Add the data model",
+};
+
+# 3. Add the data model
+
+In this guide we will be configuring our app to interact with BAQ, downloading the Task record type that we'll use as our schema, and connecting our static components to live data using the React SDK.
+
+Code to follow this guide can be found on [Github](https://github.com/baqhub/app-demo-todo/tree/2-build-ui) or [StackBlitz](https://stackblitz.com/~/github.com/baqhub/app-demo-todo/tree/2-build-ui).
+
+{props.toc}
+
+## Setup BAQ
+
+The first step is to configure our BAQ project. To do this we create a `baq.json` file that contains the name and description of the app, along with the record types it uses.
+
+This file can be created by hand, but for convenience we will be using the BAQ CLI by running the `init` command at the root of our project:
+
+```cli
+npx baq init
+```
+
+This command will prompt for the following questions:
+
+- **Where should the project be created?**
+
+  Point it towards the root folder of the app project. This should be the default already.
+
+- **What's the user-facing name of this project?**
+
+  The is the name users will see when they authorize the app. Feel free to pick a cool new name, or just go with `BAQ Todos`.
+
+- **What type of project is this?**
+
+  We pick our tech stack: `TypeScript + React`.
+
+- **Where should the project files live?**
+
+  This is where auto-generated TypeScript files will be created. The default is `src/baq` and this is what we'll be using.
+
+Now that this is done, a `baq.json` file has been created:
+
+```json
+{
+  "name": "BAQ Todos",
+  "type": "ts-react",
+  "path": "src/baq",
+  "record_types": {}
+}
+```
+
+We can edit it by hand later on, if needed.
+
+Notice that a `store.tsx` file was also created in `src/baq`.
+
+## Add Task record type
+
+We can now add the first record type to our app. Record types define the data model of the app and represent atomic units of data that can be fetched, updated, and deleted in one go.
+
+We have a choice between creating a new record type, or re-using an existing one. In this case we'll go with the later and use the existing Task record type.
+
+Each record type is itself a BAQ record, and is identified by its author's entity and its unique ID. In this case `types.baq.dev` and `fe727f22b5c34fb185a370449e4f0128` respectively.
+
+We use the `add` command to download it into our project:
+
+```cli
+npx baq add types.baq.dev+fe727f22b5c34fb185a370449e4f0128
+```
+
+This does two things:
+
+<props.compactList>
+
+- It updates `baq.json` with the new record type.
+
+- It adds a `taskRecord.ts` file with helpful typings and functions.
+
+</props.compactList>
+
+## Connect components
+
+We now have everything needed to connect our static components to the data model.
+
+### `<Header>`
+
+We fill-in the gaps in the `Header.tsx` component by creating an actual Task record and letting the SDK know about it.
+
+```diff-tsx
+import {FC, FormEvent, useRef} from "react";
++import {useRecordHelpers} from "../baq/store";
++import {TaskRecord} from "../baq/taskRecord";
+
+export const Header: FC = () => {
++  const {entity, updateRecords} = useRecordHelpers();
+
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // Read the form data and reset it.
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    form.reset();
+
+    // Read the task title.
+    const newTaskTitle = formData.get("task")?.toString();
+    if (!newTaskTitle) {
+      return;
+    }
+
+-    console.log("Got task:", newTaskTitle);
++    // Create the new task record.
++    const taskRecord = TaskRecord.new(entity, {
++      title: newTaskTitle,
++      completed: false,
++    });
++    updateRecords([taskRecord]);
+  };
+  ...
+```
+
+What's new:
+
+<props.compactList>
+
+- **`entity`** is the identifier for the current user.
+
+- **`TaskRecord.new()`** helps us create a properly formatted record.
+
+- **`updateRecords()`** lets us notify the SDK of the new record.
+
+</props.compactList>
+
+### `<Task>`
+
+In `Task.tsx` we use a hook to find the record to display. We also update the event handlers to notify the SDK when we update or delete the record.
+
+```diff-tsx
+-import {FC} from "react";
++import {ChangeEvent, FC} from "react";
++import {Record} from "@baqhub/sdk";
++import {useRecordByKey, useRecordHelpers} from "../baq/store";
++import {TaskRecord, TaskRecordKey} from "../baq/taskRecord";
+
+interface TaskProps {
+-  title: string;
+-  completed: boolean;
++  taskKey: TaskRecordKey;
+}
+
+export const Task: FC<TaskProps> = props => {
+-  const {title, completed} = props;
++  const {taskKey} = props;
++  const {entity, updateRecords} = useRecordHelpers();
+
++  // Find the requested record.
++  const record = useRecordByKey(taskKey);
++  const {title, completed} = record.content;
+
+-  const onCompletedChange = () => console.log("Completed!");
++  const onCompletedChange = (e: ChangeEvent<HTMLInputElement>) => {
++    const updatedRecord = TaskRecord.update(entity, record, {
++      ...record.content,
++      completed: e.currentTarget.checked,
++    });
++    updateRecords([updatedRecord]);
++  };
+
+-  const onDeleteClick = () => console.log("Deleted!");
++  const onDeleteClick = () => {
++    const deletedRecord = Record.delete(entity, record);
++    updateRecords([deletedRecord]);
++  };
+  ...
+```
+
+What's new:
+
+<props.compactList>
+
+- **`TaskRecordKey`** is an identifier for a Task record.
+
+- **`useRecordByKey()`** finds a record in the local store by key.
+
+- **`TaskRecord.update()`** helps us create an updated record.
+
+- **`Record.delete()`** helps us create a deleted record tombstone.
+
+</props.compactList>
+
+### `<TaskList>`
+
+Finally, we need to find records to display in `TaskList.tsx`. We achieve this by building a record query that will:
+
+<props.compactList>
+
+- Filter by author and type to limit our results.
+- Sort the records to have new tasks at the top.
+
+</props.compactList>
+
+We then pass a record key to each `<Task>` child component. We could pass the entire record instead but this approach can make testing easier down the road.
+
+```diff-tsx
+import {FC} from "react";
+import {Task} from "./Task";
++import {Q, Record} from "@baqhub/sdk";
++import {useRecordHelpers, useRecordsQuery} from "../baq/store";
++import {TaskRecord} from "../baq/taskRecord";
+
+export const TaskList: FC = () => {
++  const {entity} = useRecordHelpers();
++  const {records} = useRecordsQuery({
++    pageSize: 100,
++    filter: Q.and(Q.author(entity), Q.type(TaskRecord)),
++    sort: ["createdAt", "descending"],
++  });
+
+  return (
+    <main className="main">
+      <ul className="todo-list">
+-        <Task title="Setup the project" completed={true} />
+-        <Task title="Build the UI" completed={false} />
++        {records.map(Record.toKey).map(taskKey => (
++          <Task key={taskKey} taskKey={taskKey} />
++        ))}
+      </ul>
+    </main>
+  );
+};
+```
+
+What's new:
+
+<props.compactList>
+
+- **`useRecordsQuery()`** runs a record query against the server.
+
+- **`Q.and()`**, **`Q.author()`**... are helpers to build query filters.
+
+- **`Record.toKey()`** provides a unique key identifier from a record.
+
+</props.compactList>
+
+## Next step
+
+We're now done adding interactivity to our components.
+
+<props.compactList>
+
+- The code at this state can be found on [Github](https://github.com/baqhub/app-demo-todo/tree/3-add-data-model) or [StackBlitz](https://stackblitz.com/~/github.com/baqhub/app-demo-todo/tree/3-add-data-model).
+
+- Next: [Connect to a BAQ server](c856ddeb).
+
+</props.compactList>

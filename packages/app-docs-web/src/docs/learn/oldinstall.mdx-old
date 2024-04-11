@@ -1,0 +1,48 @@
+export const metadata = {
+  title: "Installation",
+};
+
+# Installation
+
+The BAQ SDK and BAQ React SDK are designed for gradual adoption. They can be the foundation upon which the entire project is built, or rather just used here and here to fetch data from a BAQ server.
+
+{props.toc}
+
+## Add to an existing React project
+
+Install the required dependencies:
+
+```cli
+> npm install @baqhub/sdk @baqhub/sdk-react @baqhub/cli
+```
+
+Initialize BAQ in your project using the CLI:
+
+```cli
+> npx baq init
+```
+
+This creates a `baq.json` file to keep track of the BAQ types used in your project and generate strongly-typed code to access the SDK.
+
+## Create a new React BAQ project
+
+Use a template to create a new React BAQ project from scratch:
+
+```cli
+> npx @baqhub/new
+```
+
+Follow the on-screen instructions to create one of the following project types:
+
+<props.compactList>
+
+- `React + Vite`: Blank.
+- `React + Vite`: Todo app.
+- `React + Next`: Blank.
+- `React + Next`: Simple blog.
+
+</props.compactList>
+
+## TypeScript
+
+## Next steps

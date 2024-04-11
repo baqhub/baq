@@ -1,0 +1,13 @@
+{
+  "extends": [
+    "../../tsconfig.base"
+  ],
+  "compilerOptions": {
+    "outDir": "./build",
+    "baseUrl": "./src",
+  },
+  "include": [
+    "src"
+  ],
+  "references": []
+}

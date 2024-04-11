@@ -1,0 +1,20 @@
+{
+  "name": "Bird",
+  "type": "ts-react",
+  "path": "src/baq",
+  "record_types": {
+    "post": {
+      "path": "src/types/Record.Post.1-0-0.json",
+      "record_id": "6ee7f69a90154b849bac528daa942bcd",
+      "version_hash": "562a0d9ede325cdba23afe9d14d0e927b400bd883b866b0e379721c3e269efa0",
+      "content_hash": "c1aa9722e349f42d4901f3c63fea4cdc",
+      "scopes": [
+        "read",
+        "write",
+        "subscribe"
+      ]
+    }
+  },
+  "description": "Simple short-form social network.",
+  "website_url": "https://bird.baq.dev"
+}

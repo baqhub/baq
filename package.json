@@ -1,0 +1,58 @@
+{
+  "name": "baqhub",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "ts": "tsc --build --watch",
+    "build": "tsc --build",
+    "lint": "eslint \"packages/**/*.{ts,tsx,js,cjs}\"",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pretty": "prettier --check ./packages/**/src/**/*.{js,ts,jsx,tsx,json}",
+    "pretty:write": "prettier --write ./packages/**/src/**/*.{js,ts,jsx,tsx,json}",
+    "lib-sdk:build": "yarn workspace @baqhub/sdk build",
+    "lib-sdk:publish": "yarn workspace @baqhub/sdk publish",
+    "lib-sdk:test": "yarn workspace @baqhub/sdk test",
+    "lib-sdk-react:build": "yarn workspace @baqhub/sdk-react build",
+    "lib-sdk-react:publish": "yarn workspace @baqhub/sdk-react publish",
+    "lib-sdk-react-dom:build": "yarn workspace @baqhub/sdk-react-dom build",
+    "lib-sdk-react-dom:publish": "yarn workspace @baqhub/sdk-react-dom publish",
+    "lib-sdk-react-native:build": "yarn workspace @baqhub/sdk-react-native build",
+    "lib-sdk-react-native:publish": "yarn workspace @baqhub/sdk-react-native publish",
+    "lib-cli:build": "yarn workspace @baqhub/cli build",
+    "lib-cli:test": "yarn workspace @baqhub/cli test",
+    "docs:dev": "yarn workspace @baqhub/docs-web dev",
+    "docs:build": "yarn workspace @baqhub/docs-web build",
+    "bird:dev": "yarn workspace @baqhub/bird-web dev",
+    "bird:build": "yarn workspace @baqhub/bird-web build",
+    "cli:dev": "yarn workspace @baqhub/cli-web dev",
+    "cli:build": "yarn workspace @baqhub/cli-web build",
+    "cli:test": "yarn workspace @baqhub/cli-web test",
+    "files:dev": "yarn workspace @baqhub/files-web dev",
+    "files:build": "yarn workspace @baqhub/files-web build",
+    "messages:dev": "yarn workspace @baqhub/messages-web dev",
+    "messages:build": "yarn workspace @baqhub/messages-web build",
+    "baq": "yarn workspace @baqhub/files-web baq && yarn workspace @baqhub/messages-web baq && yarn workspace @baqhub/bird-shared baq && yarn workspace @baqhub/emails-web baq && yarn workspace @baqhub/types baq"
+  },
+  "author": "BaqHub",
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
+  "private": true,
+  "packageManager": "yarn@4.1.1",
+  "resolutions": {
+    "react-element-to-jsx-string": "15.0.0",
+    "@mdx-js/react": "2.3.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "6.21.0",
+    "@typescript-eslint/parser": "6.21.0",
+    "eslint": "8.56.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-prettier": "5.1.3",
+    "eslint-plugin-react-hooks": "4.6.0",
+    "prettier": "3.2.4",
+    "prettier-plugin-organize-imports": "3.2.4",
+    "typescript": "5.3.3"
+  }
+}

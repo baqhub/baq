@@ -1,0 +1,551 @@
+export const metadata = {
+  id: "e1ca2823",
+  title: "Client",
+  summary: "Perform requests against a server.",
+};
+
+# Client
+
+Perform requests against a server.
+
+```ts
+const client = Client.ofUrl("...");
+const record = await client.getRecord(...);
+```
+
+{props.toc}
+
+## Reference
+
+### `Client`
+
+#### Static methods
+
+<props.properties>
+
+- **<props.code>ofUrl(entityRecordUrl, signal?)</props.code>**: <props.pill>Client</props.pill>
+
+  - Create a new client from the URL of a user's Entity record.
+
+  - _Parameters_
+
+    <props.properties>
+
+    - `entityRecordUrl` <props.pill>string</props.pill>
+
+      - URL of the user's Entity record.
+
+    - `signal` <props.pill href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal">AbortSignal</props.pill> _optional_
+
+      - Signal to abort the request.
+
+    </props.properties>
+
+- **<props.code>ofRecord(entityRecord: <props.pill href="375c4ea9">EntityRecord</props.pill>)</props.code>**: <props.pill>Client</props.pill>
+
+  - Create a new client from a user's Entity record.
+
+- **<props.code>authenticated(state: <props.pill href="831f781d#authenticationstate">AuthenticationState</props.pill>)</props.code>**: <props.pill>Client</props.pill>
+
+  - Create a new authenticated client from an authentication state.
+
+  - Such object is obtained through [app registration](831f781d) and [authorization flow](/todo).
+
+</props.properties>
+
+#### Methods
+
+<props.properties>
+
+- **<props.code>discover(entity, signal?)</props.code>** : <props.code>Promise\<<props.pill href="375c4ea9">EntityRecord</props.pill>\></props.code>
+
+  - Perform discovery on the provided entity.
+
+  - _Parameters_
+
+    <props.properties>
+
+    - `entity` <props.pill href="deae588f#entity">Entity</props.pill>
+
+      - Entity to perform discovery on.
+
+    - `signal` <props.pill href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal">AbortSignal</props.pill> _optional_
+
+      - Signal to abort the request.
+
+    </props.properties>
+
+- **<props.code>getEntityRecord()</props.code>**: <props.code>Promise\<<props.pill href="375c4ea9">EntityRecord</props.pill>\></props.code>
+
+  - Fetch the user's entity record.
+
+  - (Fetched only once, and cached beyond that point).
+
+- **<props.code>getOwnRecord(linkModel, model, id, opts?)</props.code>**
+
+  - Fetch a single of our user's records by ID.
+
+  - _Parameters_
+
+    <props.properties>
+
+    - `linkModel` <props.pill>Type</props.pill>
+
+      - Expected record types of linked records.
+
+    - `model` <props.pill>Type</props.pill>
+
+      - Expected type of the requested record.
+
+    - `id` <props.pill href="deae588f#recordid">RecordId</props.pill>
+
+      - ID of the record to fetch.
+
+    - `options` <props.pill>object</props.pill> _optional_
+
+      - `query` <props.pill href="c4e4e2a0#singlequery">SingleQuery</props.pill> _optional_ : Additional server parameters.
+
+      - `signal` <props.pill href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal">AbortSignal</props.pill> _optional_ : Signal to abort the request.
+
+    </props.properties>
+
+  - _Return value_
+
+    <props.properties>
+
+    - <props.code>Promise\<<props.pill href="#recordresponse">RecordResponse</props.pill>\></props.code>
+
+      - Requested record and linked records.
+
+    </props.properties>
+
+- **<props.code>getRecord(linkModel, model, entity, id, opts?)</props.code>**
+
+  - Fetch a single record by author entity and ID.
+
+  - _Parameters_
+
+    <props.properties>
+
+    - `linkModel` <props.pill>Type</props.pill>
+
+      - Expected record types of linked records.
+
+    - `model` <props.pill>Type</props.pill>
+
+      - Expected type of the requested record.
+
+    - `entity` <props.pill href="deae588f#entity">Entity</props.pill>
+
+      - Author of the record to fetch.
+
+    - `id` <props.pill href="deae588f#recordid">RecordId</props.pill>
+
+      - ID of the record to fetch.
+
+    - `options` <props.pill>object</props.pill> _optional_
+
+      - `query` <props.pill href="c4e4e2a0#singlequery">SingleQuery</props.pill> _optional_ : Additional server parameters.
+
+      - `signal` <props.pill href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal">AbortSignal</props.pill> _optional_ : Signal to abort the request.
+
+    </props.properties>
+
+  - _Return value_
+
+    <props.properties>
+
+    - <props.code>Promise\<<props.pill href="#recordresponse">RecordResponse</props.pill>\></props.code>
+
+      - Requested record and linked records.
+
+    </props.properties>
+
+- **<props.code>getRecords(linkModel, model, query, signal?)</props.code>**
+
+  - Fetch a list of records from a Query.
+
+  - _Parameters_
+
+    <props.properties>
+
+    - `linkModel` <props.pill>Type</props.pill>
+
+      - Expected record types of linked records.
+
+    - `model` <props.pill>Type</props.pill>
+
+      - Expected type of the requested records.
+
+    - `query` <props.pill href="c4e4e2a0">Query</props.pill>
+
+      - Query to narrow down what records should be fetched.
+
+    - `signal` <props.pill href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal">AbortSignal</props.pill> _optional_
+
+      - Signal to abort the request.
+
+    </props.properties>
+
+  - _Return value_
+
+    <props.properties>
+
+    - <props.code>Promise\<<props.pill href="#recordsresponse">RecordsResponse</props.pill>\></props.code>
+
+      - Requested records and linked records.
+
+    </props.properties>
+
+- **<props.code>postRecord(linkModel, model, record, signal?)</props.code>**
+
+  - Create a new record.
+
+  - _Parameters_
+
+    <props.properties>
+
+    - `linkModel` <props.pill>Type</props.pill>
+
+      - Expected record types of linked records.
+
+    - `model` <props.pill>Type</props.pill>
+
+      - Type of the record to create.
+
+    - `record` <props.pill href="4b9504a7">Record</props.pill>
+
+      - Record to create.
+
+    - **`signal`** <props.pill href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal">AbortSignal</props.pill> _optional_
+
+      - Signal to abort the request.
+
+    </props.properties>
+
+  - _Return value_
+
+    <props.properties>
+
+    - <props.code>Promise\<<props.pill href="#recordresponse">RecordResponse</props.pill>\></props.code>
+
+      - Newly created record and linked records.
+
+    </props.properties>
+
+- **<props.code>putRecord(linkModel, model, record, signal?)</props.code>**
+
+  - Update an existing record.
+
+  - _Parameters_
+
+    <props.properties>
+
+    - `linkModel` <props.pill>Type</props.pill>
+
+      - Expected record types of linked records.
+
+    - `model` <props.pill>Type</props.pill>
+
+      - Type of the record to update.
+
+    - `record` <props.pill href="4b9504a7">Record</props.pill>
+
+      - Record to update.
+
+    - `signal` <props.pill href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal">AbortSignal</props.pill> _optional_
+
+      - Signal to abort the request.
+
+    </props.properties>
+
+  - _Return value_
+
+    <props.properties>
+
+    - <props.code>Promise\<<props.pill href="#recordresponse">RecordResponse</props.pill>\></props.code>
+
+      - Newly updated record and linked records.
+
+    </props.properties>
+
+- **<props.code>deleteRecord(linkModel, record, opts?)</props.code>**
+
+  - Delete a record by updating it with a [record tombstone](/todo).
+
+  - _Parameters_
+
+    <props.properties>
+
+    - `linkModel` <props.pill>Type</props.pill>
+
+      - Expected record types of linked records.
+
+    - `record` <props.pill href="4b9504a7#nocontentrecord">NoContentRecord</props.pill>
+
+      - Record tombstone.
+
+    - `signal` <props.pill href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal">AbortSignal</props.pill> _optional_
+
+      - Signal to abort the request.
+
+    </props.properties>
+
+  - _Return value_
+
+    <props.properties>
+
+    - <props.code>Promise\<<props.pill href="#recordresponse">RecordResponse</props.pill>\></props.code>
+
+      - Record tombstone and linked records.
+
+    </props.properties>
+
+- **<props.code>uploadBlob(blob, signal?)</props.code>**: <props.code>Promise\<<props.pill href="#blobresponse">BlobResponse</props.pill>\></props.code>
+
+  - Upload a single blob for use in future records.
+
+  - _Parameters_
+
+    <props.properties>
+
+    - `blob` <props.pill href="https://developer.mozilla.org/en-US/docs/Web/API/Blob">Blob</props.pill>
+
+      - Blob to upload.
+
+    - `signal` <props.pill href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal">AbortSignal</props.pill> _optional_
+
+      - Signal to abort the request.
+
+    </props.properties>
+
+- **<props.code>downloadBlob(record, blobLink, signal?)</props.code>**: <props.code>Promise\<<props.pill href="https://developer.mozilla.org/en-US/docs/Web/API/Blob">Blob</props.pill>\></props.code>
+
+  - Download a single blob from a record and blob link.
+
+  - _Parameters_
+
+    <props.properties>
+
+    - `record` <props.pill href="4b9504a7">Record</props.pill>
+
+      - Record linking to the blob to download.
+
+    - `blobLink` <props.pill href="6cbe48da">BlobLink</props.pill>
+
+      - Link to the specific blob to download.
+
+    - `signal` <props.pill href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal">AbortSignal</props.pill> _optional_
+
+      - Signal to abort the request.
+
+    </props.properties>
+
+- **<props.code>blobUrlBuilder()</props.code>**: <props.code>Promise\<<props.pill href="#bloburlbuilder">BlobUrlBuilder</props.pill>\></props.code>
+
+  - Get a function to synchronously build blob download URLs.
+
+</props.properties>
+
+### `RecordResponse`
+
+#### Properties
+
+<props.properties>
+
+- **`record`** <props.pill href="4b9504a7">Record</props.pill>
+
+  - Requested record.
+
+- **`linkedRecords`** <props.pill href="4b9504a7">Record[]</props.pill>
+
+  - Flat list of linked records.
+
+</props.properties>
+
+### `RecordsResponse`
+
+#### Properties
+
+<props.properties>
+
+- **`records`** <props.pill href="4b9504a7">Record[]</props.pill>
+
+  - Requested records.
+
+- **`linkedRecords`** <props.pill href="4b9504a7">Record[]</props.pill>
+
+  - Flat list of linked records.
+
+</props.properties>
+
+### `BlobResponse`
+
+#### Properties
+
+<props.properties>
+
+- **`hash`** <props.pill href="deae588f#blobhash">BlobHash</props.pill>
+
+  - SHA256 hash of the uploaded blob.
+
+- **`size`** <props.pill>int</props.pill>
+
+  - Size of the uploaded blob in bytes.
+
+- **`expiresAt`** <props.pill>Date</props.pill>
+
+  - Flat list of linked records.
+
+</props.properties>
+
+## Usage
+
+### Build a client
+
+Building an authenticated client requires an authentication state obtained while [registering an app](831f781d#authentication). This state can be serialized and persisted for repeated use. Here we read an existing authentication state from the browser's [local storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) and use it to build a client.
+
+```ts
+import {Client, AuthenticationState} from "@baqhub/sdk";
+
+const authStateJson = localStorage.getItem("auth_state");
+const authStateParsed = JSON.parse(authStateJson);
+const authState = AuthenticationState.decode(authStateParsed);
+const client = Client.authenticated(authState);
+
+// Next steps:
+// Use the client to perform requests.
+```
+
+### Fetch a record
+
+Once we have a client, we can use it to fetch a record by author entity and ID. Here we fetch a [Post record](/todo) and we ignore linked records altogether.
+
+```ts
+import {IO} from "@baqhub/sdk";
+import {PostRecord} from "./baq/postRecord.js";
+
+async function fetchPostRecord(client, entity, recordId) {
+  const {record} = await client.getRecord(
+    IO.unknown,
+    PostRecord,
+    entity,
+    recordId
+  );
+
+  return record;
+}
+```
+
+### Fetch records
+
+Fetching a list of records works similarly. The difference is that we provide a [Query](c4e4e2a0) instead. Here we fetch the 30 latest Post records.
+
+```ts
+import {IO} from "@baqhub/sdk";
+import {PostRecord} from "./baq/postRecord.js";
+
+async function fetchFeed(client) {
+  const {records, linkedRecords} = await client.getRecords(
+    IO.unknown,
+    PostRecord,
+    {
+      pageSize: 30,
+      filter: Q.type(PostRecord),
+    }
+  );
+
+  return {records};
+}
+```
+
+### Fetch with linked records
+
+Depending on the situation, we may need to also read linked records from the server's response. The most common use-case for this is to get the records respective author's [Entity record](375c4ea9) which are included by default (unless it's our own user's).
+
+In this example we fetch Post records and also specify that we expect `EntityRecord` linked records.
+
+```ts
+import {EntityRecord, Q} from "@baqhub/sdk";
+import {PostRecord} from "./baq/postRecord.js";
+
+async function fetchFeed(client) {
+  const {records, linkedRecords} = await client.getRecords(
+    EntityRecord,
+    PostRecord,
+    {
+      pageSize: 30,
+      filter: Q.type(PostRecord),
+    }
+  );
+
+  return {records, linkedRecords};
+}
+```
+
+For more advanced queries, we may want to specify multiple types for linked records. This can be done by combining them with `IO.union`. In this example we also request the inclusion of the `quote_post` link, which is itself a Post record.
+
+```ts
+import {EntityRecord, Q} from "@baqhub/sdk";
+import {PostRecord} from "./baq/postRecord.js";
+
+const LinkRecord = Q.union([EntityRecord, PostRecord]);
+
+async function fetchFeed(client) {
+  const {records, linkedRecords} = await client.getRecords(
+    LinkRecord,
+    PostRecord,
+    {
+      pageSize: 30,
+      filter: Q.type(PostRecord),
+      includeLinks: ["entity", "content.quotePost"],
+    }
+  );
+
+  return {records, linkedRecords};
+}
+```
+
+### Create a new record
+
+Creating a new record requires a [Record](4b9504a7) object and its Type. Here we have a function that accepts a string as input for the new Post record, sends the record to the server, and returns the result.
+
+```ts
+import {IO} from "@baqhub/sdk";
+import {PostRecord} from "./baq/postRecord.js";
+
+async function createPostRecord(client, text) {
+  const postRecord = PostRecord.new("alice.baq.run", {text});
+  const {record} = client.postRecord(
+    IO.unknown,
+    PostRecord,
+    postRecord
+  );
+
+  return record;
+}
+```
+
+### Add a blob to a record
+
+To add a blob to a record, we must first upload it. We can then create a [BlobLink](6cbe48da) with additional metadata about our file, and finally add it to the record.
+
+In this example we upload an image and add it as avatar to the [Entity record](375c4ea9) for our user.
+
+```ts
+import {EntityRecord, BlobLink} from "@baqhub/sdk";
+
+async function addAvatar(client, entityRecord, avatarBlob) {
+  const blobResponse = client.uploadBlob(avatarBlob);
+  const blobLink = BlobLink.new(
+    blobResponse,
+    "image/jpeg",
+    "avatar.jpg"
+  );
+
+  return EntityRecord.update("alice.baq.run", entityRecord, {
+    ...entityRecord.content,
+    avatar: blobLink,
+  });
+}
+```

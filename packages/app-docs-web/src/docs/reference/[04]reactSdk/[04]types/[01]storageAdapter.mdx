@@ -1,0 +1,99 @@
+export const metadata = {
+  id: "a4abc6d8",
+  title: "StorageAdapter",
+  summary: "Interface for the SDK to store persistent data.",
+};
+
+# StorageAdapter
+
+This is an interface to give the SDK the ability to persist authentication data.
+
+{props.toc}
+
+## Reference
+
+### `StorageAdapter`
+
+Provides functions to read and write to a persistent storage medium.
+
+#### Properties
+
+<props.properties>
+
+- **`type`** <props.pill>enum</props.pill>
+
+  - Type of storage.
+
+    - `"standard"`: General-purpose storage.
+    - `"secure"`: Storage suitable for sensitive data.
+
+- **<props.code>getString(key: <props.pill>key</props.pill>)</props.code>**: <props.pill>Promise\<string | undefined\></props.pill>
+
+  - Read a string value from persistent storage for the given key.
+
+  - Returns `undefined` if no value could be found.
+
+- **<props.code>setString(key: <props.pill>key</props.pill>, value: <props.pill>key</props.pill>)</props.code>**: <props.pill>Promise</props.pill>
+
+  - Store a string value to persistent storage for the given key.
+
+  - If a value already exists for this key, the new value overwrites it.
+
+- **<props.code>removeString(key: <props.pill>key</props.pill>)</props.code>**: <props.pill>Promise</props.pill>
+
+  - Remove a string value from persistent storage for the given key.
+
+  - Does not fail if no key to remove was found.
+
+</props.properties>
+
+### `localStorageAdapter`
+
+A `StorageAdapter` implementation that uses the browser's [`localStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) API.
+
+Available in the [`@baqhub/sdk-react-dom`](https://www.npmjs.com/package/@baqhub/sdk-react-dom) package.
+
+```jsx
+import {localStorageAdapter} from "@baqhub/sdk-react-dom";
+```
+
+### `asyncStorageAdapter`
+
+A `StorageAdapter` implementation that uses React Native's [`AsyncStorage`](https://github.com/react-native-async-storage/async-storage).
+
+Available in the [`@baqhub/sdk-react-native`](https://www.npmjs.com/package/@baqhub/sdk-react-native) or [`@baqhub/sdk-expo`](https://www.npmjs.com/package/@baqhub/sdk-expo) packages.
+
+```jsx
+import {asyncStorageAdapter} from "@baqhub/sdk-react-native";
+```
+
+### `secureStorageAdapter`
+
+A secure `StorageAdapter` implementation that uses [Expo SecureStore](https://docs.expo.dev/versions/latest/sdk/securestore/).
+
+Available in the [`@baqhub/sdk-expo`](https://www.npmjs.com/package/@baqhub/sdk-expo) package.
+
+```jsx
+import {secureStorageAdapter} from "@baqhub/sdk-expo";
+```
+
+## Usage
+
+### Store authentication data
+
+To use the SDK's [built-in authentication flow](00491e8c), a storage adapter is necessary to persist the user's entity record, application record, and private key. The various `StorageAdapter` implementations make it possible to adapt to different platforms and requirements.
+
+In this example of an Expo React Native app we provide a storage adapter for the SDK to store the records it needs to persist, and a different one to store the user's private key.
+
+```jsx
+import {buildAuthentication} from "../baq/authentication.js";
+import {
+  asyncStorageAdapter,
+  secureStorageAdapter,
+} from "@baqhub/sdk-expo";
+
+const {useAuthentication} = buildAuthentication({
+  storage: asyncStorageAdapter,
+  secureStorage: secureStorageAdapter,
+});
+```

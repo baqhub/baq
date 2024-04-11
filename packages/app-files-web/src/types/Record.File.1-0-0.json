@@ -1,0 +1,42 @@
+{
+  "name": "file",
+  "icon_name": "description",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "content": {
+        "type": "object",
+        "properties": {
+          "blob": {
+            "description": "Content of the file.",
+            "type": "blob_link"
+          },
+          "size": {
+            "description": "Size of the file in bytes.",
+            "type": "int",
+            "min": 0
+          },
+          "parent": {
+            "description": "Folder in which this file is located.",
+            "type": "record_link",
+            "record_types": [
+              {
+                "entity": "{var:entity}",
+                "record_id": "3050fc130d4142a9994af0ef7c89099e"
+              }
+            ],
+            "existential": true,
+            "optional": true
+          }
+        }
+      }
+    }
+  },
+  "unique_by": {
+    "domain": "025d28438d2d4cecbcff8109d6d71421",
+    "values": [
+      "/content/parent",
+      "/content/blob/name"
+    ]
+  }
+}

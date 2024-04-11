@@ -1,0 +1,70 @@
+export const metadata = {
+  id: "f0829f85",
+  title: "StoreIdentity",
+  summary:
+    "Identify of the current user, including authentication data.",
+};
+
+# StoreIdentity
+
+This is an interface to provide a [`<Store>`](f1e914a6) with authentication data.
+
+## Reference
+
+### `StoreIdentity`
+
+#### Properties
+
+<props.properties>
+
+- **`entityRecord`** <props.pill href="/todo">EntityRecord</props.pill>
+
+  - Entity record of the authenticated user.
+
+- **`client`** <props.pill href="/todo">Client</props.pill>
+
+  - An authenticated Client to perform requests against the user's server.
+
+- **`blobUrlBuilder`** <props.pill href="/todo">BlobUrlBuilder</props.pill>
+
+  - Synchronous function to get a blob URL from a given record and blob.
+
+</props.properties>
+
+## Usage
+
+### Authenticate a Store
+
+The [`<Store>`](f1e914a6) component does not require a specific authentication mechanism and will accept any `StoreIdentity` regardless of how it's procured.
+
+In this example, we read the identity from a variable injected on `window` by an HTML script from the server that generated the page instead of relying on `useAuthentication`.
+
+```jsx
+import {Client} from "@baqhub/sdk";
+import {Store} from "./baq/store.js";
+
+const serverData = JSON.parse(window.serverData);
+
+const client = Client.authenticated({
+  entityRecord: serverData.entityRecord,
+  appRecord: serverData.appRecord,
+  credentialsRecord: serverData.credentialsRecord,
+  serverPublicKey: serverData.publicKey,
+});
+
+const blobUrlBuilder = await client.buildBlobUrlBuilderAsync();
+
+const identity = {
+  entityRecord: serverData.entityRecord,
+  client,
+  blobUrlBuilder,
+};
+
+function App() {
+  return (
+    <Store identity={identity}>
+      <Home /> {/* Rest of the app */}
+    </Store>
+  );
+}
+```

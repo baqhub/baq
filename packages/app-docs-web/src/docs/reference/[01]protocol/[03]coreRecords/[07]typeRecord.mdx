@@ -1,0 +1,172 @@
+export const metadata = {
+  id: "27a5d157",
+  title: "Type Record",
+  summary: "Schema for new records.",
+};
+
+# Type Record
+
+Schema for new records.
+
+```json
+{
+  "name": "post",
+  "icon_name": "rss_feed",
+  "schema": {...},
+  "unique_by": {...}
+}
+```
+
+{props.toc}
+
+## Reference
+
+### `TypeRecord`
+
+A public [Record](01735953) that defines a schema that new records can conform to.
+
+#### Properties
+
+<props.properties>
+
+- **`name`** <props.pill>string</props.pill>
+
+  - Name of the type in `snake_case` format.
+
+- **`icon_name`** <props.pill>string</props.pill> _optional_
+
+  - Name of the icon to use for the type.
+
+  - It should be part of the [Material Symbols](https://fonts.google.com/icons) library.
+
+- **`schema`** <props.pill href="c64170ca">Schema</props.pill>
+
+  - Schema for the records to follow.
+
+  - At the top-level should be an [Object schema](c64170ca#objectschema) with a `content` property.
+
+- **`unique_by`** <props.pill href="#typerecorduniqueby">TypeRecordUniqueBy</props.pill> _optional_
+
+  - Unicity criteria for records of this type.
+
+</props.properties>
+
+#### Notes
+
+- The `schema` applies to the entire record, and not just to its content. This makes it possible to constrain other properties like `permissions` (e.g. ensure all records of this type are public).
+
+- [Material Symbols](https://fonts.google.com/icons) are used for type icons because they're open, feature an extensive collection, and are easy to customize to fit different visual styles. This makes it possible to display record types of various origins side by side while retaining some visual consistency.
+
+### `TypeRecordUniqueBy`
+
+Let servers know what properties should form a unicity constraint.
+
+#### Properties
+
+<props.properties>
+
+- **`domain`** <props.pill>string</props.pill> _optional_
+
+  - Scope within which the unicity constraint applies.
+
+  - 128-bit identifier, hex-encoded, all-lowercase, without any spaces.
+
+  - Defaults to only applying within records of this type.
+
+- **`set_equality`** <props.pill>boolean</props.pill> _optional_
+
+  - Should properties be compared as a set and not as an array.
+
+  - Default to `false`.
+
+- **`values`** <props.pill>JsonPointer[]</props.pill>
+
+  - Json pointers to the properties that make the unicity constraint.
+
+</props.properties>
+
+## Examples
+
+### Full Type record
+
+This is what the full content of a Type record might look like. Here it's the schema for a task in a basic "Todo" app. It includes a title, and whether it was marked as completed.
+
+```json
+{
+  "name": "task",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "content": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "description": "Title of the task.",
+            "type": "string",
+            "max_length": 128
+          },
+          "completed": {
+            "description": "Whether the task was completed.",
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### Enforce public permissions
+
+Some records might need to always be public, or always private, or to only be shared with a limited number of people. Since the `schema` applies to the whole record, it makes it possible to constrain `permissions` and in this example we make sure the records are always public.
+
+```json
+{
+  "name": "post",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "content": {...},
+      "permissions": {
+        "type": "object",
+        "properties": {
+          "read": {
+            "type": "tag_link",
+            "enum": ["public"]
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### Custom unicity constraint
+
+Some apps may need servers to enforce custom unicity constraints based on their own logic. In this example, a Task record is made unique by `title` so that two tasks cannot have the same one.
+
+```json
+{
+  "name": "task",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "content": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "max_length": 128
+          },
+          "completed": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  },
+  "unique_by": {
+    "values": ["/content/title"]
+  }
+}
+```

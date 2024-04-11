@@ -1,0 +1,39 @@
+{
+  "name": "conversation",
+  "icon_name": "forum",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "content": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "min_length": 1,
+            "max_length": 60,
+            "optional": true
+          }
+        }
+      },
+      "permissions": {
+        "type": "object",
+        "properties": {
+          "read": {
+            "type": "array",
+            "min_items": 1,
+            "items": {
+              "type": "entity_link"
+            }
+          },
+          "write": {
+            "type": "array",
+            "max_items": 0,
+            "items": {
+              "type": "never"
+            }
+          }
+        }
+      }
+    }
+  }
+}

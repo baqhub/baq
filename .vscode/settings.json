@@ -1,0 +1,82 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "files.autoSave": "onFocusChange",
+  "typescript.preferences.importModuleSpecifier": "project-relative",
+  "typescript.preferences.useAliasesForRenames": false,
+  "javascript.preferences.useAliasesForRenames": false,
+  "mdx.server.enable": false,
+  "[mdx][md]": {
+    "editor.wordWrap": "on"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "tailwindCSS.includeLanguages": {
+    "typescript": "javascript", // if you are using typescript
+    "typescriptreact": "javascript" // if you are using typescript with react
+  },
+  "tailwindCSS.experimental.classRegex": [
+    // "tw`([^`]*)", // tw`...`
+    "tw\\.[^`]+`([^`]*)`", // tw.xxx<xxx>`...`
+    // "tw\\(.*?\\).*?`([^`]*)", // tw(Component)<xxx>`...`,
+    [
+      "tw\\(.*?\\).*?([^;]*)",
+      "[\"'`\\}]([^\"'`\\$]*).*?[\"'`\\$]"
+    ]
+  ],
+  "movets.skipWarning": true,
+  "files.exclude": {
+    "**/.yarn/cache": true,
+    "**/.yarn/plugins": true,
+    "**/.yarn/releases": true,
+    "**/.yarn/unplugged": true,
+    "**/.yarn/install-state.gz": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/*.tsbuildinfo": true,
+    "**/.next": true,
+    "**/out": true
+  },
+  "search.exclude": {
+    "**/.yarn": true,
+    "**/.pnp.*": true
+  },
+  "eslint.nodePath": ".yarn/sdks",
+  "prettier.prettierPath": ".yarn/sdks/prettier/index.cjs",
+  "typescript.tsdk": ".yarn/sdks/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "cSpell.enableFiletypes": [
+    "mdx"
+  ],
+  "cSpell.words": [
+    "abortable",
+    "baqhub",
+    "canonicalize",
+    "codomain",
+    "domutils",
+    "forwardable",
+    "heroicons",
+    "httpcli",
+    "idempotency",
+    "idempotently",
+    "keychain",
+    "marsidev",
+    "mathilde",
+    "nativewind",
+    "pipeable",
+    "pressable",
+    "proxied",
+    "proxying",
+    "quentez",
+    "rehype",
+    "svgr",
+    "tailwindcss",
+    "tanstack",
+    "typeof",
+    "unfollow",
+    "unicity",
+    "unoptimized"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "extends": [
+    "../../tsconfig.base"
+  ],
+  "compilerOptions": {
+    "outDir": "./build",
+    "baseUrl": "./src"
+  },
+  "include": [
+    "src",
+    "tailwind.config.ts"
+  ],
+  "references": [
+    {
+      "path": "../lib-sdk"
+    },
+    {
+      "path": "../lib-sdk-react"
+    }
+  ]
+}

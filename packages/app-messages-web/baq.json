@@ -1,0 +1,26 @@
+{
+  "name": "Messages",
+  "type": "ts-react",
+  "path": "src/baq",
+  "record_types": {
+    "conversation": {
+      "path": "src/types/Record.Conversation.1-0-0.json",
+      "record_id": "c4094303fe334bd18de6a1f1929c3cad",
+      "version_hash": "e60172a0d4f71a8c666aefb713d64e05977cd64812298dc019fb8d5e035214d0",
+      "content_hash": "00f33175716affc6e61e148c5ca9bfc7"
+    },
+    "message": {
+      "path": "src/types/Record.Message.1-0-0.json",
+      "record_id": "05d5b9442c36433688edca64df1a264c",
+      "version_hash": "cc298c1cd1dad6142157eb10eaee1dd4a5fdb49359140e57799681fad959ba86",
+      "content_hash": "ba87bc72c70bde2a3e9bf7aacaef162e"
+    },
+    "file": {
+      "entity": "types.baq.dev",
+      "record_id": "2b6f7bc8ffd54c8db8062700c040e04f",
+      "version_hash": "896f618da076825066710437f1c3b8115f4fdc636d3acab14669b29d525ce384"
+    }
+  },
+  "description": "Keep in touch with friends.",
+  "website_url": "https://messages.baq.dev"
+}

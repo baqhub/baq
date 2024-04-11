@@ -1,0 +1,54 @@
+name: App Emails Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - deploy-emails
+
+env:
+  FOLDER: ./packages/app-emails-web/dist
+  BUCKET: emails.baq.dev
+  BUCKET_REGION: us-west-2
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: 21
+          cache: "yarn"
+
+      - name: Build
+        run: |
+          yarn install --immutable
+          yarn emails:build
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          mask-aws-account-id: true
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.BUCKET_REGION }}
+
+      - name: Deploy files
+        run: >
+          aws s3 sync ${{ env.FOLDER }}
+          s3://${{ env.BUCKET }}/
+          --cache-control 'max-age=31536000, immutable'
+          --exclude "index.html"
+
+      - name: Deploy index
+        run: >
+          aws s3 sync ${{ env.FOLDER }}
+          s3://${{ env.BUCKET }}/
+          --cache-control no-cache
+          --include "index.html"

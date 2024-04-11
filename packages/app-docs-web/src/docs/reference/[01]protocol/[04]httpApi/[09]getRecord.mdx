@@ -1,0 +1,186 @@
+export const metadata = {
+  id: "e9aabfb6",
+  title: "GET record",
+  summary: "Get a single record.",
+};
+
+# GET record
+
+Get a single record.
+
+```httpcli
+GET https://baq.run/api/alice/records/{entity}/{record_id}
+```
+
+{props.toc}
+
+## Reference
+
+### Request
+
+Build the request URL by replacing the `{entity}` and `{record_id}` variables in the `record` endpoint URL template.
+
+#### Parameters
+
+<props.properties>
+
+- **`include_links`** <props.pill>string[]</props.pill> _optional_
+
+  - Paths of links to include in the response (comma-separated).
+
+  - Supports the following special values:
+
+    - `entity`: Entity records for all entity links.
+
+    - `existential`: All records for existential record links.
+
+  - Defaults to `entity,existential`.
+
+</props.properties>
+
+### Response
+
+#### Content
+
+<props.properties>
+
+- **`record`** <props.pill href="01735953">Record</props.pill>
+
+  - Newly created record.
+
+- **`linked_records`** <props.pill href="01735953">Record[]</props.pill>
+
+  - Linked records requested with `include_links`.
+
+</props.properties>
+
+## Usage
+
+### Fetch record
+
+We fetch one of our user's own records by ID.
+
+```http
+GET /api/alice/records/alice.baq.run/867deccbe7ac4adca4efc07fbe08af87 HTTP/2
+Host: baq.run
+```
+
+The response does not include any `linked_records` because our user's own Entity record is excluded.
+
+```http
+HTTP/2 200 OK
+Content-Type: application/json
+
+{
+  "record": {
+    "author": {
+      "entity": "alice.baq.run"
+    },
+    "id": "867deccbe7ac4adca4efc07fbe08af87",
+    "source": "self",
+    "created_at": "2024-03-05T16:50:17.9080000Z",
+    "received_at": "2024-03-05T16:50:20.4850000Z",
+    "version": {
+      "author": {
+        "entity": "alice.baq.run"
+      },
+      "hash": "563bebcafec0aea26d88384564d721b3026b27a42263200f7aee09366763630d",
+      "created_at": "2024-03-05T16:50:17.9080000Z",
+      "received_at": "2024-03-05T16:50:20.4850000Z"
+    },
+    "permissions": {
+      "read": "public"
+    },
+    "type": {
+      "entity": "types.baq.dev",
+      "record_id": "6ee7f69a90154b849bac528daa942bcd",
+      "version_hash": "93ca1149e00ab963ea4b29772769e20330c356bb4b6ae787d3af9168e81d1687"
+    },
+    "content": {
+      "text": "Hi everyone!"
+    }
+  },
+  "linked_records": []
+}
+```
+
+### Fetch with linked record
+
+We may sometimes want to retrieve a specific linked record within the same request. In this example we add the `include_links=$['content']['quote_post']` parameter to request the quoted record.
+
+```http
+GET /api/alice/records/alice.baq.run/ac29d77492eb42d39b10b98d5bc9ebc8?include_links=$['content']['quote_post'] HTTP/2
+Host: baq.run
+```
+
+Since the requested record indeed has a link at path `$['content']['quote_post']`, the server includes to corresponding record in the `linked_records` array.
+
+```http
+HTTP/2 200 OK
+Content-Type: application/json
+
+{
+  "record": {
+    "author": {
+      "entity": "alice.baq.run"
+    },
+    "id": "ac29d77492eb42d39b10b98d5bc9ebc8",
+    "source": "self",
+    "created_at": "2024-03-10T16:50:17.9080000Z",
+    "received_at": "2024-03-10T16:50:20.4850000Z",
+    "version": {
+      "author": {
+        "entity": "alice.baq.run"
+      },
+      "hash": "39988021d0ee456eb893a44f125b015307d013515aa043f683bd86adcca5f565",
+      "created_at": "2024-03-10T16:50:17.9080000Z",
+      "received_at": "2024-03-10T16:50:20.4850000Z"
+    },
+    "permissions": {
+      "read": "public"
+    },
+    "type": {
+      "entity": "types.baq.dev",
+      "record_id": "6ee7f69a90154b849bac528daa942bcd",
+      "version_hash": "93ca1149e00ab963ea4b29772769e20330c356bb4b6ae787d3af9168e81d1687"
+    },
+    "content": {
+      "text": "Here's what I posted the other day:",
+      "quote_post": {
+        "entity": "alice.baq.run",
+        "record_id": "867deccbe7ac4adca4efc07fbe08af87"
+      }
+    }
+  },
+  "linked_records": [
+    {
+      "author": {
+        "entity": "alice.baq.run"
+      },
+      "id": "867deccbe7ac4adca4efc07fbe08af87",
+      "source": "self",
+      "created_at": "2024-03-05T16:50:17.9080000Z",
+      "received_at": "2024-03-05T16:50:20.4850000Z",
+      "version": {
+        "author": {
+          "entity": "alice.baq.run"
+        },
+        "hash": "563bebcafec0aea26d88384564d721b3026b27a42263200f7aee09366763630d",
+        "created_at": "2024-03-05T16:50:17.9080000Z",
+        "received_at": "2024-03-05T16:50:20.4850000Z"
+      },
+      "permissions": {
+        "read": "public"
+      },
+      "type": {
+        "entity": "types.baq.dev",
+        "record_id": "6ee7f69a90154b849bac528daa942bcd",
+        "version_hash": "93ca1149e00ab963ea4b29772769e20330c356bb4b6ae787d3af9168e81d1687"
+      },
+      "content": {
+        "text": "Hi everyone!"
+      }
+    }
+  ]
+}
+```

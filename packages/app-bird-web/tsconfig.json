@@ -1,0 +1,34 @@
+{
+  "extends": [
+    "../../tsconfig.base"
+  ],
+  "compilerOptions": {
+    "outDir": "./build",
+    "baseUrl": "./src",
+  },
+  "include": [
+    "src",
+    "vite.config.ts",
+    "tailwind.config.ts"
+  ],
+  "references": [
+    {
+      "path": "../lib-config-web"
+    },
+    {
+      "path": "../lib-sdk"
+    },
+    {
+      "path": "../lib-sdk-react"
+    },
+    {
+      "path": "../lib-sdk-react-dom"
+    },
+    {
+      "path": "../lib-ui"
+    },
+    {
+      "path": "../app-bird-shared"
+    }
+  ]
+}

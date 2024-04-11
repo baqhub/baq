@@ -1,0 +1,91 @@
+export const metadata = {
+  id: "93839b3f",
+  title: "useRecordByVersion",
+  summary: "Get a single record from the store by its version.",
+};
+
+# useRecordByVersion
+
+This is a React hook to get a single record from the store from its version.
+
+```jsx
+const record = useRecordByVersion(version);
+```
+
+{props.toc}
+
+## Reference
+
+### `useRecordByVersion()`
+
+Call `useRecordByVersion` at the top level of your component to get a record back.
+
+```jsx
+function Post({postVersion}) {
+  const postRecord = useRecordByVersion(postVersion);
+  return <div>{postRecord.content.text}</div>;
+}
+```
+
+#### Parameters
+
+<props.properties>
+
+- **`version`** <props.pill href="deae588f#versionhash">VersionHash</props.pill>
+
+  - Version of the record to get.
+
+</props.properties>
+
+#### Returns
+
+This hook returns a [`Record`](/docs/reference/record)
+
+#### Notes
+
+- Throws an error if no matching record is found.
+
+- The same record will always be returned for a given version.
+
+## Usage
+
+### Display record from version
+
+It might be convenient for some components to only receive the version of the record to display instead of the full record. An example of this might be cases where storing a string is more straightforward than the whole object.
+
+Here, we display a popup editor for a Todo record based on its version.
+
+```jsx
+import {useRecordByVersion} from "./baq/store.js";
+
+function TodoEditorPopup({todoVersion}) {
+  const {content} = useRecordByVersion(todoVersion);
+
+  const onSubmit = e => {
+    e.preventDefault();
+    // Handle saving the edited record...
+  };
+
+  return (
+    <Popup>
+      <form onSubmit={onSubmit}>
+        <label>
+          Title:
+          <input value={title} defaultValue={content.title} />
+        </label>
+
+        <label>
+          Completed:
+          <input
+            type="checkbox"
+            value={title}
+            defaultValue={content.completed}
+          />
+        </label>
+
+        <button type="submit">Save</button>
+      </form>
+    </Popup>
+  );
+}
+```

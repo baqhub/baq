@@ -1,0 +1,71 @@
+{
+  "extends": [
+    "./tsconfig.base"
+  ],
+  "compilerOptions": {
+    "outDir": "./build"
+  },
+  "include": [],
+  "references": [
+    {
+      "path": "packages/lib-config-web"
+    },
+    {
+      "path": "packages/lib-sdk"
+    },
+    {
+      "path": "packages/lib-sdk/tsconfig.cjs.json"
+    },
+    {
+      "path": "packages/lib-cli"
+    },
+    {
+      "path": "packages/lib-sdk-react"
+    },
+    {
+      "path": "packages/lib-sdk-react/tsconfig.cjs.json"
+    },
+    {
+      "path": "packages/lib-sdk-react-dom"
+    },
+    {
+      "path": "packages/lib-sdk-react-dom/tsconfig.cjs.json"
+    },
+    {
+      "path": "packages/lib-sdk-react-native"
+    },
+    {
+      "path": "packages/lib-sdk-react-native/tsconfig.cjs.json"
+    },
+    {
+      "path": "packages/lib-sdk-expo/"
+    },
+    {
+      "path": "packages/lib-sdk-expo/tsconfig.cjs.json"
+    },
+    {
+      "path": "packages/lib-types"
+    },
+    {
+      "path": "packages/lib-ui"
+    },
+    {
+      "path": "packages/app-docs-web"
+    },
+    {
+      "path": "packages/app-cli-web"
+    },
+    {
+      "path": "packages/app-files-web"
+    },
+    {
+      "path": "packages/app-messages-web"
+    },
+    {
+      "path": "packages/app-bird-shared"
+    },
+    {
+      "path": "packages/app-bird-web"
+    },
+  ]
+}

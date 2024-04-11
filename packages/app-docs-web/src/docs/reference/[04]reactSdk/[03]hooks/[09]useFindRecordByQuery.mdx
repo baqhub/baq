@@ -1,0 +1,81 @@
+export const metadata = {
+  id: "460859fe",
+  title: "useFindRecordByQuery",
+  summary:
+    "Try to get a single record from the store from a query.",
+};
+
+# useFindRecordByQuery
+
+This is a React hook to query the latest version of a record from the store, if any.
+
+```jsx
+const record = useFindRecordByQuery(query);
+```
+
+{props.toc}
+
+## Reference
+
+### `useFindRecordByQuery()`
+
+Call `useFindRecordByQuery` at the top level of your component to find a record.
+
+```jsx
+function Like() {
+  const likeRecord = useFindRecordByQuery({
+    filter: ...
+  });
+
+  return likeRecord ? <StarFilled /> : <StarEmpty />;
+}
+```
+
+#### Parameters
+
+<props.properties>
+
+- **`query`** <props.pill href="/todo">RecordQuery</props.pill>
+
+  - Query to run against the store.
+
+</props.properties>
+
+#### Returns
+
+This hook returns a [`Record`](/docs/reference/record), or `undefined` if the record could not be found.
+
+#### Notes
+
+- The hook only returns a record if the query matches one and only one record.
+
+- Always returns the latest version of the record that matches this query available in the store. The hook automatically updates when a new version becomes available.
+
+## Usage
+
+### Find a sidecar record
+
+There are situations when apps or users might want to augment existing records with additional data. This is known as [Sidecar Records](/docs/learn/sidecar-records).
+
+In this example we want to display a different icon depending on whether our user "liked" a Post record or not. We assume the Like record was fetched alongside the Post using the Sidecar feature and we now need to find it from the store.
+
+```jsx
+import {Q} from "@baqhub/sdk";
+import {
+  useRecordHelpers,
+  useFindRecordByQuery,
+} from "./baq/store.js";
+
+function LikeIcon({postLink}) {
+  const {entity} = useRecordHelpers();
+  const likeRecord = useFindRecordByQuery({
+    filter: Q.and(
+      Q.author(entity),
+      Q.type(LikeRecord),
+      Q.link("content.post", postLink)
+    ),
+  });
+
+  return likeRecord ? <StarFilled /> : <StarEmpty />;
+}
+```

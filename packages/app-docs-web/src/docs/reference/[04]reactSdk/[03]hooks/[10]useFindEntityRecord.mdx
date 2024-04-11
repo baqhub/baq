@@ -1,0 +1,77 @@
+export const metadata = {
+  id: "80f9760b",
+  title: "useFindEntityRecord",
+  summary:
+    "Try to get an entity record from the store from an entity.",
+};
+
+# useFindEntityRecord
+
+This is a React hook to query the latest version of a user's entity record from the store.
+
+```jsx
+const record = useFindEntityRecord(entity);
+```
+
+{props.toc}
+
+## Reference
+
+### `useFindEntityRecord()`
+
+Call `useFindEntityRecord` at the top level of your component to find an entity record.
+
+```jsx
+function Profile({entity}) {
+  const entityRecord = useFindEntityRecord(entity);
+
+  if (!entityRecord) {
+    return <NotFound />;
+  }
+
+  return <div>Name:{entityRecord.content.profile.name}</div>;
+}
+```
+
+#### Parameters
+
+<props.properties>
+
+- **`entity`** <props.pill>string</props.pill>
+
+  - Entity of the user whose Entity record we want to find.
+
+</props.properties>
+
+#### Returns
+
+This hook return an [`EntityRecord`](/docs/reference/entityrecord), or `undefined` if the record could not be found.
+
+#### Notes
+
+- Always returns the latest version of Entity record available in the store. The hook automatically updates when a new version becomes available.
+
+## Usage
+
+### Display the author of a record
+
+When fetching records, their respective authors' Entity records are included in the response by default. They are then available in the store to display alongside the records themselves.
+
+In this example we display the name of a Post record's author right above its content.
+
+```jsx
+function Post({postRecord}) {
+  const {entity} = postRecord.author;
+  const authorRecord = useFindEntityRecord(entity);
+  if (!authorRecord) {
+    throw new Error("Entity record not found.");
+  }
+
+  return (
+    <div>
+      <div>{authorRecord.content.profile.name}</div>
+      <div>{postRecord.content.text}</div>
+    </div>
+  );
+}
+```

@@ -1,0 +1,44 @@
+{
+  "name": "@baqhub/sdk-react-native",
+  "version": "0.1.7",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "ts": "tsc --build --watch",
+    "build": "tsc --build ./tsconfig.cjs.json ./tsconfig.json && tsconfig-to-dual-package",
+    "build:clean": "rm -rf ./build",
+    "publish": "yarn npm publish",
+    "test": "yarn node --experimental-vm-modules --no-warnings $(yarn bin jest)"
+  },
+  "main": "./build/cjs/src/index.js",
+  "types": "./build/cjs/src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./build/esm/src/index.js",
+      "require": "./build/cjs/src/index.js"
+    }
+  },
+  "author": "BaqHub",
+  "license": "MIT",
+  "dependencies": {
+    "@baqhub/sdk": "^0.1.7",
+    "@baqhub/sdk-react": "^0.1.7",
+    "@react-native-async-storage/async-storage": "^1.21.0",
+    "base-64": "^1.0.0",
+    "react-native-fetch-api": "^3.0.0",
+    "react-native-get-random-values": "~1.8.0",
+    "react-native-polyfill-globals": "^3.1.0",
+    "react-native-url-polyfill": "^2.0.0",
+    "text-encoding": "^0.7.0",
+    "tslib": "^2.6.2",
+    "web-streams-polyfill": "^3.3.2"
+  },
+  "peerDependencies": {
+    "react-native": ">=0.60"
+  },
+  "devDependencies": {
+    "@types/node": "20.12.2",
+    "tsconfig-to-dual-package": "1.2.0",
+    "typescript": "5.3.3"
+  }
+}

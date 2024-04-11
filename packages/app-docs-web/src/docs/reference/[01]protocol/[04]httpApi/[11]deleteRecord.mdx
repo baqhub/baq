@@ -1,0 +1,221 @@
+export const metadata = {
+  id: "c6326f00",
+  title: "DELETE record",
+  summary: "Delete a single record.",
+};
+
+# DELETE record
+
+Delete a single record.
+
+```httpcli
+DELETE https://baq.run/api/alice/records/{entity}/{record_id}
+```
+
+{props.toc}
+
+## Reference
+
+### Request
+
+The body for this request is optional and default values are used if missing.
+
+Build the request URL by replacing the `{entity}` and `{record_id}` variables in the `record` endpoint URL template.
+
+#### Content
+
+<props.properties>
+
+- **`version`** <props.pill>object</props.pill> _optional_
+
+  - Version-specific properties:
+
+    <props.properties>
+
+    - **`parent_hash`** <props.pill href="deae588f#versionhash">VersionHash</props.pill> _optional_
+
+      - Hash of the record version to delete.
+
+      - Defaults to the most recent version if missing.
+
+    - **`created_at`** <props.pill href="deae588f#recorddate">RecordDate</props.pill> _optional_
+
+      - Deletion date.
+
+      - Defaults to the current date if missing.
+
+    </props.properties>
+
+- **`no_content`** <props.pill>object</props.pill> _optional_
+
+  - Deletion options:
+
+    <props.properties>
+
+    - **`action`** <props.pill>enum</props.pill> _optional_
+
+      - Type of deletion to perform:
+
+        - `delete`: Standard deletion, propagated to others.
+
+        - `local`: Only delete from the user's server, not propagated.
+
+        - `leave`: Remove our user without deleting for others.
+
+      - Defaults to `delete` if missing.
+
+    </props.properties>
+
+</props.properties>
+
+#### Parameters
+
+<props.properties>
+
+- **`include_links`** <props.pill>string[]</props.pill> _optional_
+
+  - Paths of links to include in the response (comma-separated).
+
+  - Supports the following special values:
+
+    - `entity`: Entity records for all entity links.
+
+    - `existential`: All records for existential record links.
+
+  - Defaults to `entity,existential`.
+
+</props.properties>
+
+#### Notes
+
+- Optimistic concurrency can be achieve by providing `version.parent_hash`: the request will fail if another version was published in the meantime.
+
+- This endpoint is idempotent if the following properties are provided:
+
+  <props.compactList>
+
+  - `version.parent_hash`
+
+  - `version.created_at`
+
+  </props.compactList>
+
+- This endpoint is atomic and the record is guaranteed to be visible in all other queries once the request completes.
+
+### Response
+
+#### Content
+
+<props.properties>
+
+- **`record`** <props.pill href="01735953">Record</props.pill>
+
+  - Deleted record, with [`no_content`](01735953#recordnocontent) property.
+
+- **`linked_records`** <props.pill href="01735953">Record[]</props.pill>
+
+  - Linked records requested with `include_links`.
+
+</props.properties>
+
+## Usage
+
+### Delete a record
+
+No request body is necessary to delete a record, this is enough:
+
+```http
+DELETE /api/alice/records/alice.baq.run/867deccbe7ac4adca4efc07fbe08af87 HTTP/2
+Host: baq.run
+```
+
+The server creates the tombstone for the record and returns it.
+
+```http
+HTTP/2 200 OK
+Content-Type: application/json
+
+{
+  "record": {
+    "author": {
+      "entity": "alice.baq.run"
+    },
+    "id": "867deccbe7ac4adca4efc07fbe08af87",
+    "source": "self",
+    "created_at": "2024-03-05T16:50:17.9080000Z",
+    "received_at": "2024-03-05T16:50:20.4850000Z",
+    "version": {
+      "author": {
+        "entity": "alice.baq.run"
+      },
+      "hash": "72109e3b0b448c906700b51f580f0c9b77dbb228d87213fbd35f41fc97b77c5b",
+      "created_at": "2024-03-07T01:39:03.1640000Z",
+      "received_at": "2024-03-07T01:39:05.5050000Z",
+      "parent_hash": "563bebcafec0aea26d88384564d721b3026b27a42263200f7aee09366763630d"
+    },
+    "permissions": {
+      "read": "public"
+    },
+    "type": {
+      "entity": "alice.baq.run",
+      "record_id": "6ee7f69a90154b849bac528daa942bcd",
+      "version_hash": "93ca1149e00ab963ea4b29772769e20330c356bb4b6ae787d3af9168e81d1687"
+    },
+    "no_content": {
+      "action": "delete",
+      "links": []
+    }
+  },
+  "linked_records": []
+}
+```
+
+### Locally delete a record
+
+Deleting a record requires write permissions. But there are cases when we might want to remove a record from view regardless. By adding `action: local` we instruct the server to only delete the record from our user's feed. Other parties are not notified of this.
+
+```http
+DELETE /api/alice/records/paul.baq.run/dc730efaeac648eb956ccbebc2605bc9 HTTP/2
+Host: baq.run
+Content-Type: application/json
+
+{
+  "no_content": {
+    "action": "local"
+  }
+}
+```
+
+### Leave a record
+
+We might sometimes want to be removed from a record's permissions in order to avoid receiving future updates. This can be done even when our user does not have write permissions on that record.
+
+By adding `action: leave` we instruct the server to delete the record from our user's feed, and to notify other parties to remove our user's entity from the record's permissions.
+
+```http
+DELETE /api/alice/records/paul.baq.run/dc730efaeac648eb956ccbebc2605bc9 HTTP/2
+Host: baq.run
+Content-Type: application/json
+
+{
+  "no_content": {
+    "action": "leave"
+  }
+}
+```
+
+### Optimistic concurrency control
+
+To make sure we're not deleting a record that changed since the last time we fetched it, we can explicitly specify `parent_hash`. The request will now fail if the record was updated in the meantime.
+
+```http
+DELETE /api/alice/records/alice.baq.run/867deccbe7ac4adca4efc07fbe08af87 HTTP/2
+Host: baq.run
+Content-Type: application/json
+
+{
+  "version": {
+    "parent_hash": "563bebcafec0aea26d88384564d721b3026b27a42263200f7aee09366763630d"
+  }
+}
+```

@@ -1,0 +1,238 @@
+export const metadata = {
+  id: "c4e4e2a0",
+  title: "Query",
+  summary: "Parameters to request records from a server.",
+};
+
+# Query
+
+Parameters to request records from a server.
+
+```ts
+const query = {
+  pageSize: 100,
+  sort: ["receivedAt", "ascending"],
+};
+```
+
+{props.toc}
+
+## Reference
+
+### `Query`
+
+#### Static methods
+
+<props.properties>
+
+- **<props.code>new(query: <props.pill>Query</props.pill>)</props.code>**: <props.pill>Query</props.pill>
+
+  - Create a new query.
+
+- **<props.code>ofKey(key: <props.pill href="4b9504a7#recordkey">RecordKey</props.pill>, baseQuery?: <props.pill href="#singlequery">SingleQuery</props.pill>)</props.code>**: <props.pill>Query</props.pill>
+
+  - Create a new query to fetch the record identified by the provided key.
+
+  - The query behavior can be tweaked with `baseQuery`.
+
+- **<props.code>filter(records: <props.pill href="4b9504a7">Record[]</props.pill>, query: <props.pill>Query</props.pill>)</props.code>**: <props.pill href="4b9504a7">Record[]</props.pill>
+
+  - Filter an array of records with the provided query.
+
+- **<props.code>toQueryString(query: <props.pill>Query</props.pill>)</props.code>**: <props.pill>string</props.pill>
+
+  - Build a query string for the [GET records](a29bdfea) endpoint.
+
+</props.properties>
+
+#### Properties
+
+<props.properties>
+
+- **`sort`** <props.pill href="#querysort">QuerySort</props.pill> _optional_
+
+  - Property on which to sort, and sort order.
+
+  - Defaults to `["version.receivedAt", "descending"]`.
+
+- **`min`** <props.pill href="#querydate">QueryDate</props.pill> _optional_
+
+  - Minimum bound for the sort property, exclusive.
+
+- **`max`** <props.pill href="#querydate">QueryDate</props.pill> _optional_
+
+  - Maximum bound for the sort property, exclusive.
+
+- **`page_start`** <props.pill href="#querydate">QueryDate</props.pill> _optional_
+
+  - Starting point of the sort property for the current page, exclusive.
+
+- **`pageSize`** <props.pill>int</props.pill> _optional_
+
+  - Desired number of records.
+
+  - Accepts values between **1** and **200**, inclusive.
+
+  - Default to **20**.
+
+- **`distinct`** <props.pill>string</props.pill> _optional_
+
+  - Path of a [Tag link](c64170ca#taglinkschema) marked as `sort_property` to deduplicate on.
+
+- **`filter`** <props.pill href="25c0e097">QueryFilter</props.pill> _optional_
+
+  - Conditions to filter the records with.
+
+- **`mode`** <props.pill href="4b9504a7#recordmode">RecordMode</props.pill> _optional_
+
+  - Filter records by their `mode` (synchronized or local-only).
+
+  - Only used for local queries.
+
+- **`include_links`** <props.pill>string[]</props.pill> _optional_
+
+  - Paths of links to include in the response (comma-separated).
+
+  - Supports the following special values:
+
+    - `entity`: Entity records for all entity links.
+
+    - `existential`: All records for existential record links.
+
+  - Defaults to `entity,existential`.
+
+- **`include_deleted`** <props.pill>boolean</props.pill> _optional_
+
+  - Whether to include deleted records in the response.
+
+  - Defaults to `false`.
+
+- **`proxy_to`** <props.pill href="deae588f#entity">Entity</props.pill> _optional_
+
+  - Other user's entity to proxy the request to.
+
+</props.properties>
+
+### `QuerySort`
+
+Tuple containing a query's sort property and sort direction.
+
+```ts
+type QuerySort = [SortProperty, SortDirection];
+```
+
+#### Members
+
+<props.properties>
+
+- **`SortProperty`** <props.pill>string</props.pill>
+
+  - Property on which to sort.
+
+  - Possible values:
+
+    - `receivedAt`
+
+    - `createdAt`
+
+    - `version.receivedAt`
+
+    - `version.createdAt`
+
+    - Path of a [Tag link](c64170ca#taglinkschema) marked as `sort_property` to sort on.
+
+- **`SortDirection`** <props.pill>enum</props.pill>
+
+  - Sort order in which to return the records.
+
+  - Possible values:
+
+    - `descending`
+
+    - `ascending`
+
+</props.properties>
+
+### `QueryDate`
+
+Either a `Date`, or a `Date` and [`VersionHash`](deae588f#versionhash) tuple.
+
+```ts
+type QueryDate = Date | [Date, VersionHash];
+```
+
+Multiple records may have the same value for a query's sort property. When that happens, these records are then further sorted by their version hash in ASCII order. Providing a `VersionHash` makes it possible to have a page boundary in the middle of that group of same-value records.
+
+### `SingleQuery`
+
+Limited query with only parameters used when fetching a single record.
+
+#### Properties
+
+<props.properties>
+
+- **`include_links`** <props.pill>string[]</props.pill> _optional_
+
+  - Paths of links to include in the response (comma-separated).
+
+  - Supports the following special values:
+
+    - `entity`: Entity records for all entity links.
+
+    - `existential`: All records for existential record links.
+
+  - Defaults to `entity,existential`.
+
+- **`include_deleted`** <props.pill>boolean</props.pill> _optional_
+
+  - Whether to include deleted records in the response.
+
+  - Defaults to `false`.
+
+- **`proxy_to`** <props.pill href="deae588f#entity">Entity</props.pill> _optional_
+
+  - Other user's entity to proxy the request to.
+
+</props.properties>
+
+## Usage
+
+### Build a query string
+
+The [GET records](a29bdfea) accepts a lot of different parameters to narrow down the records to return. Using a `Query` can make it a lot easier to construct the HTTP request.
+
+In this example, we want the first 30 records, sorted by creation date in ascending order, that were created in 2024.
+
+```ts
+import {Query} from "@baqhub/sdk";
+
+const query = {
+  sort: ["createdAt", "ascending"],
+  min: new Date(Date.UTC(2024, 0, 1)),
+  pageSize: 30,
+};
+
+const queryString = Query.toQueryString(query);
+const url = "https://baq.run/api/alice/records" + queryString;
+
+const response = await fetch(url);
+```
+
+### Filter local records
+
+The same query object used to build HTTP requests can also be used to filter a local collection of Records. Here we want to find the most recent [Message record](/todo) for each conversation.
+
+```ts
+import {Query} from "@baqhub/sdk";
+
+const query = {
+  sort: ["receivedAt", "descending"],
+  distinct: "content.conversation",
+};
+
+const allMessageRecords = [...];
+const mostRecentByConversation = Query.filter(
+  allMessageRecords,
+  query
+);
+```

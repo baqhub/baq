@@ -1,0 +1,115 @@
+export const metadata = {
+  id: "b22351f5",
+  title: "useRecordMutations",
+  summary:
+    "Update and delete records in the store and user's server.",
+};
+
+# useRecordMutations
+
+This is a React hook to mutate the record store.
+
+```jsx
+const mutations = useRecordMutations();
+```
+
+{props.toc}
+
+## Reference
+
+### `useRecordMutations()`
+
+Call `useRecordMutations` at the top level of your component to access the record store mutation functions.
+
+#### Returns
+
+This hook returns a [`RecordMutations`](#recordmutations) object.
+
+#### Notes
+
+- The mutation functions are synchronous and merely request the store perform the corresponding actions. As such, these functions never fail and do not provide feedback regarding the status of the mutation. Conflict resolution and status tracking happens at the store level through configuration of the [`<Store>`](f1e914a6).
+
+### `RecordMutations`
+
+<props.properties>
+
+- **<props.code>updateRecords(records: <props.pill href="/todo">Record[]</props.pill>)</props.code>**
+
+  - Update records in the store.
+
+    The local state is updated immediately.
+
+    Records are updated on the server as soon as possible.
+
+- **<props.code>deleteRecords(keys: <props.pill href="4b9504a7#recordkey">RecordKey[]</props.pill>)</props.code>**
+
+  - Delete records in the store.
+
+    The local state is updated immediately.
+
+    Records are deleted on the server as soon as possible.
+
+</props.properties>
+
+## Usage
+
+### Update a record
+
+To update a record, we create a new version with the updated content and call the `updateRecords` function.
+
+```jsx
+import {
+  useRecordHelpers,
+  useRecordMutations,
+} from "./baq/store.js";
+import {ItemRecord} from "./baq/itemRecord.js";
+
+function RenameItem({itemRecord}) {
+  const {entity} = useRecordHelpers();
+  const {updateRecords} = useRecordMutations();
+  const [name, setName] = useState("");
+
+  const onSaveItemClick = () => {
+    const updatedContent = {name};
+    const updatedRecord = ItemRecord.update(
+      itemRecord,
+      entity,
+      updatedContent
+    );
+
+    updateRecords([updatedRecord]);
+  };
+
+  return (
+    <>
+      <input type="text" value={name} onChange={setName} />
+      <button onClick={onSaveItemClick}></button>
+    </>
+  );
+}
+```
+
+### Delete a record
+
+To delete a record, we call the `deleteRecords` function with its key.
+
+```jsx
+import {Record} from "@baqhub/sdk";
+import {useRecordMutations} from "./baq/store.js";
+
+function Item({itemRecord}) {
+  const {deleteRecords} = useRecordMutations();
+
+  const onDeleteClick = () => {
+    const itemKey = Record.toKey(itemRecord);
+    deleteRecords([itemKey]);
+  };
+
+  return (
+    <>
+      <span>{itemRecord.content.name}</span>
+      <button onClick={onDeleteClick}>Delete</button>
+    </>
+  );
+}
+```

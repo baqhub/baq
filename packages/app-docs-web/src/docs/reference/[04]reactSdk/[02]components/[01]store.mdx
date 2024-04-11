@@ -1,0 +1,65 @@
+export const metadata = {
+  id: "f1e914a6",
+  title: "Store",
+  summary:
+    "Manage BAQ records and make them available to all components inside.",
+};
+
+# Store
+
+Manage the BAQ record store and make it available to child components.
+
+```jsx
+<Store identity={...}>
+  ...
+</Store>
+```
+
+{props.toc}
+
+## Reference
+
+### `<Store>`
+
+Provide a record store to all components inside. This is required when using any of the store hooks (`useRecordQuery`, `useStaticRecordQuery`, and so on).
+
+#### Props
+
+<props.properties>
+
+- **`identity`** <props.pill href="f0829f85">StoreIdentity</props.pill>
+
+  - Authentication information for the current user. This can be provided by the [`useAuthentication`](00491e8c) hook, or manually constructed.
+
+</props.properties>
+
+#### Notes
+
+- The `<Store>` requires an authenticated user. To query public BAQ data without authentication, use a [`Client`](/docs/reference/client) directly.
+
+## Usage
+
+### Provide an identity to a Store
+
+Use the [`useAuthentication`](00491e8c) hook to obtain a [`StoreIdentity`](f0829f85) object to use with the `<Store>`.
+
+```jsx
+import {buildAuthentication} from "../baq/authentication.js";
+import {Store} from "./baq/store.js";
+
+const {useAuthentication} = buildAuthentication({...});
+
+function App() {
+  const authentication = useAuthentication();
+
+  if (authentication.status !== "authenticated") {
+    return;
+  }
+
+  return (
+    <Store identity={authentication.identity}>
+      <Home /> {/* Rest of the app */}
+    </Store>
+  );
+}
+```

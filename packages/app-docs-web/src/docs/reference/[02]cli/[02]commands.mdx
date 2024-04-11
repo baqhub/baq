@@ -1,0 +1,204 @@
+export const metadata = {
+  id: "6bf5f232",
+  title: "Commands",
+};
+
+# Commands
+
+Use the following commands to create a BAQ project, then add, manage, and publish record types from that project.
+
+## Common options
+
+<props.properties>
+
+- **`-h`**, **`--help`**
+
+  - Display more information about a command.
+
+  - This includes what it does, parameters, and options.
+
+- **`-d`**, **`--debug`**
+
+  - Print full errors when a command fails.
+
+</props.properties>
+
+## All commands
+
+### `baq`
+
+Rebuild the current project.
+
+```cli
+baq
+```
+
+<props.compactList>
+
+- Finds the current BAQ project and rebuilds the generated types.
+
+- Remote record types are cached for repeated use.
+
+- Fails if no [project file](06fc3177) is found.
+
+</props.compactList>
+
+### `baq init`
+
+Initialize a new project.
+
+```cli
+baq init
+```
+
+<props.compactList>
+
+- Prompts for the following:
+
+  - **Path:** Where the [project file](06fc3177) should be created.
+  - **Name:** User-facing name of the app.
+  - **Type:** JS/TS, with or without React.
+  - **Files path:** Where to generate record type files.
+
+- Results in the creation of a new `baq.json` project file.
+
+</props.compactList>
+
+### `baq add`
+
+Add a new record type to the current project.
+
+```cli
+baq add <type> [name]
+baq add src/types/record.task.json
+baq add src/types/record.task.json todo_task
+baq add types.baq.dev+2b6f7bc8ffd54c8db8062700c040e04f
+```
+
+#### Parameters
+
+<props.properties>
+
+- **`type`**
+
+  - Path to a [local type record](27a5d157) _OR_ key to a public type record.
+
+- **`name`** _optional_
+
+  - Friendly name given to the record type within this app.
+
+  - Expects a value in `snake_case`.
+
+  - Defaults to the name found in the type record.
+
+</props.properties>
+
+#### Notes
+
+<props.compactList>
+
+- Rebuilds the project once the new record type is added.
+
+- Automatically downloads remote record types.
+
+</props.compactList>
+
+### `baq remove`
+
+Remove a record type from the current project.
+
+```cli
+baq remove <name>
+baq remove todo_task
+```
+
+#### Parameters
+
+<props.properties>
+
+- **`name`**
+
+  - Friendly name of the record to remove.
+
+  - Expects a value in `snake_case`.
+
+</props.properties>
+
+#### Notes
+
+<props.compactList>
+
+- Rebuilds the project once the record is removed.
+
+</props.compactList>
+
+### `baq watch`
+
+Watch files and rebuild on change.
+
+```cli
+baq watch
+```
+
+<props.compactList>
+
+- Watches all local record types added to the project.
+
+- Rebuilds all generated type files on change.
+
+- `CTRL-C` stops the watch process.
+
+</props.compactList>
+
+### `baq login`
+
+Authenticate a BAQ user to publish record types.
+
+```cli
+baq login <entity>
+baq login alice.baq.run
+```
+
+<props.compactList>
+
+- Opens the default web browser to perform the [authorization flow](/todo).
+
+- Creates a `~/.baq/profile.json` file to store authentication data.
+
+- Rebuilds all generated type files with the updated entity.
+
+</props.compactList>
+
+### `baq logout`
+
+Logout the current BAQ user.
+
+```cli
+baq logout
+```
+
+<props.compactList>
+
+- Requires confirmation.
+
+- Rebuilds all generated type files to remove the user's entity.
+
+</props.compactList>
+
+### `baq publish`
+
+Publish updated record types.
+
+```cli
+baq publish
+```
+
+<props.compactList>
+
+- Requires an authenticated BAQ user.
+
+- Finds updated local record types and publishes them.
+
+- Rebuilds all generated type files with the updated versions.
+
+</props.compactList>

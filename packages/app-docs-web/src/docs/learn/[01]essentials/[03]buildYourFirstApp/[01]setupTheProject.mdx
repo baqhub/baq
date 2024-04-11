@@ -1,0 +1,114 @@
+export const metadata = {
+  id: "7a98908e",
+  title: "1. Setup the project",
+};
+
+# 1. Setup the project
+
+In this guide we will be creating the project folder and installing the necessary dependencies.
+
+{props.toc}
+
+## Scaffold the project
+
+For this application we've decided on a popular and familiar set of technologies to make it easier to get started.
+
+<props.compactList>
+
+- **Vite** – Bundler, dev server.
+
+- **React** – UI framework.
+
+- **TypeScript** – Type-checking.
+
+</props.compactList>
+
+Let's get started by scaffolding our new project with the help of the Vite creation tool:
+
+```cli
+npm create vite@latest baqtodos --template react-swc-ts
+```
+
+We use the `react-swc-ts` template so that everything is ready for us to use React and TypeScript and we should already be able to run our bare-bones app:
+
+```cli
+cd baqtodos
+npm i
+npm run dev
+```
+
+The app should now be reachable at `http://localhost:5173/`.
+
+## Install dependencies
+
+While we could communicate with a BAQ server by making HTTP requests with the Fetch API, we instead rely on the following packages to hit the ground running and save significant time.
+
+- **`@baqhub/sdk`**: Core SDK to authenticate against a BAQ server and create, update, and query records.
+
+- **`@baqhub/sdk-react`**: React hooks and components to help build BAQ apps that update when the underlying data changes.
+
+- **`@baqhub/sdk-react-dom`**: Browser-specific logic to store and retrieve persistent data in between sessions.
+
+- **`@baqhub/cli`**: Command-line utility to manage the record types (i.e. schema or data model) used in the app.
+
+We will also install the `todomvc-app-css` package with all the CSS we'll need so that we can focus on the inner-workings of the app rather than its design.
+
+Install everything:
+
+```cli
+npm i @baqhub/sdk @baqhub/sdk-react @baqhub/sdk-react-dom @baqhub/cli todomvc-app-css
+```
+
+## Remove unneeded content
+
+Finally, we clean up the Vite template by removing everything that won't be of use for what we're building:
+
+```cli
+rm src/App.css
+rm src/index.css
+rm src/assets/react.svg
+```
+
+Replace everything in `App.tsx` to remove the default content:
+
+```tsx
+import {FC} from "react";
+
+export const App: FC = () => {
+  return null;
+};
+```
+
+Update references in `main.tsx`:
+
+```diff-tsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+-import App from "./App.tsx";
+-import "./index.css";
++import {App} from "./App.tsx";
+
++import "todomvc-app-css/index.css";
+```
+
+And update the app title in `index.html`:
+
+```diff-html
+<head>
+  ...
+-  <title>Vite + React + TS</title>
++  <title>BAQ Todos</title>
+</head>
+```
+
+## Next step
+
+We're now done setting up our project.
+
+<props.compactList>
+
+- The code at this state can be found on [Github](https://github.com/baqhub/app-demo-todo/tree/1-setup-project) or [StackBlitz](https://stackblitz.com/~/github.com/baqhub/app-demo-todo/tree/1-setup-project).
+
+- Next: [Build the UI](f8677e46).
+
+</props.compactList>

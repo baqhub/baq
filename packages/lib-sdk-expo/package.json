@@ -1,0 +1,39 @@
+{
+  "name": "@baqhub/sdk-expo",
+  "version": "0.1.7",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "ts": "tsc --build --watch",
+    "build": "tsc --build ./tsconfig.cjs.json ./tsconfig.json && tsconfig-to-dual-package",
+    "build:clean": "rm -rf ./build",
+    "publish": "yarn npm publish",
+    "test": "yarn node --experimental-vm-modules --no-warnings $(yarn bin jest)"
+  },
+  "main": "./build/cjs/src/index.js",
+  "types": "./build/cjs/src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./build/esm/src/index.js",
+      "require": "./build/cjs/src/index.js"
+    }
+  },
+  "author": "BaqHub",
+  "license": "MIT",
+  "dependencies": {
+    "@baqhub/sdk": "^0.1.7",
+    "@baqhub/sdk-react": "^0.1.7",
+    "@baqhub/sdk-react-native": "^0.1.7",
+    "expo-secure-store": "^12.8.1",
+    "tslib": "2.6.2"
+  },
+  "peerDependencies": {
+    "expo": "*",
+    "react-native": ">=0.60"
+  },
+  "devDependencies": {
+    "@types/node": "20.12.2",
+    "tsconfig-to-dual-package": "1.2.0",
+    "typescript": "5.3.3"
+  }
+}

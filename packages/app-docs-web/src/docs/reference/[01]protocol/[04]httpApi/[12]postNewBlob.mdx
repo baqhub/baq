@@ -1,0 +1,81 @@
+export const metadata = {
+  id: "934f5c75",
+  title: "POST new_blob",
+  summary: "Upload a new blob.",
+};
+
+# POST new_blob
+
+Upload a new blob.
+
+```httpcli
+POST https://baq.run/api/alice/blobs
+```
+
+{props.toc}
+
+## Reference
+
+### Request
+
+The blob to upload is the sole content of the request.
+
+#### Headers
+
+<props.properties>
+
+- **`Content-Length`** <props.pill>int</props.pill>
+
+  - Size of the blob in bytes.
+
+  - Required to upload a blob.
+
+</props.properties>
+
+### Response
+
+#### Content
+
+<props.properties>
+
+- **`hash`** <props.pill href="deae588f#blobhash">BlobHash</props.pill>
+
+  - SHA256 hash of the uploaded blob.
+
+- **`size`** <props.pill>int</props.pill>
+
+  - Size of the uploaded blob in bytes.
+
+- **`expires_at`** <props.pill href="deae588f#recorddate">RecordDate</props.pill>
+
+  - Date before which this blob should be linked to in a record.
+
+</props.properties>
+
+## Usage
+
+### Upload a text file
+
+In this example we upload a short text file containing the word `Hello`.
+
+```http
+POST /api/alice/blobs HTTP/2
+Host: baq.run
+Content-Length: 6
+Content-Type: text/plain
+
+Hello\n
+```
+
+The response provides us with the hash to use in a [Blob link](70af90d6), and tells us by when we can use that blob in a record before it expires.
+
+```http
+HTTP/2 200 OK
+Content-Type: application/json
+
+{
+  "hash":"66a045b452102c59d840ec097d59d9467e13a3f34f6494e539ffd32c1bb35f18",
+  "size":6,
+  "expires_at":"2024-03-07T07:48:19.2320000Z"
+}
+```

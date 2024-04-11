@@ -1,0 +1,100 @@
+export const metadata = {
+  id: "d1f04942",
+  title: "useFindRecordByKey",
+  summary:
+    "Try to get a single record from the store from its key.",
+};
+
+# useFindRecordByKey
+
+This is a React hook to get the latest version of a record from the store, if any.
+
+```jsx
+const record = useFindRecordByKey(key);
+```
+
+{props.toc}
+
+## Reference
+
+### `useFindRecordByKey()`
+
+Call `useFindRecordByKey` at the top level of your component to try to get a record back.
+
+```jsx
+function SelectedTodo({todoKey}) {
+  const todoRecord = useFindRecordByKey(todoKey);
+  if (!todoRecord) {
+    return <Empty />;
+  }
+
+  return <div>{todoRecord.content.title}</div>;
+}
+```
+
+#### Parameters
+
+<props.properties>
+
+- **`key`** <props.pill href="4b9504a7#recordkey">RecordKey</props.pill>
+
+  - Key (entity + id) of the record to get.
+
+</props.properties>
+
+#### Returns
+
+This hook returns a [`Record`](/docs/reference/record), or `undefined` if the record could not be found.
+
+#### Notes
+
+- Always returns the latest version of the record with this key available in the store. The hook automatically updates when a new version becomes available.
+
+## Usage
+
+### Check record exists in store
+
+It might be convenient to only store the key of a given record instead of the record itself in order to always display up-to-date data. However, this can result in having a key to a record that was since removed from the store.
+
+Here, we use `useFindRecordByKey` to avoid passing an expired key to child components.
+
+```jsx
+import {useState} from "react";
+import {useFindRecordByKey} from "./baq/store.js";
+
+function Todos() {
+  const [selectedKey, setSelectedKey] = useState();
+  const selectedRecord = useFindRecordByKey(selectedKey);
+  const validSelectedKey = selectedRecord
+    ? selectedKey
+    : undefined;
+
+  return (
+    <>
+      {validSelectedKey && (
+        <TodoDetails todoKey={validSelectedKey} />
+      )}
+    </>
+  );
+}
+```
+
+### Fallback if a record is not in the store
+
+This hook comes in handy when we expect a record to be removed from the store and want to display a fallback UI when that happens.
+
+```jsx
+function TodoDetails({todoKey}) {
+  const todoRecord = useFindRecordByKey(todoKey);
+  if (!todoRecord) {
+    return <NoTodoSelected />;
+  }
+
+  return (
+    <div>
+      <div>Title:{todoRecord.content.title}</div>
+      <div>Completed:{todoRecord.content.completed}</div>
+    </div>
+  );
+}
+```
