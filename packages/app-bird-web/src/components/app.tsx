@@ -22,9 +22,8 @@ import {TopNav} from "./shared/topNav/topNav.js";
 //
 
 const authPrefix = "/auth";
-const websiteUrl = "https://bird.baq.dev";
-const redirectHost = import.meta.env.DEV ? "http://localhost:5179" : websiteUrl;
-const redirectUrl = redirectHost + authPrefix + "{/authorization_id}";
+const redirectOrigin = window.location.origin;
+const redirectUrl = redirectOrigin + authPrefix + "{/authorization_id}";
 
 const {useAppState} = buildAppState({
   storage: localStorageAdapter,
