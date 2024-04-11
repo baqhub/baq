@@ -7,7 +7,7 @@
     "dev": "concurrently -r 'yarn next-dev' 'yarn watch-docs'",
     "next-dev": "next dev -p 5178",
     "watch-docs": "node ./watcher.cjs",
-    "build": "next build",
+    "build": "tsc --build && next build",
     "start": "next start",
     "lint": "next lint"
   },
