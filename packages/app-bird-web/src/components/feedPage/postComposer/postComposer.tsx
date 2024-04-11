@@ -1,5 +1,5 @@
 import {usePostComposerState} from "@baqhub/bird-shared/state/postComposerState.js";
-import {Button} from "@baqhub/ui/core/button.jsx";
+import {Button} from "@baqhub/ui/core/button.js";
 import {Column, Grid, tw} from "@baqhub/ui/core/style.js";
 import {FC} from "react";
 import {Avatar} from "../../shared/avatar.js";

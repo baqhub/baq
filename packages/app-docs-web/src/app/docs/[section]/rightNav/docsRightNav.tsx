@@ -10,8 +10,8 @@ import {
   useRef,
   useState,
 } from "react";
-import {MdxHeader} from "../../../../helpers/mdxHelpers.jsx";
-import {Text} from "../../../global/style.jsx";
+import {MdxHeader} from "../../../../helpers/mdxHelpers.js";
+import {Text} from "../../../global/style.js";
 
 //
 // Props.

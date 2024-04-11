@@ -1,9 +1,9 @@
 import {FC, PropsWithChildren} from "react";
 import {matchDocPageHref} from "../../../../helpers/docPageHelpers.js";
 import {findDocsPageById} from "../../../../services/docs.js";
-import {ClientLink} from "../../../global/clientLink.jsx";
+import {ClientLink} from "../../../global/clientLink.js";
 import {isServerRendering} from "../../../global/serverRender.js";
-import {MdxA} from "./mdx.jsx";
+import {MdxA} from "./mdx.js";
 
 //
 // Props.

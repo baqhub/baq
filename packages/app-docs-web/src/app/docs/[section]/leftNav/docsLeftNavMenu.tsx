@@ -4,8 +4,8 @@ import {tw} from "@baqhub/ui/core/style.js";
 import {usePathname} from "next/navigation.js";
 import {FC, Fragment} from "react";
 import {DocsPageLight, DocsSubSectionLight} from "../../../../services/docs.js";
-import {Text} from "../../../global/style.jsx";
-import {DocsLeftNavMenuItem} from "./docsLeftNavMenuItem.jsx";
+import {Text} from "../../../global/style.js";
+import {DocsLeftNavMenuItem} from "./docsLeftNavMenuItem.js";
 
 //
 // Props.

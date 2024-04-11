@@ -3,10 +3,10 @@
 import {ButtonRow, tw} from "@baqhub/ui/core/style.js";
 import {Bars3BottomLeftIcon, ChevronRightIcon} from "@heroicons/react/20/solid";
 import {FC, MouseEvent, useCallback, useState} from "react";
-import {MdxHeader} from "../../../../helpers/mdxHelpers.jsx";
+import {MdxHeader} from "../../../../helpers/mdxHelpers.js";
 import {DocsSubSectionLight} from "../../../../services/docs.js";
-import {DocsTopNavLeftMenu} from "./docsTopNavLeftMenu.jsx";
-import {DocsTopNavRightMenu} from "./docsTopNavRightMenu.jsx";
+import {DocsTopNavLeftMenu} from "./docsTopNavLeftMenu.js";
+import {DocsTopNavRightMenu} from "./docsTopNavRightMenu.js";
 
 //
 // Props.

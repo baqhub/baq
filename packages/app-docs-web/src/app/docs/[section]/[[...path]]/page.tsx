@@ -4,7 +4,7 @@ import {Metadata} from "next";
 import {ImageProps} from "next/image.js";
 import {FC, ReactNode} from "react";
 import {onlyText} from "react-children-utilities";
-import {findHeaders} from "../../../../helpers/mdxHelpers.jsx";
+import {findHeaders} from "../../../../helpers/mdxHelpers.js";
 import {slugify} from "../../../../helpers/string.js";
 import {
   docsPages,
@@ -12,9 +12,9 @@ import {
   findDocsPage,
   listSubSectionsForSection,
 } from "../../../../services/docs.js";
-import {DocsLeftNav} from "../leftNav/docsLeftNav.jsx";
-import {DocsRightNav} from "../rightNav/docsRightNav.jsx";
-import {DocsTopNav} from "../topNav/docsTopNav.jsx";
+import {DocsLeftNav} from "../leftNav/docsLeftNav.js";
+import {DocsRightNav} from "../rightNav/docsRightNav.js";
+import {DocsTopNav} from "../topNav/docsTopNav.js";
 import {
   MdxCode,
   MdxCompactList,
@@ -29,12 +29,12 @@ import {
   MdxProperties,
   MdxStrong,
   MdxUl,
-} from "./mdx.jsx";
-import {MdxImage} from "./mdxImage.jsx";
-import {MdxLink} from "./mdxLink.jsx";
-import {MdxPill} from "./mdxPill.jsx";
-import {SubPages} from "./subPages.jsx";
-import {Toc} from "./toc.jsx";
+} from "./mdx.js";
+import {MdxImage} from "./mdxImage.js";
+import {MdxLink} from "./mdxLink.js";
+import {MdxPill} from "./mdxPill.js";
+import {SubPages} from "./subPages.js";
+import {Toc} from "./toc.js";
 
 //
 // Props.

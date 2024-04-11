@@ -3,7 +3,7 @@
 import {tw} from "@baqhub/ui/core/style.js";
 import {FC, MouseEvent, useEffect} from "react";
 import {DocsSubSectionLight} from "../../../../services/docs.js";
-import {DocsLeftNavMenu} from "../leftNav/docsLeftNavMenu.jsx";
+import {DocsLeftNavMenu} from "../leftNav/docsLeftNavMenu.js";
 
 //
 // Props.

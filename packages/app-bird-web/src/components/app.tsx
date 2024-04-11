@@ -5,7 +5,7 @@ import {useConstant} from "@baqhub/sdk-react";
 import {localStorageAdapter} from "@baqhub/sdk-react-dom";
 import {Column, tw} from "@baqhub/ui/core/style.js";
 import {LayerManager} from "@baqhub/ui/layers/layerManager.js";
-import {Login, LoginLogo} from "@baqhub/ui/pages/login.jsx";
+import {Login, LoginLogo} from "@baqhub/ui/pages/login.js";
 import {
   Outlet,
   RootRoute,

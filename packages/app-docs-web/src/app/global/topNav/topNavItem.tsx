@@ -3,7 +3,7 @@
 import {tw} from "@baqhub/ui/core/style.js";
 import {usePathname} from "next/navigation.js";
 import type {FC, PropsWithChildren} from "react";
-import {Link} from "../link.jsx";
+import {Link} from "../link.js";
 
 //
 // Props.
