@@ -623,6 +623,7 @@ __metadata:
     tailwindcss: "npm:3.4.3"
     typescript: "npm:5.3.3"
     vite: "npm:5.2.7"
+    wrangler: "npm:3.41.0"
   languageName: unknown
   linkType: soft
 

@@ -24,6 +24,7 @@
     "docs:build": "yarn workspace @baqhub/docs-web build",
     "bird:dev": "yarn workspace @baqhub/bird-web dev",
     "bird:build": "yarn workspace @baqhub/bird-web build",
+    "bird:deploy": "yarn workspace @baqhub/bird-web deploy",
     "cli:dev": "yarn workspace @baqhub/cli-web dev",
     "cli:build": "yarn workspace @baqhub/cli-web build",
     "cli:deploy": "yarn workspace @baqhub/cli-web deploy",
