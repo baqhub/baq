@@ -1,8 +1,8 @@
 import {Column, Row, tw} from "@baqhub/ui/core/style.js";
 import type {FC} from "react";
-import {Link} from "../link.js";
-import {Text} from "../style.js";
-import {TopNavItem} from "./topNavItem.js";
+import {Link} from "../link.jsx";
+import {Text} from "../style.jsx";
+import {TopNavItem} from "./topNavItem.jsx";
 
 //
 // Style.

@@ -1,7 +1,7 @@
 import {Column, tw} from "@baqhub/ui/core/style.js";
 import {FC} from "react";
 import {DocsPageFull} from "../../../../services/docs.js";
-import {Link} from "../../../global/link.js";
+import {Link} from "../../../global/link.jsx";
 
 //
 // Props.

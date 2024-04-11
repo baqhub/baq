@@ -2,9 +2,9 @@ import {tw} from "@baqhub/ui/core/style.js";
 import type {Metadata, Viewport} from "next";
 import {FC, PropsWithChildren} from "react";
 import {firaCode, inter} from "./fonts/fonts.js";
-import {AutoRefresh} from "./global/autoRefresh.js";
-import {DarkModeScript} from "./global/scripts/darkModeScript.js";
-import {TopNav} from "./global/topNav/topNav.js";
+import {AutoRefresh} from "./global/autoRefresh.jsx";
+import {DarkModeScript} from "./global/scripts/darkModeScript.jsx";
+import {TopNav} from "./global/topNav/topNav.jsx";
 import "./styles/index.css";
 
 //

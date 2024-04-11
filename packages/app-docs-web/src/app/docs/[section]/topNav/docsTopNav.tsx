@@ -5,8 +5,8 @@ import {Bars3BottomLeftIcon, ChevronRightIcon} from "@heroicons/react/20/solid";
 import {FC, MouseEvent, useCallback, useState} from "react";
 import {MdxHeader} from "../../../../helpers/mdxHelpers.js";
 import {DocsSubSectionLight} from "../../../../services/docs.js";
-import {DocsTopNavLeftMenu} from "./docsTopNavLeftMenu.js";
-import {DocsTopNavRightMenu} from "./docsTopNavRightMenu.js";
+import {DocsTopNavLeftMenu} from "./docsTopNavLeftMenu.jsx";
+import {DocsTopNavRightMenu} from "./docsTopNavRightMenu.jsx";
 
 //
 // Props.

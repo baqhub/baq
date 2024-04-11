@@ -1,9 +1,9 @@
 import {Row, tw} from "@baqhub/ui/core/style.js";
 import {FC} from "react";
 import {DocsSubSectionLight} from "../../../../services/docs.js";
-import {Link} from "../../../global/link.js";
-import {Text} from "../../../global/style.js";
-import {DocsLeftNavMenu} from "./docsLeftNavMenu.js";
+import {Link} from "../../../global/link.jsx";
+import {Text} from "../../../global/style.jsx";
+import {DocsLeftNavMenu} from "./docsLeftNavMenu.jsx";
 
 //
 // Props.

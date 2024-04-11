@@ -1,7 +1,7 @@
 import {tw} from "@baqhub/ui/core/style.js";
 import {FC} from "react";
 import {MdxHeader} from "../../../../helpers/mdxHelpers.js";
-import {MdxA, MdxLi, MdxP, MdxUl} from "./mdx.js";
+import {MdxA, MdxLi, MdxP, MdxUl} from "./mdx.jsx";
 
 //
 // Props.

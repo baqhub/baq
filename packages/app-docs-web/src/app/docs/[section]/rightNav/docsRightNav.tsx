@@ -11,7 +11,7 @@ import {
   useState,
 } from "react";
 import {MdxHeader} from "../../../../helpers/mdxHelpers.js";
-import {Text} from "../../../global/style.js";
+import {Text} from "../../../global/style.jsx";
 
 //
 // Props.
