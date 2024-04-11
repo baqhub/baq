@@ -1,6 +1,6 @@
 {
   "name": "@baqhub/ui",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "",
   "type": "module",
   "scripts": {
@@ -8,12 +8,10 @@
     "build": "tsc --build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "main": "./build/src/index.js",
-  "types": "./build/src/index.d.ts",
   "exports": {
-    ".": {
-      "import": "./build/src/index.js",
-      "require": "./build/src/index.js"
+    "./*": {
+      "import": "./build/src/*",
+      "types": "./build/src/*"
     }
   },
   "author": "Baqhub",
