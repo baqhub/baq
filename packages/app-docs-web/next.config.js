@@ -16,6 +16,7 @@ const withMdx = mdx({
 
 const nextConfig = withMdx({
   output: "export",
+  distDir: "dist",
   images: {unoptimized: true},
   transpilePackages: ["@baqhub/*", "@baqhub/*"],
   webpack: config => {
