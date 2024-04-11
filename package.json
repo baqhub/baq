@@ -29,6 +29,7 @@
     "cli:test": "yarn workspace @baqhub/cli-web test",
     "files:dev": "yarn workspace @baqhub/files-web dev",
     "files:build": "yarn workspace @baqhub/files-web build",
+    "files:deploy": "yarn workspace @baqhub/files-web deploy",
     "messages:dev": "yarn workspace @baqhub/messages-web dev",
     "messages:build": "yarn workspace @baqhub/messages-web build",
     "baq": "yarn workspace @baqhub/files-web baq && yarn workspace @baqhub/messages-web baq && yarn workspace @baqhub/bird-shared baq && yarn workspace @baqhub/emails-web baq && yarn workspace @baqhub/types baq"
