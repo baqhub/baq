@@ -1,6 +1,6 @@
 "use client";
 
-import {tw} from "@baqhub/ui/core/style.jsx";
+import {tw} from "@baqhub/ui/core/style.js";
 import {usePathname} from "next/navigation.js";
 import {FC, Fragment} from "react";
 import {DocsPageLight, DocsSubSectionLight} from "../../../../services/docs.js";

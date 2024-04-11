@@ -1,4 +1,4 @@
-import {tw} from "@baqhub/ui/core/style.jsx";
+import {tw} from "@baqhub/ui/core/style.js";
 import type {Metadata, Viewport} from "next";
 import {FC, PropsWithChildren} from "react";
 import {firaCode, inter} from "./fonts/fonts.js";

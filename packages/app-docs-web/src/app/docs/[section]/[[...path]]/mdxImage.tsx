@@ -1,4 +1,4 @@
-import {tw} from "@baqhub/ui/core/style.jsx";
+import {tw} from "@baqhub/ui/core/style.js";
 import isString from "lodash/isString.js";
 import {ImageProps} from "next/image.js";
 import {FC} from "react";

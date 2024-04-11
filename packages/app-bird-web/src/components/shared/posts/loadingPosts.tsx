@@ -1,5 +1,5 @@
+import {Column, Row, Text, tw} from "@baqhub/ui/core/style.js";
 import {ArrowPathIcon} from "@heroicons/react/24/outline";
-import {Column, Row, Text, tw} from "@baqhub/ui/core/style.jsx";
 import {FC} from "react";
 
 //

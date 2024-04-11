@@ -1,4 +1,4 @@
-import {tw} from "@baqhub/ui/core/style.jsx";
+import {tw} from "@baqhub/ui/core/style.js";
 import {MDXComponents} from "mdx/types.js";
 import {Metadata} from "next";
 import {ImageProps} from "next/image.js";

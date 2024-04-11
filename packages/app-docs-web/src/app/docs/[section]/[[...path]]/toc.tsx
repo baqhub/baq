@@ -1,4 +1,4 @@
-import {tw} from "@baqhub/ui/core/style.jsx";
+import {tw} from "@baqhub/ui/core/style.js";
 import {FC} from "react";
 import {MdxHeader} from "../../../../helpers/mdxHelpers.jsx";
 import {MdxA, MdxLi, MdxP, MdxUl} from "./mdx.jsx";

@@ -3,7 +3,7 @@ import {buildAppState} from "@baqhub/bird-shared/state/appState.js";
 import {useSyncState} from "@baqhub/bird-shared/state/syncState.js";
 import {useConstant} from "@baqhub/sdk-react";
 import {localStorageAdapter} from "@baqhub/sdk-react-dom";
-import {Column, tw} from "@baqhub/ui/core/style.jsx";
+import {Column, tw} from "@baqhub/ui/core/style.js";
 import {LayerManager} from "@baqhub/ui/layers/layerManager.js";
 import {Login, LoginLogo} from "@baqhub/ui/pages/login.jsx";
 import {

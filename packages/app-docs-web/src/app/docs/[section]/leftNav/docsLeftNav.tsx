@@ -1,4 +1,4 @@
-import {Row, tw} from "@baqhub/ui/core/style.jsx";
+import {Row, tw} from "@baqhub/ui/core/style.js";
 import {FC} from "react";
 import {DocsSubSectionLight} from "../../../../services/docs.js";
 import {Link} from "../../../global/link.jsx";
