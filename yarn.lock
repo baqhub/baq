@@ -893,8 +893,8 @@ __metadata:
   resolution: "@baqhub/ui@workspace:packages/lib-ui"
   dependencies:
     "@baqhub/config-web": "npm:*"
-    "@baqhub/sdk": "npm:*"
-    "@baqhub/sdk-react": "npm:*"
+    "@baqhub/sdk": "npm:^0.1.7"
+    "@baqhub/sdk-react": "npm:^0.1.7"
     "@floating-ui/react": "npm:0.26.10"
     "@types/lodash": "npm:4.17.0"
     "@types/react": "npm:18.2.73"
