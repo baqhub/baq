@@ -3,7 +3,6 @@ name: App Emails Deploy
 on:
   push:
     branches:
-      - main
       - deploy-emails
 
 env:

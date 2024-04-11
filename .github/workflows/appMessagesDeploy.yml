@@ -3,7 +3,6 @@ name: App Messages Deploy
 on:
   push:
     branches:
-      - main
       - deploy-messages
 
 env:

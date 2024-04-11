@@ -3,7 +3,6 @@ name: App Files Deploy
 on:
   push:
     branches:
-      - main
       - deploy-files
 
 env:

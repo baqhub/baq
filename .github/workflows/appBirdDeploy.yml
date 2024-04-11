@@ -3,7 +3,6 @@ name: App Bird Deploy
 on:
   push:
     branches:
-      - main
       - deploy-bird
 
 env:

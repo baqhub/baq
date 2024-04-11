@@ -3,7 +3,7 @@ name: App CLI Deploy
 on:
   push:
     branches:
-      - main
+      - deploy-cli
 
 env:
   FOLDER: ./packages/app-cli-web/dist
