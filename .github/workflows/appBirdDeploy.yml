@@ -5,6 +5,9 @@ on:
     branches:
       - main
       - deploy-bird
+    paths:
+      - packages/app-bird-*/**
+      - packages/lib-*/**
 
 env:
   PROJECT_NAME: bird

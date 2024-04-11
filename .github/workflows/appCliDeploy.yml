@@ -5,6 +5,9 @@ on:
     branches:
       - main
       - deploy-cli
+    paths:
+      - packages/app-cli-web/**
+      - packages/lib-*/**
 
 env:
   PROJECT_NAME: cli

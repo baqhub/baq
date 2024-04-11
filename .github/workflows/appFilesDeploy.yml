@@ -5,6 +5,9 @@ on:
     branches:
       - main
       - deploy-files
+    paths:
+      - packages/app-files-web/**
+      - packages/lib-*/**
 
 env:
   PROJECT_NAME: files

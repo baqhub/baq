@@ -5,6 +5,9 @@ on:
     branches:
       - main
       - deploy-messages
+    paths:
+      - packages/app-messages-web/**
+      - packages/lib-*/**
 
 env:
   PROJECT_NAME: messages
