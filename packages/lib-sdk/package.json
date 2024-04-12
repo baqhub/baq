@@ -27,7 +27,7 @@
     "fp-ts": "^2.16.5",
     "io-ts": "^2.2.21",
     "io-ts-reporters": "^2.0.1",
-    "jsonpath-plus": "^8.0.0",
+    "jsonpath-plus": "^8.1.0",
     "lodash": "^4.17.21",
     "tslib": "^2.6.2",
     "uuid": "^9.0.1"
