@@ -1,6 +1,6 @@
 "use client";
 
-import {ButtonRow, tw} from "@baqhub/ui/core/style.js";
+import {ButtonRow, tw} from "@baqhub/ui/core/style.jsx";
 import {Bars3BottomLeftIcon, ChevronRightIcon} from "@heroicons/react/20/solid";
 import {FC, MouseEvent, useCallback, useState} from "react";
 import {MdxHeader} from "../../../../helpers/mdxHelpers.js";

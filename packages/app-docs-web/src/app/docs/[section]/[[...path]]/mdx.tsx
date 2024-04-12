@@ -1,4 +1,4 @@
-import {tw} from "@baqhub/ui/core/style.js";
+import {tw} from "@baqhub/ui/core/style.jsx";
 
 export const MdxH1 = tw.h1`
   mb-6

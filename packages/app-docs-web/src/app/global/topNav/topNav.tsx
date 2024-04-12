@@ -1,4 +1,4 @@
-import {Column, Row, tw} from "@baqhub/ui/core/style.js";
+import {Column, Row, tw} from "@baqhub/ui/core/style.jsx";
 import type {FC} from "react";
 import {Link} from "../link.jsx";
 import {Text} from "../style.jsx";

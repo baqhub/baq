@@ -1,4 +1,4 @@
-import {Column, tw} from "@baqhub/ui/core/style.js";
+import {Column, tw} from "@baqhub/ui/core/style.jsx";
 import {FC} from "react";
 import {DocsPageFull} from "../../../../services/docs.js";
 import {Link} from "../../../global/link.jsx";

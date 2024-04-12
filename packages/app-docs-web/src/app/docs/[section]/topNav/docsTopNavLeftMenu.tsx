@@ -1,6 +1,6 @@
 "use client";
 
-import {tw} from "@baqhub/ui/core/style.js";
+import {tw} from "@baqhub/ui/core/style.jsx";
 import {FC, MouseEvent, useEffect} from "react";
 import {DocsSubSectionLight} from "../../../../services/docs.js";
 import {DocsLeftNavMenu} from "../leftNav/docsLeftNavMenu.jsx";

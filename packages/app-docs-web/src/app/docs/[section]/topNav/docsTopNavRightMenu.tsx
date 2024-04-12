@@ -1,4 +1,4 @@
-import {Column, tw} from "@baqhub/ui/core/style.js";
+import {Column, tw} from "@baqhub/ui/core/style.jsx";
 import {FC, Fragment, MouseEvent, useEffect} from "react";
 import {MdxHeader} from "../../../../helpers/mdxHelpers.js";
 
