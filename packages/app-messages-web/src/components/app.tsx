@@ -1,9 +1,9 @@
+import messagesIconUrl from "@assets/messagesIcon.png";
+import messagesLogoUrl from "@assets/messagesLogo.png";
 import {unreachable} from "@baqhub/sdk";
 import {AuthenticationStatus, useConstant} from "@baqhub/sdk-react";
 import {Login, LoginLogo} from "@baqhub/ui/pages/login.js";
 import {FC, useEffect} from "react";
-import messagesIconUrl from "../../../../assets/messagesIcon.png";
-import messagesLogoUrl from "../../../../assets/messagesLogo.png";
 import {Store} from "../baq/store.js";
 import {useAppState} from "../state/appState.js";
 import {Home} from "./home.js";
