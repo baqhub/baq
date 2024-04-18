@@ -139,10 +139,14 @@ export async function performMutationRequest<
 
     const newRecord = ((): T | NoContentRecord => {
       // Create record.
-      if (!existing && "content" in record) {
+      if (
+        (!existing || existing.mode !== RecordMode.SYNCED) &&
+        "content" in record
+      ) {
         return record;
       }
 
+      // Update / Delete.
       if (!existing || !existing.version) {
         throw new Error("Unexpected record update.");
       }
