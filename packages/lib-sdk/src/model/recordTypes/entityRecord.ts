@@ -40,7 +40,6 @@ const REntityRecordProfile = IO.partialObject({
 });
 
 const EntityRecordContent = IO.object({
-  entity: IO.string,
   previousEntities: IO.readonlyArray(IO.string),
   profile: REntityRecordProfile,
   servers: IO.readonlyArray(REntityRecordServer),
@@ -49,7 +48,7 @@ const EntityRecordContent = IO.object({
 const [entityRecordType, REntityRecordType] = RecordType.full(
   Constants.typesEntity,
   "80be958368dd414fabb9420647daa1ec",
-  "7e37a172b5e5f0bfaacb0b4aef6958da2f06427c3a90bc1417d05b1bf4c4d76f",
+  "0f1d321bac18da42b893d2031fc6d0bef538aafa817404c8bc32c608d3abaafa",
   EntityRecordContent
 );
 
