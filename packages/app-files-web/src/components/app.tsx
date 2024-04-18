@@ -1,9 +1,9 @@
+import filesIconUrl from "@assets/filesIcon.png";
+import filesLogoUrl from "@assets/filesLogo.png";
 import {unreachable} from "@baqhub/sdk";
 import {AuthenticationStatus, useConstant} from "@baqhub/sdk-react";
 import {Login, LoginLogo} from "@baqhub/ui/pages/login.js";
 import {FC, useEffect} from "react";
-import filesIconUrl from "../../../../assets/filesIcon.png";
-import filesLogoUrl from "../../../../assets/filesLogo.png";
 import {Store} from "../baq/store.js";
 import {useAppState} from "../state/appState.js";
 import {Home} from "./home.js";

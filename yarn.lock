@@ -681,6 +681,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@baqhub/config-web@workspace:packages/lib-config-web"
   dependencies:
+    "@types/node": "npm:20.12.7"
     "@vitejs/plugin-react-swc": "npm:3.6.0"
     sharp: "npm:0.33.3"
     svgo: "npm:3.2.0"

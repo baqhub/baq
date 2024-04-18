@@ -1114,7 +1114,7 @@ const RAW_RUNTIME_STATE =
           ["react-dom", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:18.2.0"],\
           ["tailwindcss", "npm:3.4.3"],\
           ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
-          ["vite", "virtual:a1e1fe3754118ea0a9cf2687b244a4a72da196cec4da58472dcec8a2d3f6ca41173f79de54a0128edf5b93c400c7755705766aed74ec4bdf0df227b475409acd#npm:5.2.8"],\
+          ["vite", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:5.2.8"],\
           ["wrangler", "virtual:5be33ab443a62cc100331133ea47d04da61badd611591deb3517bea5da396f2a2537969e19b053cbc2c5947813dc4fcf2f2b276a94819d68d89d2d8d40aa38b1#npm:3.50.0"]\
         ],\
         "linkType": "SOFT"\
@@ -1166,7 +1166,7 @@ const RAW_RUNTIME_STATE =
           ["react-dom", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:18.2.0"],\
           ["tailwindcss", "npm:3.4.3"],\
           ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
-          ["vite", "virtual:a1e1fe3754118ea0a9cf2687b244a4a72da196cec4da58472dcec8a2d3f6ca41173f79de54a0128edf5b93c400c7755705766aed74ec4bdf0df227b475409acd#npm:5.2.8"],\
+          ["vite", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:5.2.8"],\
           ["wrangler", "virtual:5be33ab443a62cc100331133ea47d04da61badd611591deb3517bea5da396f2a2537969e19b053cbc2c5947813dc4fcf2f2b276a94819d68d89d2d8d40aa38b1#npm:3.50.0"]\
         ],\
         "linkType": "SOFT"\
@@ -1177,6 +1177,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./packages/lib-config-web/",\
         "packageDependencies": [\
           ["@baqhub/config-web", "workspace:packages/lib-config-web"],\
+          ["@types/node", "npm:20.12.7"],\
           ["@vitejs/plugin-react-swc", "virtual:a1e1fe3754118ea0a9cf2687b244a4a72da196cec4da58472dcec8a2d3f6ca41173f79de54a0128edf5b93c400c7755705766aed74ec4bdf0df227b475409acd#npm:3.6.0"],\
           ["sharp", "npm:0.33.3"],\
           ["svgo", "npm:3.2.0"],\
@@ -1254,7 +1255,7 @@ const RAW_RUNTIME_STATE =
           ["react-dom", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:18.2.0"],\
           ["tailwindcss", "npm:3.4.3"],\
           ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
-          ["vite", "virtual:a1e1fe3754118ea0a9cf2687b244a4a72da196cec4da58472dcec8a2d3f6ca41173f79de54a0128edf5b93c400c7755705766aed74ec4bdf0df227b475409acd#npm:5.2.8"],\
+          ["vite", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:5.2.8"],\
           ["wrangler", "virtual:5be33ab443a62cc100331133ea47d04da61badd611591deb3517bea5da396f2a2537969e19b053cbc2c5947813dc4fcf2f2b276a94819d68d89d2d8d40aa38b1#npm:3.50.0"]\
         ],\
         "linkType": "SOFT"\
@@ -1282,7 +1283,7 @@ const RAW_RUNTIME_STATE =
           ["react-dom", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:18.2.0"],\
           ["tailwindcss", "npm:3.4.3"],\
           ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
-          ["vite", "virtual:a1e1fe3754118ea0a9cf2687b244a4a72da196cec4da58472dcec8a2d3f6ca41173f79de54a0128edf5b93c400c7755705766aed74ec4bdf0df227b475409acd#npm:5.2.8"],\
+          ["vite", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:5.2.8"],\
           ["wrangler", "virtual:5be33ab443a62cc100331133ea47d04da61badd611591deb3517bea5da396f2a2537969e19b053cbc2c5947813dc4fcf2f2b276a94819d68d89d2d8d40aa38b1#npm:3.50.0"]\
         ],\
         "linkType": "SOFT"\
@@ -1446,8 +1447,8 @@ const RAW_RUNTIME_STATE =
           ["tailwind-styled-components", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:2.2.0"],\
           ["tailwindcss", "npm:3.4.3"],\
           ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
-          ["vite", "virtual:a1e1fe3754118ea0a9cf2687b244a4a72da196cec4da58472dcec8a2d3f6ca41173f79de54a0128edf5b93c400c7755705766aed74ec4bdf0df227b475409acd#npm:5.2.8"],\
-          ["vite-plugin-svgr", "virtual:a1e1fe3754118ea0a9cf2687b244a4a72da196cec4da58472dcec8a2d3f6ca41173f79de54a0128edf5b93c400c7755705766aed74ec4bdf0df227b475409acd#npm:4.2.0"]\
+          ["vite", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:5.2.8"],\
+          ["vite-plugin-svgr", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:4.2.0"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -13619,6 +13620,45 @@ const RAW_RUNTIME_STATE =
           ["vite", "virtual:a1e1fe3754118ea0a9cf2687b244a4a72da196cec4da58472dcec8a2d3f6ca41173f79de54a0128edf5b93c400c7755705766aed74ec4bdf0df227b475409acd#npm:5.2.8"],\
           ["@types/less", null],\
           ["@types/lightningcss", null],\
+          ["@types/node", "npm:20.12.7"],\
+          ["@types/sass", null],\
+          ["@types/stylus", null],\
+          ["@types/sugarss", null],\
+          ["@types/terser", null],\
+          ["esbuild", "npm:0.20.2"],\
+          ["fsevents", "patch:fsevents@npm%3A2.3.3#optional!builtin<compat/fsevents>::version=2.3.3&hash=df0bf1"],\
+          ["less", null],\
+          ["lightningcss", null],\
+          ["postcss", "npm:8.4.38"],\
+          ["rollup", "npm:4.13.2"],\
+          ["sass", null],\
+          ["stylus", null],\
+          ["sugarss", null],\
+          ["terser", null]\
+        ],\
+        "packagePeers": [\
+          "@types/less",\
+          "@types/lightningcss",\
+          "@types/node",\
+          "@types/sass",\
+          "@types/stylus",\
+          "@types/sugarss",\
+          "@types/terser",\
+          "less",\
+          "lightningcss",\
+          "sass",\
+          "stylus",\
+          "sugarss",\
+          "terser"\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:5.2.8", {\
+        "packageLocation": "./.yarn/__virtual__/vite-virtual-c77b2a75d1/4/.yarn/berry/cache/vite-npm-5.2.8-618ece674d-10c0.zip/node_modules/vite/",\
+        "packageDependencies": [\
+          ["vite", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:5.2.8"],\
+          ["@types/less", null],\
+          ["@types/lightningcss", null],\
           ["@types/node", null],\
           ["@types/sass", null],\
           ["@types/stylus", null],\
@@ -13696,6 +13736,22 @@ const RAW_RUNTIME_STATE =
           ["@svgr/plugin-jsx", "virtual:e14a33ba06c7fb7d76a24a77b28a3b316da3f5295d07b6e4d0abe180ec63ff9b484f4728f63c9e666dceb8180e2b69eb441a2f777686255e59b8c2ac579a220e#npm:8.1.0"],\
           ["@types/vite", null],\
           ["vite", "virtual:a1e1fe3754118ea0a9cf2687b244a4a72da196cec4da58472dcec8a2d3f6ca41173f79de54a0128edf5b93c400c7755705766aed74ec4bdf0df227b475409acd#npm:5.2.8"]\
+        ],\
+        "packagePeers": [\
+          "@types/vite",\
+          "vite"\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:4.2.0", {\
+        "packageLocation": "./.yarn/__virtual__/vite-plugin-svgr-virtual-e4fc3804f1/4/.yarn/berry/cache/vite-plugin-svgr-npm-4.2.0-e0c6a7a1f0-10c0.zip/node_modules/vite-plugin-svgr/",\
+        "packageDependencies": [\
+          ["vite-plugin-svgr", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:4.2.0"],\
+          ["@rollup/pluginutils", "virtual:e14a33ba06c7fb7d76a24a77b28a3b316da3f5295d07b6e4d0abe180ec63ff9b484f4728f63c9e666dceb8180e2b69eb441a2f777686255e59b8c2ac579a220e#npm:5.0.5"],\
+          ["@svgr/core", "npm:8.1.0"],\
+          ["@svgr/plugin-jsx", "virtual:e14a33ba06c7fb7d76a24a77b28a3b316da3f5295d07b6e4d0abe180ec63ff9b484f4728f63c9e666dceb8180e2b69eb441a2f777686255e59b8c2ac579a220e#npm:8.1.0"],\
+          ["@types/vite", null],\
+          ["vite", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:5.2.8"]\
         ],\
         "packagePeers": [\
           "@types/vite",\
