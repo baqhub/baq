@@ -9,12 +9,14 @@ import {Column, tw} from "@baqhub/ui/core/style.js";
 import {LayerManager} from "@baqhub/ui/layers/layerManager.js";
 import {Login, LoginLogo} from "@baqhub/ui/pages/login.js";
 import {
+  Link,
   Outlet,
-  RootRoute,
   ScrollRestoration,
+  createRoute,
   useNavigate,
 } from "@tanstack/react-router";
 import {FC, useEffect} from "react";
+import {rootRoute} from "../main.js";
 import {TopNav} from "./shared/topNav/topNav.js";
 
 //
@@ -44,6 +46,22 @@ const Layout = tw(Column)`
   px-3
   sm:px-5
 `;
+
+const Footer = tw(Column)`
+  items-center
+  p-4
+`;
+
+const PrivacyLink = tw(Link)`
+  hover:underline
+  underline-offset-2
+
+  select-none
+  text-neutral-400
+  any-hover:hover:text-neutral-500
+  dark:text-neutral-500
+  dark:any-hover:hover:text-neutral-400
+` as typeof Link;
 
 //
 // Component.
@@ -78,9 +96,14 @@ export const App: FC = () => {
 
   if (state.status === "unauthenticated") {
     return (
-      <Login appName="Bird" state={state} onConnectClick={onConnectRequest}>
-        <LoginLogo alt="Bird app logo" src={birdLogoUrl} />
-      </Login>
+      <Column>
+        <Login appName="Bird" state={state} onConnectClick={onConnectRequest}>
+          <LoginLogo alt="Bird app logo" src={birdLogoUrl} />
+        </Login>
+        <Footer>
+          <PrivacyLink to="/privacy">Privacy Policy</PrivacyLink>
+        </Footer>
+      </Column>
     );
   }
 
@@ -107,6 +130,8 @@ const Sync: FC = () => {
 // Route.
 //
 
-export const appRoute = new RootRoute({
+export const appRoute = createRoute({
+  id: "app",
   component: App,
+  getParentRoute: () => rootRoute,
 });

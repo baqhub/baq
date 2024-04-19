@@ -36,7 +36,7 @@ export const FeedPage: FC = () => {
 //
 
 export const feedRoute = createRoute({
-  getParentRoute: () => appRoute,
   path: "/",
+  getParentRoute: () => appRoute,
   component: FeedPage,
 });

@@ -1,5 +1,10 @@
 import {DateServicesProvider} from "@baqhub/bird-shared/components/date/dateServicesProvider.js";
-import {RouterProvider, createRouter} from "@tanstack/react-router";
+import {
+  RouterProvider,
+  createRootRoute,
+  createRoute,
+  createRouter,
+} from "@tanstack/react-router";
 import {StrictMode} from "react";
 import ReactDOM from "react-dom/client";
 import {appRoute} from "./components/app.js";
@@ -12,11 +17,20 @@ import "./styles/index.css";
 // Routing.
 //
 
-const routeTree = appRoute.addChildren([
-  feedRoute,
-  mentionsRoute,
-  profileRoute,
+export const rootRoute = createRootRoute();
+
+const privacyRoute = createRoute({
+  path: "/privacy",
+  getParentRoute: () => rootRoute,
+}).lazy(() =>
+  import("./components/privacyPage/privacyPage.js").then(d => d.PrivacyRoute)
+);
+
+const routeTree = rootRoute.addChildren([
+  privacyRoute,
+  appRoute.addChildren([feedRoute, mentionsRoute, profileRoute]),
 ]);
+
 const router = createRouter({routeTree});
 
 declare module "@tanstack/react-router" {
