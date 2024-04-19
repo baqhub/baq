@@ -15,6 +15,7 @@ import {
 import {DocsLeftNav} from "../leftNav/docsLeftNav.jsx";
 import {DocsRightNav} from "../rightNav/docsRightNav.jsx";
 import {DocsTopNav} from "../topNav/docsTopNav.jsx";
+import {Footer} from "./footer.jsx";
 import {
   MdxCode,
   MdxCompactList,
@@ -95,7 +96,6 @@ const DocsContent = tw.div`
   lg:max-w-3xl
 
   pt-8
-  pb-32
   px-6
   sm:px-8
   lg:px-8
@@ -174,6 +174,7 @@ const DocsPage: FC<DocsPageProps> = async ({params}) => {
               compactList={MdxCompactList}
               components={components}
             />
+            <Footer />
           </DocsContent>
         </DocsCenter>
         <DocsRightNav headers={headers} />
