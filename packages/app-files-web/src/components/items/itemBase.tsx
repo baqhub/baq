@@ -1,5 +1,6 @@
 import {Handler} from "@baqhub/sdk";
 import {ButtonRow, Row, Text, tw} from "@baqhub/ui/core/style.js";
+import {useDropdown} from "@baqhub/ui/layers/dropdown/useDropdown.js";
 import {FC, PropsWithChildren, ReactNode} from "react";
 import {FileRecordKey} from "../../baq/fileRecord.js";
 import {FolderRecordKey} from "../../baq/folderRecord.js";
@@ -58,6 +59,7 @@ const ActionButtons = tw(Row)`
 
   invisible
   group-hover:visible
+  group-data-[pressed=true]:visible
 
   p-1
 `;
@@ -73,6 +75,7 @@ const Background = tw.div`
   rounded-lg
   group-hover:bg-neutral-100
   peer-active:bg-neutral-200
+  group-data-[pressed=true]:bg-neutral-200
 `;
 
 //
@@ -81,8 +84,10 @@ const Background = tw.div`
 
 export const ItemBase: FC<ItemBaseProps> = props => {
   const {itemKey, itemName, icon, deleteDialogTitle, onClick, children} = props;
+  const dropdown = useDropdown();
+
   return (
-    <Layout>
+    <Layout data-pressed={dropdown.isOpen}>
       <ItemButton type="button" onClick={onClick}>
         <Icon>{icon}</Icon>
         <Label>{children}</Label>
@@ -92,6 +97,7 @@ export const ItemBase: FC<ItemBaseProps> = props => {
           itemKey={itemKey}
           itemName={itemName}
           deleteDialogTitle={deleteDialogTitle}
+          dropdown={dropdown}
         />
       </ActionButtons>
       <Background />

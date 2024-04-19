@@ -1,9 +1,9 @@
-import {EllipsisHorizontalIcon} from "@heroicons/react/24/outline";
 import {IconButton} from "@baqhub/ui/core/iconButton.js";
 import {Grid, Text, tw} from "@baqhub/ui/core/style.js";
 import {OkCancelDialog} from "@baqhub/ui/layers/dialog/okCancelDialog.js";
 import {DropdownItem} from "@baqhub/ui/layers/dropdown/dropdownItem.js";
 import {useDropdown} from "@baqhub/ui/layers/dropdown/useDropdown.js";
+import {EllipsisHorizontalIcon} from "@heroicons/react/24/outline";
 import {FC, useState} from "react";
 import {FileRecordKey} from "../../baq/fileRecord.js";
 import {FolderRecordKey} from "../../baq/folderRecord.js";
@@ -18,6 +18,7 @@ interface ItemActionsProps {
   itemKey: FolderRecordKey | FileRecordKey;
   itemName: string;
   deleteDialogTitle: string;
+  dropdown: ReturnType<typeof useDropdown>;
 }
 
 //
@@ -38,14 +39,12 @@ const ItemName = tw(Text)`
 //
 
 export const ItemActionsButton: FC<ItemActionsProps> = props => {
-  const {itemKey, itemName, deleteDialogTitle} = props;
+  const {itemKey, itemName, deleteDialogTitle, dropdown} = props;
   const itemActionsState = useItemActionsState(itemKey);
 
   //
   // Dropdown.
   //
-
-  const dropdown = useDropdown();
 
   const onRenameItemClick = () => {
     setIsRenameDialogOpen(true);
