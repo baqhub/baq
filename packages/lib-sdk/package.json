@@ -3,6 +3,7 @@
   "version": "0.1.8",
   "description": "",
   "type": "module",
+  "sideEffects": false,
   "scripts": {
     "ts": "tsc --build --watch ./tsconfig.cjs.json ./tsconfig.json",
     "build": "tsc --build ./tsconfig.cjs.json ./tsconfig.json && tsconfig-to-dual-package",
@@ -10,6 +11,7 @@
     "publish": "yarn npm publish",
     "test": "yarn node --experimental-vm-modules --no-warnings $(yarn bin jest)"
   },
+  "module": "./build/esm/src/index.js",
   "main": "./build/cjs/src/index.js",
   "types": "./build/cjs/src/index.d.ts",
   "exports": {

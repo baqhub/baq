@@ -10,6 +10,7 @@
     "publish": "yarn npm publish",
     "test": "yarn node --experimental-vm-modules --no-warnings $(yarn bin jest)"
   },
+  "module": "./build/esm/src/index.js",
   "main": "./build/cjs/src/index.js",
   "types": "./build/cjs/src/index.d.ts",
   "exports": {
