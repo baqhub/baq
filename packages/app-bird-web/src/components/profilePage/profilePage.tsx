@@ -1,7 +1,7 @@
 import {PostVersionHash} from "@baqhub/bird-shared/baq/postRecord.js";
 import {useProfilePageState} from "@baqhub/bird-shared/state/profilePageState.js";
 import {FaceFrownIcon, PencilSquareIcon} from "@heroicons/react/24/outline";
-import {Route} from "@tanstack/react-router";
+import {createRoute} from "@tanstack/react-router";
 import {FC, Suspense} from "react";
 import {appRoute} from "../app.js";
 import {PostByVersion} from "../shared/post/postByVersion.js";
@@ -71,7 +71,7 @@ const ProfilePageContent: FC<
 // Route.
 //
 
-export const profileRoute = new Route({
+export const profileRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/profile/$entity",
   component: ProfilePage,

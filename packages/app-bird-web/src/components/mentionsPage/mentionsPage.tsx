@@ -1,7 +1,7 @@
 import {PostRecordKey} from "@baqhub/bird-shared/baq/postRecord.js";
 import {useMentionsPageState} from "@baqhub/bird-shared/state/mentionsPageState.js";
 import {ChatBubbleBottomCenterTextIcon} from "@heroicons/react/24/outline";
-import {Route} from "@tanstack/react-router";
+import {Route, createRoute} from "@tanstack/react-router";
 import {FC, Suspense} from "react";
 import {appRoute} from "../app.js";
 import {PostByKey} from "../shared/post/postByKey.js";
@@ -36,7 +36,7 @@ export const MentionsPage: FC = () => {
 // Route.
 //
 
-export const mentionsRoute = new Route({
+export const mentionsRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/mentions",
   component: MentionsPage,

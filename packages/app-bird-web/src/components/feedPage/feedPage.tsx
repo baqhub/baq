@@ -1,7 +1,7 @@
 import {PostRecordKey} from "@baqhub/bird-shared/baq/postRecord.js";
 import {useFeedPageState} from "@baqhub/bird-shared/state/feedPageState.js";
 import {UsersIcon} from "@heroicons/react/24/outline";
-import {Route} from "@tanstack/react-router";
+import {createRoute} from "@tanstack/react-router";
 import {FC, Suspense} from "react";
 import {appRoute} from "../app.js";
 import {PostByKey} from "../shared/post/postByKey.js";
@@ -35,7 +35,7 @@ export const FeedPage: FC = () => {
 // Route.
 //
 
-export const feedRoute = new Route({
+export const feedRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "/",
   component: FeedPage,

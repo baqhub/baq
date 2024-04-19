@@ -14,7 +14,7 @@
     "svgo": "3.2.0",
     "tailwindcss": "3.4.3",
     "typescript": "5.3.3",
-    "vite": "5.2.8",
+    "vite": "5.2.9",
     "vite-plugin-image-optimizer": "1.1.7",
     "vite-plugin-svgr": "4.2.0"
   }
