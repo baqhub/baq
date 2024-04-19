@@ -49,7 +49,7 @@ const Layout = tw(Column)`
 
 const Footer = tw(Column)`
   items-center
-  p-4
+  p-5
 `;
 
 const PrivacyLink = tw(Link)`
