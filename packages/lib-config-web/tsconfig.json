@@ -3,8 +3,8 @@
     "../../tsconfig.base"
   ],
   "compilerOptions": {
-    "baseUrl": "./src",
     "outDir": "./build",
+    "baseUrl": "./src",
   },
   "include": [
     "src"
