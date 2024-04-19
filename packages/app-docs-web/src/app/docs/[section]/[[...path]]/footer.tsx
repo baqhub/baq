@@ -43,13 +43,6 @@ const SayHi = tw(Text)`
   dark:text-zinc-500
 `;
 
-// const Separator = tw(Text)`
-//   after:content-['•']
-//   text-md
-//   text-zinc-300
-//   dark:text-zinc-600
-// `;
-
 const ExternalLink = tw.a`
   shrink-0
   block
