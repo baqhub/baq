@@ -1,3 +1,5 @@
+import birdIconUrl from "@assets/birdIcon.png";
+import birdLogoUrl from "@assets/birdLogo.png";
 import {Store} from "@baqhub/bird-shared/baq/store.js";
 import {buildAppState} from "@baqhub/bird-shared/state/appState.js";
 import {useSyncState} from "@baqhub/bird-shared/state/syncState.js";
@@ -13,8 +15,6 @@ import {
   useNavigate,
 } from "@tanstack/react-router";
 import {FC, useEffect} from "react";
-import birdIconUrl from "../../../../assets/birdIcon.png";
-import birdLogoUrl from "../../../../assets/birdLogo.png";
 import {TopNav} from "./shared/topNav/topNav.js";
 
 //
