@@ -1,6 +1,6 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
+# Dependencies.
 .yarn/*
 !.yarn/cache
 !.yarn/patches
@@ -9,13 +9,13 @@
 !.yarn/sdks
 !.yarn/versions
 
-# testing
+# Testing.
 /coverage
 
-# production
+# Production.
 **/build
 
-# misc
+# Misc.
 node_modules
 .DS_Store
 .env.local

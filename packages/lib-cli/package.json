@@ -1,6 +1,6 @@
 {
   "name": "@baqhub/cli",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "",
   "type": "module",
   "scripts": {
@@ -17,7 +17,7 @@
   "author": "Baqhub",
   "license": "MIT",
   "dependencies": {
-    "@baqhub/sdk": "^0.1.5",
+    "@baqhub/sdk": "^0.1.9",
     "@commander-js/extra-typings": "12.0.1",
     "@inquirer/prompts": "5.0.1",
     "ajv": "8.12.0",
