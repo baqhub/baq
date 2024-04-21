@@ -25,7 +25,7 @@ export const unstable_settings = {
   initialRouteName: "(tabs)",
 };
 
-const birdIconUrl = "https://bird.baq.dev/assets/birdIcon-n2MYINEF.png";
+const birdIconUrl = "https://bird.baq.dev/assets/birdIcon-CSccJO_o.png";
 const redirectUrlPrefix = "bird://auth";
 const redirectUrl = `${redirectUrlPrefix}{/authorization_id}`;
 const {useAppState} = buildAppState({
