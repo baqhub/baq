@@ -1,7 +1,7 @@
 import {usePostComposerState} from "@baqhub/bird-shared/state/postComposerState.js";
 import {Button} from "@baqhub/ui/core/button.js";
 import {Column, Grid, tw} from "@baqhub/ui/core/style.js";
-import {FC} from "react";
+import {FC, KeyboardEvent} from "react";
 import {Avatar} from "../../shared/avatar.js";
 
 //
@@ -77,6 +77,15 @@ export const PostComposer: FC = () => {
   const {onTextChange, onPostPress} = state;
   const isValidText = Boolean(text.trim());
 
+  const onInputKeyDown = (e: KeyboardEvent) => {
+    if ((!e.metaKey && !e.ctrlKey) || e.key !== "Enter") {
+      return;
+    }
+
+    e.preventDefault();
+    onPostPress();
+  };
+
   return (
     <Layout>
       <AvatarCell>
@@ -88,6 +97,7 @@ export const PostComposer: FC = () => {
         maxLength={400}
         rows={1}
         onChange={e => onTextChange(e.target.value)}
+        onKeyDown={onInputKeyDown}
         required
       />
       <Sizer>{text}&nbsp;</Sizer>
