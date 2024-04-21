@@ -83,7 +83,7 @@ const RMessageRecordContent: IO.RType<MessageRecordContent> = IO.intersection([
 const [messageRecordType, RMessageRecordType] = RecordType.full(
   "types.baq.dev",
   "05d5b9442c36433688edca64df1a264c",
-  "cc298c1cd1dad6142157eb10eaee1dd4a5fdb49359140e57799681fad959ba86",
+  "91cbccc741f078df29e3f5f42308547f3a12b638d1a66bda793b3a5ff58ad3e1",
   RMessageRecordContent
 );
 

@@ -32,7 +32,7 @@ const RFileRecordContent: IO.RType<FileRecordContent> = SchemaIO.object(
 const [fileRecordType, RFileRecordType] = RecordType.full(
   "types.baq.dev",
   "2b6f7bc8ffd54c8db8062700c040e04f",
-  "896f618da076825066710437f1c3b8115f4fdc636d3acab14669b29d525ce384",
+  "7c4dcbb7c6613e2cd679ac04170310b0d370d8f6cfbb18d006ba2b8cf4f3ab3a",
   RFileRecordContent
 );
 

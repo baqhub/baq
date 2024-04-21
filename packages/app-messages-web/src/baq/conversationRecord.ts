@@ -24,7 +24,7 @@ const RConversationRecordContent: IO.RType<ConversationRecordContent> =
 const [conversationRecordType, RConversationRecordType] = RecordType.full(
   "types.baq.dev",
   "c4094303fe334bd18de6a1f1929c3cad",
-  "e60172a0d4f71a8c666aefb713d64e05977cd64812298dc019fb8d5e035214d0",
+  "65fa2f274eeec213c7b40a8ee0477a0b2751ce21e137991791b690e7853c4529",
   RConversationRecordContent
 );
 

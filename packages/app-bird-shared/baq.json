@@ -6,7 +6,7 @@
     "post": {
       "path": "src/types/Record.Post.1-0-0.json",
       "record_id": "6ee7f69a90154b849bac528daa942bcd",
-      "version_hash": "562a0d9ede325cdba23afe9d14d0e927b400bd883b866b0e379721c3e269efa0",
+      "version_hash": "a1970e66b4556dc56c684368a37a33f07933602d343ee913b04a89d208d3da63",
       "content_hash": "c1aa9722e349f42d4901f3c63fea4cdc",
       "scopes": [
         "read",
