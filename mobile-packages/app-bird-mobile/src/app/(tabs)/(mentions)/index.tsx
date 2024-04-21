@@ -1,10 +1,9 @@
 import {PostRecordKey} from "@baqhub/app-bird-shared/build/src/baq/postRecord";
-import {useFeedPageState} from "@baqhub/app-bird-shared/build/src/state/feedPageState";
-import {Stack, router} from "expo-router";
+import {useMentionsPageState} from "@baqhub/app-bird-shared/build/src/state/mentionsPageState";
+import {Stack} from "expo-router";
 import {FC} from "react";
-import {MagnifyingGlassIcon, UsersIcon} from "react-native-heroicons/outline";
+import {UsersIcon} from "react-native-heroicons/outline";
 import {Screen} from "../../../components/core/screen";
-import {ToolbarButton} from "../../../components/core/toolbarButton";
 import {PostByKey} from "../../../components/post/postByKey";
 import {EmptyPosts} from "../../../components/posts/emptyPosts";
 import {LoadingPosts} from "../../../components/posts/loadingPosts";
@@ -14,20 +13,11 @@ import {Posts} from "../../../components/posts/posts";
 // Component.
 //
 
-const FeedTab: FC = () => {
-  const {isLoading, getPostKeys} = useFeedPageState();
+const MentionsTab: FC = () => {
+  const {isLoading, getPostKeys} = useMentionsPageState();
   return (
     <Screen>
-      <Stack.Screen
-        options={{
-          title: "Bird Feed",
-          headerRight: () => (
-            <ToolbarButton onPress={() => router.push("/searchModal")}>
-              <MagnifyingGlassIcon />
-            </ToolbarButton>
-          ),
-        }}
-      />
+      <Stack.Screen options={{title: "Mentions"}} />
       <Posts
         isLoading={isLoading}
         getItems={getPostKeys}
@@ -40,7 +30,7 @@ const FeedTab: FC = () => {
 };
 
 function renderPost(key: PostRecordKey) {
-  return <PostByKey key={key} postKey={key} routePrefix="/(feed)" />;
+  return <PostByKey key={key} postKey={key} routePrefix="/(mentions)" />;
 }
 
 function renderLoading() {
@@ -49,8 +39,10 @@ function renderLoading() {
 
 function renderEmpty() {
   return (
-    <EmptyPosts icon={<UsersIcon />}>Follow people to see more!</EmptyPosts>
+    <EmptyPosts icon={<UsersIcon />}>
+      You haven't been mentioned yet!
+    </EmptyPosts>
   );
 }
 
-export default FeedTab;
+export default MentionsTab;

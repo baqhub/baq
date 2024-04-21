@@ -2,6 +2,7 @@ import {useRecordHelpers} from "@baqhub/app-bird-shared/build/src/baq/store";
 import {Tabs, router} from "expo-router";
 import {FC, useCallback} from "react";
 import {useColorScheme} from "react-native";
+import {AtSymbolIcon} from "react-native-heroicons/outline";
 import {HomeIcon, PencilIcon, UserIcon} from "react-native-heroicons/solid";
 import {amber, neutral, white} from "tailwindcss/colors";
 import {Icon, tw} from "../../helpers/style";
@@ -56,6 +57,22 @@ const TabLayout: FC = () => {
           tabBarIcon: ({color}) => (
             <TabIcon>
               <HomeIcon color={color} />
+            </TabIcon>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="(mentions)"
+        options={{
+          headerShown: false,
+          tabBarIcon: ({color}) => (
+            <TabIcon>
+              <AtSymbolIcon
+                strokeWidth={2.5}
+                width={30}
+                height={30}
+                color={color}
+              />
             </TabIcon>
           ),
         }}
