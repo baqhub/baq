@@ -1,0 +1,65 @@
+{
+  "expo": {
+    "name": "Bird",
+    "slug": "app-mobile-bird",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/birdMobileIcon.png",
+    "scheme": "bird",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "backgroundColor": "#ffffff",
+      "image": "./assets/images/birdMobileSplash.png",
+      "resizeMode": "contain"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "buildNumber": "7",
+      "supportsTablet": false,
+      "bundleIdentifier": "com.baqhub.ios.bird",
+      "splash": {
+        "backgroundColor": "#ffffff",
+        "image": "./assets/images/birdMobileSplash.png",
+        "resizeMode": "contain",
+        "dark": {
+          "backgroundColor": "#0a0a0a",
+          "image": "./assets/images/birdMobileSplash.png",
+          "resizeMode": "contain"
+        }
+      },
+      "config": {
+        "usesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-localization"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "owner": "baqhub",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "1ebbeb6a-ce8d-4bf9-9301-9f624376912b"
+      }
+    }
+  }
+}

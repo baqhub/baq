@@ -1,0 +1,35 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts",
+    "tailwind.d.ts",
+    "global.d.ts"
+  ],
+  "references": [
+    {
+      "path": "../../packages/lib-sdk/tsconfig.json"
+    },
+    {
+      "path": "../../packages/lib-sdk-react/tsconfig.json"
+    },
+    {
+      "path": "../../packages/lib-sdk-react-native/tsconfig.json"
+    },
+    {
+      "path": "../../packages/lib-sdk-expo/tsconfig.json"
+    },
+    {
+      "path": "../../packages/app-bird-shared"
+    }
+  ]
+}
