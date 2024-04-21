@@ -1,4 +1,4 @@
-import {useAvatarState} from "@protocol-apps/app-bird-shared/build/src/state/avatarState";
+import {useAvatarState} from "@baqhub/app-bird-shared/build/src/state/avatarState";
 import {FC} from "react";
 import {Image, View} from "react-native";
 import {tw} from "../../helpers/style";

@@ -1,8 +1,8 @@
-import {useConstant} from "@baqhub/sdk-react";
 import {
   ProxyStore,
   useRecordHelpers,
-} from "@protocol-apps/app-bird-shared/build/src/baq/store";
+} from "@baqhub/app-bird-shared/build/src/baq/store";
+import {useConstant} from "@baqhub/sdk-react";
 import {Stack, useLocalSearchParams, useNavigation} from "expo-router";
 import {FC, useCallback} from "react";
 import {Alert} from "react-native";

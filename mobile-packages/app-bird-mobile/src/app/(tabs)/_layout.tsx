@@ -1,4 +1,4 @@
-import {useRecordHelpers} from "@protocol-apps/app-bird-shared/build/src/baq/store";
+import {useRecordHelpers} from "@baqhub/app-bird-shared/build/src/baq/store";
 import {Tabs, router} from "expo-router";
 import {FC, useCallback} from "react";
 import {useColorScheme} from "react-native";

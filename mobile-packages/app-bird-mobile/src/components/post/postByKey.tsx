@@ -1,5 +1,5 @@
-import {PostRecordKey} from "@protocol-apps/app-bird-shared/build/src/baq/postRecord";
-import {usePostStateByKey} from "@protocol-apps/app-bird-shared/build/src/state/postStateByKey";
+import {PostRecordKey} from "@baqhub/app-bird-shared/build/src/baq/postRecord";
+import {usePostStateByKey} from "@baqhub/app-bird-shared/build/src/state/postStateByKey";
 import {FC} from "react";
 import {Post} from "./post";
 

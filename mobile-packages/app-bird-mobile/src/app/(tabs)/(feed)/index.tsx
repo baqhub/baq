@@ -1,5 +1,5 @@
-import {PostRecordKey} from "@protocol-apps/app-bird-shared/build/src/baq/postRecord";
-import {useFeedPageState} from "@protocol-apps/app-bird-shared/build/src/state/feedPageState";
+import {PostRecordKey} from "@baqhub/app-bird-shared/build/src/baq/postRecord";
+import {useFeedPageState} from "@baqhub/app-bird-shared/build/src/state/feedPageState";
 import {Stack, router} from "expo-router";
 import {FC} from "react";
 import {MagnifyingGlassIcon, UsersIcon} from "react-native-heroicons/outline";

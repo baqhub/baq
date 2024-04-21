@@ -1,4 +1,4 @@
-import {ProxyStore} from "@protocol-apps/app-bird-shared/build/src/baq/store";
+import {ProxyStore} from "@baqhub/app-bird-shared/build/src/baq/store";
 import {Stack, useLocalSearchParams} from "expo-router";
 import {FC} from "react";
 import {ProfileScreen} from "../../../../components/screens/profileScreen";

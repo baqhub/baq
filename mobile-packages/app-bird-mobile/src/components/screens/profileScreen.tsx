@@ -1,6 +1,6 @@
+import {PostVersionHash} from "@baqhub/app-bird-shared/build/src/baq/postRecord";
+import {useProfilePageState} from "@baqhub/app-bird-shared/build/src/state/profilePageState";
 import {noop} from "@baqhub/sdk";
-import {PostVersionHash} from "@protocol-apps/app-bird-shared/build/src/baq/postRecord";
-import {useProfilePageState} from "@protocol-apps/app-bird-shared/build/src/state/profilePageState";
 import {FC, useCallback} from "react";
 import {StyleSheet} from "react-native";
 import {FaceFrownIcon, PencilSquareIcon} from "react-native-heroicons/outline";

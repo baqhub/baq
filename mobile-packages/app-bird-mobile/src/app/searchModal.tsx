@@ -1,6 +1,6 @@
-import {useSearchDialogState} from "@protocol-apps/app-bird-shared/build/src/state/searchDialogState";
+import {useSearchDialogState} from "@baqhub/app-bird-shared/build/src/state/searchDialogState";
 import {router} from "expo-router";
-import React, {FC, useCallback, useRef} from "react";
+import {FC, useCallback, useRef} from "react";
 import {
   KeyboardAvoidingView,
   Platform,

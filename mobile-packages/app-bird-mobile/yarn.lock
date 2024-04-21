@@ -1685,7 +1685,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.24.0":
+"@babel/runtime@npm:^7.24.1":
   version: 7.24.4
   resolution: "@babel/runtime@npm:7.24.4"
   dependencies:
@@ -1744,6 +1744,18 @@ __metadata:
   checksum: 10c0/42cefce8a68bd09bb5828b4764aa5586c53c60128ac2ac012e23858e1c179347a4aac9c66fc577994fbf57595227611c5ec8270bf0cfc94ff033bbfac0550b70
   languageName: node
   linkType: hard
+
+"@baqhub/app-bird-shared@portal:../../packages/app-bird-shared::locator=app-bird-mobile%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@baqhub/app-bird-shared@portal:../../packages/app-bird-shared::locator=app-bird-mobile%40workspace%3A."
+  dependencies:
+    "@baqhub/cli": "npm:*"
+    "@baqhub/sdk": "npm:*"
+    "@baqhub/sdk-react": "npm:*"
+    lodash: "npm:4.17.21"
+    react: "npm:18.2.0"
+  languageName: node
+  linkType: soft
 
 "@baqhub/cli@portal:../../packages/lib-cli::locator=app-bird-mobile%40workspace%3A.":
   version: 0.0.0-use.local
@@ -2098,17 +2110,6 @@ __metadata:
     tmp: "npm:^0.0.33"
     tslib: "npm:^2.4.0"
   checksum: 10c0/4ac22ccc3a8d5c6ccbb724551fedcc28c4bef598583fc7fdb615eb1f13205bfc1cb09cff2aaf410880e5ef19b90c344d362e804f79ea2019bd15a3f54c15a46a
-  languageName: node
-  linkType: hard
-
-"@expo/eas-build-job@npm:1.0.92":
-  version: 1.0.92
-  resolution: "@expo/eas-build-job@npm:1.0.92"
-  dependencies:
-    joi: "npm:^17.11.0"
-    semver: "npm:^7.5.4"
-    zod: "npm:^3.22.4"
-  checksum: 10c0/c6ee28c600cbf766bbcaedfe906dce05149b1a59db331a3fad8d82bed463927a22c400f2a0f3c3a4752b5ee97b91df2a8027e9d42d1d768f2cd2c5fd942867d8
   languageName: node
   linkType: hard
 
@@ -2549,11 +2550,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/steps@npm:1.0.92":
-  version: 1.0.92
-  resolution: "@expo/steps@npm:1.0.92"
+"@expo/steps@npm:1.0.95":
+  version: 1.0.95
+  resolution: "@expo/steps@npm:1.0.95"
   dependencies:
-    "@expo/eas-build-job": "npm:1.0.92"
+    "@expo/eas-build-job": "npm:1.0.95"
     "@expo/logger": "npm:1.0.57"
     "@expo/spawn-async": "npm:^1.7.2"
     arg: "npm:^5.0.2"
@@ -2565,7 +2566,7 @@ __metadata:
     this-file: "npm:^2.0.3"
     uuid: "npm:^9.0.1"
     yaml: "npm:^2.3.4"
-  checksum: 10c0/14ef88544011b146e6d12411737bed510ec2d91abfc7bc5ebc6537b832defa0399e70bd8624f84e3dd9dcd62f5381df388e4b2a70245318e995b1f78dc994e96
+  checksum: 10c0/9b899b9734ea944b8dc79202e00eefec292e4a90040f9a7b283932d17a79d1f2ce64094e38c7011d8eb710d2e1b1ce7c30d2778f09e30e47a0261f02f2284542
   languageName: node
   linkType: hard
 
@@ -3313,18 +3314,6 @@ __metadata:
   checksum: 10c0/5bd7576bb1b38a47a7fc7b51ac9f38748e772beebc56200450c4a817d712232b8f1d3ef70532c80840243c657d491cf6a6be1e3a214cff907645819fdc34aadd
   languageName: node
   linkType: hard
-
-"@protocol-apps/app-bird-shared@portal:../../packages/app-bird-shared::locator=app-bird-mobile%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "@protocol-apps/app-bird-shared@portal:../../packages/app-bird-shared::locator=app-bird-mobile%40workspace%3A."
-  dependencies:
-    "@baqhub/cli": "npm:*"
-    "@baqhub/sdk": "npm:*"
-    "@baqhub/sdk-react": "npm:*"
-    lodash: "npm:4.17.21"
-    react: "npm:18.2.0"
-  languageName: node
-  linkType: soft
 
 "@radix-ui/react-compose-refs@npm:1.0.0":
   version: 1.0.0
@@ -4268,13 +4257,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:~18.2.74":
-  version: 18.2.74
-  resolution: "@types/react@npm:18.2.74"
+"@types/react@npm:~18.2.79":
+  version: 18.2.79
+  resolution: "@types/react@npm:18.2.79"
   dependencies:
     "@types/prop-types": "npm:*"
     csstype: "npm:^3.0.2"
-  checksum: 10c0/347e38b4c5dc20d50ff71bf04b7caaef490e5ff695e74a0088a13fbb2a0c5d125a5ecfd142adfa30f0176da0e2734942c91ba61d95ce269c43b3265bd7379361
+  checksum: 10c0/c8a8a005d8830a48cc1ef93c3510c4935a2a03e5557dbecaa8f1038450cbfcb18eb206fa7fba7077d54b8da21faeb25577e897a333392770a7797f625b62c78a
   languageName: node
   linkType: hard
 
@@ -4691,16 +4680,16 @@ __metadata:
     "@babel/plugin-transform-arrow-functions": "npm:^7.23.3"
     "@babel/plugin-transform-shorthand-properties": "npm:^7.23.3"
     "@babel/plugin-transform-template-literals": "npm:^7.23.3"
+    "@baqhub/app-bird-shared": "portal:../../packages/app-bird-shared"
     "@baqhub/sdk": "portal:../../packages/lib-sdk"
     "@baqhub/sdk-expo": "portal:../../packages/lib-sdk-expo"
     "@baqhub/sdk-react": "portal:../../packages/lib-sdk-react"
     "@expo/vector-icons": "npm:^14.0.0"
-    "@protocol-apps/app-bird-shared": "portal:../../packages/app-bird-shared"
     "@react-native-async-storage/async-storage": "npm:1.21.0"
     "@react-navigation/native": "npm:^6.1.9"
     "@types/lodash": "npm:^4.17.0"
-    "@types/react": "npm:~18.2.74"
-    eas-cli: "npm:^7.1.2"
+    "@types/react": "npm:~18.2.79"
+    eas-cli: "npm:^7.8.2"
     expo: "npm:^50.0.17"
     expo-constants: "npm:~15.4.6"
     expo-font: "npm:~11.10.3"
@@ -4729,7 +4718,7 @@ __metadata:
     react-native-svg: "npm:14.1.0"
     react-native-web: "npm:~0.19.9"
     react-test-renderer: "npm:18.2.0"
-    tailwind-merge: "npm:2.2.2"
+    tailwind-merge: "npm:2.3.0"
     tailwindcss: "npm:3.4.3"
     typescript: "npm:5.3.3"
   languageName: unknown
@@ -6460,9 +6449,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eas-cli@npm:^7.1.2":
-  version: 7.8.0
-  resolution: "eas-cli@npm:7.8.0"
+"eas-cli@npm:^7.8.2":
+  version: 7.8.2
+  resolution: "eas-cli@npm:7.8.2"
   dependencies:
     "@expo/apple-utils": "npm:1.7.0"
     "@expo/code-signing-certificates": "npm:0.0.5"
@@ -6484,7 +6473,7 @@ __metadata:
     "@expo/results": "npm:1.0.0"
     "@expo/rudder-sdk-node": "npm:1.1.1"
     "@expo/spawn-async": "npm:1.7.0"
-    "@expo/steps": "npm:1.0.92"
+    "@expo/steps": "npm:1.0.95"
     "@expo/timeago.js": "npm:1.0.0"
     "@oclif/core": "npm:^1.26.2"
     "@oclif/plugin-autocomplete": "npm:^2.3.10"
@@ -6533,7 +6522,7 @@ __metadata:
     resolve-from: "npm:5.0.0"
     semver: "npm:7.5.4"
     slash: "npm:3.0.0"
-    tar: "npm:6.2.0"
+    tar: "npm:6.2.1"
     terminal-link: "npm:2.1.1"
     tslib: "npm:2.6.2"
     turndown: "npm:7.1.2"
@@ -6542,7 +6531,7 @@ __metadata:
     wrap-ansi: "npm:7.0.0"
   bin:
     eas: bin/run
-  checksum: 10c0/dcf0452a4bba44054882ac2b2ba1095789daac3596a37977bc3ae6a5b770659ad6b400dff94fcdd94b7daa2530febdadd4736fce0754b6e786a0e9445eefc802
+  checksum: 10c0/5e99678835cb1c99cd27e4ecdc9e6e2176228d06e9a82b8e725a9c55477e66abba51658caca9136b46033a19f89b20ff1aa9bd1245610a6516d42deee64fbca3
   languageName: node
   linkType: hard
 
@@ -13388,12 +13377,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwind-merge@npm:2.2.2":
-  version: 2.2.2
-  resolution: "tailwind-merge@npm:2.2.2"
+"tailwind-merge@npm:2.3.0":
+  version: 2.3.0
+  resolution: "tailwind-merge@npm:2.3.0"
   dependencies:
-    "@babel/runtime": "npm:^7.24.0"
-  checksum: 10c0/68a5e199848a467aed4f8d1a8d7b6a5b583ff72f1d2801e018bf245eaa41e6564b63ead9e2b708a214cefbd843970c5e0a21754d5f2a20e2c1238e25955685ce
+    "@babel/runtime": "npm:^7.24.1"
+  checksum: 10c0/5ea308e23c3ab1cf4c3f35f0a471753f4d3ed232d63dd7c09151a74428737321902203d90e9f0cb76ea5c3978e71b0adbc503dc455e56cda967a7674ae4b94b5
   languageName: node
   linkType: hard
 
@@ -13430,7 +13419,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tar@npm:6.2.0, tar@npm:^6.0.2, tar@npm:^6.0.5, tar@npm:^6.1.11, tar@npm:^6.1.2":
+"tar@npm:6.2.1":
+  version: 6.2.1
+  resolution: "tar@npm:6.2.1"
+  dependencies:
+    chownr: "npm:^2.0.0"
+    fs-minipass: "npm:^2.0.0"
+    minipass: "npm:^5.0.0"
+    minizlib: "npm:^2.1.1"
+    mkdirp: "npm:^1.0.3"
+    yallist: "npm:^4.0.0"
+  checksum: 10c0/a5eca3eb50bc11552d453488344e6507156b9193efd7635e98e867fab275d527af53d8866e2370cd09dfe74378a18111622ace35af6a608e5223a7d27fe99537
+  languageName: node
+  linkType: hard
+
+"tar@npm:^6.0.2, tar@npm:^6.0.5, tar@npm:^6.1.11, tar@npm:^6.1.2":
   version: 6.2.0
   resolution: "tar@npm:6.2.0"
   dependencies:

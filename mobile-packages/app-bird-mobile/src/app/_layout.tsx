@@ -1,7 +1,7 @@
+import {Store} from "@baqhub/app-bird-shared/build/src/baq/store";
+import {DateServicesProvider} from "@baqhub/app-bird-shared/build/src/components/date/dateServicesProvider";
+import {buildAppState} from "@baqhub/app-bird-shared/build/src/state/appState";
 import {asyncStorageAdapter, secureStorageAdapter} from "@baqhub/sdk-expo";
-import {Store} from "@protocol-apps/app-bird-shared/build/src/baq/store";
-import {DateServicesProvider} from "@protocol-apps/app-bird-shared/build/src/components/date/dateServicesProvider";
-import {buildAppState} from "@protocol-apps/app-bird-shared/build/src/state/appState";
 import {DarkTheme, DefaultTheme, ThemeProvider} from "@react-navigation/native";
 import {Locale, useLocales} from "expo-localization";
 import {SplashScreen, Stack} from "expo-router";

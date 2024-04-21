@@ -1,4 +1,4 @@
-import {usePostComposerState} from "@protocol-apps/app-bird-shared/build/src/state/postComposerState";
+import {usePostComposerState} from "@baqhub/app-bird-shared/build/src/state/postComposerState";
 import {Stack, router} from "expo-router";
 import isEmpty from "lodash/isEmpty";
 import {FC, useCallback, useRef, useState} from "react";

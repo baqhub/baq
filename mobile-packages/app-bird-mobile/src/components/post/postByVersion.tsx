@@ -1,5 +1,5 @@
-import {PostVersionHash} from "@protocol-apps/app-bird-shared/build/src/baq/postRecord";
-import {usePostStateByVersion} from "@protocol-apps/app-bird-shared/build/src/state/postStateByVersion";
+import {PostVersionHash} from "@baqhub/app-bird-shared/build/src/baq/postRecord";
+import {usePostStateByVersion} from "@baqhub/app-bird-shared/build/src/state/postStateByVersion";
 import {FC} from "react";
 import {Post} from "./post";
 

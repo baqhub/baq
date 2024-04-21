@@ -1,9 +1,9 @@
 import {
   PostRecordKey,
   PostVersionHash,
-} from "@protocol-apps/app-bird-shared/build/src/baq/postRecord";
-import {AbsoluteDateFormatter} from "@protocol-apps/app-bird-shared/build/src/components/date/absoluteDateFormatter";
-import {usePostDetailState} from "@protocol-apps/app-bird-shared/build/src/state/postDetailState";
+} from "@baqhub/app-bird-shared/build/src/baq/postRecord";
+import {AbsoluteDateFormatter} from "@baqhub/app-bird-shared/build/src/components/date/absoluteDateFormatter";
+import {usePostDetailState} from "@baqhub/app-bird-shared/build/src/state/postDetailState";
 import {Link, Stack} from "expo-router";
 import {FC, useCallback} from "react";
 import {Pressable, StyleSheet} from "react-native";
