@@ -68,7 +68,7 @@ const TabLayout: FC = () => {
           tabBarIcon: ({color}) => (
             <TabIcon>
               <AtSymbolIcon
-                strokeWidth={2.5}
+                strokeWidth={2.3}
                 width={30}
                 height={30}
                 color={color}
