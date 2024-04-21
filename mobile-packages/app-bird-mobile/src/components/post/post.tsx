@@ -11,6 +11,7 @@ import {
 } from "react-native-heroicons/outline";
 import {Column, Icon, Row, Text, tw} from "../../helpers/style";
 import {Avatar} from "../core/avatar";
+import {PostText} from "./postText";
 
 //
 // Props.
@@ -85,6 +86,11 @@ const BodyText = tw(Text)`
   leading-5
 `;
 
+const MentionText = tw(Text)`
+  text-amber-700
+  dark:text-amber-500
+`;
+
 const Actions = tw(Row)`
   -mt-0.5
   -mx-2
@@ -112,7 +118,7 @@ const ActionButtonIcon = tw(Icon)`
 
 export const Post: FC<PostProps> = props => {
   const {routePrefix, proxyEntity, postKey} = props;
-  const {authorEntity, authorName, text, date} = props;
+  const {authorEntity, authorName, text, textMentions, date} = props;
 
   return (
     <Link
@@ -153,7 +159,13 @@ export const Post: FC<PostProps> = props => {
                 <RelativeDateFormatter value={date} />
               </DateText>
             </InfoRow>
-            <BodyText>{text}</BodyText>
+            <BodyText>
+              <PostText
+                text={text}
+                textMentions={textMentions}
+                MentionComponent={MentionText}
+              />
+            </BodyText>
             <Actions>
               <ActionButton>
                 <ActionButtonIcon style={{transform: [{translateY: 0.5}]}}>

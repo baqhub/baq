@@ -1,6 +1,12 @@
-import {Record} from "@baqhub/sdk";
+import {EntityLink, Record} from "@baqhub/sdk";
 import {PostRecord} from "../baq/postRecord.js";
 import {useFindEntityRecord, useRecordHelpers} from "../baq/store.js";
+
+export interface Mention {
+  mention: EntityLink;
+  index: number;
+  length: number;
+}
 
 export function usePostState(post: PostRecord) {
   const {proxyEntity} = useRecordHelpers();

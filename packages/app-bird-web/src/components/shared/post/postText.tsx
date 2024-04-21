@@ -1,4 +1,5 @@
-import {EntityLink, Str} from "@baqhub/sdk";
+import {Mention} from "@baqhub/bird-shared/state/postState.js";
+import {Str} from "@baqhub/sdk";
 import {FC, Fragment, ReactNode} from "react";
 import {PostMention} from "./postMention.js";
 
@@ -6,20 +7,10 @@ import {PostMention} from "./postMention.js";
 // Props.
 //
 
-interface Mention {
-  mention: EntityLink;
-  index: number;
-  length: number;
-}
-
 interface PostTextProps {
   text: string;
   textMentions: ReadonlyArray<Mention> | undefined;
 }
-
-//
-// Style.
-//
 
 //
 // Components.

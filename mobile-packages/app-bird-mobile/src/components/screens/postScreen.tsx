@@ -13,6 +13,8 @@ import {LoadingSecondary} from "../../components/posts/loadingSecondary";
 import {Posts} from "../../components/posts/posts";
 import {Column, Row, Text, tw} from "../../helpers/style";
 import {PostByVersion} from "../post/postByVersion";
+import {PostText} from "../post/postText";
+import {PostMention} from "./postMention";
 
 //
 // Props.
@@ -84,7 +86,7 @@ const FullDate = tw(Text)`
 export const PostScreen: FC<PostScreenProps> = props => {
   const {routePrefix, postKey} = props;
   const state = usePostDetailState(decodeURIComponent(postKey));
-  const {authorEntity, authorName, text, date} = state;
+  const {authorEntity, authorName, text, textMentions, date} = state;
   const {isLoading, getReplyVersions, wrap} = state;
 
   const renderPost = useCallback(() => {
@@ -108,7 +110,13 @@ export const PostScreen: FC<PostScreenProps> = props => {
               </AuthorIdentity>
             </AuthorButton>
           </Link>
-          <Body>{text}</Body>
+          <Body>
+            <PostText
+              text={text}
+              textMentions={textMentions}
+              MentionComponent={PostMention}
+            />
+          </Body>
         </Content>
         <Info
           style={{
@@ -122,7 +130,7 @@ export const PostScreen: FC<PostScreenProps> = props => {
         </Info>
       </Post>
     );
-  }, [authorEntity, authorName, text, date]);
+  }, [authorEntity, authorName, text, textMentions, date]);
 
   const renderReply = useCallback(
     (version: PostVersionHash) => {
