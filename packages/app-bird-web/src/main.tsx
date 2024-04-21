@@ -26,9 +26,24 @@ const privacyRoute = createRoute({
   import("./components/privacyPage/privacyPage.js").then(d => d.PrivacyRoute)
 );
 
+const authRoute = createRoute({
+  path: "/auth",
+  getParentRoute: () => appRoute,
+});
+
+const authAuthorizationRoute = createRoute({
+  path: "$authorizationId",
+  getParentRoute: () => authRoute,
+});
+
 const routeTree = rootRoute.addChildren([
   privacyRoute,
-  appRoute.addChildren([feedRoute, mentionsRoute, profileRoute]),
+  appRoute.addChildren([
+    authRoute.addChildren([authAuthorizationRoute]),
+    mentionsRoute,
+    profileRoute,
+    feedRoute,
+  ]),
 ]);
 
 const router = createRouter({

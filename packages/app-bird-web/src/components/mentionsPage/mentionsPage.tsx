@@ -1,7 +1,7 @@
 import {PostRecordKey} from "@baqhub/bird-shared/baq/postRecord.js";
 import {useMentionsPageState} from "@baqhub/bird-shared/state/mentionsPageState.js";
 import {ChatBubbleBottomCenterTextIcon} from "@heroicons/react/24/outline";
-import {Route, createRoute} from "@tanstack/react-router";
+import {createRoute} from "@tanstack/react-router";
 import {FC, Suspense} from "react";
 import {appRoute} from "../app.js";
 import {PostByKey} from "../shared/post/postByKey.js";

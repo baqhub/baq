@@ -14,6 +14,7 @@ import {
   ScrollRestoration,
   createRoute,
   useNavigate,
+  useParams,
 } from "@tanstack/react-router";
 import {FC, useEffect} from "react";
 import {rootRoute} from "../main.js";
@@ -69,14 +70,14 @@ const PrivacyLink = tw(Link)`
 
 export const App: FC = () => {
   const navigate = useNavigate();
+  const params = useParams({strict: false});
 
   const authorizationId = useConstant(() => {
-    const {pathname} = window.location;
-    if (!pathname.startsWith(authPrefix)) {
+    if (!("authorizationId" in params)) {
       return undefined;
     }
 
-    return pathname.slice(authPrefix.length + 1) || undefined;
+    return params.authorizationId;
   });
 
   useEffect(() => {
