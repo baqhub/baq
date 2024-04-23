@@ -17,7 +17,8 @@ const Layout = tw(Grid)`
 `;
 
 const BackLink = tw(Link)`
-  block
+  hidden
+  md:block
   justify-self-start
   col-start-1
 
@@ -41,6 +42,7 @@ const Icon = tw.div`
 `;
 
 const Logo = tw.img`
+  col-start-2
   h-16
   select-none
 `;
@@ -49,7 +51,7 @@ const Logo = tw.img`
 // Component.
 //
 
-export const PrivacyHeader: FC = () => {
+export const PublicHeader: FC = () => {
   return (
     <Layout>
       <BackLink to="/">

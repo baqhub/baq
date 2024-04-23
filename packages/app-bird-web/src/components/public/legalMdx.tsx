@@ -66,8 +66,6 @@ const MdxH2 = tw.h2`
   pt-6
   [&_+_*]:mt-0
 
-  scroll-mt-48
-
   border-t
   border-neutral-300
   dark:border-neutral-700

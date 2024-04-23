@@ -1,9 +1,8 @@
 import {Column, Row, tw} from "@baqhub/ui/core/style.js";
-import {createLazyRoute} from "@tanstack/react-router";
+import {Outlet, createLazyRoute} from "@tanstack/react-router";
 import {FC} from "react";
-import {LegalMdx} from "../shared/legalMdx.js";
-import Privacy from "./privacyContent.mdx";
-import {PrivacyHeader} from "./privacyHeader.js";
+import {LegalMdx} from "./legalMdx.js";
+import {PublicHeader} from "./publicHeader.js";
 
 //
 // Style.
@@ -29,13 +28,13 @@ const Center = tw(Column)`
 // Component.
 //
 
-const PrivacyPage: FC = () => {
+const PublicLayout: FC = () => {
   return (
     <Layout>
       <Center>
-        <PrivacyHeader />
+        <PublicHeader />
         <LegalMdx>
-          <Privacy />
+          <Outlet />
         </LegalMdx>
       </Center>
     </Layout>
@@ -46,6 +45,6 @@ const PrivacyPage: FC = () => {
 // Route.
 //
 
-export const PrivacyRoute = createLazyRoute("/privacy")({
-  component: PrivacyPage,
+export const PublicLayoutRoute = createLazyRoute("/public")({
+  component: PublicLayout,
 });

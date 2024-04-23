@@ -11,19 +11,36 @@ import {appRoute} from "./components/app.js";
 import {feedRoute} from "./components/feedPage/feedPage.js";
 import {mentionsRoute} from "./components/mentionsPage/mentionsPage.js";
 import {profileRoute} from "./components/profilePage/profilePage.js";
+import {RootLayout} from "./components/rootLayout.js";
 import "./styles/index.css";
 
 //
 // Routing.
 //
 
-export const rootRoute = createRootRoute();
+export const rootRoute = createRootRoute({component: RootLayout});
+
+const publicLayoutRoute = createRoute({
+  id: "public",
+  getParentRoute: () => rootRoute,
+}).lazy(() =>
+  import("./components/public/publicLayout.js").then(d => d.PublicLayoutRoute)
+);
+
+const eulaRoute = createRoute({
+  path: "/eula",
+  getParentRoute: () => publicLayoutRoute,
+}).lazy(() =>
+  import("./components/public/eulaPage/eulaPage.js").then(d => d.EulaRoute)
+);
 
 const privacyRoute = createRoute({
   path: "/privacy",
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => publicLayoutRoute,
 }).lazy(() =>
-  import("./components/privacyPage/privacyPage.js").then(d => d.PrivacyRoute)
+  import("./components/public/privacyPage/privacyPage.js").then(
+    d => d.PrivacyRoute
+  )
 );
 
 const authRoute = createRoute({
@@ -37,7 +54,7 @@ const authAuthorizationRoute = createRoute({
 });
 
 const routeTree = rootRoute.addChildren([
-  privacyRoute,
+  publicLayoutRoute.addChildren([eulaRoute, privacyRoute]),
   appRoute.addChildren([
     authRoute.addChildren([authAuthorizationRoute]),
     mentionsRoute,
