@@ -4,8 +4,8 @@ import {FC} from "react";
 export const RootLayout: FC = () => {
   return (
     <>
-      <Outlet />
       <ScrollRestoration />
+      <Outlet />
     </>
   );
 };
