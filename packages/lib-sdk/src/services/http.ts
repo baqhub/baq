@@ -31,7 +31,8 @@ export function setHttpApi(newApi: typeof api) {
 export class RequestError extends CustomError {
   constructor(
     public options: HttpSendOptions,
-    public status: number
+    public status: number,
+    public headers: Headers
   ) {
     super("Request error.");
   }
@@ -260,7 +261,7 @@ async function sendAsync(options: HttpSendOptions) {
     });
 
     if (!response.ok) {
-      throw new RequestError(options, response.status);
+      throw new RequestError(options, response.status, response.headers);
     }
 
     return response;
