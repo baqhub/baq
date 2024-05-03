@@ -35,6 +35,7 @@ export enum RecordMode {
 export enum NoContentRecordAction {
   DELETE = "delete",
   LOCAL = "local",
+  REPORT = "report",
   LEAVE = "leave",
 }
 
