@@ -44,7 +44,12 @@ export class RequestFailedError extends CustomError {
   }
 }
 
-function isError(error: unknown, statuses?: ReadonlyArray<number>) {
+function isError<T extends ReadonlyArray<number> | undefined>(
+  error: unknown,
+  statuses?: T
+): error is T extends undefined
+  ? RequestFailedError | RequestError
+  : RequestError {
   if (error instanceof RequestFailedError && !statuses) {
     return true;
   }
