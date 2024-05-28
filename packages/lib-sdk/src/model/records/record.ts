@@ -278,6 +278,10 @@ function buildRecordUpdate<R extends RAnyRecord>(
   content: IO.TypeOf<R>["content"],
   {permissions}: UpdateRecordOptions = {}
 ) {
+  if (record.source === "proxy") {
+    throw new Error("Cannot update proxied record.");
+  }
+
   // Make sure the new date is higher.
   // TODO: bound this and keep local server offset.
   const versionCreatedAt = record.version?.createdAt;
@@ -316,6 +320,10 @@ function buildNoContentRecord(
   record: AnyRecord,
   action: `${NoContentRecordAction}` = NoContentRecordAction.DELETE
 ): NoContentRecord {
+  if (record.source === "proxy") {
+    throw new Error("Cannot delete proxied record.");
+  }
+
   // Make sure the new date is higher.
   // TODO: bound this and keep local server offset.
   const versionCreatedAt = record.version?.createdAt;

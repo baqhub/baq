@@ -1,14 +1,20 @@
 import {RelativeDateFormatter} from "@baqhub/app-bird-shared/build/src/components/date/relativeDateFormatter";
 import {usePostState} from "@baqhub/app-bird-shared/build/src/state/postState";
 import {Link} from "expo-router";
-import {FC} from "react";
-import {Pressable, StyleSheet} from "react-native";
+import {FC, useCallback} from "react";
+import {Alert, Pressable, StyleSheet} from "react-native";
 import {
   ArrowPathRoundedSquareIcon,
   ChatBubbleOvalLeftIcon,
+  EllipsisHorizontalIcon,
   HeartIcon,
   PaperAirplaneIcon,
 } from "react-native-heroicons/outline";
+import {
+  ContextMenuButton,
+  MenuConfig,
+  OnPressMenuItemEventObject,
+} from "react-native-ios-context-menu";
 import {Column, Icon, Row, Text, tw} from "../../helpers/style";
 import {Avatar} from "../core/avatar";
 import {PostText} from "./postText";
@@ -47,6 +53,12 @@ const Content = tw(Column)`
 
 const InfoRow = tw(Row)`
   gap-1
+  items-center
+`;
+
+const InfoRowText = tw(Row)`
+  flex-1
+  gap-1
   items-baseline
 `;
 
@@ -78,6 +90,20 @@ const DateText = tw(Text)`
   text-right
   text-neutral-500
   dark:text-neutral-500
+`;
+
+const MenuButton = tw(Pressable)`
+  shrink-0
+  -my-1.5
+  p-0.5
+`;
+
+const MenuButtonIcon = tw(Icon)`
+  w-[22px]
+  h-[22px]
+  text-neutral-500
+  dark:text-neutral-500
+  translate-y-[1px]
 `;
 
 const BodyText = tw(Text)`
@@ -113,12 +139,104 @@ const ActionButtonIcon = tw(Icon)`
 `;
 
 //
+// Context menu.
+//
+
+const menuConfig: MenuConfig = {
+  menuTitle: "",
+  menuItems: [
+    {
+      actionKey: "hide",
+      actionTitle: "Hide",
+      icon: {
+        type: "IMAGE_SYSTEM",
+        imageValue: {
+          systemName: "eye.slash",
+        },
+      },
+    },
+    {
+      actionKey: "report",
+      actionTitle: "Report",
+      icon: {
+        type: "IMAGE_SYSTEM",
+        imageValue: {
+          systemName: "exclamationmark.bubble",
+        },
+      },
+      menuAttributes: ["destructive"],
+    },
+  ],
+};
+
+//
 // Component.
 //
 
 export const Post: FC<PostProps> = props => {
   const {routePrefix, proxyEntity, postKey} = props;
   const {authorEntity, authorName, text, textMentions, date} = props;
+  const {onHidePress, onReportPress} = props;
+
+  //
+  // Menu actions.
+  //
+
+  const onHideMenuPress = useCallback(() => {
+    Alert.alert(
+      "Hide Post",
+      "Hide this post from your timeline? This action cannot be undone.",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Hide",
+          style: "destructive",
+          onPress: onHidePress,
+        },
+      ]
+    );
+  }, [onHidePress]);
+
+  const onReportMenuPress = useCallback(() => {
+    Alert.alert(
+      "Report Post",
+      "Report this post for objectionable content? It will also be hidden from your timeline. This action cannot be undone.",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Report",
+          style: "destructive",
+          onPress: onReportPress,
+        },
+      ]
+    );
+  }, [onReportPress]);
+
+  const onMenuPress = useCallback(
+    (e: OnPressMenuItemEventObject) => {
+      switch (e.nativeEvent.actionKey) {
+        case "hide":
+          return onHideMenuPress();
+
+        case "report":
+          return onReportMenuPress();
+
+        default:
+          throw new Error("Unknown action.");
+      }
+    },
+    [onHideMenuPress, onReportMenuPress]
+  );
+
+  //
+  // Render.
+  //
 
   return (
     <Link
@@ -143,21 +261,34 @@ export const Post: FC<PostProps> = props => {
           </Link>
           <Content>
             <InfoRow>
-              <Link
-                href={{
-                  pathname: `${routePrefix}/profile/[entity]` as any,
-                  params: {entity: authorEntity},
-                }}
-                asChild
-              >
-                <AuthorNameButton>
-                  <AuthorName numberOfLines={1}>{authorName}</AuthorName>
-                </AuthorNameButton>
-              </Link>
-              <AuthorEntity numberOfLines={1}>{authorEntity}</AuthorEntity>
-              <DateText>
-                <RelativeDateFormatter value={date} />
-              </DateText>
+              <InfoRowText>
+                <Link
+                  href={{
+                    pathname: `${routePrefix}/profile/[entity]` as any,
+                    params: {entity: authorEntity},
+                  }}
+                  asChild
+                >
+                  <AuthorNameButton>
+                    <AuthorName numberOfLines={1}>{authorName}</AuthorName>
+                  </AuthorNameButton>
+                </Link>
+                <AuthorEntity numberOfLines={1}>{authorEntity}</AuthorEntity>
+                <DateText>
+                  <RelativeDateFormatter value={date} />
+                </DateText>
+              </InfoRowText>
+              <MenuButton>
+                <ContextMenuButton
+                  isMenuPrimaryAction
+                  menuConfig={menuConfig}
+                  onPressMenuItem={onMenuPress}
+                >
+                  <MenuButtonIcon>
+                    <EllipsisHorizontalIcon />
+                  </MenuButtonIcon>
+                </ContextMenuButton>
+              </MenuButton>
             </InfoRow>
             <BodyText>
               <PostText
