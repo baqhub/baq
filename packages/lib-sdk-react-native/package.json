@@ -24,21 +24,21 @@
   "dependencies": {
     "@baqhub/sdk": "^0.1.7",
     "@baqhub/sdk-react": "^0.1.7",
-    "@react-native-async-storage/async-storage": "^1.21.0",
+    "@react-native-async-storage/async-storage": "^1.23.1",
     "base-64": "^1.0.0",
     "react-native-fetch-api": "^3.0.0",
-    "react-native-get-random-values": "~1.8.0",
+    "react-native-get-random-values": "~1.11.0",
     "react-native-polyfill-globals": "^3.1.0",
     "react-native-url-polyfill": "^2.0.0",
     "text-encoding": "^0.7.0",
     "tslib": "^2.6.2",
-    "web-streams-polyfill": "^3.3.2"
+    "web-streams-polyfill": "^3.3.3"
   },
   "peerDependencies": {
     "react-native": ">=0.60"
   },
   "devDependencies": {
-    "@types/node": "20.12.7",
+    "@types/node": "20.12.12",
     "tsconfig-to-dual-package": "1.2.0",
     "typescript": "5.3.3"
   }

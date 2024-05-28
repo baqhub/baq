@@ -13,18 +13,18 @@
   "dependencies": {
     "@baqhub/sdk-react": "*",
     "@baqhub/ui": "*",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   },
   "devDependencies": {
     "@baqhub/config-web": "*",
-    "@types/react": "18.2.79",
-    "@types/react-dom": "18.2.25",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
     "autoprefixer": "10.4.19",
     "postcss": "8.4.38",
     "tailwindcss": "3.4.3",
     "typescript": "5.3.3",
-    "vite": "5.2.9",
-    "wrangler": "3.51.2"
+    "vite": "5.2.11",
+    "wrangler": "3.57.1"
   }
 }
