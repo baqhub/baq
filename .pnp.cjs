@@ -1076,7 +1076,7 @@ const RAW_RUNTIME_STATE =
           ["@types/lodash", "npm:4.17.4"],\
           ["@types/react", "npm:18.3.3"],\
           ["lodash", "npm:4.17.21"],\
-          ["react", "npm:18.2.0"],\
+          ["react", "npm:18.3.1"],\
           ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
         ],\
         "linkType": "SOFT"\
