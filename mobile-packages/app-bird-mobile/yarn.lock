@@ -1867,6 +1867,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@dominicstop/ts-event-emitter@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@dominicstop/ts-event-emitter@npm:1.1.0"
+  checksum: 10c0/fe16c03132736a0a798c232636ab6b127fd8063509511ccafbd99405c224a106cfb7a8d4af13c4f6f412ec0ea3baae3678aa2c8c09d81c9985c423d476404e1a
+  languageName: node
+  linkType: hard
+
 "@egjs/hammerjs@npm:^2.0.17":
   version: 2.0.17
   resolution: "@egjs/hammerjs@npm:2.0.17"
@@ -4717,6 +4724,8 @@ __metadata:
     react-native-gesture-handler: "npm:~2.14.0"
     react-native-get-random-values: "npm:~1.8.0"
     react-native-heroicons: "npm:^3.2.0"
+    react-native-ios-context-menu: "npm:^2.5.1"
+    react-native-ios-utilities: "npm:^4.4.5"
     react-native-reanimated: "npm:~3.6.2"
     react-native-safe-area-context: "npm:4.8.2"
     react-native-screens: "npm:~3.29.0"
@@ -11984,6 +11993,31 @@ __metadata:
     react: ">=16.8"
     react-native-svg: ">=9"
   checksum: 10c0/d16a87d67d970de698d44d478e7cdc51403599bdb681c2ab14f0523ba06b9eb5e852626c67005809f04a7e85e58287aa7497a1851d00cc147a437ce6c49a67b1
+  languageName: node
+  linkType: hard
+
+"react-native-ios-context-menu@npm:^2.5.1":
+  version: 2.5.1
+  resolution: "react-native-ios-context-menu@npm:2.5.1"
+  dependencies:
+    "@dominicstop/ts-event-emitter": "npm:^1.1.0"
+  peerDependencies:
+    expo: "*"
+    react: "*"
+    react-native: "*"
+    react-native-ios-utilities: 4.4.x
+  checksum: 10c0/39147b0f9c03a2df89dd94a440d3fe3facf3d6a016b5508de53f93a5f50506f81211f8373b99162ba58a0084cb89fede117b677af965ecfb3258ef7ae70cedb2
+  languageName: node
+  linkType: hard
+
+"react-native-ios-utilities@npm:^4.4.5":
+  version: 4.4.5
+  resolution: "react-native-ios-utilities@npm:4.4.5"
+  peerDependencies:
+    expo: "*"
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/acaf0295653f9dbc13e9f5de5ee56e5cec3d9758287cdffd1ab114748d3d8a391423afde594278ce8c65f4510179cc0f2dc2fbdd23870d4bb30c5704d25df872
   languageName: node
   linkType: hard
 

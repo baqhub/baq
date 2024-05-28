@@ -68,7 +68,6 @@ const AuthorNameButton = tw(Pressable)`
 `;
 
 const AuthorName = tw(Text)`
-  shrink
   text-[16px]
   font-semibold
   text-neutral-800
@@ -84,7 +83,7 @@ const AuthorEntity = tw(Text)`
 `;
 
 const DateText = tw(Text)`
-  flex-1
+  grow
   shrink-0
 
   text-right
@@ -176,7 +175,7 @@ const menuConfig: MenuConfig = {
 export const Post: FC<PostProps> = props => {
   const {routePrefix, proxyEntity, postKey} = props;
   const {authorEntity, authorName, text, textMentions, date} = props;
-  const {onHidePress, onReportPress} = props;
+  const {canActOnPost, onHidePress, onReportPress} = props;
 
   //
   // Menu actions.
@@ -278,17 +277,19 @@ export const Post: FC<PostProps> = props => {
                   <RelativeDateFormatter value={date} />
                 </DateText>
               </InfoRowText>
-              <MenuButton>
-                <ContextMenuButton
-                  isMenuPrimaryAction
-                  menuConfig={menuConfig}
-                  onPressMenuItem={onMenuPress}
-                >
-                  <MenuButtonIcon>
-                    <EllipsisHorizontalIcon />
-                  </MenuButtonIcon>
-                </ContextMenuButton>
-              </MenuButton>
+              {canActOnPost && (
+                <MenuButton>
+                  <ContextMenuButton
+                    isMenuPrimaryAction
+                    menuConfig={menuConfig}
+                    onPressMenuItem={onMenuPress}
+                  >
+                    <MenuButtonIcon>
+                      <EllipsisHorizontalIcon />
+                    </MenuButtonIcon>
+                  </ContextMenuButton>
+                </MenuButton>
+              )}
             </InfoRow>
             <BodyText>
               <PostText
