@@ -791,7 +791,7 @@ __metadata:
     "@baqhub/sdk-react": "npm:^0.1.7"
     "@baqhub/sdk-react-native": "npm:^0.1.7"
     "@types/node": "npm:20.12.12"
-    expo-secure-store: "npm:^13.0.1"
+    expo-secure-store: "npm:^12.8.1"
     tsconfig-to-dual-package: "npm:1.2.0"
     tslib: "npm:2.6.2"
     typescript: "npm:5.3.3"
@@ -818,11 +818,11 @@ __metadata:
   dependencies:
     "@baqhub/sdk": "npm:^0.1.7"
     "@baqhub/sdk-react": "npm:^0.1.7"
-    "@react-native-async-storage/async-storage": "npm:^1.23.1"
+    "@react-native-async-storage/async-storage": "npm:^1.21.0"
     "@types/node": "npm:20.12.12"
     base-64: "npm:^1.0.0"
     react-native-fetch-api: "npm:^3.0.0"
-    react-native-get-random-values: "npm:~1.11.0"
+    react-native-get-random-values: "npm:~1.8.0"
     react-native-polyfill-globals: "npm:^3.1.0"
     react-native-url-polyfill: "npm:^2.0.0"
     text-encoding: "npm:^0.7.0"
@@ -2488,7 +2488,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-async-storage/async-storage@npm:^1.23.1":
+"@react-native-async-storage/async-storage@npm:^1.21.0":
   version: 1.23.1
   resolution: "@react-native-async-storage/async-storage@npm:1.23.1"
   dependencies:
@@ -5839,12 +5839,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-secure-store@npm:^13.0.1":
-  version: 13.0.1
-  resolution: "expo-secure-store@npm:13.0.1"
+"expo-secure-store@npm:^12.8.1":
+  version: 12.8.1
+  resolution: "expo-secure-store@npm:12.8.1"
   peerDependencies:
     expo: "*"
-  checksum: 10c0/e74bebb7c9a35c22031805b1eee37f93c88efb0b247b70afb781fc272ca3ba65b0fe86b3abc45ea60350d223e6a9f76f2007b4a9da5f1dd98f43d9e8adc13816
+  checksum: 10c0/eb15637da244cf6cebd3a0e742ecd00d2bf9818716b13dc545d8497e236787b0f044d179dc267d14a9f99e56004738a2647e2b7d3023ca1d0cbc768618e56b66
   languageName: node
   linkType: hard
 
@@ -9519,14 +9519,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-get-random-values@npm:~1.11.0":
-  version: 1.11.0
-  resolution: "react-native-get-random-values@npm:1.11.0"
+"react-native-get-random-values@npm:~1.8.0":
+  version: 1.8.0
+  resolution: "react-native-get-random-values@npm:1.8.0"
   dependencies:
     fast-base64-decode: "npm:^1.0.0"
   peerDependencies:
     react-native: ">=0.56"
-  checksum: 10c0/2ce71f1ab7f5b36d4a9dd59cc80b4aa75526f047c6680a7f1a388fa8b9a62efdacaf7b7de3be593c73e882773b2eee74916b00f7c8b158e40b46388998218586
+  checksum: 10c0/1a220a1f27afc163db78147d7cb097dfa9b2eab9976465bf1a2f6f10429d773204651b14e03eee7950eb8295596f67fc286f68c3b2fd259d7128f540024f20de
   languageName: node
   linkType: hard
 
