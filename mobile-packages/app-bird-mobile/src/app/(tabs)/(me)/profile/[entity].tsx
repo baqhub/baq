@@ -16,10 +16,6 @@ import {ProfileScreen} from "../../../../components/screens/profileScreen";
 
 const MeProfileScreen: FC = () => {
   const {entity} = useLocalSearchParams<{entity: string}>();
-  if (!entity) {
-    throw new Error("Param is needed.");
-  }
-
   const navigation = useNavigation();
   const isInitial = useConstant(() => navigation.getState().index === 0);
   const title = isInitial ? "My Profile" : "Profile";

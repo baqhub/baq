@@ -9,10 +9,6 @@ import {ProfileScreen} from "../../../../components/screens/profileScreen";
 
 const MentionsProfileScreen: FC = () => {
   const {entity} = useLocalSearchParams<{entity: string}>();
-  if (!entity) {
-    throw new Error("Param is needed.");
-  }
-
   return (
     <ProxyStore entity={entity}>
       <Stack.Screen options={{title: "Profile"}} />
