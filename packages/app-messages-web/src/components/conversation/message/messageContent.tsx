@@ -15,12 +15,11 @@ interface MessageContentProps {
 // Style.
 //
 
-const Layout = tw(Column)`
-  gap-2
-`;
+const Layout = tw(Column)``;
 
 const Images = tw(Column)`
   p-2
+  pb-0
   gap-2
 `;
 
