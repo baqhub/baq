@@ -4,3 +4,162 @@ export const metadata = {
 };
 
 # Using the CLI
+
+The BAQ CLI is an helpful tool to manage the record types used in your application, whether you choose to create them yourself or use existing ones.
+
+{props.toc}
+
+For a list of all commands see the [CLI reference](6bf5f232).
+
+## Installation
+
+The BAQ CLI is distributed as an NPM package. It can be installed globally:
+
+```cli
+npm install -g @baqhub/cli
+baq help
+```
+
+Or locally within a project:
+
+```cli
+npm install -D @baqhub/cli
+npx baq help
+```
+
+## Initialize a BAQ project
+
+For the BAQ CLI to manage record types in an application, it needs a [project file](06fc3177). To create it, initialize a new project like this:
+
+```cli
+baq init
+```
+
+This command will prompt for the following questions:
+
+- **Where should the project be created?**
+
+  Point it towards the root folder of the app project.
+
+- **What's the user-facing name of this project?**
+
+  This is the name users will see when they authorize the app.
+
+- **What type of project is this?**
+
+  Different files will be generated depending on the project type.
+
+- **Where should the project files live?**
+
+  This is where auto-generated JS/TS files will be created.
+
+After this, a `baq.json` file is created:
+
+```json
+{
+  "name": "Cool BAQ app",
+  "type": "ts-react",
+  "path": "src/baq",
+  "record_types": {}
+}
+```
+
+This file can be updated with other [CLI commands](6bf5f232), or directly by hand.
+
+## Import existing record types
+
+Record types are BAQ records themselves and are identified by their author entity and record ID. A record type can be imported into the current project like this:
+
+```cli
+baq add types.baq.dev+fe727f22b5c34fb185a370449e4f0128
+```
+
+This is a record type for a single task in a todo app and its intrinsic name `task` will be used by default. If needed, a different name can be specified during import:
+
+```cli
+baq add types.baq.dev+fe727f22b5c34fb185a370449e4f0128 todo
+```
+
+This will name it `todo` instead within the current project. This can be helpful to avoid conflicts, or for naming consistency within your app.
+
+#### Remove a record type
+
+When a record type is no longer needed it can be removed from the current project by its short name like this:
+
+```cli
+baq remove task
+```
+
+## Publish new record types
+
+When a suitable record type does not already exist, it can be necessary to create and publish a new one. It starts by creating the JSON file with the record type definition:
+
+```json
+{
+  "name": "task",
+  "icon_name": "task_alt",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "content": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "description": "Title of the task.",
+            "type": "string",
+            "max_length": 128
+          },
+          "completed": {
+            "description": "Whether the task was completed.",
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+The record type can now be added to the project:
+
+```cli
+baq add src/types/task.json
+```
+
+This will track the local type in the project file, getting it ready for publication, and generate the corresponding code files.
+
+#### Authentication
+
+The record type needs to be published to a BAQ server before the app can be made publicly available. Authenticate the BAQ CLI with a server by providing an entity:
+
+```cli
+baq login username.host.com
+```
+
+This will open a browser window to complete the authentication flow and obtain a code that can then be copy/pasted to complete the process.
+
+#### Publishing
+
+All local record types can be published with a single command:
+
+```cli
+baq publish
+```
+
+This will create new records for newly created types, and update existing records for modified types.
+
+## Rebuild code files
+
+Whenever changes are made to the `baq.json` project file, or to local record type definitions, the corresponding auto-generated code files may need to be updated.
+
+This can be triggered manually with:
+
+```cli
+baq
+```
+
+Or automatically every time a change is detected with:
+
+```cli
+baq watch
+```
