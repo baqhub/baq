@@ -5,7 +5,7 @@ import {useRecordHelpers} from "../baq/store.js";
 import {useHomeContext} from "./homeState.js";
 
 export function useFileDropState() {
-  const {entity, client, updateRecords} = useRecordHelpers();
+  const {entity, updateRecords, uploadBlob} = useRecordHelpers();
   const {folderLink, isLoading, isUniqueItemName} = useHomeContext();
 
   const findUniqueFileName = useCallback(
@@ -40,7 +40,7 @@ export function useFileDropState() {
         return;
       }
 
-      const blob = await client.uploadBlob(file);
+      const blob = await uploadBlob(file);
       const record = FileRecord.new(entity, {
         blob: BlobLink.new(blob, file.type, name.trim()),
         size: blob.size,
@@ -48,7 +48,14 @@ export function useFileDropState() {
       });
       updateRecords([record]);
     },
-    [isLoading, findUniqueFileName, client, entity, folderLink, updateRecords]
+    [
+      isLoading,
+      findUniqueFileName,
+      entity,
+      folderLink,
+      updateRecords,
+      uploadBlob,
+    ]
   );
 
   return {onFileDrop};

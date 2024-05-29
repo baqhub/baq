@@ -77,6 +77,7 @@ interface State<T extends AnyRecord> {
   lastQueryId: number;
   mutations: ReadonlyArray<Mutation<T>>;
   mutationsSubscriptions: ReadonlyArray<Subscription>;
+  blobUrls: Map<string, string>;
   isUpdating: boolean;
 }
 
@@ -169,6 +170,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
       lastQueryId: 0,
       mutations: [],
       mutationsSubscriptions: [],
+      blobUrls: new Map(),
       isUpdating: false,
     });
 
@@ -643,12 +645,31 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     // Helpers.
     //
 
+    const uploadBlob = useCallback(
+      async (blob: Blob, signal?: AbortSignal) => {
+        const blobResponse = await client.uploadBlob(blob, signal);
+
+        // TODO: Memory management.
+        // TODO: React Native compatibility.
+        const blobUrl = URL.createObjectURL(blob);
+        stateRef.current.blobUrls.set(blobResponse.hash, blobUrl);
+
+        return blobResponse;
+      },
+      [client]
+    );
+
     const buildBlobUrl = useCallback(
       <R extends T>(
         record: R,
         blob: AnyBlobLink,
         expiresInSeconds?: number
       ) => {
+        const blobUrl = stateRef.current.blobUrls.get(blob.hash);
+        if (blobUrl) {
+          return blobUrl;
+        }
+
         return blobUrlBuilder(record, blob, expiresInSeconds);
       },
       [blobUrlBuilder]
@@ -665,6 +686,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         client,
         versions,
         updateRecords,
+        uploadBlob,
         buildBlobUrl,
         onDisconnectRequest: onDisconnectRequestStable,
         subscribeToState,
@@ -683,6 +705,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
       client,
       versions,
       updateRecords,
+      uploadBlob,
       buildBlobUrl,
       onDisconnectRequestStable,
       subscribeToState,

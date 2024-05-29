@@ -1,6 +1,7 @@
 import {
   AnyBlobLink,
   AnyRecord,
+  BlobResponse,
   Client,
   Handler,
   NoContentRecord,
@@ -51,6 +52,7 @@ export interface StoreContextProps<T extends AnyRecord> {
     blob: AnyBlobLink,
     expiresInSeconds?: number
   ) => string;
+  uploadBlob: (blob: Blob, signal?: AbortSignal) => Promise<BlobResponse>;
   onDisconnectRequest: Handler;
   // Internal.
   subscribeToState: (callback: () => void) => () => void;

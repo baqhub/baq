@@ -28,7 +28,7 @@ export function buildHelpers<T extends AnyRecord>(
   proxyEntity: string
 ) {
   const {entity, client, versions, getStateSnapshot} = store;
-  const {updateRecords, buildBlobUrl, onDisconnectRequest} = store;
+  const {updateRecords, uploadBlob, buildBlobUrl, onDisconnectRequest} = store;
   return {
     entity,
     proxyEntity,
@@ -39,6 +39,7 @@ export function buildHelpers<T extends AnyRecord>(
     findRecordByQuery: accessors.findRecordByQuery(getStateSnapshot),
     findEntityRecord: accessors.findEntityRecord(getStateSnapshot),
     updateRecords,
+    uploadBlob,
     buildBlobUrl,
     onDisconnectRequest,
   };

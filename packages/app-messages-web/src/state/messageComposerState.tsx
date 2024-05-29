@@ -36,7 +36,7 @@ export interface PendingImage {
 export function useMessageComposerState(
   conversationKey: ConversationRecordKey
 ) {
-  const {entity, client, recordByKey, updateRecords} = useRecordHelpers();
+  const {entity, recordByKey, updateRecords, uploadBlob} = useRecordHelpers();
   const [images, setImages] = useState<ReadonlyArray<PendingImage>>([]);
   const [text, setText] = useState("");
 
@@ -102,10 +102,10 @@ export function useMessageComposerState(
 
       const [smallResponse, mediumResponse, largeResponse, originalResponse] =
         await Promise.all([
-          client.uploadBlob(smallBlob, signal),
-          client.uploadBlob(mediumBlob, signal),
-          client.uploadBlob(largeBlob, signal),
-          client.uploadBlob(originalBlob, signal),
+          uploadBlob(smallBlob, signal),
+          uploadBlob(mediumBlob, signal),
+          uploadBlob(largeBlob, signal),
+          uploadBlob(originalBlob, signal),
         ]);
 
       const image: MessageRecordImage = {
@@ -124,7 +124,7 @@ export function useMessageComposerState(
 
       onImageUpload(id, image);
     });
-  }, [client, pendingToUpload, onThumbnail, onImageUpload]);
+  }, [uploadBlob, pendingToUpload, onThumbnail, onImageUpload]);
 
   const onSendRequest = useCallback(() => {
     // Create the new message record.
