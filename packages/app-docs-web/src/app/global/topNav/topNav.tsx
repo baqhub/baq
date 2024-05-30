@@ -1,8 +1,12 @@
 import {Column, Row, tw} from "@baqhub/ui/core/style.jsx";
+import {DiscordIcon} from "@baqhub/ui/icons/filled/discord.jsx";
+import {GithubIcon} from "@baqhub/ui/icons/filled/github.jsx";
 import type {FC} from "react";
 import {Link} from "../link.jsx";
 import {Text} from "../style.jsx";
 import {TopNavItem} from "./topNavItem.jsx";
+import {TopNavLink} from "./topNavLink.jsx";
+import {TopNavTheme} from "./topNavTheme.jsx";
 
 //
 // Style.
@@ -60,6 +64,27 @@ const Items = tw(Row)`
   gap-2
 `;
 
+const Links = tw(Row)`
+  hidden
+  sm:flex
+
+  px-1.5
+  gap-4
+`;
+
+const Separator = tw.div`
+  hidden
+  sm:block
+
+  w-1.5
+  h-1.5
+  mx-2
+
+  rounded-full
+  bg-zinc-300
+  dark:bg-zinc-600
+`;
+
 const Spacer = tw.div`
   grow
 `;
@@ -83,6 +108,19 @@ export const TopNav: FC = () => {
               <TopNavItem to="/docs/reference">Reference</TopNavItem>
               <TopNavItem to="/blog">Blog</TopNavItem>
             </Items>
+            <Separator />
+            <Links>
+              <TopNavLink href="https://discord.gg/jg9wMG9s83">
+                <DiscordIcon />
+              </TopNavLink>
+              <TopNavLink href="https://github.com/baqhub/baq">
+                <GithubIcon />
+              </TopNavLink>
+            </Links>
+            <Separator />
+            <Links>
+              <TopNavTheme />
+            </Links>
           </Center>
         </Content>
       </Layout>
