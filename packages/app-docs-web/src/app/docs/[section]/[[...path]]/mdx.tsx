@@ -11,7 +11,7 @@ export const MdxH1 = tw.h1`
 `;
 
 export const MdxH2 = tw.h2`
-  mt-8
+  mt-12
   mb-5
   pt-6
   [&_+_*]:mt-0
@@ -31,7 +31,7 @@ export const MdxH2 = tw.h2`
 `;
 
 export const MdxH3 = tw.h3`
-  mt-8
+  mt-12
   mb-4
   pt-6
   [&_+_*]:mt-0
@@ -55,7 +55,7 @@ export const MdxH3 = tw.h3`
 `;
 
 export const MdxH4 = tw.h4`
-  mt-6
+  mt-10
   mb-3.5
   [&_+_*]:mt-0
 
@@ -91,8 +91,8 @@ export const MdxUl = tw.ul`
   mt-5
   mb-5
   pl-6
-  [ul_&]:mt-3
-  [ul_&]:mb-3
+  [ul_&]:mt-2
+  [ul_&]:mb-2
 
   list-disc
   marker:text-zinc-600
@@ -115,8 +115,8 @@ export const MdxOl = tw.ol`
 export const MdxLi = tw.li`
   mt-3
   mb-3
-  [&_li]:mt-1.5
-  [&_li]:mb-1.5
+  [&_li]:mt-1
+  [&_li]:mb-1
   [&_>_p]:mt-3
   [&_>_p]:mb-3
   [&_>_&_>_p]:mt-2
@@ -131,9 +131,11 @@ export const MdxProperties = tw.div`
   [&_>_ul]:list-none
   [&_>_ul]:pl-0
   [&_>_ul_>_li_>_ul]:list-none
-  [&_>_ul_>_li]:mb-6
-  [&_>_ul_p]:mt-1.5
-  [&_>_ul_p]:mb-1.5
+  [&_>_ul_>_li_>_ul]:pl-8
+  [&_>_ul_>_li]:mb-9
+  [&_&_>_ul_>_li]:mb-5
+  [&_>_ul_p]:mt-1
+  [&_>_ul_p]:mb-1
 `;
 
 export const MdxA = tw.a`

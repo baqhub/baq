@@ -189,6 +189,7 @@ export interface DocsPageLight {
 }
 
 export interface DocsSubSectionLight {
+  path: string;
   subSection: string;
   pages: ReadonlyArray<DocsPageLight>;
 }
@@ -212,6 +213,7 @@ function subSectionToLight([
 ]: DocsSubSectionData): DocsSubSectionLight {
   const path = slugify(subSection);
   return {
+    path,
     subSection,
     pages: pages.map(p => docsPageToLight(path, p)),
   };
@@ -236,7 +238,7 @@ export function findDocsPage(section: string, path: string | undefined) {
   );
 
   if (!page) {
-    throw new Error("Page not found.");
+    throw new Error("Page not found: " + path);
   }
 
   return page;

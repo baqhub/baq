@@ -95,11 +95,22 @@ const DocsContent = tw.div`
   min-w-0
   lg:max-w-3xl
 
-  pt-8
+  pt-4
+  sm:pt-8
   px-6
   sm:px-8
   lg:px-8
   xl:px-12
+`;
+
+const DocsContentSection = tw.div`
+  sm:hidden
+  mb-3
+
+  text-sm
+  font-semibold
+  text-amber-700
+  dark:text-amber-500
 `;
 
 function headerId(children: ReactNode) {
@@ -140,6 +151,7 @@ const DocsPage: FC<DocsPageProps> = async ({params}) => {
   const {section, path} = params;
   const page = await findDocsPage(section, path?.join("/"));
   const subSections = await listSubSectionsForSection(section);
+  const subSection = subSections.find(s => s.path === path?.[0]);
 
   const headers = findHeaders(
     <page.Component
@@ -165,6 +177,9 @@ const DocsPage: FC<DocsPageProps> = async ({params}) => {
         <DocsLeftNav section={section} subSections={subSections} />
         <DocsCenter>
           <DocsContent>
+            {subSection && (
+              <DocsContentSection>{subSection.subSection}</DocsContentSection>
+            )}
             <page.Component
               toc={toc}
               subPages={subPages}
