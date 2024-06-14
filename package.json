@@ -36,7 +36,7 @@
     "messages:dev": "yarn workspace @baqhub/messages-web dev",
     "messages:build": "yarn workspace @baqhub/messages-web build",
     "messages:deploy": "yarn workspace @baqhub/messages-web deploy",
-    "baq": "yarn workspace @baqhub/files-web baq && yarn workspace @baqhub/messages-web baq && yarn workspace @baqhub/bird-shared baq && yarn workspace @baqhub/emails-web baq && yarn workspace @baqhub/types baq"
+    "baq": "yarn workspace @baqhub/files-web baq && yarn workspace @baqhub/messages-web baq && yarn workspace @baqhub/bird-shared baq && yarn workspace @baqhub/types baq"
   },
   "author": "Baqhub",
   "license": "MIT",
