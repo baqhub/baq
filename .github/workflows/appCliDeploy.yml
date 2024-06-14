@@ -25,7 +25,7 @@ jobs:
       - name: Cache
         uses: actions/setup-node@v4
         with:
-          node-version: 21
+          node-version: 22
           cache: "yarn"
 
       - name: Build
