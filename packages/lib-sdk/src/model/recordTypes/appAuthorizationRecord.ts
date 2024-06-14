@@ -20,7 +20,7 @@ const [appAuthorizationRecordType, RAppAuthorizationRecordType] =
   RecordType.full(
     Constants.typesEntity,
     "378dae797f404dcc9b7446d6d4212d36",
-    "918d3b8db84b751132d34bcbf1b9ba43a0634a32cb7c352d062986100c9b2d47",
+    "d0b72ace928dd5c96fadd01e6bf4e5cdf2cabe1be157027dfbb61ed95665d125",
     AppAuthorizationRecordContent
   );
 

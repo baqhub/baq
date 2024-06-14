@@ -139,7 +139,7 @@ class RecordClassBase<
     const model = IO.object({
       author: EntityLink.io(),
       id: IO.string,
-      source: RRecordSource,
+      source: IO.defaultValue(RRecordSource, RecordSource.SELF),
       createdAt: IO.isoDate,
       receivedAt: IO.union([IO.undefined, IO.isoDate]),
       version: IO.union([IO.undefined, RRecordVersion]),

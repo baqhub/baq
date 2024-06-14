@@ -36,7 +36,7 @@ const AppRecordContent = IO.intersection([
 const [appRecordType, RAppRecordType] = RecordType.full(
   Constants.typesEntity,
   "58d114d7dcd24b1aa1ccbbccfe77634a",
-  "2e244796c10537a51af8349390834306ed791a7fb41757eb3c0e6290436679d2",
+  "a479033f572bcc099b5f2f1e86f2ae803d8bb7092b5d01f013c604d98dedeb54",
   AppRecordContent
 );
 

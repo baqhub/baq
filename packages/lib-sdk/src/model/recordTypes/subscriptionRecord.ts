@@ -26,7 +26,7 @@ export const [subscriptionRecordType, RSubscriptionRecordType] =
   RecordType.full(
     Constants.typesEntity,
     "138304ac29db432f838ad7b178f3cede",
-    "044b9c32c0cc17cf668a6f720e8da186446bb3adbce1cb93a4c459258e3a1b90",
+    "96267b416aeb6b41dde2f86e5e25a0c7373aaa9fd8445b8211916947c04e0a32",
     RSubscriptionRecordContent
   );
 
