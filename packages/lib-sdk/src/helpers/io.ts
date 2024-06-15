@@ -336,17 +336,15 @@ export function listEnumValues<T extends Enum>(sourceEnum: T) {
   return Object.keys(sourceEnum).filter(isStringKey).map(keyToValue);
 }
 
-export function enumeration<T extends Enum>(
-  sourceEnum: T
-): t.Type<T[keyof T], string | number, unknown> {
+function enumerationBase<T extends Enum, R>(name: string, sourceEnum: T) {
   const enumValues = new Set<string | number>(listEnumValues(sourceEnum));
 
-  function isEnumValue(value: unknown): value is T[keyof T] {
+  function isEnumValue(value: unknown): value is R {
     return (isString(value) || isNumber(value)) && enumValues.has(value);
   }
 
   return new t.Type(
-    "Enum",
+    name,
     isEnumValue,
     (value: unknown, context) => {
       if (isEnumValue(value)) {
@@ -357,6 +355,12 @@ export function enumeration<T extends Enum>(
     },
     value => value
   );
+}
+
+export function enumeration<T extends Enum>(
+  sourceEnum: T
+): t.Type<T[keyof T], string | number, unknown> {
+  return enumerationBase<T, T[keyof T]>("Enum", sourceEnum);
 }
 
 type StringEnum = {[key: string]: string};
@@ -364,53 +368,37 @@ type StringEnum = {[key: string]: string};
 export function weakEnumeration<T extends StringEnum>(
   sourceEnum: T
 ): t.Type<`${T[keyof T]}`, string, unknown> {
-  const enumValues = new Set<string | number>(listEnumValues(sourceEnum));
-
-  function isEnumValue(value: unknown): value is `${T[keyof T]}` {
-    return (isString(value) || isNumber(value)) && enumValues.has(value);
-  }
-
-  return new t.Type(
-    "WeakEnum",
-    isEnumValue,
-    (value: unknown, context) => {
-      if (isEnumValue(value)) {
-        return t.success(value);
-      }
-
-      return t.failure(value, context);
-    },
-    value => value
-  );
+  return enumerationBase<T, `${T[keyof T]}`>("WeakEnum", sourceEnum);
 }
 
 interface EnumerationWithValuesOptions {
   isCaseSensitive: boolean;
 }
 
-export function enumerationWithValues<T extends Enum>(
+function enumerationWithValuesBase<T extends Enum, R extends string | number>(
+  name: string,
   sourceEnum: T,
-  values: {[K in T[keyof T]]: string},
+  values: {[K in R]: string},
   {isCaseSensitive}: EnumerationWithValuesOptions = {isCaseSensitive: true}
-): t.Type<T[keyof T], string, unknown> {
+) {
   // Case sensitivity.
   const valueTransform = isCaseSensitive ? identity : toLower;
 
   // Mapper.
   const invertedValues = map(
     values,
-    (value, key) => [valueTransform(value), key as any as T[keyof T]] as const
+    (value, key) => [valueTransform(value), key as any as R] as const
   );
   const valueMap = new Map(invertedValues);
 
   // Type guard.
   const enumValues = new Set<string | number>(listEnumValues(sourceEnum));
-  function isEnumValue(value: unknown): value is T[keyof T] {
+  function isEnumValue(value: unknown): value is R {
     return (isString(value) || isNumber(value)) && enumValues.has(value);
   }
 
   return new t.Type(
-    "EnumWithValues",
+    name,
     isEnumValue,
     (value: unknown, context) => {
       const enumValue = isString(value) && valueMap.get(valueTransform(value));
@@ -421,6 +409,32 @@ export function enumerationWithValues<T extends Enum>(
       return t.success(enumValue);
     },
     value => values[value]
+  );
+}
+
+export function enumerationWithValues<T extends Enum>(
+  sourceEnum: T,
+  values: {[K in T[keyof T]]: string},
+  options?: EnumerationWithValuesOptions
+): t.Type<T[keyof T], string, unknown> {
+  return enumerationWithValuesBase(
+    "EnumWithValues",
+    sourceEnum,
+    values,
+    options
+  );
+}
+
+export function weakEnumerationWithValues<T extends Enum>(
+  sourceEnum: T,
+  values: {[K in `${T[keyof T]}`]: string},
+  options?: EnumerationWithValuesOptions
+): t.Type<`${T[keyof T]}`, string, unknown> {
+  return enumerationWithValuesBase(
+    "WeakEnumWithValues",
+    sourceEnum,
+    values,
+    options
   );
 }
 

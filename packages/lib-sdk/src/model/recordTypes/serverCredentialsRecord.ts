@@ -14,7 +14,7 @@ export enum CredentialsAlgorithm {
   ED25519 = "ed25519",
 }
 
-const RCredentialsAlgorithm = IO.enumeration(CredentialsAlgorithm);
+const RCredentialsAlgorithm = IO.weakEnumeration(CredentialsAlgorithm);
 
 const ServerCredentialsRecordContent = IO.object({
   app: RecordLink.io(AppRecord),

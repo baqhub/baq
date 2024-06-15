@@ -15,7 +15,7 @@ import {HttpSignatureInput} from "./httpSignatureInput.js";
 export interface HttpBearerSignature {
   id: string;
   timestamp: number;
-  algorithm: CredentialsAlgorithm;
+  algorithm: `${CredentialsAlgorithm}`;
   signature: Uint8Array;
 }
 

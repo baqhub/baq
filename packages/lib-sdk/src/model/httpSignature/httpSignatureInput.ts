@@ -17,7 +17,7 @@ export interface HttpSignatureInput {
   pathAndQuery: string;
   host: string;
   port: number;
-  headerValues: Map<HttpSignatureHeader, string>;
+  headerValues: Map<`${HttpSignatureHeader}`, string>;
 }
 
 //
@@ -41,7 +41,7 @@ function signatureInputFromRequest(
       result.set(signatureHeader, value);
       return result;
     },
-    new Map<HttpSignatureHeader, string>()
+    new Map<`${HttpSignatureHeader}`, string>()
   );
 
   const urlObj = new URL(url);

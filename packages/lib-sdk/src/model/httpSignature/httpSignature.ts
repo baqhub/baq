@@ -27,7 +27,7 @@ export interface HttpSignature {
   id: string;
   timestamp: number;
   nonce: string;
-  headers: ReadonlyArray<HttpSignatureHeader>;
+  headers: ReadonlyArray<`${HttpSignatureHeader}`>;
   algorithm: CredentialsAlgorithm;
   signature: Uint8Array;
 }

@@ -1,5 +1,5 @@
 import {Constants} from "../../constants.js";
-import {enumerationWithValues} from "../../helpers/io.js";
+import * as IO from "../../helpers/io.js";
 
 const {
   clientIdHeader,
@@ -20,7 +20,7 @@ export enum HttpSignatureHeader {
   LAST_EVENT_ID = "LAST_EVENT_ID",
 }
 
-export const RHttpSignatureHeader = enumerationWithValues(
+export const RHttpSignatureHeader = IO.weakEnumerationWithValues(
   HttpSignatureHeader,
   {
     [HttpSignatureHeader.RANGE]: "range",

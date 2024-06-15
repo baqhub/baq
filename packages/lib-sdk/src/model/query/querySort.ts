@@ -24,7 +24,7 @@ export type QuerySort = [string, `${QuerySortDirection}`];
 // I/O.
 //
 
-const querySortDirectionMap: {[K in QuerySortDirection]: string} = {
+const querySortDirectionMap: {[K in `${QuerySortDirection}`]: string} = {
   [QuerySortDirection.ASCENDING]: "asc",
   [QuerySortDirection.DESCENDING]: "desc",
 };
