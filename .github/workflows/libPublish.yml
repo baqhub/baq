@@ -22,9 +22,12 @@ jobs:
           node-version: 22
           cache: "yarn"
 
-      - name: Build
+      - name: Install
         run: |
           yarn install --immutable
+
+      - name: Build
+        run: |
           yarn lib-sdk:build
           yarn lib-sdk-react:build
           yarn lib-sdk-react-dom:build
