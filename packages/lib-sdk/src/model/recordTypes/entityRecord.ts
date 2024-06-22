@@ -27,7 +27,7 @@ const REntityRecordServerEndpoints = IO.object({
 
 const REntityRecordServer = IO.object({
   version: IO.literal("1.0.0"),
-  preference: IO.Int,
+  preference: IO.number,
   endpoints: REntityRecordServerEndpoints,
 });
 
@@ -48,7 +48,7 @@ const EntityRecordContent = IO.object({
 const [entityRecordType, REntityRecordType] = RecordType.full(
   Constants.typesEntity,
   "80be958368dd414fabb9420647daa1ec",
-  "f1b71e39c44434b34bbfc9418dd1de59ba5d4421d32fbeae281c662ef75e1496",
+  "5869ed5eb6b565b92990ecfda31b4eb7e837489cb4799a534c00e3fd6ca756e9",
   EntityRecordContent
 );
 
