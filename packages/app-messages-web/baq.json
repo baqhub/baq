@@ -6,19 +6,19 @@
     "conversation": {
       "path": "src/types/Record.Conversation.1-0-0.json",
       "record_id": "c4094303fe334bd18de6a1f1929c3cad",
-      "version_hash": "a75833f9fb9e2182170f247ea960f4c66a53fa54e9b5509ba1bd9134fa3c1e4b",
+      "version_hash": "70f4a1e95d6d882698dde8f59de00f423dae9b3145246afce6ed040e3ff238e1",
       "content_hash": "00f33175716affc6e61e148c5ca9bfc7"
     },
     "message": {
       "path": "src/types/Record.Message.1-0-0.json",
       "record_id": "05d5b9442c36433688edca64df1a264c",
-      "version_hash": "af2744914b2ffca315ae3c6ad39981635b7adc07019369fb54038b12a1c4fb9d",
+      "version_hash": "8c6fc376e64fa98e816f211064f83eddbd169d9b62757aa76348363d0c4edc7e",
       "content_hash": "ba87bc72c70bde2a3e9bf7aacaef162e"
     },
     "file": {
       "entity": "types.baq.dev",
       "record_id": "2b6f7bc8ffd54c8db8062700c040e04f",
-      "version_hash": "c7b02ad25cf4ecddba9a0a912cd06f9ff73287720e51b84e797f0c048bde55ad"
+      "version_hash": "5ef6b551eb1f4c9deaffe59ea9f4bb04da83d0e33f4b6a6df3224a674281017c"
     }
   },
   "description": "Keep in touch with friends.",

@@ -32,16 +32,16 @@ export class RRecordLinkClass<T extends RAnyRecordType> extends IO.Type<
   unknown
 > {
   constructor(_type?: T) {
-    const model = IO.intersection([
-      IO.object({
+    const model = IO.dualObject(
+      {
         entity: IO.string,
         recordId: IO.string,
-      }),
-      IO.partialObject({
+      },
+      {
         originalEntity: IO.string,
         versionCreatedAt: IO.isoDate,
-      }),
-    ]);
+      }
+    );
 
     super("RecordLink", model.is, model.validate, model.encode);
   }

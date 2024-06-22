@@ -30,7 +30,7 @@ const RFolderRecordContent: IO.RType<FolderRecordContent> = SchemaIO.object(
 const [folderRecordType, RFolderRecordType] = RecordType.full(
   "types.baq.dev",
   "3050fc130d4142a9994af0ef7c89099e",
-  "d5b2f346bcad7418fb987ef141b8951f28d8fea567c65dc28dd01325e80b35de",
+  "da9486074a9accf1d8082739a90f390482891c5deed2ac1b48c4a3a1efb1ef3c",
   RFolderRecordContent
 );
 

@@ -16,15 +16,15 @@ export interface EntityLink {
 
 export class REntityLinkClass extends IO.Type<EntityLink, unknown, unknown> {
   constructor() {
-    const model = IO.intersection([
-      IO.object({
+    const model = IO.dualObject(
+      {
         entity: IO.string,
-      }),
-      IO.partialObject({
+      },
+      {
         originalEntity: IO.string,
         versionCreatedAt: IO.isoDate,
-      }),
-    ]);
+      }
+    );
 
     super("EntityLink", model.is, model.validate, model.encode);
   }

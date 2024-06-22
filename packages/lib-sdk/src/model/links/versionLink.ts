@@ -4,16 +4,16 @@ import * as IO from "../../helpers/io.js";
 // Model.
 //
 
-const RVersionLinkRaw = IO.intersection([
-  IO.object({
+const RVersionLinkRaw = IO.dualObject(
+  {
     entity: IO.string,
     recordId: IO.string,
     versionHash: IO.string,
-  }),
-  IO.partialObject({
+  },
+  {
     originalEntity: IO.string,
-  }),
-]);
+  }
+);
 
 export interface VersionLink extends IO.TypeOf<typeof RVersionLinkRaw> {}
 export const RVersionLink = IO.clean<VersionLink>(RVersionLinkRaw);
