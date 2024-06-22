@@ -73,8 +73,13 @@ export interface NoContentRecord {
   createdAt: Date;
   receivedAt: Date | undefined;
   version: RecordVersion<NoContentRecord> | undefined;
+  permissions: RecordPermissions;
 
-  noContent: {action: `${NoContentRecordAction}`};
+  type: AnyRecordType;
+  noContent: {
+    action: `${NoContentRecordAction}`;
+    links?: unknown;
+  };
   mode: `${RecordMode}`;
 }
 
@@ -220,10 +225,17 @@ export const RNoContentRecord: IO.Type<NoContentRecord> = IO.object({
   createdAt: IO.isoDate,
   receivedAt: IO.union([IO.undefined, IO.isoDate]),
   version: IO.union([IO.undefined, RRecordVersion]),
+  permissions: RRecordPermissions,
 
-  noContent: IO.object({
-    action: RNoContentRecordAction,
-  }),
+  type: RAnyRecordType,
+  noContent: IO.dualObject(
+    {
+      action: RNoContentRecordAction,
+    },
+    {
+      links: IO.unknown,
+    }
+  ),
   mode: IO.defaultValue(RRecordMode, RecordMode.SYNCED),
 });
 
@@ -347,7 +359,9 @@ function buildNoContentRecord(
       receivedAt: undefined,
       parentHash: record.version?.hash,
     },
+    permissions: record.permissions,
 
+    type: record.type,
     noContent: {action},
     mode: record.mode,
   };

@@ -7,6 +7,7 @@ import * as IO from "../../helpers/io.js";
 export interface EntityLink {
   entity: string;
   originalEntity?: string;
+  versionCreatedAt?: Date;
 }
 
 //
@@ -21,6 +22,7 @@ export class REntityLinkClass extends IO.Type<EntityLink, unknown, unknown> {
       }),
       IO.partialObject({
         originalEntity: IO.string,
+        versionCreatedAt: IO.isoDate,
       }),
     ]);
 

@@ -21,8 +21,6 @@ export type RRecordType<T, C, E extends string, R extends string> = IO.Type<
   RecordType<T, C, E, R>
 >;
 
-export type RAnyRecordType = RRecordType<any, any, any, any>;
-
 function buildRecordType<E extends string, R extends string>(
   entity: E,
   recordId: R,
@@ -46,6 +44,13 @@ function buildRecordType<E extends string, R extends string>(
 
   return [RType, typeCreator] as const;
 }
+
+export type RAnyRecordType = RRecordType<any, any, any, any>;
+export const RAnyRecordType: RAnyRecordType = IO.object({
+  entity: IO.string,
+  recordId: IO.string,
+  versionHash: IO.string,
+});
 
 function buildRecordTypeFull<
   E extends string,

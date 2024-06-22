@@ -15,6 +15,7 @@ import {
 export interface RecordLink<T extends AnyRecord> {
   entity: string;
   originalEntity?: string;
+  versionCreatedAt?: Date;
   recordId: string;
   _type?: T;
 }
@@ -38,6 +39,7 @@ export class RRecordLinkClass<T extends RAnyRecordType> extends IO.Type<
       }),
       IO.partialObject({
         originalEntity: IO.string,
+        versionCreatedAt: IO.isoDate,
       }),
     ]);
 

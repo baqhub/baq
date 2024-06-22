@@ -30,6 +30,10 @@ jobs:
           yarn lib-sdk-react-dom:build
           yarn lib-cli:build
 
+      - name: Test
+        run: |
+          yarn lib-sdk:test
+
       - name: Publish "lib-sdk"
         uses: JS-DevTools/npm-publish@v2
         with:
