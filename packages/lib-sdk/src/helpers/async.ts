@@ -14,20 +14,20 @@ function throwIfAborted(signal: AbortSignal) {
   throw new AbortedError();
 }
 
-function delay(delayMilliseconds: number, abort: AbortSignal) {
+function delay(delayMilliseconds: number, abort?: AbortSignal) {
   return new Promise<void>((resolve, reject) => {
     const onAbortRequested = () => {
-      abort.removeEventListener("abort", onAbortRequested);
+      abort?.removeEventListener("abort", onAbortRequested);
       clearTimeout(timeoutId);
       reject(new AbortedError());
     };
 
     const timeoutId = setTimeout(() => {
       resolve();
-      abort.removeEventListener("abort", onAbortRequested);
+      abort?.removeEventListener("abort", onAbortRequested);
     }, delayMilliseconds);
 
-    abort.addEventListener("abort", onAbortRequested);
+    abort?.addEventListener("abort", onAbortRequested);
   });
 }
 

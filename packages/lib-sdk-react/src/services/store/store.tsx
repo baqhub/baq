@@ -560,38 +560,71 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         const queryId = ++stateRef.current.lastQueryId;
 
         const performQuery = async () => {
-          try {
-            const response = await client.getRecords(
-              RKnownRecord,
-              RKnownRecord,
-              query
-            );
+          let keepGoing = true;
 
-            const responseRecords = [
-              ...response.linkedRecords,
-              ...response.records,
-            ];
+          while (keepGoing) {
+            keepGoing = false;
 
-            updateRecords(responseRecords, query.proxyTo || entity);
+            try {
+              const response = await client.getRecords(
+                RKnownRecord,
+                RKnownRecord,
+                query
+              );
 
-            updateQueries(value => {
-              const currentQuery = value[queryId];
-              if (!currentQuery) {
-                throw new Error("Query not found.");
+              const responseRecords = [
+                ...response.linkedRecords,
+                ...response.records,
+              ];
+
+              updateRecords(responseRecords, query.proxyTo || entity);
+
+              updateQueries(value => {
+                const currentQuery = value[queryId];
+                if (!currentQuery) {
+                  throw new Error("Query not found.");
+                }
+
+                return {
+                  ...value,
+                  [queryId]: {
+                    ...currentQuery,
+                    promise: undefined,
+                    isComplete: !response.nextPage,
+                    recordVersions: response.records.map(Record.toVersionHash),
+                  },
+                };
+              });
+            } catch (err) {
+              // Permanent error: mark as failed.
+              if (
+                Http.isError(err, [
+                  HttpStatusCode.BAD_REQUEST,
+                  HttpStatusCode.INTERNAL_SERVER_ERROR,
+                ])
+              ) {
+                updateQueries(value => {
+                  const currentQuery = value[queryId];
+                  if (!currentQuery) {
+                    throw new Error("Query not found.");
+                  }
+
+                  return {
+                    ...value,
+                    [queryId]: {
+                      ...currentQuery,
+                      promise: undefined,
+                      error: err,
+                    },
+                  };
+                });
+                return;
               }
 
-              return {
-                ...value,
-                [queryId]: {
-                  ...currentQuery,
-                  promise: undefined,
-                  isComplete: response.records.length < response.pageSize,
-                  recordVersions: response.records.map(Record.toVersionHash),
-                },
-              };
-            });
-          } catch (err) {
-            // Do something with errors.
+              // Transient error: retry.
+              await Async.delay(2000);
+              keepGoing = true;
+            }
           }
         };
 
@@ -602,6 +635,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           isSync,
           isComplete: match?.isComplete || isLocalTracked,
           isDisplayed: false,
+          error: undefined,
           recordVersions: match?.recordVersions,
         };
 
@@ -833,13 +867,14 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         isSync: false,
         isComplete: isLocalTracked,
         isDisplayed: true,
+        error: undefined,
         recordVersions: undefined,
       };
     }, [isFetch, isTracked, isSync, isLocalTracked, requestedQuery]);
 
     const trackedQuery = useQuery<Q>(initialStoreQuery.id);
     const storeQuery = trackedQuery || initialStoreQuery;
-    const {query, promise} = storeQuery;
+    const {query, promise, error} = storeQuery;
 
     useEffect(() => {
       storeQuery.isDisplayed = true;
@@ -965,6 +1000,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
     return {
       isLoading: Boolean(promise),
+      error,
       records,
       deferredRecords,
       getRecords,
@@ -992,7 +1028,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
     const trackedQuery = useQuery<Q>(initialStoreQuery.id);
     const storeQuery = trackedQuery || initialStoreQuery;
-    const {query, promise, recordVersions} = storeQuery;
+    const {query, promise, error, recordVersions} = storeQuery;
 
     useEffect(() => {
       storeQuery.isDisplayed = true;
@@ -1059,6 +1095,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
     return {
       isLoading: Boolean(promise),
+      error,
       hasResults: Boolean(recordVersions),
       records,
       deferredRecords,

@@ -7,6 +7,7 @@ export interface StoreQuery<T extends AnyRecord, Q extends T> {
   isSync: boolean;
   isComplete: boolean;
   isDisplayed: boolean;
+  error: unknown | undefined;
   recordVersions: ReadonlyArray<string> | undefined;
 }
 
