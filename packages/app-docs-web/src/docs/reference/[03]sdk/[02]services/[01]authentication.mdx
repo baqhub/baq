@@ -26,7 +26,7 @@ Authentication.register("alice.baq.run", {...});
 
   - Start registration of the app with the user's server.
 
-  - _Parameters_
+  - ##### Parameters
 
     <props.properties>
 
@@ -46,7 +46,7 @@ Authentication.register("alice.baq.run", {...});
 
     </props.properties>
 
-  - _Return value properties_
+  - ##### Return value properties
 
     <props.properties>
 
@@ -57,6 +57,34 @@ Authentication.register("alice.baq.run", {...});
     - `state` <props.pill href="#authenticationstate">AuthenticationState</props.pill>
 
       - Authentication state to create [authenticated clients](e1ca2823).
+
+    </props.properties>
+
+- **<props.code>complete(state, authorizationId)</props.code>**: <props.pill href="#authenticationstate">AuthenticationState</props.pill>
+
+  - Update the authentication state with the authorization ID obtained after completion of the authorization flow.
+
+  - ##### Parameters
+
+    <props.properties>
+
+    - `state` <props.pill href="#authenticationstate">AuthenticationState</props.pill>
+
+      - Partial authentication state to update.
+
+    - `authorizationId` <props.pill>string</props.pill>
+
+      - Result of the authorization flow.
+
+    </props.properties>
+
+  - ##### Return value
+
+    <props.properties>
+
+    - &ZeroWidthSpace;<props.pill href="#authenticationstate">AuthenticationState</props.pill>
+
+      - Updated state.
 
     </props.properties>
 

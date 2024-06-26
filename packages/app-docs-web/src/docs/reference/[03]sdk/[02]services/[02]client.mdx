@@ -23,21 +23,31 @@ const record = await client.getRecord(...);
 
 <props.properties>
 
-- **<props.code>ofUrl(entityRecordUrl, signal?)</props.code>**: <props.pill>Client</props.pill>
+- **<props.code>ofEntity(entity)</props.code>**: <props.pill>Client</props.pill>
+
+  - Create a new client from a user's entity.
+
+  - ##### Parameters
+
+    <props.properties>
+
+    - `entity` <props.pill href="deae588f#deae588f">Entity</props.pill>
+
+      - Entity of the user.
+
+    </props.properties>
+
+- **<props.code>ofUrl(entityRecordUrl)</props.code>**: <props.pill>Client</props.pill>
 
   - Create a new client from the URL of a user's Entity record.
 
-  - _Parameters_
+  - ##### Parameters
 
     <props.properties>
 
     - `entityRecordUrl` <props.pill>string</props.pill>
 
       - URL of the user's Entity record.
-
-    - `signal` <props.pill href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal">AbortSignal</props.pill> _optional_
-
-      - Signal to abort the request.
 
     </props.properties>
 
@@ -61,7 +71,7 @@ const record = await client.getRecord(...);
 
   - Perform discovery on the provided entity.
 
-  - _Parameters_
+  - ##### Parameters
 
     <props.properties>
 
@@ -75,17 +85,27 @@ const record = await client.getRecord(...);
 
     </props.properties>
 
-- **<props.code>getEntityRecord()</props.code>**: <props.code>Promise\<<props.pill href="375c4ea9">EntityRecord</props.pill>\></props.code>
+- **<props.code>getEntityRecord(signal?)</props.code>**: <props.code>Promise\<<props.pill href="375c4ea9">EntityRecord</props.pill>\></props.code>
 
   - Fetch the user's entity record.
 
   - (Fetched only once, and cached beyond that point).
 
+  - ##### Parameters
+
+    <props.properties>
+
+    - `signal` <props.pill href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal">AbortSignal</props.pill> _optional_
+
+      - Signal to abort the request.
+
+    </props.properties>
+
 - **<props.code>getOwnRecord(linkModel, model, id, opts?)</props.code>**
 
   - Fetch a single of our user's records by ID.
 
-  - _Parameters_
+  - ##### Parameters
 
     <props.properties>
 
@@ -109,7 +129,7 @@ const record = await client.getRecord(...);
 
     </props.properties>
 
-  - _Return value_
+  - ##### Return value
 
     <props.properties>
 
@@ -123,7 +143,7 @@ const record = await client.getRecord(...);
 
   - Fetch a single record by author entity and ID.
 
-  - _Parameters_
+  - ##### Parameters
 
     <props.properties>
 
@@ -151,7 +171,7 @@ const record = await client.getRecord(...);
 
     </props.properties>
 
-  - _Return value_
+  - ##### Return value
 
     <props.properties>
 
@@ -165,7 +185,7 @@ const record = await client.getRecord(...);
 
   - Fetch a list of records from a Query.
 
-  - _Parameters_
+  - ##### Parameters
 
     <props.properties>
 
@@ -187,7 +207,7 @@ const record = await client.getRecord(...);
 
     </props.properties>
 
-  - _Return value_
+  - ##### Return value
 
     <props.properties>
 
@@ -201,7 +221,7 @@ const record = await client.getRecord(...);
 
   - Create a new record.
 
-  - _Parameters_
+  - ##### Parameters
 
     <props.properties>
 
@@ -223,7 +243,7 @@ const record = await client.getRecord(...);
 
     </props.properties>
 
-  - _Return value_
+  - ##### Return value
 
     <props.properties>
 
@@ -237,7 +257,7 @@ const record = await client.getRecord(...);
 
   - Update an existing record.
 
-  - _Parameters_
+  - ##### Parameters
 
     <props.properties>
 
@@ -259,7 +279,7 @@ const record = await client.getRecord(...);
 
     </props.properties>
 
-  - _Return value_
+  - ##### Return value
 
     <props.properties>
 
@@ -273,7 +293,7 @@ const record = await client.getRecord(...);
 
   - Delete a record by updating it with a [record tombstone](/todo).
 
-  - _Parameters_
+  - ##### Parameters
 
     <props.properties>
 
@@ -291,7 +311,7 @@ const record = await client.getRecord(...);
 
     </props.properties>
 
-  - _Return value_
+  - ##### Return value
 
     <props.properties>
 
@@ -305,7 +325,7 @@ const record = await client.getRecord(...);
 
   - Upload a single blob for use in future records.
 
-  - _Parameters_
+  - ##### Parameters
 
     <props.properties>
 
@@ -323,7 +343,7 @@ const record = await client.getRecord(...);
 
   - Download a single blob from a record and blob link.
 
-  - _Parameters_
+  - ##### Parameters
 
     <props.properties>
 
@@ -409,8 +429,7 @@ Building an authenticated client requires an authentication state obtained while
 import {Client, AuthenticationState} from "@baqhub/sdk";
 
 const authStateJson = localStorage.getItem("auth_state");
-const authStateParsed = JSON.parse(authStateJson);
-const authState = AuthenticationState.decode(authStateParsed);
+const authState = AuthenticationState.decodeJSON(authStateJson);
 const client = Client.authenticated(authState);
 
 // Next steps:
@@ -516,7 +535,7 @@ import {PostRecord} from "./baq/postRecord.js";
 
 async function createPostRecord(client, text) {
   const postRecord = PostRecord.new("alice.baq.run", {text});
-  const {record} = client.postRecord(
+  const {record} = await client.postRecord(
     IO.unknown,
     PostRecord,
     postRecord
@@ -536,7 +555,7 @@ In this example we upload an image and add it as avatar to the [Entity record](3
 import {EntityRecord, BlobLink} from "@baqhub/sdk";
 
 async function addAvatar(client, entityRecord, avatarBlob) {
-  const blobResponse = client.uploadBlob(avatarBlob);
+  const blobResponse = await client.uploadBlob(avatarBlob);
   const blobLink = BlobLink.new(
     blobResponse,
     "image/jpeg",

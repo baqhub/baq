@@ -1,6 +1,7 @@
 import UriTemplate from "es6-url-template";
 import compact from "lodash/compact.js";
 import {Constants} from "../constants.js";
+import {Async} from "../helpers/async.js";
 import {ErrorWithData} from "../helpers/customError.js";
 import {findLink} from "../helpers/headers.js";
 import * as IO from "../helpers/io.js";
@@ -42,7 +43,7 @@ type TSRecord<K extends keyof any, T> = {
 };
 
 interface BuildClientOptions {
-  entityRecordTask: Promise<EntityRecord>;
+  getEntityRecord: (signal: AbortSignal) => Promise<EntityRecord>;
   authorizationBuilder?: HttpAuthorizationBuilder;
   bearerBuilder?: HttpBearerBuilder;
 }
@@ -73,17 +74,18 @@ export type BlobUrlBuilder = (
 ) => string;
 
 function buildClientBase(clientOptions: BuildClientOptions) {
-  const {entityRecordTask, authorizationBuilder, bearerBuilder} = clientOptions;
-
-  function getEntityRecord() {
-    return entityRecordTask;
-  }
+  const {
+    getEntityRecord: ger,
+    authorizationBuilder,
+    bearerBuilder,
+  } = clientOptions;
+  const getEntityRecord = Async.sharePromise(ger);
 
   //
   // Template resolution.
   //
 
-  function getEntityUrlTemplate(
+  function getEntityUrlTemplateForRecord(
     entityRecord: EntityRecord,
     endpoint: EntityRecordServerEndpoint
   ) {
@@ -95,18 +97,20 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     return new UriTemplate(firstServer.endpoints[endpoint]);
   }
 
-  async function getEntityUrlTemplateAsync(
-    endpoint: EntityRecordServerEndpoint
+  async function getEntityUrlTemplate(
+    endpoint: EntityRecordServerEndpoint,
+    signal: AbortSignal | undefined
   ) {
-    const entityRecord = await entityRecordTask;
-    return getEntityUrlTemplate(entityRecord, endpoint);
+    const entityRecord = await getEntityRecord(signal);
+    return getEntityUrlTemplateForRecord(entityRecord, endpoint);
   }
 
   async function expandUrlTemplate(
     endpoint: EntityRecordServerEndpoint,
-    values: TSRecord<string, string>
+    values: TSRecord<string, string>,
+    signal: AbortSignal | undefined
   ) {
-    const urlTemplate = await getEntityUrlTemplateAsync(endpoint);
+    const urlTemplate = await getEntityUrlTemplate(endpoint, signal);
     return fixUrl(urlTemplate.expand(values));
   }
 
@@ -121,15 +125,20 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     recordId: string,
     {query, signal}: GetRecordOptions = {}
   ) {
-    const url = await expandUrlTemplate("record", {
-      entity,
-      record_id: recordId,
-    });
+    const url = await expandUrlTemplate(
+      "record",
+      {
+        entity,
+        record_id: recordId,
+      },
+      signal
+    );
+
     const urlAndQuery = url + Query.singleToQueryString(query);
-    const options: HttpOptions = {authorizationBuilder, signal};
+    const httpOptions: HttpOptions = {authorizationBuilder, signal};
 
     const responseModel = recordResponse(knownModel, model);
-    const [, response] = await Api.get(responseModel, urlAndQuery, options);
+    const [, response] = await Api.get(responseModel, urlAndQuery, httpOptions);
     return response;
   }
 
@@ -141,16 +150,21 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     versionHash: string,
     {query, signal}: GetRecordOptions = {}
   ) {
-    const url = await expandUrlTemplate("recordVersion", {
-      entity,
-      record_id: recordId,
-      version_hash: versionHash,
-    });
+    const url = await expandUrlTemplate(
+      "recordVersion",
+      {
+        entity,
+        record_id: recordId,
+        version_hash: versionHash,
+      },
+      signal
+    );
+
     const urlAndQuery = url + Query.singleToQueryString(query);
-    const options: HttpOptions = {authorizationBuilder, signal};
+    const httpOptions: HttpOptions = {authorizationBuilder, signal};
 
     const responseModel = recordResponse(knownModel, model);
-    const [, response] = await Api.get(responseModel, urlAndQuery, options);
+    const [, response] = await Api.get(responseModel, urlAndQuery, httpOptions);
     return response;
   }
 
@@ -160,7 +174,7 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     recordId: string,
     options?: GetRecordOptions
   ) {
-    const entityRecord = await entityRecordTask;
+    const entityRecord = await getEntityRecord(options?.signal);
     return getRecord(
       knownModel,
       model,
@@ -176,12 +190,12 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     query: Query<IO.TypeOf<M>>,
     signal?: AbortSignal
   ) {
-    const url = await expandUrlTemplate("records", {});
+    const url = await expandUrlTemplate("records", {}, signal);
     const urlAndQuery = url + Query.toQueryString(query);
-    const options: HttpOptions = {authorizationBuilder, signal};
+    const httpOptions: HttpOptions = {authorizationBuilder, signal};
 
     const responseModel = recordsResponse(knownModel, model);
-    const [, response] = await Api.get(responseModel, urlAndQuery, options);
+    const [, response] = await Api.get(responseModel, urlAndQuery, httpOptions);
     return response;
   }
 
@@ -191,11 +205,11 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     query: Query<IO.TypeOf<R>>,
     signal: AbortSignal
   ) {
-    const url = await expandUrlTemplate("events", {});
+    const url = await expandUrlTemplate("events", {}, signal);
     const urlAndQuery = url + Query.toQueryString(query);
-    const options: HttpOptions = {authorizationBuilder, signal};
+    const httpOptions: HttpOptions = {authorizationBuilder, signal};
 
-    Api.eventSource(recordModel, onRecord, "record", urlAndQuery, options);
+    Api.eventSource(recordModel, onRecord, "record", urlAndQuery, httpOptions);
   }
 
   async function postRecordBaseAsync<
@@ -208,10 +222,10 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     signal?: AbortSignal,
     options: PostRecordOptions = {}
   ) {
-    const url = await expandUrlTemplate("newRecord", {});
+    const url = await expandUrlTemplate("newRecord", {}, signal);
+    const responseModel = recordResponse(knownModel, recordModel);
     const httpOptions: HttpOptions = {...options, authorizationBuilder, signal};
 
-    const responseModel = recordResponse(knownModel, recordModel);
     return await Api.post(responseModel, recordModel, record, url, httpOptions);
   }
 
@@ -265,13 +279,18 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     record: IO.TypeOf<R>,
     signal?: AbortSignal
   ) {
-    const url = await expandUrlTemplate("record", {
-      entity: record.author.entity,
-      record_id: record.id,
-    });
-    const httpOptions: HttpOptions = {authorizationBuilder, signal};
+    const url = await expandUrlTemplate(
+      "record",
+      {
+        entity: record.author.entity,
+        record_id: record.id,
+      },
+      signal
+    );
 
     const responseModel = recordResponse(knownModel, recordModel);
+    const httpOptions: HttpOptions = {authorizationBuilder, signal};
+
     const [, response] = await Api.put(
       responseModel,
       recordModel,
@@ -288,14 +307,18 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     record: NoContentRecord,
     signal?: AbortSignal
   ) {
-    const url = await expandUrlTemplate("record", {
-      entity: record.author.entity,
-      record_id: record.id,
-    });
+    const url = await expandUrlTemplate(
+      "record",
+      {
+        entity: record.author.entity,
+        record_id: record.id,
+      },
+      signal
+    );
 
     const responseModel = recordResponse(knownModel, RNoContentRecord);
-
     const httpOptions: HttpOptions = {authorizationBuilder, signal};
+
     const [_, response] = await Api.delete(
       responseModel,
       RNoContentRecord,
@@ -337,7 +360,7 @@ function buildClientBase(clientOptions: BuildClientOptions) {
       throw new ErrorWithData("Blob does not have a type.", {blob});
     }
 
-    const url = await expandUrlTemplate("newBlob", {});
+    const url = await expandUrlTemplate("newBlob", {}, signal);
     const headers = {"Content-Type": blob.type};
     const httpOptions: HttpOptions = {authorizationBuilder, headers, signal};
 
@@ -350,12 +373,16 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     blob: AnyBlobLink,
     signal?: AbortSignal
   ) {
-    const url = await expandUrlTemplate("recordBlob", {
-      entity: record.author.entity,
-      record_id: record.id,
-      blob_hash: blob.hash,
-      file_name: blob.name,
-    });
+    const url = await expandUrlTemplate(
+      "recordBlob",
+      {
+        entity: record.author.entity,
+        record_id: record.id,
+        blob_hash: blob.hash,
+        file_name: blob.name,
+      },
+      signal
+    );
 
     const isProxyRecord = record.source === "proxy";
     const query = isProxyRecord ? {proxyTo: record.author.entity} : undefined;
@@ -371,7 +398,11 @@ function buildClientBase(clientOptions: BuildClientOptions) {
   }
 
   function blobUrlBuilderFor(entityRecord: EntityRecord): BlobUrlBuilder {
-    const urlTemplate = getEntityUrlTemplate(entityRecord, "recordBlob");
+    const urlTemplate = getEntityUrlTemplateForRecord(
+      entityRecord,
+      "recordBlob"
+    );
+
     return (record, blob, expiresInSeconds) => {
       const maybeAddBearer = (url: string) => {
         const isProxyRecord = record.source === "proxy";
@@ -418,7 +449,7 @@ function buildClientBase(clientOptions: BuildClientOptions) {
   }
 
   async function blobUrlBuilder() {
-    const entityRecord = await entityRecordTask;
+    const entityRecord = await getEntityRecord();
     return blobUrlBuilderFor(entityRecord);
   }
 
@@ -442,24 +473,54 @@ function buildClientBase(clientOptions: BuildClientOptions) {
   };
 }
 
-function buildClientFromUrl(entityRecordUrl: string, signal?: AbortSignal) {
-  async function getEntityRecordAsyncInternal(entityRecordUrl: string) {
-    const options: HttpOptions = {signal};
-    const responseModel = recordResponse(AnyRecord, EntityRecord);
-    const [, {record}] = await Api.get(responseModel, entityRecordUrl, options);
-    return record;
-  }
-
-  const entityRecordTask = getEntityRecordAsyncInternal(
-    fixUrl(entityRecordUrl)
+async function getEntityRecordFromEntityRecordUrl(
+  entityRecordUrl: string,
+  signal: AbortSignal
+) {
+  const options: HttpOptions = {signal};
+  const responseModel = recordResponse(AnyRecord, EntityRecord);
+  const [, {record}] = await Api.get(
+    responseModel,
+    fixUrl(entityRecordUrl),
+    options
   );
 
-  return buildClientBase({entityRecordTask});
+  return record;
+}
+
+async function getEntityRecordFromEntity(entity: string, signal: AbortSignal) {
+  // Perform discovery.
+  const headers = await Http.head(fixDiscoverUrl(`https://${entity}/`));
+  const entityRecordLink = findLink(
+    headers,
+    "https://baq.dev/rels/entity-record"
+  );
+
+  if (!entityRecordLink) {
+    throw new Error("Entity record link not found.");
+  }
+
+  // Fetch the record.
+  return getEntityRecordFromEntityRecordUrl(entityRecordLink, signal);
+}
+
+function buildClientFromUrl(entityRecordUrl: string) {
+  const getEntityRecord = (signal: AbortSignal) =>
+    getEntityRecordFromEntityRecordUrl(entityRecordUrl, signal);
+
+  return buildClientBase({getEntityRecord});
+}
+
+function buildClientFromEntity(entity: string) {
+  const getEntityRecord = (signal: AbortSignal) =>
+    getEntityRecordFromEntity(entity, signal);
+
+  return buildClientBase({getEntityRecord});
 }
 
 function buildClientFromRecord(entityRecord: EntityRecord) {
-  const entityRecordTask = Promise.resolve(entityRecord);
-  return buildClientBase({entityRecordTask});
+  const getEntityRecord = () => Promise.resolve(entityRecord);
+  return buildClientBase({getEntityRecord});
 }
 
 function buildAuthenticatedClient(state: AuthenticationState) {
@@ -487,9 +548,9 @@ function buildAuthenticatedClient(state: AuthenticationState) {
     return HttpBearerSignature.toQuery(signature);
   };
 
-  const entityRecordTask = Promise.resolve(entityRecord);
+  const getEntityRecord = () => Promise.resolve(entityRecord);
   return buildClientBase({
-    entityRecordTask,
+    getEntityRecord,
     authorizationBuilder,
     bearerBuilder,
   });
@@ -516,22 +577,14 @@ function fixDiscoverUrl(url: string) {
 }
 
 async function discover(entity: string, signal?: AbortSignal) {
-  // Perform discovery.
-  const headers = await Http.head(fixDiscoverUrl(`https://${entity}/`));
-  const entityRecordLink = findLink(
-    headers,
-    "https://baq.dev/rels/entity-record"
-  );
-  if (!entityRecordLink) {
-    throw new Error("Entity record link not found.");
-  }
-
-  // Create a client for the entity record.
-  return buildClientFromUrl(entityRecordLink, signal);
+  const client = buildClientFromEntity(entity);
+  await client.getEntityRecord(signal);
+  return client;
 }
 
 export const Client = {
   ofUrl: buildClientFromUrl,
+  ofEntity: buildClientFromEntity,
   ofRecord: buildClientFromRecord,
   authenticated: buildAuthenticatedClient,
   discover,

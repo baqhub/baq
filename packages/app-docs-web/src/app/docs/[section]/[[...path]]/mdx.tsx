@@ -65,6 +65,12 @@ export const MdxH4 = tw.h4`
   dark:text-white
 `;
 
+export const MdxH5 = tw.h5`
+  italic
+  underline
+  underline-offset-2
+`;
+
 export const MdxP = tw.p`
   mt-3
   mb-3
