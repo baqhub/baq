@@ -46,14 +46,6 @@ function sharePromise<T>(promiseCreator: (signal: AbortSignal) => Promise<T>) {
   let waitersCount = 0;
   const controller = new AbortController();
 
-  const onAbortRequested = () => {
-    if (--waitersCount > 0) {
-      return;
-    }
-
-    controller.abort();
-  };
-
   const getPromise = () => {
     if (promise) {
       return promise;
@@ -63,14 +55,35 @@ function sharePromise<T>(promiseCreator: (signal: AbortSignal) => Promise<T>) {
     return promise;
   };
 
-  return async (signal?: AbortSignal) => {
-    waitersCount++;
-    signal?.addEventListener("abort", onAbortRequested);
-    const result = await getPromise();
-    signal?.removeEventListener("abort", onAbortRequested);
-    signal?.throwIfAborted();
-    waitersCount--;
-    return result;
+  return (signal?: AbortSignal) => {
+    return new Promise<T>((resolve, reject) => {
+      let aborted = false;
+
+      const onAbortRequested = () => {
+        aborted = true;
+        signal?.removeEventListener("abort", onAbortRequested);
+        waitersCount--;
+
+        if (waitersCount === 0) {
+          controller.abort();
+        }
+
+        reject(new AbortedError());
+      };
+
+      waitersCount++;
+      signal?.addEventListener("abort", onAbortRequested);
+
+      getPromise().then(result => {
+        if (aborted) {
+          return;
+        }
+
+        signal?.removeEventListener("abort", onAbortRequested);
+        waitersCount--;
+        resolve(result);
+      });
+    });
   };
 }
 

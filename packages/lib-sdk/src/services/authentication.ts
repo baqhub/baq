@@ -17,8 +17,8 @@ async function register(
   {icon, signal}: StartAuthenticationOptions = {}
 ) {
   // Perform discovery.
-  const client = await Client.discover(entity, signal);
-  const entityRecord = await client.getEntityRecord();
+  const client = Client.ofEntity(entity);
+  const entityRecord = await client.getEntityRecord(signal);
 
   // Upload the app icon, if any.
   const iconLink = await (async () => {

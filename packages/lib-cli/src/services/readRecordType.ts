@@ -105,15 +105,11 @@ async function tryReadCacheRecordTypeContent(versionHash: string) {
 // Fetch remote schemas.
 //
 
-function buildClient(entity: string) {
-  return Client.discover(entity, new AbortController().signal);
-}
-
-const buildClientMemoized = memoize(buildClient);
+const buildClientMemoized = memoize(Client.ofEntity);
 
 export async function tryFetchRecordType(entity: string, recordId: string) {
   try {
-    const client = await buildClientMemoized(entity);
+    const client = buildClientMemoized(entity);
     const {record} = await client.getRecord(
       AnyRecord,
       TypeRecord,
@@ -151,7 +147,7 @@ export async function tryFetchRecordTypeVersion(
   versionHash: string
 ) {
   try {
-    const client = await buildClientMemoized(entity);
+    const client = buildClientMemoized(entity);
     const {record} = await client.getRecordVersion(
       AnyRecord,
       TypeRecord,
