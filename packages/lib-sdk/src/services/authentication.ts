@@ -60,9 +60,11 @@ async function register(
     );
 
   // Resolve the authentication flow URL.
-  const flowUrl = await client.expandUrlTemplate("auth", {
-    record_id: appRecord.id,
-  });
+  const flowUrl = await client.expandUrlTemplate(
+    "auth",
+    {record_id: appRecord.id},
+    signal
+  );
 
   const state: AuthenticationState = {
     authorizationId: undefined,
@@ -78,6 +80,17 @@ async function register(
   };
 }
 
+function complete(
+  state: AuthenticationState,
+  authorizationId: string
+): AuthenticationState {
+  return {
+    ...state,
+    authorizationId,
+  };
+}
+
 export const Authentication = {
   register,
+  complete,
 };

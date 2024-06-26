@@ -302,10 +302,10 @@ export function buildAuthentication(options: BuildAuthenticationOptions) {
       };
     }
 
-    const localStateWithAuthorization: AuthenticationState = {
-      ...localState,
-      authorizationId,
-    };
+    const localStateWithAuthorization = Authentication.complete(
+      localState,
+      authorizationId
+    );
 
     const client = Client.authenticated(localStateWithAuthorization);
     const blobUrlBuilder = client.blobUrlBuilderFor(localState.entityRecord);

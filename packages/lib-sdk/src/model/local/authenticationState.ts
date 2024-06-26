@@ -29,7 +29,13 @@ export const AuthenticationState = {
   decode: (value: unknown) => {
     return IO.decode(RAuthenticationState, value);
   },
+  decodeJSON: (value: string) => {
+    return AuthenticationState.decode(JSON.parse(value));
+  },
   encode: (state: AuthenticationState) => {
     return IO.encode(RAuthenticationState, state);
+  },
+  encodeJSON: (state: AuthenticationState) => {
+    return JSON.stringify(AuthenticationState.encode(state));
   },
 };

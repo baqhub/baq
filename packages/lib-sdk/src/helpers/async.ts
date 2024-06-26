@@ -41,8 +41,42 @@ function wait(signal: AbortSignal) {
   });
 }
 
+function sharePromise<T>(promiseCreator: (signal: AbortSignal) => Promise<T>) {
+  let promise: Promise<T>;
+  let waitersCount = 0;
+  const controller = new AbortController();
+
+  const onAbortRequested = () => {
+    if (--waitersCount > 0) {
+      return;
+    }
+
+    controller.abort();
+  };
+
+  const getPromise = () => {
+    if (promise) {
+      return promise;
+    }
+
+    promise = promiseCreator(controller.signal);
+    return promise;
+  };
+
+  return async (signal?: AbortSignal) => {
+    waitersCount++;
+    signal?.addEventListener("abort", onAbortRequested);
+    const result = await getPromise();
+    signal?.removeEventListener("abort", onAbortRequested);
+    signal?.throwIfAborted();
+    waitersCount--;
+    return result;
+  };
+}
+
 export const Async = {
   throwIfAborted,
   delay,
   wait,
+  sharePromise,
 };
