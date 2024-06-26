@@ -59,9 +59,9 @@ function sharePromise<T>(promiseCreator: (signal: AbortSignal) => Promise<T>) {
     return new Promise<T>((resolve, reject) => {
       let aborted = false;
 
-      const onAbortRequested = () => {
+      const onAbort = () => {
         aborted = true;
-        signal?.removeEventListener("abort", onAbortRequested);
+        signal?.removeEventListener("abort", onAbort);
         waitersCount--;
 
         if (waitersCount === 0) {
@@ -72,14 +72,15 @@ function sharePromise<T>(promiseCreator: (signal: AbortSignal) => Promise<T>) {
       };
 
       waitersCount++;
-      signal?.addEventListener("abort", onAbortRequested);
+      signal?.throwIfAborted();
+      signal?.addEventListener("abort", onAbort);
 
       getPromise().then(result => {
         if (aborted) {
           return;
         }
 
-        signal?.removeEventListener("abort", onAbortRequested);
+        signal?.removeEventListener("abort", onAbort);
         waitersCount--;
         resolve(result);
       });
