@@ -130,8 +130,84 @@ const client = Client.ofEntity("https://alice.baq.run");
 
 ## Fetch a record
 
+The newly created [Client](e1ca2823) can now be used to fetch a record. In this case a task record that our user created.
+
+```ts
+import {IO} from "@baqhub/sdk";
+import {TaskRecord} from "./taskRecord.js";
+
+const {record} = await client.getRecord(
+  IO.unknown,
+  TaskRecord,
+  "alice.baq.run",
+  "9f5e0c5dc5e0451cbd64eea32e5e38c6"
+);
+```
+
+Thanks to the record type we defined, the resulting `record` is properly typed.
+
 ## Fetch records
 
-## Publish a record
+Fetching multiple records works in the same way. Filtering what records to get is done by building a [Query](c4e4e2a0) object.
 
-## Publish a record update
+In this example, we want all the tasks created by our own user.
+
+```ts
+import {IO, Q} from "@baqhub/sdk";
+import {TaskRecord} from "./taskRecord.js";
+
+const {records} = await client.getRecords(
+  IO.unknown,
+  TaskRecord,
+  {
+    pageSize: 30,
+    filter: Q.and(Q.author("alice.baq.run"), Q.type(TaskRecord)),
+  }
+);
+```
+
+## Create a new record
+
+The record type we defined earlier provides helpers to help us create new records of that type.
+
+We then use the [Client](e1ca2823) to push that record to the server.
+
+```ts
+import {IO} from "@baqhub/sdk";
+import {TaskRecord} from "./taskRecord.js";
+
+const task = TaskRecord.new("alice.baq.run", {
+  title: "Write more guides on BAQ.DEV",
+  completed: false,
+});
+
+const {record} = await client.postRecord(
+  IO.unknown,
+  TaskRecord,
+  task
+);
+```
+
+## Update an existing record
+
+Creating a new version of an existing record is very similar. We use a record type helper to create the updated record, and then push it to the server with the help of the [Client](e1ca2823).
+
+```ts
+import {IO} from "@baqhub/sdk";
+import {TaskRecord} from "./taskRecord.js";
+
+function updateTask(task: TaskRecord) {
+  const updatedTask = TaskRecord.update("alice.baq.run", task, {
+    ...task.content,
+    completed: true,
+  });
+
+  const {record} = await client.putRecord(
+    IO.unknown,
+    TaskRecord,
+    updatedTask
+  );
+
+  return record;
+}
+```

@@ -535,7 +535,7 @@ import {PostRecord} from "./baq/postRecord.js";
 
 async function createPostRecord(client, text) {
   const postRecord = PostRecord.new("alice.baq.run", {text});
-  const {record} = client.postRecord(
+  const {record} = await client.postRecord(
     IO.unknown,
     PostRecord,
     postRecord
@@ -555,7 +555,7 @@ In this example we upload an image and add it as avatar to the [Entity record](3
 import {EntityRecord, BlobLink} from "@baqhub/sdk";
 
 async function addAvatar(client, entityRecord, avatarBlob) {
-  const blobResponse = client.uploadBlob(avatarBlob);
+  const blobResponse = await client.uploadBlob(avatarBlob);
   const blobLink = BlobLink.new(
     blobResponse,
     "image/jpeg",
