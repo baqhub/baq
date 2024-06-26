@@ -23,21 +23,31 @@ const record = await client.getRecord(...);
 
 <props.properties>
 
-- **<props.code>ofUrl(entityRecordUrl, signal?)</props.code>**: <props.pill>Client</props.pill>
+- **<props.code>ofEntity(entity)</props.code>**: <props.pill>Client</props.pill>
 
-  - Create a new client from the URL of a user's Entity record.
+  - Create a new client from a user's entity.
 
   - _Parameters_
 
     <props.properties>
 
-    - `entityRecordUrl` <props.pill>string</props.pill>
+  - `entity` <props.pill href="deae588f#deae588f">Entity</props.pill>
 
-      - URL of the user's Entity record.
+    - Entity of the target user.
 
-    - `signal` <props.pill href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal">AbortSignal</props.pill> _optional_
+    </props.properties>
 
-      - Signal to abort the request.
+- **<props.code>ofUrl(entityRecordUrl)</props.code>**: <props.pill>Client</props.pill>
+
+  - Create a new client from the URL of a user's Entity record.
+
+  #### Parameters
+
+    <props.properties>
+
+  - `entityRecordUrl` <props.pill>string</props.pill>
+
+    - URL of the user's Entity record.
 
     </props.properties>
 
@@ -75,11 +85,21 @@ const record = await client.getRecord(...);
 
     </props.properties>
 
-- **<props.code>getEntityRecord()</props.code>**: <props.code>Promise\<<props.pill href="375c4ea9">EntityRecord</props.pill>\></props.code>
+- **<props.code>getEntityRecord(signal?)</props.code>**: <props.code>Promise\<<props.pill href="375c4ea9">EntityRecord</props.pill>\></props.code>
 
   - Fetch the user's entity record.
 
   - (Fetched only once, and cached beyond that point).
+
+  #### Parameters
+
+    <props.properties>
+
+  - `signal` <props.pill href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal">AbortSignal</props.pill> _optional_
+
+    - Signal to abort the request.
+
+    </props.properties>
 
 - **<props.code>getOwnRecord(linkModel, model, id, opts?)</props.code>**
 
