@@ -409,8 +409,7 @@ Building an authenticated client requires an authentication state obtained while
 import {Client, AuthenticationState} from "@baqhub/sdk";
 
 const authStateJson = localStorage.getItem("auth_state");
-const authStateParsed = JSON.parse(authStateJson);
-const authState = AuthenticationState.decode(authStateParsed);
+const authState = AuthenticationState.decodeJSON(authStateJson);
 const client = Client.authenticated(authState);
 
 // Next steps:

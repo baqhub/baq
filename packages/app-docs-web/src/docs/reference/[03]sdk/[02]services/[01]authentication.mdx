@@ -60,6 +60,34 @@ Authentication.register("alice.baq.run", {...});
 
     </props.properties>
 
+- **<props.code>complete(state, authorizationId)</props.code>**: <props.pill href="#authenticationstate">AuthenticationState</props.pill>
+
+  - Update the authentication state with the authorization ID obtained after completion of the authorization flow.
+
+  - _Parameters_
+
+    <props.properties>
+
+    - `state` <props.pill href="#authenticationstate">AuthenticationState</props.pill>
+
+      - Partial authentication state to update.
+
+    - `authorizationId` <props.pill>string</props.pill>
+
+      - Result of the authorization flow.
+
+    </props.properties>
+
+  - _Return value_
+
+    <props.properties>
+
+    - &ZeroWidthSpace;<props.pill href="#authenticationstate">AuthenticationState</props.pill>
+
+      - Updated state.
+
+    </props.properties>
+
 </props.properties>
 
 ### `AuthenticationState`

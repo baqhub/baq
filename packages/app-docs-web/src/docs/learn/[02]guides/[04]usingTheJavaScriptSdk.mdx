@@ -4,3 +4,134 @@ export const metadata = {
 };
 
 # Using the JavaScript SDK
+
+The BAQ JavaScript SDK provides abstractions and helpers that make it easier to work with BAQ records instead of having to directly interact with the [HTTP API](50c614b0).
+
+{props.toc}
+
+## Installation
+
+The BAQ JavaScript SDK is distributed as an NPM package.
+
+```cli
+npm install @baqhub/sdk
+```
+
+## Define a record type
+
+The schemas for record types are expressed using [io-ts](https://github.com/gcanti/io-ts) to enable client-side validation of the data returned by servers and persisted locally.
+
+The recommended way to define record types is to let the [BAQ CLI](6fd9977d) do it automatically based on a record type JSON definition. But it's also possible to do it by hand.
+
+In this example, we define a `task` record type with a title and completion status.
+
+{/* prettier-ignore */}
+```ts
+import {IO, SchemaIO, RecordType, Record} from "@baqhub/sdk";
+
+// Define the schema for the record content.
+const RTaskRecordContent = SchemaIO.object({
+  title: SchemaIO.string({maxLength: 128}),
+  completed: SchemaIO.boolean(),
+});
+
+// Define the record type.
+// These must match the published record type.
+const [taskRecordType, RTaskRecordType] = RecordType.full(
+  "baqtodotypes.baq.run",
+  "8f37b56913fc4e739bc2f983b7eb70dd",
+  "37463fd745d448068d0558a3225a26aa132626779b934f919b2e2f9757a38490",
+  RTaskRecordContent
+);
+
+// Combine content schema and type to define the record.
+const RTaskRecord = Record.io(
+  taskRecordType,
+  RTaskRecordType,
+  RTaskRecordContent
+);
+
+// Export the record type object and type.
+export interface TaskRecord extends IO.TypeOf<typeof RTaskRecord> {}
+export const TaskRecord = Record.ioClean<TaskRecord>(RTaskRecord);
+```
+
+## Authenticate
+
+Authentication is a 3-step process:
+
+1. Register the app.
+
+2. Direct the user to the authorization flow.
+
+3. Build the authentication state with the resulting authorization ID.
+
+Here, we use the record type we defined earlier to request permission to read and write task records.
+
+```ts
+import {Authentication} from "@baqhub/sdk";
+import {TaskRecord} from "./taskRecord.js";
+
+async function authenticate(entity: string) {
+  //
+  // Step 1: Register the app.
+  //
+  const {flowUrl, state} = await Authentication.register(entity, {
+    name: "BAQ Todo",
+    description: "Manage your daily tasks with ease.",
+    uris: {
+      website: "https://baqtodo.app",
+      redirect: "https://baqtodo.app/auth{/authorization_id}",
+    },
+    scopeRequest: {
+      read: [TaskRecord.link],
+      write: [TaskRecord.link],
+    },
+  });
+
+  //
+  // Step 2: Direct the user to the authorization flow.
+  //
+  const authorizationId = await showFlowBrowser(flowUrl);
+
+  //
+  // Step 3: Combine the authorization ID and partial authentication state.
+  //
+  return Authentication.complete(state, authorizationId);
+}
+```
+
+## Build a Client
+
+Now that we have an authentication state, we can use it to build a [Client](e1ca2823) to fetch data and perform actions on behalf of our user.
+
+```ts
+import {Client, AuthenticationState} from "@baqhub/sdk";
+
+const authState = await authenticate("https://alice.baq.run");
+const client = Client.authenticated(authState);
+```
+
+The state can also be persisted in JSON form to be re-used in between sessions.
+
+```ts
+import {Client, AuthenticationState} from "@baqhub/sdk";
+
+const authStateJson = localStorage.getItem("auth_state");
+const authState = AuthenticationState.decodeJSON(authStateJson);
+const client = Client.authenticated(authState);
+```
+
+When only wanting to query public records, an unauthenticated client can be created with just the user's entity:
+
+```ts
+const client = Client.ofEntity("https://alice.baq.run");
+```
+
+## Fetch a record
+
+## Fetch records
+
+## Publish a record
+
+## Publish a record update
