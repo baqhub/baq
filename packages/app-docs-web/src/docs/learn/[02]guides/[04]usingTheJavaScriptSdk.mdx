@@ -112,7 +112,7 @@ const authState = await authenticate("https://alice.baq.run");
 const client = Client.authenticated(authState);
 ```
 
-The state can also be persisted in JSON form to be re-used in between sessions.
+The state can be persisted in JSON format to be re-used in between sessions.
 
 ```ts
 import {Client, AuthenticationState} from "@baqhub/sdk";
