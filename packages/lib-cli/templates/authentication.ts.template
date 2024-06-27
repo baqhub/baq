@@ -4,46 +4,32 @@
 
 import {RecordType} from "@baqhub/sdk";
 import {
-  BuildAuthenticationOptions,
-  UseAuthenticationOptions,
+  StorageAdapter,
+  SecureStorageAdapter,
   buildAuthentication as buildAuthenticationBase
 } from "@baqhub/sdk-react";
-import {useCallback} from "react";
 {recordTypesImport}
 
-const scopeRequest = {
-  {scopeRequest}
-};
+export interface BuildAuthenticationOptions {
+  storage: StorageAdapter;
+  secureStorage?: SecureStorageAdapter;
+  redirectUrl: string
+}
 
 export function buildAuthentication(options: BuildAuthenticationOptions) {
-  const {useAuthentication: useAuthBase} = buildAuthenticationBase({
-    ...options,
-    scopeRequest
-  });
-
-  function useAuthentication(redirectUrl: string, options: UseAuthenticationOptions) {
-    const authentication = useAuthBase(options);
-    const {onConnectRequest: onConnectRequestBase} = authentication;
-
-    const onConnectRequest = useCallback(
-      (entity: string) => {
-        onConnectRequestBase(entity, {
-          name: "{appName}",{appDescription}
-          uris: {
-            {appWebsiteUrl}
-            redirect: redirectUrl,
-          },
-          scopeRequest
-        });
+  const {storage, secureStorage, redirectUrl} = options;
+  return buildAuthenticationBase({
+    storage,
+    secureStorage,
+    app: {
+      name: "{appName}",{appDescription}
+      uris: {
+        {appWebsiteUrl}
+        redirect: redirectUrl,
       },
-      [onConnectRequestBase, redirectUrl]
-    );
-
-    return {
-      ...authentication,
-      onConnectRequest
-    };
-  }
-
-  return {useAuthentication};
+      scopeRequest: {
+        {scopeRequest}
+      }
+    }
+  });
 }

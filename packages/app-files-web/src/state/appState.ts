@@ -6,6 +6,7 @@ const redirectUrl = redirectOrigin + "/auth{/authorization_id}";
 
 const {useAuthentication} = buildAuthentication({
   storage: localStorageAdapter,
+  redirectUrl,
 });
 
 export function useAppState(
@@ -13,5 +14,5 @@ export function useAppState(
   authorizationId: string | undefined
 ) {
   const options = {appIconUrl, authorizationId};
-  return useAuthentication(redirectUrl, options);
+  return useAuthentication(options);
 }

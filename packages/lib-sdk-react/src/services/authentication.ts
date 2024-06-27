@@ -56,7 +56,6 @@ interface UnauthenticatedConnectingState {
   status: AuthenticationStatus.UNAUTHENTICATED;
   connectStatus: ConnectStatus.CONNECTING;
   entity: string;
-  appContent: AppRecordContent;
 }
 
 interface UnauthenticatedWaitingOnFlowState {
@@ -111,7 +110,6 @@ interface InitializeSuccessAction {
 interface ConnectStartAction {
   type: UseAuthenticationActionType.CONNECT_START;
   entity: string;
-  appContent: AppRecordContent;
 }
 
 interface ConnectSuccessAction {
@@ -182,7 +180,6 @@ function reducer(
         status: AuthenticationStatus.UNAUTHENTICATED,
         connectStatus: ConnectStatus.CONNECTING,
         entity: action.entity,
-        appContent: action.appContent,
       };
 
     case UseAuthenticationActionType.CONNECT_SUCCESS:
@@ -264,7 +261,7 @@ function reducer(
 export interface BuildAuthenticationOptions {
   storage: StorageAdapter;
   secureStorage?: SecureStorageAdapter;
-  scopeRequest?: AppScopes;
+  app: AppRecordContent;
 }
 
 export interface UseAuthenticationOptions {
@@ -273,7 +270,7 @@ export interface UseAuthenticationOptions {
 }
 
 export function buildAuthentication(options: BuildAuthenticationOptions) {
-  const {storage, secureStorage, scopeRequest} = options;
+  const {storage, secureStorage, app} = options;
   const authenticationStorage = new AuthenticationStorage(
     storage,
     secureStorage
@@ -333,16 +330,12 @@ export function buildAuthentication(options: BuildAuthenticationOptions) {
     // API.
     //
 
-    const onConnectRequest = useCallback(
-      (entity: string, appContent: AppRecordContent) => {
-        dispatch({
-          type: UseAuthenticationActionType.CONNECT_START,
-          entity,
-          appContent,
-        });
-      },
-      []
-    );
+    const onConnectRequest = useCallback((entity: string) => {
+      dispatch({
+        type: UseAuthenticationActionType.CONNECT_START,
+        entity,
+      });
+    }, []);
 
     const waitingOnFlowLocalState =
       authenticationState.status === AuthenticationStatus.UNAUTHENTICATED &&
@@ -444,10 +437,7 @@ export function buildAuthentication(options: BuildAuthenticationOptions) {
           };
 
           // Check compatibility of app record scopes with what we require.
-          if (
-            scopeRequest &&
-            !AppScopes.hasScopes(updatedState.appRecord, scopeRequest)
-          ) {
+          if (!AppScopes.hasScopes(updatedState.appRecord, app.scopeRequest)) {
             dispatch({type: UseAuthenticationActionType.DISCONNECT});
             return;
           }
@@ -532,12 +522,12 @@ export function buildAuthentication(options: BuildAuthenticationOptions) {
       }
 
       console.log("Starting auth.");
-      const {entity, appContent} = connectingState;
+      const {entity} = connectingState;
 
       return abortable(async signal => {
         try {
           const icon = await appIconPromise;
-          const auth = await Authentication.register(entity, appContent, {
+          const auth = await Authentication.register(entity, app, {
             icon,
             signal,
           });
