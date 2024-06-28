@@ -81,7 +81,7 @@ function App() {
   useEffect(() => {
     if (
       state.status === "unauthenticated" &&
-      state.connectStatus !== "waiting_on_flow"
+      state.connectStatus === "waiting_on_flow"
     ) {
       window.location.href = state.flowUrl;
     }
@@ -152,7 +152,7 @@ export type KnownRecord = IO.TypeOf<typeof RKnownRecord>;
 
 This sets up a Store that knows how to handle task records, and exports all the hooks necessary to interact with it.
 
-We can now add it to the. To do so, we need to provide it with the authentication state provided by the `useAuthentication` hook:
+We can now add it to the app. To do so, we need to give it the authentication state provided by the `useAuthentication` hook:
 
 ```tsx
 function App() {
@@ -237,7 +237,7 @@ function Tasks() {
 
 To update data we use the [`useRecordMutations()`](b22351f5) hook.
 
-It provides an `updateRecords()` function that synchronously reflects the changes instantly across the rest of the UI. The store then works in the background to synchronize the updated data with the server.
+It provides an `updateRecords()` function that synchronously reflects the changes instantly across the rest of the UI. The Store then works in the background to push the updated data with the server.
 
 Here we create a new task record in an event handler with the provided title:
 
@@ -259,7 +259,7 @@ function NewTask() {
 }
 ```
 
-The same hook is used to update:
+The same hook is used to update a record:
 
 ```ts
 const updatedTask = TaskRecord.update(entity, task, {
@@ -269,7 +269,7 @@ const updatedTask = TaskRecord.update(entity, task, {
 updatedRecords([updatedTask]);
 ```
 
-And delete:
+And delete a record:
 
 ```ts
 import {Record} from "@baqhub/sdk";
