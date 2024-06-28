@@ -1,6 +1,6 @@
+import {buildAuthentication} from "@baqhub/app-bird-shared/build/src/baq/authentication";
 import {Store} from "@baqhub/app-bird-shared/build/src/baq/store";
 import {DateServicesProvider} from "@baqhub/app-bird-shared/build/src/components/date/dateServicesProvider";
-import {buildAppState} from "@baqhub/app-bird-shared/build/src/state/appState";
 import {asyncStorageAdapter, secureStorageAdapter} from "@baqhub/sdk-expo";
 import {DarkTheme, DefaultTheme, ThemeProvider} from "@react-navigation/native";
 import {Locale, useLocales} from "expo-localization";
@@ -28,9 +28,10 @@ export const unstable_settings = {
 const birdIconUrl = "https://bird.baq.dev/assets/birdIcon-CSccJO_o.png";
 const redirectUrlPrefix = "bird://auth";
 const redirectUrl = `${redirectUrlPrefix}{/authorization_id}`;
-const {useAppState} = buildAppState({
+const {useAuthentication} = buildAuthentication({
   storage: asyncStorageAdapter,
   secureStorage: secureStorageAdapter,
+  redirectUrl,
 });
 
 //
@@ -53,12 +54,9 @@ function RootLayoutContent() {
   const colorScheme = useColorScheme();
   const [locale] = useLocales() as [Locale];
 
-  const appState = useAppState({
-    appIconUrl: birdIconUrl,
-    redirectUrl,
-  });
-  const {state, onAuthorizationResult} = appState;
-  const {onConnectRequest, onDisconnectRequest} = appState;
+  const auth = useAuthentication({appIconUrl: birdIconUrl});
+  const {state, onAuthorizationResult} = auth;
+  const {onConnectRequest, onDisconnectRequest} = auth;
 
   const onAuthUrl = useCallback(
     (authUrl: string | undefined) => {

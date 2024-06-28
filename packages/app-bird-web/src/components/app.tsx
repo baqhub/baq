@@ -1,7 +1,7 @@
 import birdIconUrl from "@assets/birdIcon.png";
 import birdLogoUrl from "@assets/birdLogo.png";
+import {buildAuthentication} from "@baqhub/bird-shared/baq/authentication.js";
 import {Store} from "@baqhub/bird-shared/baq/store.js";
-import {buildAppState} from "@baqhub/bird-shared/state/appState.js";
 import {useSyncState} from "@baqhub/bird-shared/state/syncState.js";
 import {useConstant} from "@baqhub/sdk-react";
 import {localStorageAdapter} from "@baqhub/sdk-react-dom";
@@ -28,8 +28,9 @@ const authPrefix = "/auth";
 const redirectOrigin = window.location.origin;
 const redirectUrl = redirectOrigin + authPrefix + "{/authorization_id}";
 
-const {useAppState} = buildAppState({
+const {useAuthentication} = buildAuthentication({
   storage: localStorageAdapter,
+  redirectUrl,
 });
 
 //
@@ -89,9 +90,8 @@ export const App: FC = () => {
     navigate({to: "/", replace: true});
   }, [navigate]);
 
-  const {state, onConnectRequest, onDisconnectRequest} = useAppState({
+  const {state, onConnectRequest, onDisconnectRequest} = useAuthentication({
     appIconUrl: birdIconUrl,
-    redirectUrl,
     authorizationId,
   });
 

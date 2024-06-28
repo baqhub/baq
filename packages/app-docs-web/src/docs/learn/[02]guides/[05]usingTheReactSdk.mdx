@@ -4,3 +4,276 @@ export const metadata = {
 };
 
 # Using the React SDK
+
+The BAQ React SDK provides components and hooks to make it easier to build reactive UI on top of records.
+
+{props.toc}
+
+## Installation
+
+The BAQ React SDK is distributed as an NPM package.
+
+```cli
+npm install @baqhub/sdk-react @baqhub/sdk
+```
+
+Platform-specific features are implemented in [separate packages](a4abc6d8#localstorageadapter).
+
+```cli
+npm install @baqhub/sdk-react-dom
+```
+
+## Authenticate
+
+Authentication is a 3-step process:
+
+1. Register the app.
+
+2. Direct the user to the authorization flow.
+
+3. Build the authentication state with the resulting authorization ID.
+
+The authentication system in the SDK handles most of the background logic, including persisting the authentication state in between sessions, and only requires implementation of the corresponding user interface.
+
+The recommended way to [define record types](4ae6101c#define-a-record-type) and configure the authentication system is to let the [BAQ CLI](6fd9977d) do it automatically. But it's also possible to do it by hand:
+
+```tsx
+import {buildAuthentication} from "@baqhub/sdk-react";
+import {localStorageAdapter} from "@baqhub/sdk-react-dom";
+import {TaskRecord} from "./taskRecord.js";
+
+const {useAuthentication} = buildAuthentication({
+  storage: localStorageAdapter,
+  app: {
+    name: "BAQ Todos",
+    uris: {
+      redirect: "...",
+    },
+    scopeRequest: {
+      read: [TaskRecord.link],
+      write: [TaskRecord.link],
+    },
+  },
+});
+```
+
+We then use the [`useAuthentication`](00491e8c) hook to authenticate a user:
+
+```tsx
+//
+// Step 3: When the authorization flow redirects back,
+// read the resulting authorization ID.
+//
+const url = new URL(window.location.href);
+const authorizationId = url.searchParams.get("authorization_id");
+
+function App() {
+  // Pass the authorization ID to the hook.
+  const auth = useAuthentication({authorizationId});
+  // The hook provides us with the current state and a
+  // function to start the authorization flow.
+  const {state, onConnectRequest} = auth;
+
+  //
+  // Step 2: After app registration completes,
+  // redirect the user to the authorization flow.
+  //
+  useEffect(() => {
+    if (
+      state.status === "unauthenticated" &&
+      state.connectStatus === "waiting_on_flow"
+    ) {
+      window.location.href = state.flowUrl;
+    }
+  }, [state]);
+
+  // If not authenticated, display the login form.
+  if (state.status === "unauthenticated") {
+    return (
+      <Login onConnectClick={onConnectRequest} />
+    );
+  }
+
+  // Otherwise, display the app.
+  return ...
+}
+
+function Login({onConnectRequest}) {
+  const [entity, setEntity] = useState("");
+
+  //
+  // Step 1: Call onConnectRequest with the entity to authenticate.
+  // This starts the app registration process with that user.
+  //
+  const onContinueClick = () => {
+    onConnectRequest(entity);
+  };
+
+  // Display the login form.
+  return (
+    <>
+      <input type="text" value={entity} onChange={setEntity} />
+      <button type="button" onClick={onContinueClick}>Continue</button>
+    </>
+  );
+}
+```
+
+## Add Store to app
+
+Once authenticated, the [`<Store>`](f1e914a6) component is responsible for managing records within the app. It also deduplicates requests, and makes sure the latest data is always being displayed.
+
+The recommended way to configure the Store is to let the [BAQ CLI](6fd9977d) do it automatically. But it's also possible to do it by hand:
+
+```ts
+import {IO} from "@baqhub/sdk";
+import {createStore} from "@baqhub/sdk-react";
+import {TaskRecord} from "./taskRecord.js";
+
+export const {
+  RKnownRecord,
+  Store,
+  ProxyStore,
+  wrapInProxyStore,
+  useRecordsQuery,
+  useStaticRecordsQuery,
+  useRecordQuery,
+  useStaticRecordQuery,
+  useRecordHelpers,
+  useRecordByVersion,
+  useRecordByKey,
+  useFindRecordByKey,
+  useFindRecordByQuery,
+  useFindEntityRecord,
+} = createStore(TaskRecord);
+
+export type KnownRecord = IO.TypeOf<typeof RKnownRecord>;
+```
+
+This sets up a Store that knows how to handle task records, and exports all the hooks necessary to interact with it.
+
+We can now add it to the app. To do so, we need to give it the authentication state provided by the `useAuthentication` hook:
+
+```tsx
+function App() {
+  const {state, onDisconnectRequest} = useAppState(...);
+
+  // If not authenticated, display the login form.
+  if (state.status === "unauthenticated") {
+    return ...
+  }
+
+  // If authenticated, render the app, wrapped in a Store.
+  return (
+    <Store
+      identity={state.identity}
+      onDisconnectRequest={onDisconnectRequest}
+    >
+      <Home />
+    </Store>
+  );
+}
+```
+
+## Fetch records
+
+To retrieve records from the server we use the [`useRecordsQuery`](53716cd7) hook. This can be called in any component that is wrapped by a [`<Store>`](f1e914a6).
+
+Requests are automatically deduplicated, and a connection is kept open to receive new matching records in real time.
+
+```tsx
+import {Q} from "@baqhub/sdk";
+import {useRecordsQuery} from "./store.js";
+import {TaskRecord} from "./taskRecord.js";
+
+function Tasks() {
+  const {getRecords} = useRecordsQuery({
+    filter: Q.and(Q.author("alice.baq.run"), Q.type(TaskRecord)),
+  });
+
+  return (
+    <Suspense fallback={<Loading />}>
+      <TaskList getRecords={getRecords} />
+    </Suspense>
+  );
+}
+```
+
+This can also be done without Suspense:
+
+```tsx
+function Tasks() {
+  const {isLoading, records} = useRecordsQuery({
+    filter: Q.and(Q.author("alice.baq.run"), Q.type(TaskRecord)),
+  });
+
+  if (isLoading) {
+    return <TasksLoading />;
+  }
+
+  return <TaskList records={records} />;
+}
+```
+
+The hook automatically retries in case of transient error, but permanent errors can be handled explicitly:
+
+```tsx
+function Tasks() {
+  const {isLoading, error, records} = useRecordsQuery(...)
+
+  if (isLoading) {
+    return <TasksLoading />;
+  }
+
+  if (error) {
+    return <TasksError />;
+  }
+
+  return <TaskList records={records} />;
+}
+```
+
+## Create and update records
+
+To update data we use the [`useRecordMutations()`](b22351f5) hook.
+
+It provides an `updateRecords()` function that synchronously reflects the changes instantly across the rest of the UI. The Store then works in the background to push the updated data with the server.
+
+Here we create a new task record in an event handler with the provided title:
+
+```ts
+import {Q} from "@baqhub/sdk";
+import {useRecordHelpers, useRecordMutations} from "./store.js";
+import {TaskRecord} from "./taskRecord.js";
+
+function NewTask() {
+  const {entity} = useRecordHelpers();
+  const {updateRecords} = useRecordMutations();
+
+  const onCreateTask = (title: string) => {
+    const record = TaskRecord.new(entity, {title});
+    updateRecords([record]);
+  };
+
+  // Render the task creation form.
+}
+```
+
+The same hook is used to update a record:
+
+```ts
+const updatedTask = TaskRecord.update(entity, task, {
+  ...task.content,
+  completed: true,
+});
+updatedRecords([updatedTask]);
+```
+
+And delete a record:
+
+```ts
+import {Record} from "@baqhub/sdk";
+
+const deletedTask = Record.delete(entity, task);
+updatedRecords([deletedTask]);
+```
