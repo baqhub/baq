@@ -196,7 +196,7 @@ Creating a new version of an existing record is very similar. We use a record ty
 import {IO} from "@baqhub/sdk";
 import {TaskRecord} from "./taskRecord.js";
 
-function updateTask(task: TaskRecord) {
+async function updateTask(task: TaskRecord) {
   const updatedTask = TaskRecord.update("alice.baq.run", task, {
     ...task.content,
     completed: true,
@@ -208,6 +208,19 @@ function updateTask(task: TaskRecord) {
     updatedTask
   );
 
+  return record;
+}
+```
+
+## Delete a record
+
+Deletion works in the same way, but with no need to create the deleted record tombstone, the server does that for us and returns it.
+
+```ts
+import {IO} from "@baqhub/sdk";
+
+async function deleteTask(task: TaskRecord) {
+  const {record} = await client.deleteRecord(IO.unknown, task);
   return record;
 }
 ```
