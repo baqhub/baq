@@ -28,6 +28,6 @@
   },
   "devDependencies": {
     "tsconfig-to-dual-package": "1.2.0",
-    "typescript": "5.3.3"
+    "typescript": "5.5.2"
   }
 }

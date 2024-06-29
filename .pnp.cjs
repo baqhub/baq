@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /* eslint-disable */
+// @ts-nocheck
 "use strict";
 
 const RAW_RUNTIME_STATE =
@@ -109,7 +110,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-plugin-react-hooks", "virtual:28a3b42add2c462f25029e8605467cc8854806df10aedb182d8356898f159d8c6e6526142b40870a19fca1725d5b4e34e41538e35883dd53da2f7fdf4a263e15#npm:4.6.2"],\
           ["prettier", "npm:3.2.4"],\
           ["prettier-plugin-organize-imports", "virtual:28a3b42add2c462f25029e8605467cc8854806df10aedb182d8356898f159d8c6e6526142b40870a19fca1725d5b4e34e41538e35883dd53da2f7fdf4a263e15#npm:3.2.4"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -1077,7 +1078,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react", "npm:18.3.3"],\
           ["lodash", "npm:4.17.21"],\
           ["react", "npm:18.3.1"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -1110,7 +1111,7 @@ const RAW_RUNTIME_STATE =
           ["remark-smartypants", "npm:3.0.1"],\
           ["rollup", "npm:4.18.0"],\
           ["tailwindcss", "npm:3.4.4"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"],\
           ["vite", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:5.3.2"],\
           ["wrangler", "virtual:5be33ab443a62cc100331133ea47d04da61badd611591deb3517bea5da396f2a2537969e19b053cbc2c5947813dc4fcf2f2b276a94819d68d89d2d8d40aa38b1#npm:3.62.0"]\
         ],\
@@ -1142,7 +1143,7 @@ const RAW_RUNTIME_STATE =
           ["ts-jest-resolver", "npm:2.0.1"],\
           ["tsconfig-to-dual-package", "virtual:f4f0705b3d062e5f76bbf430101f687a40b2d2ee7237e4f5b0123dd70cef21ff2c9639d3f142d51d1f96b59ca235b03eaf939678c2b68b45776b9f378f289a21#npm:1.2.0"],\
           ["tslib", "npm:2.6.3"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -1162,7 +1163,7 @@ const RAW_RUNTIME_STATE =
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:18.3.1"],\
           ["tailwindcss", "npm:3.4.4"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"],\
           ["vite", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:5.3.2"],\
           ["wrangler", "virtual:5be33ab443a62cc100331133ea47d04da61badd611591deb3517bea5da396f2a2537969e19b053cbc2c5947813dc4fcf2f2b276a94819d68d89d2d8d40aa38b1#npm:3.62.0"]\
         ],\
@@ -1179,7 +1180,7 @@ const RAW_RUNTIME_STATE =
           ["sharp", "npm:0.33.4"],\
           ["svgo", "npm:3.3.2"],\
           ["tailwindcss", "npm:3.4.4"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"],\
           ["vite", "virtual:a1e1fe3754118ea0a9cf2687b244a4a72da196cec4da58472dcec8a2d3f6ca41173f79de54a0128edf5b93c400c7755705766aed74ec4bdf0df227b475409acd#npm:5.3.2"],\
           ["vite-plugin-image-optimizer", "virtual:a1e1fe3754118ea0a9cf2687b244a4a72da196cec4da58472dcec8a2d3f6ca41173f79de54a0128edf5b93c400c7755705766aed74ec4bdf0df227b475409acd#npm:1.1.8"],\
           ["vite-plugin-svgr", "virtual:a1e1fe3754118ea0a9cf2687b244a4a72da196cec4da58472dcec8a2d3f6ca41173f79de54a0128edf5b93c400c7755705766aed74ec4bdf0df227b475409acd#npm:4.2.0"]\
@@ -1224,7 +1225,7 @@ const RAW_RUNTIME_STATE =
           ["sharp", "npm:0.33.4"],\
           ["slugify", "npm:1.6.6"],\
           ["tailwindcss", "npm:3.4.4"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"],\
           ["webpack", "virtual:5d672a90405c6f5d47887489ef531ab2fd03fac749388ff320a003f2abe51f8657c1c807618f7a35c5e421f938e6110552511db9f7a513f65dfd6f0ca4011fe6#npm:5.92.1"],\
           ["ws", "virtual:c471e93de551a72d65dd794fc60e4cdb16d950c633d4ac162672d712a723379ee566bc525f442dd92a980a47c9a6530f441149878d2a2b2dc36d8aa480b7ebdb#npm:8.17.1"]\
         ],\
@@ -1252,7 +1253,7 @@ const RAW_RUNTIME_STATE =
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:18.3.1"],\
           ["tailwindcss", "npm:3.4.4"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"],\
           ["vite", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:5.3.2"],\
           ["wrangler", "virtual:5be33ab443a62cc100331133ea47d04da61badd611591deb3517bea5da396f2a2537969e19b053cbc2c5947813dc4fcf2f2b276a94819d68d89d2d8d40aa38b1#npm:3.62.0"]\
         ],\
@@ -1280,7 +1281,7 @@ const RAW_RUNTIME_STATE =
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:18.3.1"],\
           ["tailwindcss", "npm:3.4.4"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"],\
           ["vite", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:5.3.2"],\
           ["wrangler", "virtual:5be33ab443a62cc100331133ea47d04da61badd611591deb3517bea5da396f2a2537969e19b053cbc2c5947813dc4fcf2f2b276a94819d68d89d2d8d40aa38b1#npm:3.62.0"]\
         ],\
@@ -1308,7 +1309,7 @@ const RAW_RUNTIME_STATE =
           ["ts-jest-resolver", "npm:2.0.1"],\
           ["tsconfig-to-dual-package", "virtual:f4f0705b3d062e5f76bbf430101f687a40b2d2ee7237e4f5b0123dd70cef21ff2c9639d3f142d51d1f96b59ca235b03eaf939678c2b68b45776b9f378f289a21#npm:1.2.0"],\
           ["tslib", "npm:2.6.3"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"],\
           ["uuid", "npm:10.0.0"]\
         ],\
         "linkType": "SOFT"\
@@ -1326,7 +1327,7 @@ const RAW_RUNTIME_STATE =
           ["expo-secure-store", "virtual:e8bac5d1de97eae36ff83a2f855e33674cdadba602345bd8827fce44eb8d8b45dc630f1798b7e3a3016aed290b2d9564468ad1654ce2168f4c3eda3c2c5f1a37#npm:12.8.1"],\
           ["tsconfig-to-dual-package", "virtual:f4f0705b3d062e5f76bbf430101f687a40b2d2ee7237e4f5b0123dd70cef21ff2c9639d3f142d51d1f96b59ca235b03eaf939678c2b68b45776b9f378f289a21#npm:1.2.0"],\
           ["tslib", "npm:2.6.3"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -1348,7 +1349,7 @@ const RAW_RUNTIME_STATE =
           ["ts-jest-resolver", "npm:2.0.1"],\
           ["tsconfig-to-dual-package", "virtual:f4f0705b3d062e5f76bbf430101f687a40b2d2ee7237e4f5b0123dd70cef21ff2c9639d3f142d51d1f96b59ca235b03eaf939678c2b68b45776b9f378f289a21#npm:1.2.0"],\
           ["tslib", "npm:2.6.3"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"],\
           ["use-sync-external-store", "virtual:18b6d8f442fb27b52dff0900df96d3577a663851588ff6d3c40c6339f5694d4ca3e538d234653edfc4692a3e97bcc32e1f13d86a24ab5ba62b83369dfaac476e#npm:1.2.2"]\
         ],\
         "linkType": "SOFT"\
@@ -1362,7 +1363,7 @@ const RAW_RUNTIME_STATE =
           ["@baqhub/sdk-react", "workspace:packages/lib-sdk-react"],\
           ["tsconfig-to-dual-package", "virtual:f4f0705b3d062e5f76bbf430101f687a40b2d2ee7237e4f5b0123dd70cef21ff2c9639d3f142d51d1f96b59ca235b03eaf939678c2b68b45776b9f378f289a21#npm:1.2.0"],\
           ["tslib", "npm:2.6.3"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -1386,7 +1387,7 @@ const RAW_RUNTIME_STATE =
           ["text-encoding", "npm:0.7.0"],\
           ["tsconfig-to-dual-package", "virtual:f4f0705b3d062e5f76bbf430101f687a40b2d2ee7237e4f5b0123dd70cef21ff2c9639d3f142d51d1f96b59ca235b03eaf939678c2b68b45776b9f378f289a21#npm:1.2.0"],\
           ["tslib", "npm:2.6.3"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"],\
           ["web-streams-polyfill", "npm:3.3.3"]\
         ],\
         "packagePeers": [\
@@ -1411,7 +1412,7 @@ const RAW_RUNTIME_STATE =
           ["text-encoding", "npm:0.7.0"],\
           ["tsconfig-to-dual-package", "virtual:f4f0705b3d062e5f76bbf430101f687a40b2d2ee7237e4f5b0123dd70cef21ff2c9639d3f142d51d1f96b59ca235b03eaf939678c2b68b45776b9f378f289a21#npm:1.2.0"],\
           ["tslib", "npm:2.6.3"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"],\
           ["web-streams-polyfill", "npm:3.3.3"]\
         ],\
         "linkType": "SOFT"\
@@ -1444,7 +1445,7 @@ const RAW_RUNTIME_STATE =
           ["react-dom", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:18.3.1"],\
           ["tailwind-styled-components", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:2.2.0"],\
           ["tailwindcss", "npm:3.4.4"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"],\
           ["vite", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:5.3.2"],\
           ["vite-plugin-svgr", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:4.2.0"]\
         ],\
@@ -4694,7 +4695,7 @@ const RAW_RUNTIME_STATE =
           ["natural-compare", "npm:1.4.0"],\
           ["semver", "npm:7.5.4"],\
           ["ts-api-utils", "virtual:13ffd1bc07b93281b72291274c0af093a3c26b60d89e902c40c3a0ebaa025b0ecc48219e0815a802de39ad5bb2fd3be177da27656fe98ae9708708aac6f2b114#npm:1.0.1"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"]\
         ],\
         "packagePeers": [\
           "@types/eslint",\
@@ -4727,7 +4728,7 @@ const RAW_RUNTIME_STATE =
           ["@typescript-eslint/visitor-keys", "npm:6.21.0"],\
           ["debug", "virtual:1ff4b5f90832ba0a9c93ba1223af226e44ba70c1126a3740d93562b97bc36544e896a5e95908196f7458713e6a6089a34bfc67362fc6df7fa093bd06c878be47#npm:4.3.4"],\
           ["eslint", "npm:8.57.0"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"]\
         ],\
         "packagePeers": [\
           "@types/eslint",\
@@ -4768,7 +4769,7 @@ const RAW_RUNTIME_STATE =
           ["debug", "virtual:1ff4b5f90832ba0a9c93ba1223af226e44ba70c1126a3740d93562b97bc36544e896a5e95908196f7458713e6a6089a34bfc67362fc6df7fa093bd06c878be47#npm:4.3.4"],\
           ["eslint", "npm:8.57.0"],\
           ["ts-api-utils", "virtual:13ffd1bc07b93281b72291274c0af093a3c26b60d89e902c40c3a0ebaa025b0ecc48219e0815a802de39ad5bb2fd3be177da27656fe98ae9708708aac6f2b114#npm:1.0.1"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"]\
         ],\
         "packagePeers": [\
           "@types/eslint",\
@@ -4830,7 +4831,7 @@ const RAW_RUNTIME_STATE =
           ["minimatch", "npm:9.0.3"],\
           ["semver", "npm:7.5.4"],\
           ["ts-api-utils", "virtual:13ffd1bc07b93281b72291274c0af093a3c26b60d89e902c40c3a0ebaa025b0ecc48219e0815a802de39ad5bb2fd3be177da27656fe98ae9708708aac6f2b114#npm:1.0.1"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"]\
         ],\
         "packagePeers": [\
           "@types/typescript",\
@@ -5632,7 +5633,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-plugin-react-hooks", "virtual:28a3b42add2c462f25029e8605467cc8854806df10aedb182d8356898f159d8c6e6526142b40870a19fca1725d5b4e34e41538e35883dd53da2f7fdf4a263e15#npm:4.6.2"],\
           ["prettier", "npm:3.2.4"],\
           ["prettier-plugin-organize-imports", "virtual:28a3b42add2c462f25029e8605467cc8854806df10aedb182d8356898f159d8c6e6526142b40870a19fca1725d5b4e34e41538e35883dd53da2f7fdf4a263e15#npm:3.2.4"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -11401,7 +11402,7 @@ const RAW_RUNTIME_STATE =
           ["@volar/vue-language-plugin-pug", null],\
           ["@volar/vue-typescript", null],\
           ["prettier", "npm:3.2.4"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"]\
         ],\
         "packagePeers": [\
           "@types/prettier",\
@@ -11426,7 +11427,7 @@ const RAW_RUNTIME_STATE =
           ["@volar/vue-language-plugin-pug", null],\
           ["@volar/vue-typescript", null],\
           ["prettier", "npm:3.2.4"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"]\
         ],\
         "packagePeers": [\
           "@types/prettier",\
@@ -11994,7 +11995,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["resolve-tsconfig", "virtual:3fd8ccc123dfd8752bcf9862f1479cbb24e6815ee28b70993142c6e3f3ca6cbd980126e489c3dc7631fa3456cc4504b7a3d7f12159e49c1819deeff16aad505d#npm:1.3.0"],\
           ["@types/typescript", null],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"]\
         ],\
         "packagePeers": [\
           "@types/typescript",\
@@ -13295,7 +13296,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["ts-api-utils", "virtual:13ffd1bc07b93281b72291274c0af093a3c26b60d89e902c40c3a0ebaa025b0ecc48219e0815a802de39ad5bb2fd3be177da27656fe98ae9708708aac6f2b114#npm:1.0.1"],\
           ["@types/typescript", null],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"]\
         ],\
         "packagePeers": [\
           "@types/typescript",\
@@ -13358,7 +13359,7 @@ const RAW_RUNTIME_STATE =
           ["lodash.memoize", "npm:4.1.2"],\
           ["make-error", "npm:1.3.6"],\
           ["semver", "npm:7.5.4"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"],\
           ["yargs-parser", "npm:21.1.1"]\
         ],\
         "packagePeers": [\
@@ -13404,7 +13405,7 @@ const RAW_RUNTIME_STATE =
           ["tsconfig-to-dual-package", "virtual:f4f0705b3d062e5f76bbf430101f687a40b2d2ee7237e4f5b0123dd70cef21ff2c9639d3f142d51d1f96b59ca235b03eaf939678c2b68b45776b9f378f289a21#npm:1.2.0"],\
           ["@types/typescript", null],\
           ["resolve-tsconfig", "virtual:3fd8ccc123dfd8752bcf9862f1479cbb24e6815ee28b70993142c6e3f3ca6cbd980126e489c3dc7631fa3456cc4504b7a3d7f12159e49c1819deeff16aad505d#npm:1.3.0"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"]\
         ],\
         "packagePeers": [\
           "@types/typescript",\
@@ -13482,10 +13483,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["typescript", [\
-      ["patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7", {\
-        "packageLocation": "../../../.yarn/berry/cache/typescript-patch-4778c7998b-10c0.zip/node_modules/typescript/",\
+      ["patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07", {\
+        "packageLocation": "../../../.yarn/berry/cache/typescript-patch-7885ea9a13-10c0.zip/node_modules/typescript/",\
         "packageDependencies": [\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
+          ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -15785,6 +15786,12 @@ class ProxiedFS extends FakeFS {
   rmdirSync(p, opts) {
     return this.baseFs.rmdirSync(this.mapToBase(p), opts);
   }
+  async rmPromise(p, opts) {
+    return this.baseFs.rmPromise(this.mapToBase(p), opts);
+  }
+  rmSync(p, opts) {
+    return this.baseFs.rmSync(this.mapToBase(p), opts);
+  }
   async linkPromise(existingP, newP) {
     return this.baseFs.linkPromise(this.mapToBase(existingP), this.mapToBase(newP));
   }
@@ -16165,6 +16172,18 @@ class NodeFS extends BasePortableFakeFS {
   }
   rmdirSync(p, opts) {
     return this.realFs.rmdirSync(npath.fromPortablePath(p), opts);
+  }
+  async rmPromise(p, opts) {
+    return await new Promise((resolve, reject) => {
+      if (opts) {
+        this.realFs.rm(npath.fromPortablePath(p), opts, this.makeCallback(resolve, reject));
+      } else {
+        this.realFs.rm(npath.fromPortablePath(p), this.makeCallback(resolve, reject));
+      }
+    });
+  }
+  rmSync(p, opts) {
+    return this.realFs.rmSync(npath.fromPortablePath(p), opts);
   }
   async linkPromise(existingP, newP) {
     return await new Promise((resolve, reject) => {
@@ -16821,6 +16840,20 @@ class MountFS extends BasePortableFakeFS {
       return mountFs.rmdirSync(subPath, opts);
     });
   }
+  async rmPromise(p, opts) {
+    return await this.makeCallPromise(p, async () => {
+      return await this.baseFs.rmPromise(p, opts);
+    }, async (mountFs, { subPath }) => {
+      return await mountFs.rmPromise(subPath, opts);
+    });
+  }
+  rmSync(p, opts) {
+    return this.makeCallSync(p, () => {
+      return this.baseFs.rmSync(p, opts);
+    }, (mountFs, { subPath }) => {
+      return mountFs.rmSync(subPath, opts);
+    });
+  }
   async linkPromise(existingP, newP) {
     return await this.makeCallPromise(newP, async () => {
       return await this.baseFs.linkPromise(existingP, newP);
@@ -17459,6 +17492,7 @@ const SYNC_IMPLEMENTATIONS = /* @__PURE__ */ new Set([
   `realpathSync`,
   `renameSync`,
   `rmdirSync`,
+  `rmSync`,
   `statSync`,
   `symlinkSync`,
   `truncateSync`,
@@ -17494,6 +17528,7 @@ const ASYNC_IMPLEMENTATIONS = /* @__PURE__ */ new Set([
   `readlinkPromise`,
   `renamePromise`,
   `rmdirPromise`,
+  `rmPromise`,
   `statPromise`,
   `symlinkPromise`,
   `truncatePromise`,
@@ -19517,6 +19552,27 @@ class ZipFS extends BasePortableFakeFS {
     const index = this.entries.get(resolvedP);
     if (typeof index === `undefined`)
       throw EINVAL(`rmdir '${p}'`);
+    this.deleteEntry(p, index);
+  }
+  async rmPromise(p, opts) {
+    return this.rmSync(p, opts);
+  }
+  rmSync(p, { recursive = false } = {}) {
+    if (this.readOnly)
+      throw EROFS(`rm '${p}'`);
+    if (recursive) {
+      this.removeSync(p);
+      return;
+    }
+    const resolvedP = this.resolveFilename(`rm '${p}'`, p);
+    const directoryListing = this.listings.get(resolvedP);
+    if (!directoryListing)
+      throw ENOTDIR(`rm '${p}'`);
+    if (directoryListing.size > 0)
+      throw ENOTEMPTY(`rm '${p}'`);
+    const index = this.entries.get(resolvedP);
+    if (typeof index === `undefined`)
+      throw EINVAL(`rm '${p}'`);
     this.deleteEntry(p, index);
   }
   hydrateDirectory(resolvedP) {

@@ -586,7 +586,7 @@ __metadata:
     "@types/react": "npm:18.3.3"
     lodash: "npm:4.17.21"
     react: "npm:^18.2.0"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.5.2"
   languageName: unknown
   linkType: soft
 
@@ -617,7 +617,7 @@ __metadata:
     remark-smartypants: "npm:3.0.1"
     rollup: "npm:4.18.0"
     tailwindcss: "npm:3.4.4"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.5.2"
     vite: "npm:5.3.2"
     wrangler: "npm:3.62.0"
   languageName: unknown
@@ -637,7 +637,7 @@ __metadata:
     react: "npm:18.3.1"
     react-dom: "npm:18.3.1"
     tailwindcss: "npm:3.4.4"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.5.2"
     vite: "npm:5.3.2"
     wrangler: "npm:3.62.0"
   languageName: unknown
@@ -667,7 +667,7 @@ __metadata:
     ts-jest-resolver: "npm:2.0.1"
     tsconfig-to-dual-package: "npm:1.2.0"
     tslib: "npm:2.6.3"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.5.2"
   bin:
     baq: ./build/src/index.js
   languageName: unknown
@@ -682,7 +682,7 @@ __metadata:
     sharp: "npm:0.33.4"
     svgo: "npm:3.3.2"
     tailwindcss: "npm:3.4.4"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.5.2"
     vite: "npm:5.3.2"
     vite-plugin-image-optimizer: "npm:1.1.8"
     vite-plugin-svgr: "npm:4.2.0"
@@ -725,7 +725,7 @@ __metadata:
     sharp: "npm:0.33.4"
     slugify: "npm:1.6.6"
     tailwindcss: "npm:3.4.4"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.5.2"
     webpack: "npm:5.92.1"
     ws: "npm:8.17.1"
   languageName: unknown
@@ -751,7 +751,7 @@ __metadata:
     react: "npm:18.3.1"
     react-dom: "npm:18.3.1"
     tailwindcss: "npm:3.4.4"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.5.2"
     vite: "npm:5.3.2"
     wrangler: "npm:3.62.0"
   languageName: unknown
@@ -777,7 +777,7 @@ __metadata:
     react: "npm:18.3.1"
     react-dom: "npm:18.3.1"
     tailwindcss: "npm:3.4.4"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.5.2"
     vite: "npm:5.3.2"
     wrangler: "npm:3.62.0"
   languageName: unknown
@@ -794,7 +794,7 @@ __metadata:
     expo-secure-store: "npm:^12.8.1"
     tsconfig-to-dual-package: "npm:1.2.0"
     tslib: "npm:2.6.3"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.5.2"
   peerDependencies:
     expo: "*"
     react-native: ">=0.60"
@@ -808,7 +808,7 @@ __metadata:
     "@baqhub/sdk-react": "npm:^0.1.9"
     tsconfig-to-dual-package: "npm:1.2.0"
     tslib: "npm:^2.6.3"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.5.2"
   languageName: unknown
   linkType: soft
 
@@ -828,7 +828,7 @@ __metadata:
     text-encoding: "npm:^0.7.0"
     tsconfig-to-dual-package: "npm:1.2.0"
     tslib: "npm:^2.6.3"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.5.2"
     web-streams-polyfill: "npm:^3.3.3"
   peerDependencies:
     react-native: ">=0.60"
@@ -851,7 +851,7 @@ __metadata:
     ts-jest-resolver: "npm:2.0.1"
     tsconfig-to-dual-package: "npm:1.2.0"
     tslib: "npm:^2.6.3"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.5.2"
     use-sync-external-store: "npm:^1.2.2"
   languageName: unknown
   linkType: soft
@@ -876,7 +876,7 @@ __metadata:
     ts-jest-resolver: "npm:2.0.1"
     tsconfig-to-dual-package: "npm:1.2.0"
     tslib: "npm:^2.6.3"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.5.2"
     uuid: "npm:^10.0.0"
   languageName: unknown
   linkType: soft
@@ -905,7 +905,7 @@ __metadata:
     react-dom: "npm:18.3.1"
     tailwind-styled-components: "npm:2.2.0"
     tailwindcss: "npm:3.4.4"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.5.2"
     vite: "npm:5.3.2"
     vite-plugin-svgr: "npm:4.2.0"
   languageName: unknown
@@ -4202,7 +4202,7 @@ __metadata:
     eslint-plugin-react-hooks: "npm:4.6.2"
     prettier: "npm:3.2.4"
     prettier-plugin-organize-imports: "npm:3.2.4"
-    typescript: "npm:5.3.3"
+    typescript: "npm:5.5.2"
   languageName: unknown
   linkType: soft
 
@@ -11220,23 +11220,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.3.3":
-  version: 5.3.3
-  resolution: "typescript@npm:5.3.3"
+"typescript@npm:5.5.2":
+  version: 5.5.2
+  resolution: "typescript@npm:5.5.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/e33cef99d82573624fc0f854a2980322714986bc35b9cb4d1ce736ed182aeab78e2cb32b385efa493b2a976ef52c53e20d6c6918312353a91850e2b76f1ea44f
+  checksum: 10c0/8ca39b27b5f9bd7f32db795045933ab5247897660627251e8254180b792a395bf061ea7231947d5d7ffa5cb4cc771970fd4ef543275f9b559f08c9325cccfce3
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>":
-  version: 5.3.3
-  resolution: "typescript@patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"
+"typescript@patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>":
+  version: 5.5.2
+  resolution: "typescript@patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/1d0a5f4ce496c42caa9a30e659c467c5686eae15d54b027ee7866744952547f1be1262f2d40de911618c242b510029d51d43ff605dba8fb740ec85ca2d3f9500
+  checksum: 10c0/a7b7ede75dc7fc32a76d0d0af6b91f5fbd8620890d84c906f663d8783bf3de6d7bd50f0430b8bb55eac88a38934af847ff709e7156e5138b95ae94cbd5f73e5b
   languageName: node
   linkType: hard
 
