@@ -31,14 +31,14 @@
     "react-native-polyfill-globals": "^3.1.0",
     "react-native-url-polyfill": "^2.0.0",
     "text-encoding": "^0.7.0",
-    "tslib": "^2.6.2",
+    "tslib": "^2.6.3",
     "web-streams-polyfill": "^3.3.3"
   },
   "peerDependencies": {
     "react-native": ">=0.60"
   },
   "devDependencies": {
-    "@types/node": "20.12.12",
+    "@types/node": "20.14.9",
     "tsconfig-to-dual-package": "1.2.0",
     "typescript": "5.3.3"
   }
