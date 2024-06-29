@@ -5,6 +5,7 @@ on:
     branches:
       - main
     paths:
+      - .github/workflows/libPublish.yml
       - packages/lib-*/**
 
 jobs:
@@ -19,7 +20,7 @@ jobs:
       - name: Cache
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
           cache: "yarn"
 
       - name: Install
