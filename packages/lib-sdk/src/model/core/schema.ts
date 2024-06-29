@@ -115,7 +115,6 @@ interface RecordLinkSchema {
 
 interface VersionLinkSchema {
   type: "version_link";
-  existential?: boolean;
   recordTypes?: ReadonlyArray<AnyRecordLink>;
 }
 
@@ -311,10 +310,7 @@ const RVersionLinkSchema: IO.Type<VersionLinkSchema> = IO.recursion(
   () =>
     IO.dualObject(
       {type: IO.literal("version_link")},
-      {
-        existential: IO.boolean,
-        recordTypes: IO.readonlyArray(AnyRecordLink.io()),
-      }
+      {recordTypes: IO.readonlyArray(AnyRecordLink.io())}
     )
 );
 
