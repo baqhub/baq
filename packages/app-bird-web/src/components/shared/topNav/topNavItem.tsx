@@ -1,25 +1,13 @@
 import {Handler} from "@baqhub/sdk";
 import {tw} from "@baqhub/ui/core/style.js";
-import {
-  AnyRoute,
-  Link,
-  RegisteredRouter,
-  RoutePaths,
-  ToOptions,
-} from "@tanstack/react-router";
+import {Link, ToOptions} from "@tanstack/react-router";
 import {FC, PropsWithChildren} from "react";
 
 //
 // Props.
 //
 
-type TopNavItemLinkProps<
-  TRouteTree extends AnyRoute,
-  TFrom extends RoutePaths<TRouteTree> | string,
-  TTo extends string,
-  TMaskFrom extends RoutePaths<TRouteTree> | string,
-  TMaskTo extends string,
-> = ToOptions<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo> & PropsWithChildren;
+type TopNavItemLinkProps = ToOptions & PropsWithChildren;
 
 interface TopNavItemProps extends PropsWithChildren {
   onClick: Handler;
@@ -62,13 +50,7 @@ const Icon = tw.div`
 // Component.
 //
 
-export function TopNavItemLink<
-  TRouteTree extends AnyRoute = RegisteredRouter["routeTree"],
-  TFrom extends RoutePaths<TRouteTree> | string = string,
-  TTo extends string = "",
-  TMaskFrom extends RoutePaths<TRouteTree> | string = TFrom,
-  TMaskTo extends string = "",
->(props: TopNavItemLinkProps<TRouteTree, TFrom, TTo, TMaskFrom, TMaskTo>) {
+export function TopNavItemLink(props: TopNavItemLinkProps) {
   const {children, ...linkProps} = props;
   return (
     // TODO: Remove hack when types are fixed.
