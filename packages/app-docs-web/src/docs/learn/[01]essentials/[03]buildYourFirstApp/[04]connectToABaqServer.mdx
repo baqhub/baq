@@ -133,14 +133,15 @@ import {TaskList} from "./components/TaskList";
 +import {buildAuthentication} from "./baq/authentication";
 +import {Store} from "./baq/store";
 
-+// Pick a storage provider for authentication data (here localStorage).
-+const {useAuthentication} = buildAuthentication({
-+  storage: localStorageAdapter,
-+});
-
 +// Build the redirect URL from the current location.
 +const redirectUrl =
 +  window.location.origin + "?authorization_id={authorization_id}";
+
++// Pick a storage provider for authentication data (here localStorage).
++const {useAuthentication} = buildAuthentication({
++  storage: localStorageAdapter,
++  redirectUrl,
++});
 
 +// Read the "authorization_id" from the query params.
 +const currentUrl = new URL(window.location.href);
@@ -149,7 +150,6 @@ import {TaskList} from "./components/TaskList";
 export const App: FC = () => {
 +  // Find the current authentication state.
 +  const {state, onConnectRequest, onDisconnectRequest} = useAuthentication(
-+    redirectUrl,
 +    {authorizationId}
 +  );
 
