@@ -1,6 +1,6 @@
 {
   "name": "@baqhub/sdk-react-dom",
-  "version": "0.1.9",
+  "version": "0.1.13",
   "description": "",
   "type": "module",
   "sideEffects": false,
@@ -23,7 +23,7 @@
   "author": "Baqhub",
   "license": "MIT",
   "dependencies": {
-    "@baqhub/sdk-react": "^0.1.9",
+    "@baqhub/sdk-react": "^0.1.13",
     "tslib": "^2.6.3"
   },
   "devDependencies": {

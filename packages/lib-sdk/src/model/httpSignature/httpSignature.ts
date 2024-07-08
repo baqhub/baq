@@ -3,10 +3,6 @@ import * as IO from "../../helpers/io.js";
 import {sign} from "../../helpers/signature.js";
 import {Str} from "../../helpers/string.js";
 import {
-  CredentialsAlgorithm,
-  RCredentialsAlgorithm,
-} from "../core/credentialsAlgorithm.js";
-import {
   HttpSignatureHeader,
   RHttpSignatureHeader,
 } from "./httpSignatureHeader.js";
@@ -28,7 +24,6 @@ export interface HttpSignature {
   timestamp: number;
   nonce: string;
   headers: ReadonlyArray<`${HttpSignatureHeader}`>;
-  algorithm: CredentialsAlgorithm;
   signature: Uint8Array;
 }
 
@@ -42,7 +37,6 @@ function signatureToHeader(signature: HttpSignature) {
     ["ts", signature.timestamp.toString()],
     ["nonce", signature.nonce],
     ["headers", signature.headers.map(RHttpSignatureHeader.encode).join(",")],
-    ["algorithm", RCredentialsAlgorithm.encode(signature.algorithm)],
     ["signature", IO.base64Bytes.encode(signature.signature)],
   ];
 
@@ -60,8 +54,6 @@ function buildSignatureString(
   input: HttpSignatureInput
 ) {
   const prefixString = RHttpSignaturePrefix.encode(prefix);
-  const algorithmString = RCredentialsAlgorithm.encode(signature.algorithm);
-
   const headersString = signature.headers
     .map(header => {
       const headerKey = RHttpSignatureHeader.encode(header);
@@ -73,7 +65,6 @@ function buildSignatureString(
 
   return [
     prefixString,
-    algorithmString,
     signature.timestamp,
     signature.nonce,
     input.authorizationId || "",
@@ -96,7 +87,6 @@ function httpSign(
     timestamp: Date.now(),
     nonce: Str.random(8),
     headers: [...input.headerValues.keys()],
-    algorithm: CredentialsAlgorithm.ED_25519,
     signature: new Uint8Array(0),
   };
 

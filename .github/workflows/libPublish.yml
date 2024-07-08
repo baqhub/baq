@@ -39,28 +39,28 @@ jobs:
           yarn lib-sdk:test
 
       - name: Publish "lib-sdk"
-        uses: JS-DevTools/npm-publish@v2
+        uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
           access: public
           package: ./packages/lib-sdk/
 
       - name: Publish "lib-sdk-react"
-        uses: JS-DevTools/npm-publish@v2
+        uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
           access: public
           package: ./packages/lib-sdk-react/
 
       - name: Publish "lib-sdk-react-dom"
-        uses: JS-DevTools/npm-publish@v2
+        uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
           access: public
           package: ./packages/lib-sdk-react-dom/
 
       - name: Publish "lib-cli"
-        uses: JS-DevTools/npm-publish@v2
+        uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
           access: public

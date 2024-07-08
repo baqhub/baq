@@ -7,6 +7,7 @@ import {findLink} from "../helpers/headers.js";
 import * as IO from "../helpers/io.js";
 import {Str} from "../helpers/string.js";
 import {findStableTimestamp} from "../helpers/time.js";
+import {HttpCredentialsHeader} from "../model/core/httpCredentialsHeader.js";
 import {HttpHeaders} from "../model/core/httpHeaders.js";
 import {HttpMethod} from "../model/core/httpMethod.js";
 import {HttpBearerSignature} from "../model/httpSignature/httpBearerSignature.js";
@@ -249,11 +250,11 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     credentialsRecord: ServerCredentialsRecord,
     signal?: AbortSignal
   ) {
+    const credentialsHeader = HttpCredentialsHeader.ofRecord(credentialsRecord);
     const options: PostRecordOptions = {
       headers: {
-        [Constants.publicKeyHeader]: IO.base64Bytes.encode(
-          credentialsRecord.content.publicKey
-        ),
+        [Constants.credentialsHeader]:
+          HttpCredentialsHeader.toString(credentialsHeader),
       },
     };
 
@@ -265,12 +266,14 @@ function buildClientBase(clientOptions: BuildClientOptions) {
       options
     );
 
-    const publicKey = headers.get(Constants.publicKeyHeader);
-    if (!publicKey) {
-      throw new Error("Server public key not found.");
+    const responseCredentials = HttpCredentialsHeader.tryParseHeader(
+      headers.get(Constants.credentialsHeader)
+    );
+    if (!responseCredentials) {
+      throw new Error("Server credentials not found.");
     }
 
-    return [publicKey, response.record] as const;
+    return [responseCredentials.publicKey, response.record] as const;
   }
 
   async function putRecord<K extends RAnyRecord, R extends RAnyRecord>(

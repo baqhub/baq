@@ -45,11 +45,11 @@ async function register(
   const credentialsRecord = buildServerCredentialsRecord(appRecord);
 
   const authenticatedClient = Client.authenticated({
-    authorizationId: undefined,
     entityRecord,
     appRecord,
     credentialsRecord,
-    serverPublicKey: "",
+    serverPublicKey: undefined,
+    authorizationId: undefined,
   });
 
   const [serverPublicKey, serverAppRecord] =

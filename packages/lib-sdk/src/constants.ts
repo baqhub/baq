@@ -5,7 +5,7 @@ export const Constants = {
   httpSignaturePrefix: "BAQ",
   clientIdHeader: "X-Baq-Client-Id",
   contentSha256Header: "X-Baq-Content-SHA256",
-  publicKeyHeader: "X-Baq-PublicKey",
+  credentialsHeader: "X-Baq-Credentials",
   lastEventIdHeader: "Last-Event-ID",
   defaultPageSize: 20,
 };
