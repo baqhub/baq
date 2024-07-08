@@ -100,16 +100,9 @@ export function fetchEventSource(
         }
       } catch (err) {
         if (!abortController.signal.aborted) {
-          // if we haven't aborted the request ourselves:
-          try {
-            // check if we need to retry:
-            clearTimeout(retryTimer);
-            retryTimer = setTimeout(create, retryInterval);
-          } catch (innerErr) {
-            // we should not retry anymore:
-            dispose();
-            reject(innerErr);
-          }
+          // if we haven't aborted the request ourselves, retry.
+          clearTimeout(retryTimer);
+          retryTimer = setTimeout(create, retryInterval);
         }
       }
     }

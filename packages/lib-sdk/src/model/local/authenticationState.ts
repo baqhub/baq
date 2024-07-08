@@ -11,7 +11,7 @@ const RAuthenticationStateRaw = IO.object({
   entityRecord: EntityRecord,
   appRecord: AppRecord,
   credentialsRecord: ServerCredentialsRecord,
-  serverPublicKey: IO.string,
+  serverPublicKey: IO.union([IO.undefined, IO.base64Bytes]),
   authorizationId: IO.union([IO.undefined, IO.string]),
 });
 
