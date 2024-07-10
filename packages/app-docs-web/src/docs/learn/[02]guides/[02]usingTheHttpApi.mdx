@@ -104,7 +104,7 @@ To get permission to access private records and create new records, the app need
 
 #### Step 1
 
-Register the app with the user's server by creating an app record. Here we have an app that requests permission to read and write all Task records for this user. We also send the public key of the credentials we'll use to sign requests in a separate HTTP header.
+Register the app with the user's server by creating an app record. Here we have an app that requests permission to read and write all Task records for this user. We also send the public credentials we'll use to sign requests in a separate HTTP header.
 
 ```http
 POST /api/alice/records HTTP/2
