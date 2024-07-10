@@ -5,7 +5,7 @@ import {RAnyRecord} from "../records/record.js";
 // Model.
 //
 
-export function recordResponse<K extends RAnyRecord, T extends IO.Any>(
+function recordResponse<K extends RAnyRecord, T extends IO.Any>(
   knownRecord: K,
   recordType: T
 ) {
@@ -14,3 +14,7 @@ export function recordResponse<K extends RAnyRecord, T extends IO.Any>(
     linkedRecords: IO.readonlyArray(knownRecord),
   });
 }
+
+export const RecordResponse = {
+  io: recordResponse,
+};

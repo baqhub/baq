@@ -32,7 +32,7 @@ import {
   Record,
 } from "../model/records/record.js";
 import {RBlobResponse} from "../model/response/blobResponse.js";
-import {recordResponse} from "../model/response/recordResponse.js";
+import {RecordResponse} from "../model/response/recordResponse.js";
 import {recordsResponse} from "../model/response/recordsResponse.js";
 import {Api} from "./api.js";
 import {Http, HttpAuthorizationBuilder, HttpOptions} from "./http.js";
@@ -138,7 +138,7 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     const urlAndQuery = url + Query.singleToQueryString(query);
     const httpOptions: HttpOptions = {authorizationBuilder, signal};
 
-    const responseModel = recordResponse(knownModel, model);
+    const responseModel = RecordResponse.io(knownModel, model);
     const [, response] = await Api.get(responseModel, urlAndQuery, httpOptions);
     return response;
   }
@@ -164,7 +164,7 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     const urlAndQuery = url + Query.singleToQueryString(query);
     const httpOptions: HttpOptions = {authorizationBuilder, signal};
 
-    const responseModel = recordResponse(knownModel, model);
+    const responseModel = RecordResponse.io(knownModel, model);
     const [, response] = await Api.get(responseModel, urlAndQuery, httpOptions);
     return response;
   }
@@ -200,10 +200,16 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     return response;
   }
 
-  async function recordEventSource<R extends IO.Any>(
+  async function recordEventSource<
+    Q extends AnyRecord,
+    R extends
+      | IO.Type<Q, unknown, unknown>
+      | IO.Type<NoContentRecord, unknown, unknown>
+      | IO.Type<Q | NoContentRecord, unknown, unknown>,
+  >(
     recordModel: R,
     onRecord: (record: IO.TypeOf<R>) => void,
-    query: Query<IO.TypeOf<R>>,
+    query: Query<Q>,
     signal: AbortSignal
   ) {
     const url = await expandUrlTemplate("events", {}, signal);
@@ -215,7 +221,7 @@ function buildClientBase(clientOptions: BuildClientOptions) {
 
   async function postRecordBaseAsync<
     K extends RAnyRecord,
-    R extends RAnyRecord,
+    R extends RAnyEventRecord,
   >(
     knownModel: K,
     recordModel: R,
@@ -224,13 +230,13 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     options: PostRecordOptions = {}
   ) {
     const url = await expandUrlTemplate("newRecord", {}, signal);
-    const responseModel = recordResponse(knownModel, recordModel);
+    const responseModel = RecordResponse.io(knownModel, recordModel);
     const httpOptions: HttpOptions = {...options, authorizationBuilder, signal};
 
     return await Api.post(responseModel, recordModel, record, url, httpOptions);
   }
 
-  async function postRecord<K extends RAnyRecord, R extends RAnyRecord>(
+  async function postRecord<K extends RAnyRecord, R extends RAnyEventRecord>(
     knownModel: K,
     recordModel: R,
     record: IO.TypeOf<R>,
@@ -291,7 +297,7 @@ function buildClientBase(clientOptions: BuildClientOptions) {
       signal
     );
 
-    const responseModel = recordResponse(knownModel, recordModel);
+    const responseModel = RecordResponse.io(knownModel, recordModel);
     const httpOptions: HttpOptions = {authorizationBuilder, signal};
 
     const [, response] = await Api.put(
@@ -319,7 +325,7 @@ function buildClientBase(clientOptions: BuildClientOptions) {
       signal
     );
 
-    const responseModel = recordResponse(knownModel, RNoContentRecord);
+    const responseModel = RecordResponse.io(knownModel, RNoContentRecord);
     const httpOptions: HttpOptions = {authorizationBuilder, signal};
 
     const [_, response] = await Api.delete(
@@ -481,7 +487,7 @@ async function getEntityRecordFromEntityRecordUrl(
   signal: AbortSignal
 ) {
   const options: HttpOptions = {signal};
-  const responseModel = recordResponse(AnyRecord, EntityRecord);
+  const responseModel = RecordResponse.io(AnyRecord, EntityRecord);
   const [, {record}] = await Api.get(
     responseModel,
     fixUrl(entityRecordUrl),

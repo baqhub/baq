@@ -179,20 +179,12 @@ export async function performMutationRequest<
     })();
 
     try {
-      const {record, linkedRecords} = await (() => {
-        // Create record.
-        if ("content" in newRecord && !newRecord.version?.parentHash) {
-          return client.postRecord(model, model, newRecord, signal);
-        }
-
-        // Update record.
-        if ("content" in newRecord) {
-          return client.putRecord(model, model, newRecord, signal);
-        }
-
-        // Delete record
-        return client.deleteRecord(model, newRecord, signal);
-      })();
+      const {record, linkedRecords} = await client.postRecord(
+        model,
+        eventModel,
+        newRecord,
+        signal
+      );
 
       return applyUpdates(
         state,
