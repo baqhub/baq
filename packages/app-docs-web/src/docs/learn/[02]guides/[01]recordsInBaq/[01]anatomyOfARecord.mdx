@@ -1,0 +1,66 @@
+export const metadata = {
+  id: "c4930c8e",
+  title: "Anatomy of a record",
+};
+
+# Anatomy of a record
+
+A record is the core unit of data within the BAQ network. Every record exposes a set of properties that inform servers on what they should do with it. This is an overview of these properties at a high level.
+
+See the [record reference](01735953) for more technical information.
+
+{props.toc}
+
+## Links
+
+Records can reference other objects within the BAQ network:
+
+<props.compactList>
+
+- **Tags**: Plain strings.
+
+- **Blobs**: Opaque binary objects (images, videos...).
+
+- **Records**: Other BAQ records.
+
+- **Entities**: Other BAQ users.
+
+</props.compactList>
+
+Link are used to define relationships between records. They can be used to enable detailed queries, and `existential` links make it possible to cascade delete records.
+
+## Identity
+
+A record is identified by its `author` and `id`.
+
+- The `author` is a link to the user that originally created the record. They remain the source of truth for the record, even if other people update it.
+
+- The `id` is a unique identifier within the scope of the `author`.
+
+## Type
+
+A record's [schema](c64170ca) is defined by its `type`, which is a link to a [Type record](27a5d157).
+
+Some types are built-in to implement some of the protocol [core features](ab269c26), but anyone can create and publish their own types to best represent the data model needed for their apps.
+
+## Permissions
+
+The `permissions` object contains links to other entities to give them read/write access to the record. It also instructs servers on where to propagate it when published. Records generally fall into one of three categories:
+
+<props.compactList>
+
+- **Private record**: Only accessible to the original author.
+
+- **Shared record**: Accessible to a small set of entities.
+
+- **Public record**: Visible to everyone.
+
+</props.compactList>
+
+## Version
+
+Records are versioned: updating a record creates a new record version.
+
+Each record version is immutable and uniquely identified by its `version.hash` property. New record versions must explicitly link to the parent version they update.
+
+New record versions may be created by users other than the original author, provided they have permission to do so.
