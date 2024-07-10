@@ -4,3 +4,296 @@ export const metadata = {
 };
 
 # Using the HTTP API
+
+The BAQ HTTP API is how apps communicate with servers, and how servers communicate with one another. It returns data in JSON format and follows familiar REST principles.
+
+{props.toc}
+
+## Discovery
+
+To start interacting with a BAQ server, we need to find the endpoints it exposes. This is done through the [discovery process](15c9fa81) that makes it possible to find a user's server from their entity.
+
+#### Step 1
+
+Perform a [HEAD request](15c9fa81) on the entity to discover:
+
+```http
+HEAD / HTTP/2
+Host: alice.baq.run
+```
+
+This returns a `Link` header with the URL of the user's [Entity record](375c4ea9):
+
+```http
+HTTP/2 204 No Content
+Link: <https://baq.run/api/alice/records/alice.baq.run/529acdec9bcb48fc98c4be5271f0f698>; rel="https://baq.dev/rels/entity-record"
+```
+
+#### Step 2
+
+Download the user's Entity record:
+
+```http
+GET /api/alice/records/alice.baq.run/529acdec9bcb48fc98c4be5271f0f698 HTTP/2
+Host: baq.run
+```
+
+```http
+HTTP/2 200 OK
+Content-Type: application/json
+
+{
+  "record": {
+    "author": {"entity": "alice.baq.run"},
+    "content": {
+      "previous_entities": [],
+      "profile": {
+        "name": "Alice"
+      },
+      "servers": [
+        {
+          "version": "1.0.0",
+          "preference": 0,
+          "endpoints": {
+            "auth": "https://baq.run/alice/auth/{record_id}",
+            "records": "https://baq.run/api/alice/records",
+            "record": "https://baq.run/api/alice/records/{entity}/{record_id}",
+            "record_versions": "https://baq.run/api/alice/records/{entity}/{record_id}/versions",
+            "record_version": "https://baq.run/api/alice/records/{entity}/{record_id}/versions/{version_hash}",
+            "new_record": "https://baq.run/api/alice/records",
+            "record_blob": "https://baq.run/api/alice/records/{entity}/{record_id}/blobs/{blob_hash}/{file_name}",
+            "record_version_blob": "https://baq.run/api/alice/records/{entity}/{record_id}/versions/{version_hash}/blobs/{blob_hash}/{file_name}",
+            "new_blob": "https://baq.run/api/alice/blobs",
+            "events": "https://baq.run/api/alice/events",
+            "new_notification": "https://baq.run/api/alice/notifications",
+            "server_info": "https://baq.run/api/alice/server"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+This contains basic profile information, along with the API endpoints to use to communicate with the user's server.
+
+## Fetch public records
+
+Public records can be fetched without any form of authentication through the [`records`](a29bdfea) or [`record`](e9aabfb6) endpoints. This comes in handy to display public content to any visitor, like for a blog or podcast.
+
+The following request returns all public Task records from that user:
+
+```http
+GET /api/alice/records?filter=$['type']=types.baq.dev+fe727f22b5c34fb185a370449e4f0128 HTTP/2
+Host: baq.run
+```
+
+```http
+HTTP/2 200 OK
+Content-Type: application/json
+
+{
+  "records": [...],
+  "linked_records": [...]
+}
+```
+
+## Authenticate
+
+To get permission to access private records and create new records, the app needs to be authorized by the user.
+
+#### Step 1
+
+Register the app with the user's server by creating an app record. Here we have an app that requests permission to read and write all Task records for this user. We also send the public credentials we'll use to sign requests in a separate HTTP header.
+
+```http
+POST /api/alice/records HTTP/2
+Host: baq.run
+Content-Type: application/json
+Authorization: BAQ ...
+X-Baq-Credentials: algorithm="ed25519" public_key="yLRK/T3oCvqnLuEQ54yDgAgVU0+m772JeaJ0vlD45Mg="
+
+{
+  "name": "BAQ Todos",
+  "uris": {
+    "redirect": "https://tododemo.baq.dev/?authorization_id={authorization_id}",
+    "website": "https://tododemo.baq.dev"
+  },
+  "scope_request": {
+    "read": [
+      {
+        "entity": "types.baq.dev",
+        "record_id": "fe727f22b5c34fb185a370449e4f0128"
+      }
+    ],
+    "write": [
+      {
+        "entity": "types.baq.dev",
+        "record_id": "fe727f22b5c34fb185a370449e4f0128"
+      }
+    ]
+  }
+}
+```
+
+The server returns the newly created record. The record ID will be needed later on to sign authenticated requests. Server credentials are also included to verify the signature of server responses.
+
+```http
+HTTP/2 200 OK
+Content-Type: application/json
+Server-Authorization: BAQ ...
+X-Baq-Credentials: algorithm="ed25519" public_key="INCrEeo0IjPtrSqqZlD2ukyM2bWrvjOE6ik1j1rO8as="
+
+{
+  "record": {
+    "author": {
+      "entity": "alice.baq.run"
+    },
+    "id": "4bae3e86828a44fc96b78cd0d5a4b7ae",
+    ...
+  },
+  "linked_records": []
+}
+```
+
+#### Step 2
+
+Direct the user to the `auth` endpoint with the ID of the App record. This can be done within the current window for web apps, or by opening a browser window for desktop/mobile apps.
+
+```
+https://baq.run/alice/auth/867deccbe7ac4adca4efc07fbe08af87
+```
+
+Once the user authorizes the app, they will be redirected back to the `redirect` URL from the App record with a unique authorization ID.
+
+```
+https://tododemo.baq.dev/?authorization_id=ab15b883b9f24d9dbd9d3cd3cda3707b
+```
+
+#### Step 3
+
+We can now perform [authenticated requests](4d23cbf0) by using our private key to include a unique signature in the `Authorization` header.
+
+```http
+GET /api/alice/records/alice.baq.run/430ed5e38a0c4002a62f81e497820c5c HTTP/2
+Host: baq.run
+X-Baq-Client-Id: 8fbf7696f25b4628bde73f46f4631d3f
+Authorization: id="4bae3e86828a44fc96b78cd0d5a4b7ae" algorithm="ed25519" ts="1710884802348" nonce="573hf2jg" headers="x-baq-client-id" signature="wVdBX9VKGJHhWBWOwiT9NH5ELHgMYt36JFqN+aiPVbeCWyMT85KgjemVemKQxw2m0ZYMfsQ6kV92uraJkyUWCQ=="
+```
+
+## Fetch a record
+
+A single record can be fetched through the [`record`](e9aabfb6) endpoint.
+
+```http
+GET /api/alice/records/alice.baq.run/867deccbe7ac4adca4efc07fbe08af87 HTTP/2
+Host: baq.run
+```
+
+```http
+HTTP/2 200 OK
+Content-Type: application/json
+
+{
+  "record": {
+    "author": {
+      "entity": "alice.baq.run"
+    },
+    "id": "867deccbe7ac4adca4efc07fbe08af87",
+    ...
+  },
+  "linked_records": []
+}
+```
+
+## Fetch a list of records
+
+Multiple records can be retrieved in a single request through the [`records`](a29bdfea) endpoint. This pulls the entire collection of records available on the user's server in chronological order, but filters can be provided to narrow it down to the desired subset instead.
+
+In this examples, records are filtered by `type` and `author` to only return Task records created by user `cyril.baq.run`:
+
+```http
+GET /api/alice/records?filter=$['type']=types.baq.dev+fe727f22b5c34fb185a370449e4f0128,$['author']=cyril.baq.run HTTP/2
+Host: baq.run
+```
+
+```http
+HTTP/2 200 OK
+Content-Type: application/json
+
+{
+  "records": [...],
+  "linked_records": [...]
+}
+```
+
+## Fetch proxied records
+
+The [`records`](a29bdfea) endpoint can also be used to fetch records from outside the user's server. This is done by indicating what entity to target with the `proxy_to` query param.
+
+```http
+GET /api/alice/records?query_to=cyril.baq.run HTTP/2
+Host: baq.run
+```
+
+This offers some advantages compared to a direct request:
+
+- No need to perform discovery.
+
+- It not only returns public records, but also private records that the user is authorized to access.
+
+- It offers more consistent performance by making sure all requests are only to the user's own server (some servers may decide to cache results for greater availability).
+
+## Create a new record
+
+A new record is created with a request to the [`new_record`](d80a9260) endpoint.
+
+In this example, we create a new private Task record:
+
+```http
+POST /api/alice/records HTTP/2
+Host: baq.run
+Content-Type: application/json
+
+{
+  "type": {
+    "entity": "types.baq.dev",
+    "record_id": "fe727f22b5c34fb185a370449e4f0128",
+    "version_hash": "2c2363602c496a6ac5d692c6332d246a8d4492d74ff4fe539ea15a36bec0e899"
+  },
+  "content": {
+    "title": "Buy more cookies!",
+    "completed": false
+  }
+}
+```
+
+- The `id` and `created_at` properties can be added to [make the request idempotent](d80a9260#create-a-record-idempotently). If omitted, the server will provide values for both.
+
+- This endpoint can also be used to [update](d80a9260#update-an-existing-record) or [delete](d80a9260#delete-a-record) a record.
+
+## Update an existing record
+
+While a record can be updated through the [`new_record`](d80a9260) endpoint, a PUT request to the [`record`](ee55634d) endpoint can also be used for convenience.
+
+```http
+PUT /api/alice/records/alice.baq.run/867deccbe7ac4adca4efc07fbe08af87 HTTP/2
+Host: baq.run
+Content-Type: application/json
+
+{
+  "content": {
+    "title": "Buy more cookies!",
+    "completed": true
+  }
+}
+```
+
+## Delete a record
+
+While a record can be deleted through the [`new_record`](d80a9260) endpoint, a DELETE request to the [`record`](c6326f00) endpoint can also be used for convenience.
+
+```http
+DELETE /api/alice/records/alice.baq.run/867deccbe7ac4adca4efc07fbe08af87 HTTP/2
+Host: baq.run
+```
