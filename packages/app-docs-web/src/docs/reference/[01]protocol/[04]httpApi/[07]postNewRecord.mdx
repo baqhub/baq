@@ -6,7 +6,7 @@ export const metadata = {
 
 # POST new_record
 
-Create a new record.
+Create a new record, or a new version of an existing record.
 
 ```httpcli
 POST https://baq.run/api/alice/records
@@ -18,7 +18,9 @@ POST https://baq.run/api/alice/records
 
 ### Request
 
-#### Content
+#### Create record
+
+Properties to create a new record.
 
 <props.properties>
 
@@ -50,6 +52,126 @@ POST https://baq.run/api/alice/records
 
 </props.properties>
 
+#### Update record
+
+Properties to update an existing record.
+
+<props.properties>
+
+- **`author`** <props.pill href="fa939df0">EntityLink</props.pill> _optional_
+
+  - Author of the record to update.
+
+  - Defaults to the user if missing.
+
+- **`id`** <props.pill href="deae588f#recordid">RecordId</props.pill>
+
+  - Unique identifier of the record to update.
+
+- **`version`** <props.pill>object</props.pill>
+
+  - Version-specific properties:
+
+    <props.properties>
+
+    - **`parent_hash`** <props.pill href="deae588f#versionhash">VersionHash</props.pill>
+
+      - Hash of the record version to update.
+
+    - **`created_at`** <props.pill href="deae588f#recorddate">RecordDate</props.pill> _optional_
+
+      - Creation date of the record version.
+
+      - Defaults to the current date if missing.
+
+    </props.properties>
+
+- **`permissions`** <props.pill href="01735953#recordpermissions">RecordPermissions</props.pill> _optional_
+
+  - Updated permissions for the record, if different.
+
+- **`type`** <props.pill href="041ee052">VersionLink</props.pill> _optional_
+
+  - Updated link to the record schema, if different.
+
+- **`content`** <props.pill>object</props.pill>
+
+  - Updated record content.
+
+</props.properties>
+
+#### Delete record
+
+Properties to delete an existing record.
+
+<props.properties>
+
+- **`author`** <props.pill href="fa939df0">EntityLink</props.pill> _optional_
+
+  - Author of the record to delete.
+
+  - Defaults to the user if missing.
+
+- **`id`** <props.pill href="deae588f#recordid">RecordId</props.pill>
+
+  - Unique identifier of the record to delete.
+
+- **`version`** <props.pill>object</props.pill>
+
+  - Version-specific properties:
+
+    <props.properties>
+
+    - **`parent_hash`** <props.pill href="deae588f#versionhash">VersionHash</props.pill>
+
+      - Hash of the record version to delete.
+
+    - **`created_at`** <props.pill href="deae588f#recorddate">RecordDate</props.pill> _optional_
+
+      - Creation date of the record version.
+
+      - Defaults to the current date if missing.
+
+    </props.properties>
+
+- **`no_content`** <props.pill>object</props.pill> _optional_
+
+  - Deletion options:
+
+    <props.properties>
+
+    - **`action`** <props.pill>enum</props.pill> _optional_
+
+      - Type of deletion to perform:
+
+        - `delete`: Standard deletion, propagated to others.
+
+        - `local`: Only delete from the user's server, not propagated.
+
+        - `leave`: Remove our user without deleting for others.
+
+      - Defaults to `delete` if missing.
+
+    </props.properties>
+
+</props.properties>
+
+#### Headers
+
+<props.properties>
+
+- **`X-Baq-Credentials: ...`** _optional_
+
+  - Properties:
+
+    - **`algorithm="..."`** <props.pill>enum</props.pill> : Signature algorithm.
+
+    - **`public_key="..."`** <props.pill>string</props.pill> : Base64 encoded public key.
+
+  - Only include in the request when creating a new [App](02acb69c) or [Relationship](d15903e4) record.
+
+</props.properties>
+
 #### Parameters
 
 <props.properties>
@@ -76,13 +198,13 @@ POST https://baq.run/api/alice/records
 
   - `id`
 
-  - `created_at`
+  - `created_at` / `version.created_at`
 
   </props.compactList>
 
 - All links in a new record will be validated and must point to existing and accessible entities, records, and blobs.
 
-- This endpoint is atomic and the record is guaranteed to be visible in all other queries once the request completes.
+- This endpoint is atomic and the record is guaranteed to be visible in all other queries after the request completes.
 
 ### Response
 
@@ -104,9 +226,13 @@ POST https://baq.run/api/alice/records
 
 <props.properties>
 
-- **`X-Baq-PublicKey: ...`** _optional_
+- **`X-Baq-Credentials: ...`** _optional_
 
-  - Base64 encoded public key.
+  - Properties:
+
+    - **`algorithm="..."`** <props.pill>enum</props.pill> : Signature algorithm.
+
+    - **`public_key="..."`** <props.pill>string</props.pill> : Base64 encoded public key.
 
   - Only part of the response when creating a new [App](02acb69c) or [Relationship](d15903e4) record.
 
@@ -199,6 +325,46 @@ Content-Type: application/json
   },
   "permissions": {
     "read": "public"
+  }
+}
+```
+
+### Update an existing record
+
+To update a record authored by the user, we only need to specify the `id` of the record, the `parent_hash` of the version to update, and the updated `content` to use.
+
+```http
+POST /api/alice/records HTTP/2
+Host: baq.run
+Content-Type: application/json
+
+{
+  "id": "4c093b447c834e3ba62bc69c7ca7069f",
+  "version": {
+    "parent_hash": "93ca1149e00ab963ea4b29772769e20330c356bb4b6ae787d3af9168e81d1687"
+  },
+  "content": {
+    "text": "Bye everyone!"
+  }
+}
+```
+
+### Delete a record
+
+To delete a record, we omit the `content` property. A `no_content` object can be provided to specify the deletion behavior.
+
+```http
+POST /api/alice/records HTTP/2
+Host: baq.run
+Content-Type: application/json
+
+{
+  "id": "4c093b447c834e3ba62bc69c7ca7069f",
+  "version": {
+    "parent_hash": "93ca1149e00ab963ea4b29772769e20330c356bb4b6ae787d3af9168e81d1687"
+  },
+  "no_content": {
+    "action": "delete"
   }
 }
 ```
