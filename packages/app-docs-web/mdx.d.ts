@@ -3,7 +3,7 @@ declare module "*.mdx" {
 
   export interface MDXProps {
     toc?: ReactNode;
-    subPages?: ReactNode;
+    pages?: ReactNode;
     properties: ComponentType;
     code: ComponentType;
     pill: ComponentType;

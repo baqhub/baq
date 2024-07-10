@@ -166,7 +166,7 @@ const DocsPage: FC<DocsPageProps> = async ({params}) => {
   );
 
   const toc = <Toc headers={headers} />;
-  const subPages = <SubPages pages={page.subPages} />;
+  const pages = <SubPages pages={page.subPages} />;
 
   return (
     <>
@@ -184,7 +184,7 @@ const DocsPage: FC<DocsPageProps> = async ({params}) => {
             )}
             <page.Component
               toc={toc}
-              subPages={subPages}
+              pages={pages}
               properties={MdxProperties}
               code={MdxCode}
               pill={MdxPill}
