@@ -41,7 +41,7 @@ A record is identified by its `author` and `id`.
 
 A record's [schema](c64170ca) is defined by its `type`, which is a link to a [Type record](27a5d157).
 
-Some types are built-in to implement some of the protocol [core features](ab269c26), but anyone can create and publish their own types to best represent the data model needed for their apps.
+Some types are built-in to implement some of the platform [core features](ab269c26), but anyone can create and publish their own types to best represent the data model needed for their apps.
 
 ## Permissions
 
@@ -64,3 +64,17 @@ Records are versioned: updating a record creates a new record version.
 Each record version is immutable and uniquely identified by its `version.hash` property. New record versions must explicitly link to the parent version they update.
 
 New record versions may be created by users other than the original author, provided they have permission to do so.
+
+## Timestamps
+
+Every record includes 4 timestamps:
+
+- `created_at` : When it was initially created according to the author.
+
+- `received_at` : When it was received by the server.
+
+- `version.created_at` : When this version was created (author).
+
+- `version.received_at` : When this version was received by the server.
+
+These can all be used as sort property when listing records.
