@@ -7,7 +7,7 @@ export const metadata = {
 
 A record is the core unit of data within the BAQ network. Every record exposes a set of properties that inform servers on what they should do with it. This is an overview of these properties at a high level.
 
-See the [record reference](01735953) for more technical information.
+See the [record reference](01735953) for more technical details.
 
 {props.toc}
 
@@ -27,7 +27,7 @@ Records can reference other objects within the BAQ network:
 
 </props.compactList>
 
-Link are used to define relationships between records. They can be used to enable detailed queries, and `existential` links make it possible to cascade delete records.
+Link are used to define relationships between records. They can be used to enable detailed queries, and `existential` links make it possible to cascade-delete records.
 
 ## Identity
 
@@ -41,7 +41,7 @@ A record is identified by its `author` and `id`.
 
 A record's [schema](c64170ca) is defined by its `type`, which is a link to a [Type record](27a5d157).
 
-Some types are built-in to implement some of the platform [core features](ab269c26), but anyone can create and publish their own types to best represent the data model needed for their apps.
+Some types are built-in to implement some of the [core platform features](ab269c26), but anyone can create and publish their own types to best represent the data model needed for their apps.
 
 ## Permissions
 

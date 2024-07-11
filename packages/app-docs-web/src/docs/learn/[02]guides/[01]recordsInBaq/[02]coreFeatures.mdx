@@ -37,9 +37,9 @@ The profiles of linked users can be returned alongside the resulting records whe
 
 Applications register themselves with a user by creating an [App record](02acb69c).
 
-This record is used to define identity of an app and the permissions it requires to operate. It also identifies the credentials to use when authenticating incoming requests from that app.
+This record is used to define the identity of an app and the permissions it requires to operate. It also identifies the credentials to use when authenticating incoming requests from that app.
 
-This makes it easy possible for users to list all the apps currently in use on their account.
+This makes it easy for users to list all the apps currently in use on their account.
 
 ## Relationships
 
@@ -51,7 +51,7 @@ It can also be used to block another user and refuse all future interaction.
 
 ## Notifications
 
-When a new record is created, the server looks at the content of the `permissions` object to identify who else is allowed to read it and transfer the record to their respective servers.
+When a new record is created, the server looks at the content of the `permissions` object to identify who else is allowed to read it and transfers the record to their respective servers.
 
 Servers should strive to do this as quickly as possible to enable real-time use cases like instant messaging.
 
@@ -63,4 +63,4 @@ These records can be public or private depending on the use case.
 
 A Subscription record will be propagated to the publisher's server by notification, and then used whenever a new public record is created.
 
-Due to the potential large number of subscriptions, records propagated in that way should not be expected to be delivered in real-time.
+Due to the potential for a large number of subscriptions, records propagated in that way should not be expected to be delivered in real-time.
