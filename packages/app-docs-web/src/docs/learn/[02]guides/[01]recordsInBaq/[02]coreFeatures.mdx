@@ -1,0 +1,66 @@
+export const metadata = {
+  id: "ab269c26",
+  title: "Core features",
+};
+
+# Core features
+
+On top of simple CRUD operations for records, the platform offers convenient higher-level features. All of which are implemented on top of records.
+
+{props.toc}
+
+## Types
+
+[Type records](27a5d157) define [schemas](c64170ca) that are used to enforce consistency in between records. Every record is required to specify a type it conforms to.
+
+Servers are responsible for verifying backward compatibility when a new version of a type is published.
+
+Type records are always public, and can be used by all apps.
+
+## Profiles
+
+Every user has a single [Entity record](375c4ea9) that contains basic profile information:
+
+<props.compactList>
+
+- Name
+
+- Avatar
+
+- Short bio
+
+</props.compactList>
+
+The profiles of linked users can be returned alongside the resulting records when [performing a query](a29bdfea#request), making it easy to display author information without having to fetch it separately.
+
+## Apps
+
+Applications register themselves with a user by creating an [App record](02acb69c).
+
+This record is used to define the identity of an app and the permissions it requires to operate. It also identifies the credentials to use when authenticating incoming requests from that app.
+
+This makes it easy for users to list all the apps currently in use on their account.
+
+## Relationships
+
+Whenever two users interact in any way, a [Relationship record](d15903e4) is created to represent the status of the link between these two entities.
+
+This record is used to identify the credentials to use when authenticating requests in between their respective servers.
+
+It can also be used to block another user and refuse all future interaction.
+
+## Notifications
+
+When a new record is created, the server looks at the content of the `permissions` object to identify who else is allowed to read it and transfers the record to their respective servers.
+
+Servers should strive to do this as quickly as possible to enable real-time use cases like instant messaging.
+
+## Subscriptions
+
+A user can request to be notified of all new public records of a given type by creating a [Subscription record](5609fae1) targeting a specific publishing entity.
+
+These records can be public or private depending on the use case.
+
+A Subscription record will be propagated to the publisher's server by notification, and then used whenever a new public record is created.
+
+Due to the potential for a large number of subscriptions, records propagated in that way should not be expected to be delivered in real-time.

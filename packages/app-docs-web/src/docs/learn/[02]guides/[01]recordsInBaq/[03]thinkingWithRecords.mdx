@@ -1,0 +1,90 @@
+export const metadata = {
+  id: "b8267a5b",
+  title: "Thinking with records",
+};
+
+# Thinking with records
+
+BAQ apps model their data with records and may be designed differently than traditional centralized web apps and isolated desktop/mobile apps.
+
+Let's look at different BAQ apps and see how they're architected.
+
+{props.toc}
+
+## Guiding principles
+
+- Take advantage of built-in platform features (links, subscriptions...).
+
+- Use BAQ to store as much of an app's data as possible. This makes for a better user experience when moving from device to device.
+
+- Re-use popular types everywhere it makes sense. This creates a virtuous cycle where apps benefit from one another.
+
+## Files app
+
+This is a file hosting service with a hierarchy of folders and files.
+
+![Files app data model.](modelAppFiles)
+
+It uses two record types:
+
+- **Folder** : Record with a name and optionally a parent folder.
+
+- **File** : Record that links to a blob with the file content, and optionally a parent folder.
+
+Queries:
+
+- _**Root folder** :_ Find all Folder or File records with no parent link.
+
+- _**Other folder** :_ Find all Folder or File records that have that record as parent.
+
+Notes:
+
+- By marking the `parent` link as `existential`, deleting a folder will also delete all downstream content.
+
+A live version of the app can be found at [files.baq.dev](https://files.baq.dev) ([source](https://github.com/baqhub/baq/tree/main/packages/app-files-web))
+
+## Messages app
+
+This is an instant-messaging service with either 1:1 or group conversations.
+
+![Messages app data model.](modelAppMessages)
+
+It uses two record types:
+
+- **Conversation** : Record that defines the participants of the conversation through its permissions. Also includes an optional title.
+
+- **Message** : Record with the text content of the message, a link to the conversation it belongs to, and optional links to another message when replying, and to any number of blobs for images.
+
+Queries:
+
+- _**Conversation list** :_ The `distinct` parameter can be used to list the last message for each conversation. The corresponding conversation can be returned in the same request by adding the `include_links` parameter.
+
+- _**Message list** :_ List all Message records that link to the selected conversation, sorted by `received_at` descending.
+
+A live version of the app can be found at [messages.baq.dev](https://messages.baq.dev) ([source](https://github.com/baqhub/baq/tree/main/packages/app-messages-web))
+
+## Bird app
+
+This is a micro-blogging service with support for text, mentions, and images.
+
+![Bird app data model.](modelAppBird)
+
+It uses two record types:
+
+- **Post** : Record with text content and optional links to other users for mentions, to other posts for re-posts and replies, and to any number of blobs for images.
+
+- **Subscription** : Built-in record that makes it possible to automatically receive public posts from a given user.
+
+Queries:
+
+- _**Feed** :_ List all Post records filtered by `source`.
+
+- _**Mentions** :_ List Post records that have mention links to the user.
+
+- _**User publications** :_ List Post records by author, proxy to the target user.
+
+- _**Followings** :_ List Subscription records filtered by author.
+
+- _**Followers** :_ List Subscription records filtered by publisher.
+
+A live version of the app can be found at [bird.baq.dev](https://bird.baq.dev) ([source](https://github.com/baqhub/baq/tree/main/packages/app-bird-web))
