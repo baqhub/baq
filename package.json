@@ -40,6 +40,17 @@
   },
   "author": "Baqhub",
   "license": "MIT",
+  "keywords": [
+    "baq",
+    "baqhub",
+    "sdk",
+    "cli",
+    "federated",
+    "javascript",
+    "typescript",
+    "react",
+    "react-native"
+  ],
   "workspaces": [
     "packages/*"
   ],
