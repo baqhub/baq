@@ -1,4 +1,4 @@
-# BAQ React SDK &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![npm version](https://img.shields.io/npm/v/@baqhub/sdk-react.svg?color=)](https://www.npmjs.com/package/@baqhub/sdk-react)
+# BAQ React SDK &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/baqhub/baq/blob/main/packages/lib-sdk-react/LICENSE) [![npm version](https://img.shields.io/npm/v/@baqhub/sdk-react.svg?color=)](https://www.npmjs.com/package/@baqhub/sdk-react)
 
 This is the official React SDK for the [BAQ](https://baq.dev) federated app platform. It provides components and hooks to make it easier to build reactive UI on top of records.
 
@@ -23,4 +23,4 @@ npm install @baqhub/sdk-react-dom
 
 ## License
 
-The BAQ React SDK is [MIT licensed](LICENSE).
+The BAQ React SDK is [MIT licensed](https://github.com/baqhub/baq/blob/main/packages/lib-sdk-react/LICENSE).

@@ -1,4 +1,4 @@
-# BAQ CLI &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![npm version](https://img.shields.io/npm/v/@baqhub/cli.svg?color=)](https://www.npmjs.com/package/@baqhub/cli)
+# BAQ CLI &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/baqhub/baq/blob/main/packages/lib-cli/LICENSE) [![npm version](https://img.shields.io/npm/v/@baqhub/cli.svg?color=)](https://www.npmjs.com/package/@baqhub/cli)
 
 This is the official command line interface for the [BAQ](https://baq.dev) federated app platform. It helps manage record types in your application, whether you choose to create them yourself or use existing ones.
 
@@ -25,4 +25,4 @@ npx baq help
 
 ## License
 
-The BAQ CLI is [MIT licensed](LICENSE).
+The BAQ CLI is [MIT licensed](https://github.com/baqhub/baq/blob/main/packages/lib-cli/LICENSE).

@@ -1,4 +1,4 @@
-# BAQ React DOM SDK &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![npm version](https://img.shields.io/npm/v/@baqhub/sdk-react-dom.svg?color=)](https://www.npmjs.com/package/@baqhub/sdk-react-dom)
+# BAQ React DOM SDK &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/baqhub/baq/blob/main/packages/lib-sdk-react-dom/LICENSE) [![npm version](https://img.shields.io/npm/v/@baqhub/sdk-react-dom.svg?color=)](https://www.npmjs.com/package/@baqhub/sdk-react-dom)
 
 This is the official React DOM SDK for the [BAQ](https://baq.dev) federated app platform. It provides DOM-specific adapters to enable the [BAQ React SDK](https://baq.dev/docs/learn/guides/using-the-react-sdk) to work in web browsers.
 
@@ -17,4 +17,4 @@ npm install @baqhub/sdk @baqhub/sdk-react @baqhub/sdk-react-dom
 
 ## License
 
-The BAQ React DOM SDK is [MIT licensed](LICENSE).
+The BAQ React DOM SDK is [MIT licensed](https://github.com/baqhub/baq/blob/main/packages/lib-sdk-react-dom/LICENSE).
