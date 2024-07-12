@@ -25,6 +25,9 @@
 // https://github.com/Azure/fetch-event-source/blob/main/src/fetch.ts
 //
 
+// Modifications:
+// - Allow headers to be rebuilt on each request.
+
 import {
   EventSourceMessage,
   getBytes,
