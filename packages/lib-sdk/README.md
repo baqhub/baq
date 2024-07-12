@@ -13,7 +13,6 @@ npm install @baqhub/sdk
 ## Documentation
 
 - **[Getting started guide](https://baq.dev/docs/learn/guides/using-the-javascript-sdk)** : Overview of the JavaScript SDK.
-
 - **[Full reference](https://baq.dev/docs/reference/javascript-sdk/model)** : All the types and functions.
 
 ## License
