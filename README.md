@@ -22,8 +22,11 @@ This is the monorepo for all the core open-source BAQ projects:
 BAQ is designed to be used as little or as much as you need within your app. From offering users a simple way to sign-in, all the way to building entire apps on top of it.
 
 - Read this [introduction to BAQ](https://baq.dev/docs/learn) for an overview of the platform.
+
 - Follow [this tutorial](https://baq.dev/docs/learn/essentials/build-your-first-app) to build a BAQ app from scratch in under 30 minutes.
+
 - Check out our guides for the [CLI](https://baq.dev/docs/learn/guides/using-the-cli), [JS SDK](https://baq.dev/docs/learn/guides/using-the-javascript-sdk), and [React SDK](https://baq.dev/docs/learn/guides/using-the-react-sdk).
+
 - Search the [BAQ reference](https://baq.dev/docs/reference) for in-depth information.
 
 ## Documentation
@@ -32,7 +35,7 @@ The full documentation is available at [BAQ.DEV](https://baq.dev/docs/learn).
 
 ## Contributing
 
-Development of BAQ happens in the open on Github, and we are grateful to the community for contributing bugfixes and improvements.
+Development of BAQ happens in the open on GitHub, and we are grateful to the community for contributing bugfixes and improvements.
 
 ## License
 
