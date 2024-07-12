@@ -1,6 +1,6 @@
 {
   "name": "@baqhub/cli",
-  "version": "0.1.13",
+  "version": "0.1.15",
   "description": "",
   "type": "module",
   "scripts": {
@@ -16,6 +16,15 @@
   },
   "author": "Baqhub",
   "license": "MIT",
+  "keywords": [
+    "baq",
+    "baqhub",
+    "federated",
+    "javascript",
+    "typescript",
+    "cli",
+    "command"
+  ],
   "dependencies": {
     "@baqhub/sdk": "^0.1.13",
     "@commander-js/extra-typings": "12.1.0",

@@ -1,4 +1,4 @@
-# [BAQ](https://baq.dev/) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/baqhub/baq/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/@baqhub/sdk.svg?color=)](https://www.npmjs.com/package/react)
+# [BAQ](https://baq.dev/) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![npm version](https://img.shields.io/npm/v/@baqhub/sdk.svg?color=)](https://www.npmjs.com/package/@baqhub/sdk)
 
 BAQ (pronounced `/bAk/`, like “back”) is a federated app platform. It lets developers build connected apps with little to no backend infrastructure while allowing end users to be in control of their own data.
 
