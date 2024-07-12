@@ -28,7 +28,7 @@ BAQ is designed to be used as little or as much as you need within your app. Fro
 
 ## Documentation
 
-The full BAQ documentation is available at [BAQ.DEV](https://baq.dev/docs/learn).
+The full documentation is available at [BAQ.DEV](https://baq.dev/docs/learn).
 
 ## Contributing
 
