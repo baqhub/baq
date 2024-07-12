@@ -50,7 +50,7 @@ export function fetchEventSource(
   input: RequestInfo,
   options: FetchEventSourceInit
 ) {
-  return new Promise<void>((resolve, reject) => {
+  return new Promise<void>(resolve => {
     const {buildHeaders, onmessage, openWhenHidden, signal, ...rest} = options;
 
     if (signal?.aborted) {
