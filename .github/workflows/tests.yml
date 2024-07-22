@@ -21,7 +21,11 @@ jobs:
           node-version: 22
           cache: "yarn"
 
-      - name: Run tests
+      - name: Build
         run: |
           yarn install --immutable
+          yarn build
+
+      - name: Test
+        run: |
           yarn test

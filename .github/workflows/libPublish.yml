@@ -36,7 +36,7 @@ jobs:
 
       - name: Test
         run: |
-          yarn lib-sdk:test
+          yarn test
 
       - name: Publish "lib-sdk"
         uses: JS-DevTools/npm-publish@v3

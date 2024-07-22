@@ -6,6 +6,7 @@ on:
       - main
       - deploy-messages
     paths:
+      - .github/workflows/appMessagesDeploy.yml
       - packages/app-messages-web/**
       - packages/lib-*/**
 

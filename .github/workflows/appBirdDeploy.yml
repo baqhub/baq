@@ -6,6 +6,7 @@ on:
       - main
       - deploy-bird
     paths:
+      - .github/workflows/appBirdDeploy.yml
       - packages/app-bird-*/**
       - packages/lib-*/**
 
