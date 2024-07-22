@@ -6,11 +6,9 @@ export function useSyncState() {
   const {entity} = useRecordHelpers();
   useRecordQuery(
     {
+      sources: ["self", "subscription"],
       filter: Q.or(
-        Q.and(
-          Q.type(PostRecord),
-          Q.or(Q.source("self"), Q.source("subscription"))
-        ),
+        Q.type(PostRecord),
         Q.and(
           Q.type(SubscriptionRecord),
           Q.author(entity),
