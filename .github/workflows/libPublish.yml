@@ -23,16 +23,10 @@ jobs:
           node-version: 20
           cache: "yarn"
 
-      - name: Install
-        run: |
-          yarn install --immutable
-
       - name: Build
         run: |
-          yarn lib-sdk:build
-          yarn lib-sdk-react:build
-          yarn lib-sdk-react-dom:build
-          yarn lib-cli:build
+          yarn install --immutable
+          yarn build
 
       - name: Test
         run: |
