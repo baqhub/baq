@@ -7,8 +7,7 @@
     "ts": "tsc --build --watch",
     "build": "tsc --build ./tsconfig.cjs.json ./tsconfig.json && tsconfig-to-dual-package",
     "build:clean": "rm -rf ./build",
-    "publish": "yarn npm publish",
-    "test": "yarn node --experimental-vm-modules --no-warnings $(yarn bin jest)"
+    "publish": "yarn npm publish"
   },
   "module": "./build/esm/src/index.js",
   "main": "./build/cjs/src/index.js",

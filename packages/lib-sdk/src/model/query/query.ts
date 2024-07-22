@@ -5,9 +5,15 @@ import isString from "lodash/isString.js";
 import orderBy from "lodash/orderBy.js";
 import uniqBy from "lodash/uniqBy.js";
 import {Constants} from "../../constants.js";
+import {Array} from "../../helpers/array.js";
 import {Str} from "../../helpers/string.js";
 import {isDefined} from "../../helpers/type.js";
-import {AnyRecord, NoContentRecord, RecordMode} from "../records/record.js";
+import {
+  AnyRecord,
+  NoContentRecord,
+  RecordMode,
+  RecordSource,
+} from "../records/record.js";
 import {RecordKey} from "../records/recordKey.js";
 import {normalizePath} from "./pathHelpers.js";
 import {QueryDate} from "./queryDate.js";
@@ -20,12 +26,18 @@ import {QuerySort, QuerySortDirection, QuerySortProperty} from "./querySort.js";
 
 type IncludeLink = "entity" | "existential" | string;
 const includeLinkSpecialValues = ["entity", "existential"];
+const defaultSources = [
+  RecordSource.SELF,
+  RecordSource.NOTIFICATION,
+  RecordSource.SUBSCRIPTION,
+];
 
 interface StaticQueryBase {
   proxyTo?: string;
 }
 
 export interface LiveSingleQuery {
+  sources?: ReadonlyArray<`${RecordSource}`>;
   includeLinks?: ReadonlyArray<IncludeLink>;
   includeDeleted?: boolean;
 }
@@ -300,6 +312,13 @@ function queryIsSyncSuperset(
   }
 
   if (!includeLinksIsSuperset(query1.includeLinks, query2.includeLinks)) {
+    return false;
+  }
+
+  const sources1 = query1.sources || defaultSources;
+  const sources2 = query2.sources || defaultSources;
+
+  if (!Array.isSuperset(sources1, sources2)) {
     return false;
   }
 

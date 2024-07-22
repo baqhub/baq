@@ -23,6 +23,7 @@ export enum RecordSource {
   SELF = "self",
   RESOLUTION = "resolution",
   NOTIFICATION = "notification",
+  NOTIFICATION_UNKNOWN = "notification_unknown",
   SUBSCRIPTION = "subscription",
   PROXY = "proxy",
 }

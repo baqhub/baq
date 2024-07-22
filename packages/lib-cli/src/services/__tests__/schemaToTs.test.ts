@@ -1,16 +1,16 @@
 import {Schema} from "@baqhub/sdk";
-import {expect, test} from "@jest/globals";
+import {expect, test} from "vitest";
 import {formatCode} from "../formatter.js";
 import {schemaToTs} from "../schemaToTs.js";
 
-test("boolean schema", () => {
+test("boolean schema", async () => {
   // Prepare.
   const schema: Schema = {
     type: "boolean",
   };
 
   // Act.
-  const schemaString = formatCode(schemaToTs(schema));
+  const schemaString = await formatCode(schemaToTs(schema));
 
   // Assert.
   expect(schemaString).toMatchInlineSnapshot(`
@@ -19,7 +19,7 @@ test("boolean schema", () => {
   `);
 });
 
-test("boolean schema with enum", () => {
+test("boolean schema with enum", async () => {
   // Prepare.
   const schema: Schema = {
     type: "boolean",
@@ -27,7 +27,7 @@ test("boolean schema with enum", () => {
   };
 
   // Act.
-  const schemaString = formatCode(schemaToTs(schema));
+  const schemaString = await formatCode(schemaToTs(schema));
 
   // Assert.
   expect(schemaString).toMatchInlineSnapshot(`
@@ -36,7 +36,7 @@ test("boolean schema with enum", () => {
   `);
 });
 
-test("string schema with enum", () => {
+test("string schema with enum", async () => {
   // Prepare.
   const schema: Schema = {
     type: "string",
@@ -44,7 +44,7 @@ test("string schema with enum", () => {
   };
 
   // Act.
-  const schemaString = formatCode(schemaToTs(schema));
+  const schemaString = await formatCode(schemaToTs(schema));
 
   // Assert.
   expect(schemaString).toMatchInlineSnapshot(`
@@ -53,7 +53,7 @@ test("string schema with enum", () => {
   `);
 });
 
-test("object schema", () => {
+test("object schema", async () => {
   // Prepare.
   const schema: Schema = {
     type: "object",
@@ -64,7 +64,7 @@ test("object schema", () => {
   };
 
   // Act.
-  const schemaString = formatCode(schemaToTs(schema));
+  const schemaString = await formatCode(schemaToTs(schema));
 
   // Assert.
   expect(schemaString).toMatchInlineSnapshot(`
@@ -73,7 +73,7 @@ test("object schema", () => {
   `);
 });
 
-test("nested object schema", () => {
+test("nested object schema", async () => {
   // Prepare.
   const schema: Schema = {
     type: "object",
@@ -91,7 +91,7 @@ test("nested object schema", () => {
   };
 
   // Act.
-  const schemaString = formatCode(schemaToTs(schema));
+  const schemaString = await formatCode(schemaToTs(schema));
 
   // Assert.
   expect(schemaString).toMatchInlineSnapshot(`
@@ -103,7 +103,7 @@ test("nested object schema", () => {
   `);
 });
 
-test("array schema", () => {
+test("array schema", async () => {
   // Prepare.
   const schema: Schema = {
     type: "array",
@@ -111,7 +111,7 @@ test("array schema", () => {
   };
 
   // Act.
-  const schemaString = formatCode(schemaToTs(schema));
+  const schemaString = await formatCode(schemaToTs(schema));
 
   // Assert.
   expect(schemaString).toMatchInlineSnapshot(`
@@ -120,7 +120,7 @@ test("array schema", () => {
   `);
 });
 
-test("ref schema", () => {
+test("ref schema", async () => {
   // Prepare.
   const schema: Schema = {
     definitions: {
@@ -131,11 +131,11 @@ test("ref schema", () => {
   };
 
   // Act.
-  const schemaString = formatCode(schemaToTs(schema));
+  const schemaString = await formatCode(schemaToTs(schema));
 
   // Assert.
   expect(schemaString).toMatchInlineSnapshot(`
-    "namespace RefName {
+    "export namespace RefName {
       export type Type = string;
     }
 
@@ -144,7 +144,7 @@ test("ref schema", () => {
   `);
 });
 
-test("nested ref schema", () => {
+test("nested ref schema", async () => {
   // Prepare.
   const schema: Schema = {
     definitions: {
@@ -166,16 +166,16 @@ test("nested ref schema", () => {
   };
 
   // Act.
-  const schemaString = formatCode(schemaToTs(schema));
+  const schemaString = await formatCode(schemaToTs(schema));
 
   // Assert.
   expect(schemaString).toMatchInlineSnapshot(`
-    "namespace RefName {
+    "export namespace RefName {
       export type Type = string;
     }
 
-    namespace PropProp1 {
-      namespace RefName {
+    export namespace PropProp1 {
+      export namespace RefName {
         export type Type = number;
       }
 
@@ -187,7 +187,7 @@ test("nested ref schema", () => {
   `);
 });
 
-test("union schema", () => {
+test("union schema", async () => {
   // Prepare.
   const schema: Schema = {
     type: "union",
@@ -198,7 +198,7 @@ test("union schema", () => {
   };
 
   // Act.
-  const schemaString = formatCode(schemaToTs(schema));
+  const schemaString = await formatCode(schemaToTs(schema));
 
   // Assert.
   expect(schemaString).toMatchInlineSnapshot(`
@@ -207,7 +207,7 @@ test("union schema", () => {
   `);
 });
 
-test("tag link schema with enum", () => {
+test("tag link schema with enum", async () => {
   // Prepare.
   const schema: Schema = {
     type: "tag_link",
@@ -215,7 +215,7 @@ test("tag link schema with enum", () => {
   };
 
   // Act.
-  const schemaString = formatCode(schemaToTs(schema));
+  const schemaString = await formatCode(schemaToTs(schema));
 
   // Assert.
   expect(schemaString).toMatchInlineSnapshot(`
