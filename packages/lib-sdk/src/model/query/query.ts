@@ -24,8 +24,13 @@ import {QuerySort, QuerySortDirection, QuerySortProperty} from "./querySort.js";
 // Model.
 //
 
-type IncludeLink = "entity" | "existential" | string;
-const includeLinkSpecialValues = ["entity", "existential"];
+type IncludeLink = "entity" | "standing" | "existential" | string;
+const includeLinkSpecialValues: ReadonlyArray<IncludeLink> = [
+  "entity",
+  "standing",
+  "existential",
+];
+
 const defaultSources = [
   RecordSource.SELF,
   RecordSource.NOTIFICATION,

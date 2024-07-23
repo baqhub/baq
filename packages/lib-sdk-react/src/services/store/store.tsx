@@ -16,6 +16,7 @@ import {
   RNoContentRecord,
   Record,
   RecordKey,
+  StandingRecord,
   SubscriptionRecord,
   VersionHash,
   isDefined,
@@ -104,7 +105,12 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
   ...types: R
 ) {
   const RIntermediate = IO.union([EntityRecord, EntityRecord, ...types]);
-  const RKnownRecord = IO.union([RIntermediate, SubscriptionRecord]);
+  const RKnownRecord = IO.union([
+    RIntermediate,
+    StandingRecord,
+    SubscriptionRecord,
+  ]);
+
   const RKnownEventRecord = IO.union([RKnownRecord, RNoContentRecord]);
   type T = IO.TypeOf<typeof RKnownRecord>;
 
