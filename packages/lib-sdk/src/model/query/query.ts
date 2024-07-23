@@ -37,7 +37,6 @@ interface StaticQueryBase {
 }
 
 export interface LiveSingleQuery {
-  sources?: ReadonlyArray<`${RecordSource}`>;
   includeLinks?: ReadonlyArray<IncludeLink>;
   includeDeleted?: boolean;
 }
@@ -53,6 +52,7 @@ export interface LiveQuery<T extends AnyRecord> extends LiveSingleQuery {
   pageSize?: number;
 
   distinct?: string;
+  sources?: ReadonlyArray<`${RecordSource}`>;
   filter?: QueryFilter<T>;
   mode?: `${RecordMode}`;
 }
@@ -109,6 +109,7 @@ function queryToQueryString<T extends AnyRecord>(query: Query<T>) {
     ["page_start", query.pageStart && QueryDate.toString(query.pageStart)],
     ["page_size", (query.pageSize || Constants.defaultPageSize).toString()],
     ["distinct", query.distinct && normalizePath(query.distinct)],
+    ["sources", query.sources?.join(",")],
     ...(filterStrings || []).map(f => ["filter", f] as const),
     ["include_links", includeLinksToString(query.includeLinks)],
     ["include_deleted", query.includeDeleted ? "true" : undefined],
@@ -209,6 +210,12 @@ function filterByQuery<R extends AnyRecord, T extends R>(
       }
 
       if (query.mode && record.mode !== query.mode) {
+        return false;
+      }
+
+      // Sources.
+      const sources = query.sources || defaultSources;
+      if (!sources.includes(record.source)) {
         return false;
       }
 
@@ -318,7 +325,7 @@ function queryIsSyncSuperset(
   const sources1 = query1.sources || defaultSources;
   const sources2 = query2.sources || defaultSources;
 
-  if (!Array.isSuperset(sources1, sources2)) {
+  if (sources1 !== sources2 && !Array.isSuperset(sources1, sources2)) {
     return false;
   }
 
