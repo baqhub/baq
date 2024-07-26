@@ -95,18 +95,18 @@ export const PostComposer: FC<PostComposerProps> = ({mention}) => {
     onPostPress();
   };
 
-  const initialText = useConstant(() => text);
+  const shouldFocus = useConstant(() => Boolean(text));
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
     const currentTextarea = textareaRef.current;
-    if (!initialText || !currentTextarea) {
+    if (!shouldFocus || !currentTextarea) {
       return;
     }
 
     currentTextarea.focus();
     currentTextarea.selectionStart = currentTextarea.value.length;
     currentTextarea.selectionEnd = currentTextarea.value.length;
-  }, [initialText]);
+  }, [shouldFocus]);
 
   return (
     <Layout>
