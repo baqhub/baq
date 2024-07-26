@@ -7,6 +7,7 @@ import {
   NoContentRecord,
   Query,
   RecordKey,
+  StandingRecord,
 } from "@baqhub/sdk";
 import {createContext, useContext} from "react";
 import {StoreQuery} from "./storeQuery.js";
@@ -36,6 +37,11 @@ export type Selector<T extends AnyRecord, R> = (
   state: EntityRecordsState<T>
 ) => R;
 
+export type UpdateRecords<T extends AnyRecord> = (
+  updates: ReadonlyArray<T | StandingRecord | NoContentRecord>,
+  proxyEntity?: string
+) => void;
+
 export interface RegisterQueryOptions {
   isFetch: boolean;
   isSync: boolean;
@@ -46,7 +52,7 @@ export interface StoreContextProps<T extends AnyRecord> {
   entity: string;
   client: Client;
   versions: RecordVersions<T>;
-  updateRecords: (u: ReadonlyArray<T | NoContentRecord>, e?: string) => void;
+  updateRecords: UpdateRecords<T>;
   buildBlobUrl: <R extends T>(
     record: R,
     blob: AnyBlobLink,

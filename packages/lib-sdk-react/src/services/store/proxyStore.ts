@@ -8,6 +8,7 @@ import {
   findStandingDecision,
   recordByKey,
   recordByVersion,
+  updateStandingDecision,
 } from "./storeHelpers.js";
 
 //
@@ -20,7 +21,7 @@ export function buildAccessors(entity: string, proxyEntity: string) {
     findRecordByKey: findRecordByKey(entity, proxyEntity),
     findRecordByQuery: findRecordByQuery(entity, proxyEntity),
     findEntityRecord: findEntityRecord(entity, proxyEntity),
-    findStandingDecision: findStandingDecision(entity, proxyEntity),
+    findStandingDecision: findStandingDecision(entity),
   };
 }
 
@@ -31,6 +32,8 @@ export function buildHelpers<T extends AnyRecord>(
 ) {
   const {entity, client, versions, getStateSnapshot} = store;
   const {updateRecords, uploadBlob, buildBlobUrl, onDisconnectRequest} = store;
+  const updateStanding = updateStandingDecision<T>(entity);
+
   return {
     entity,
     proxyEntity,
@@ -40,6 +43,8 @@ export function buildHelpers<T extends AnyRecord>(
     findRecordByKey: accessors.findRecordByKey(getStateSnapshot),
     findRecordByQuery: accessors.findRecordByQuery(getStateSnapshot),
     findEntityRecord: accessors.findEntityRecord(getStateSnapshot),
+    findStandingDecision: accessors.findStandingDecision(getStateSnapshot),
+    updateStandingDecision: updateStanding(getStateSnapshot, updateRecords),
     updateRecords,
     uploadBlob,
     buildBlobUrl,
