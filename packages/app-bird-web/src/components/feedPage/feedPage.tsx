@@ -1,5 +1,6 @@
 import {PostRecordKey} from "@baqhub/bird-shared/baq/postRecord.js";
 import {useFeedPageState} from "@baqhub/bird-shared/state/feedPageState.js";
+import {IO} from "@baqhub/sdk";
 import {UsersIcon} from "@heroicons/react/24/outline";
 import {createRoute} from "@tanstack/react-router";
 import {FC, Suspense} from "react";
@@ -16,6 +17,7 @@ import {PostComposer} from "./postComposer/postComposer.js";
 
 export const FeedPage: FC = () => {
   const {getPostKeys} = useFeedPageState();
+  const {mention} = feedRoute.useSearch();
 
   const renderPost = (postKey: PostRecordKey) => (
     <PostByKey key={postKey} postKey={postKey} />
@@ -23,7 +25,7 @@ export const FeedPage: FC = () => {
 
   return (
     <Suspense fallback={<LoadingPosts />}>
-      <PostComposer />
+      <PostComposer mention={mention} />
       <Posts getItems={getPostKeys} renderItem={renderPost}>
         <EmptyPosts icon={<UsersIcon />} text="Follow people to see more!" />
       </Posts>
@@ -35,8 +37,13 @@ export const FeedPage: FC = () => {
 // Route.
 //
 
+const RFeedRouteSearchParams = IO.partialObject({
+  mention: IO.string,
+});
+
 export const feedRoute = createRoute({
   path: "/",
   getParentRoute: () => appRoute,
+  validateSearch: params => IO.decode(RFeedRouteSearchParams, params),
   component: FeedPage,
 });

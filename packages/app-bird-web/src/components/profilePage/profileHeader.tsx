@@ -69,6 +69,11 @@ export const ProfileHeader: FC<ProfileHeaderProps> = props => {
   const {onBlockClick, onUnblockClick} = props;
   const {entity, name, bio, isOwnProfile, isSubscribed, isBlocked} = profile;
 
+  const navigate = useNavigate();
+  const onMentionClick = () => {
+    navigate({to: "/", search: {mention: entity}});
+  };
+
   return (
     <Profile>
       <ProfileTop>
@@ -90,9 +95,7 @@ export const ProfileHeader: FC<ProfileHeaderProps> = props => {
               Follow
             </Button>
           )}
-          <Button onClick={noop} isDisabled>
-            Mention
-          </Button>
+          <Button onClick={onMentionClick}>Mention</Button>
           {isBlocked ? (
             <Button onClick={onUnblockClick}>Unblock</Button>
           ) : (
