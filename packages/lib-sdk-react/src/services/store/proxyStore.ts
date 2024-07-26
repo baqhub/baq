@@ -5,6 +5,7 @@ import {
   findEntityRecord,
   findRecordByKey,
   findRecordByQuery,
+  findStandingDecision,
   recordByKey,
   recordByVersion,
 } from "./storeHelpers.js";
@@ -19,6 +20,7 @@ export function buildAccessors(entity: string, proxyEntity: string) {
     findRecordByKey: findRecordByKey(entity, proxyEntity),
     findRecordByQuery: findRecordByQuery(entity, proxyEntity),
     findEntityRecord: findEntityRecord(entity, proxyEntity),
+    findStandingDecision: findStandingDecision(entity, proxyEntity),
   };
 }
 

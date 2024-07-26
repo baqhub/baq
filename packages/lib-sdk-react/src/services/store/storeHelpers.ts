@@ -5,6 +5,8 @@ import {
   Q,
   Query,
   RecordKey,
+  StandingDecision,
+  StandingRecord,
   VersionHash,
 } from "@baqhub/sdk";
 import {EntityRecordsState, RecordVersions} from "./storeContext.js";
@@ -132,5 +134,23 @@ export function findEntityRecord<T extends AnyRecord>(
     return findRecord(getState)({
       filter: Q.and(Q.author(entity), Q.type(EntityRecord)),
     });
+  };
+}
+
+export function findStandingDecision<T extends AnyRecord>(
+  entity: string,
+  proxyEntity: string
+) {
+  const findRecord = findRecordByQuery(entity, proxyEntity);
+  return (getState: GetState<T>) => (entity: string) => {
+    const standingRecord = findRecord(getState)({
+      filter: Q.and(Q.author(entity), Q.type(StandingRecord)),
+    });
+
+    if (!standingRecord) {
+      return StandingDecision.UNDECIDED;
+    }
+
+    return standingRecord.content.decision;
   };
 }
