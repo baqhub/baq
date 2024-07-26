@@ -18,7 +18,5 @@ export function useAvatarState(entity: string | undefined) {
     return buildBlobUrl(entityRecord, avatar);
   }, [entityRecord, buildBlobUrl]);
 
-  return {
-    avatarUrl,
-  };
+  return {avatarUrl};
 }

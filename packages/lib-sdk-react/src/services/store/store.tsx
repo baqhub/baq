@@ -1325,6 +1325,22 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     return useReferenceStateSelector(selector);
   }
 
+  function useFindStandingDecision(entity: string) {
+    const {findStandingDecision} = useProxyStoreContext().accessors;
+    const selector = useCallback(
+      (state: EntityRecordsState<T>) => {
+        if (!entity) {
+          return undefined;
+        }
+
+        return findStandingDecision(() => state)(entity);
+      },
+      [findStandingDecision, entity]
+    );
+
+    return useReferenceStateSelector(selector);
+  }
+
   return {
     RKnownRecord,
     ProxyStore,
@@ -1340,5 +1356,6 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     useFindRecordByKey,
     useFindRecordByQuery,
     useFindEntityRecord,
+    useFindStandingDecision,
   };
 }

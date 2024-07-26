@@ -63,10 +63,6 @@ function fixUrl(url: string) {
     return url.replace("https://localhost", "http://localhost:5254");
   }
 
-  if (url.startsWith("https://baq.run")) {
-    return url.replace("https://baq.run", "http://localhost:5173");
-  }
-
   return url.replace("https://localhost", "http://localhost:5173");
 }
 

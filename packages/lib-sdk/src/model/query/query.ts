@@ -24,7 +24,12 @@ import {QuerySort, QuerySortDirection, QuerySortProperty} from "./querySort.js";
 // Model.
 //
 
-type IncludeLink = "entity" | "standing" | "existential" | string;
+type IncludeLink =
+  | "entity"
+  | "standing"
+  | "existential"
+  | (string & NonNullable<unknown>);
+
 const includeLinkSpecialValues: ReadonlyArray<IncludeLink> = [
   "entity",
   "standing",
@@ -220,7 +225,10 @@ function filterByQuery<R extends AnyRecord, T extends R>(
 
       // Sources.
       const sources = query.sources || defaultSources;
-      if (!sources.includes(record.source)) {
+      if (
+        !sources.includes(record.source) &&
+        record.source !== RecordSource.PROXY
+      ) {
         return false;
       }
 

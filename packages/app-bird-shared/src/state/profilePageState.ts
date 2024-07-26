@@ -1,7 +1,14 @@
-import {EntityRecord, Q, Record, SubscriptionRecord} from "@baqhub/sdk";
+import {
+  EntityRecord,
+  Q,
+  Record,
+  StandingDecision,
+  SubscriptionRecord,
+} from "@baqhub/sdk";
 import {useCallback} from "react";
 import {PostRecord} from "../baq/postRecord.js";
 import {
+  useFindStandingDecision,
   useRecordHelpers,
   useRecordQuery,
   useStaticRecordQuery,
@@ -19,10 +26,11 @@ export interface ProfileData {
 
 export interface FullProfileData extends ProfileData {
   isSubscribed: boolean;
+  isBlocked: boolean;
 }
 
 export function useProfilePageState(profileEntity: string) {
-  const {entity, updateRecords} = useRecordHelpers();
+  const {entity, updateRecords, updateStandingDecision} = useRecordHelpers();
 
   //
   // Subscription.
@@ -44,6 +52,7 @@ export function useProfilePageState(profileEntity: string) {
 
   const {getRecord: getEntityRecord} = useStaticRecordQuery({
     filter: Q.and(Q.type(EntityRecord), Q.author(profileEntity)),
+    includeLinks: ["standing"],
     proxyTo: profileEntity,
   });
 
@@ -62,6 +71,7 @@ export function useProfilePageState(profileEntity: string) {
     };
   }, [entity, getEntityRecord]);
 
+  const decision = useFindStandingDecision(profileEntity);
   const getFull = useCallback((): FullProfileData | undefined => {
     const profile = getProfile();
     const subscriptionRecord = getSubscriptionRecord();
@@ -73,8 +83,9 @@ export function useProfilePageState(profileEntity: string) {
     return {
       ...profile,
       isSubscribed: Boolean(subscriptionRecord),
+      isBlocked: decision === StandingDecision.BLOCK,
     };
-  }, [getProfile, getSubscriptionRecord]);
+  }, [getProfile, getSubscriptionRecord, decision]);
 
   const {isLoading: arePostsLoading, getRecords} = useStaticRecordsQuery({
     pageSize: 200,
@@ -120,6 +131,24 @@ export function useProfilePageState(profileEntity: string) {
     updateRecords([deletedRecord]);
   }, [getEntityRecord, getSubscriptionRecord, entity, updateRecords]);
 
+  const onBlockClick = useCallback(() => {
+    const entityRecord = getEntityRecord();
+    if (!entityRecord || entityRecord.author.entity === entity) {
+      return;
+    }
+
+    updateStandingDecision(entityRecord.author.entity, StandingDecision.BLOCK);
+  }, [entity, getEntityRecord, updateStandingDecision]);
+
+  const onUnblockClick = useCallback(() => {
+    const entityRecord = getEntityRecord();
+    if (!entityRecord || entityRecord.author.entity === entity) {
+      return;
+    }
+
+    updateStandingDecision(entityRecord.author.entity, StandingDecision.ALLOW);
+  }, [entity, getEntityRecord, updateStandingDecision]);
+
   return {
     getProfile,
     getFull,
@@ -128,6 +157,8 @@ export function useProfilePageState(profileEntity: string) {
     arePostsLoading,
     onFollowClick,
     onUnfollowClick,
+    onBlockClick,
+    onUnblockClick,
     wrap: wrapInProxyStore(profileEntity),
   };
 }
