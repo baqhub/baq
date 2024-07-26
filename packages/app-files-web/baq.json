@@ -6,13 +6,13 @@
     "folder": {
       "path": "src/types/Record.Folder.1-0-0.json",
       "record_id": "3050fc130d4142a9994af0ef7c89099e",
-      "version_hash": "da9486074a9accf1d8082739a90f390482891c5deed2ac1b48c4a3a1efb1ef3c",
+      "version_hash": "3bada69093fedd3f8c223ca7cffb9c74503e0c2960cb7c17647d36369bc2afa7",
       "content_hash": "a54ea1137eeddc3d42ab2f869c45cabc"
     },
     "file": {
       "path": "src/types/Record.File.1-0-0.json",
       "record_id": "2b6f7bc8ffd54c8db8062700c040e04f",
-      "version_hash": "5ef6b551eb1f4c9deaffe59ea9f4bb04da83d0e33f4b6a6df3224a674281017c",
+      "version_hash": "d07d677c1282efeb3e7b510db7b57b278d5af8bb62e0e09b894f08e3671fb879",
       "content_hash": "b96445976ae77724e66882fb52b2b451"
     }
   },
