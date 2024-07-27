@@ -158,14 +158,15 @@ export function findStandingRecord<T extends AnyRecord>(entity: string) {
 
 export function findStandingDecision<T extends AnyRecord>(entity: string) {
   const findRecord = findStandingRecord(entity);
-  return (getState: GetState<T>) => (publisherEntity: string) => {
-    const standingRecord = findRecord(getState)(publisherEntity);
-    if (!standingRecord) {
-      return StandingDecision.UNDECIDED;
-    }
+  return (getState: GetState<T>) =>
+    (publisherEntity: string): `${StandingDecision}` => {
+      const standingRecord = findRecord(getState)(publisherEntity);
+      if (!standingRecord) {
+        return StandingDecision.UNDECIDED;
+      }
 
-    return standingRecord.content.decision;
-  };
+      return standingRecord.content.decision;
+    };
 }
 
 export function updateStandingDecision<T extends AnyRecord>(entity: string) {

@@ -1,5 +1,6 @@
 import {useAvatarState} from "@baqhub/bird-shared/state/avatarState.js";
 import {tw} from "@baqhub/ui/core/style.js";
+import {NoSymbolIcon} from "@heroicons/react/24/outline";
 import {FC} from "react";
 
 //
@@ -19,6 +20,7 @@ interface AvatarProps {
 
 const Layout = tw.div`
   shrink-0
+  relative
 
   rounded-full
   bg-cover
@@ -37,19 +39,55 @@ const layoutSizeStyle: Record<AvatarSize, string> = {
   `,
 };
 
+const BlockedPill = tw.div`
+  absolute
+
+  rounded-full
+  bg-red-500
+  dark:bg-red-600
+  text-white
+  drop-shadow
+`;
+
+const blockedPillSizeStyle: Record<AvatarSize, string> = {
+  small: `
+    -bottom-1
+    -right-1
+    p-[2px]
+
+    w-5
+    h-5
+  `,
+  large: `
+    bottom-0
+    right-0
+    p-[3px]
+
+    w-7
+    h-7
+  `,
+};
+
 //
 // Component.
 //
 
 export const Avatar: FC<AvatarProps> = props => {
   const {entity, size} = props;
-  const {avatarUrl} = useAvatarState(entity);
+  const {avatarUrl, isBlocked} = useAvatarState(entity);
   const layoutStyle = layoutSizeStyle[size || "small"];
+  const blockedPillStyle = blockedPillSizeStyle[size || "small"];
 
   return (
     <Layout
       className={layoutStyle}
       style={avatarUrl ? {backgroundImage: `url(${avatarUrl})`} : {}}
-    />
+    >
+      {isBlocked && (
+        <BlockedPill className={blockedPillStyle}>
+          <NoSymbolIcon className="stroke-[1.8]" />
+        </BlockedPill>
+      )}
+    </Layout>
   );
 };

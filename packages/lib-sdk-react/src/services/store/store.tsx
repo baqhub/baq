@@ -1325,12 +1325,12 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     return useReferenceStateSelector(selector);
   }
 
-  function useFindStandingDecision(entity: string) {
+  function useFindStandingDecision(entity: string | undefined) {
     const {findStandingDecision} = useProxyStoreContext().accessors;
     const selector = useCallback(
       (state: EntityRecordsState<T>) => {
         if (!entity) {
-          return undefined;
+          return "undecided";
         }
 
         return findStandingDecision(() => state)(entity);
