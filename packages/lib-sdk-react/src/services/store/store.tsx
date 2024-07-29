@@ -16,6 +16,7 @@ import {
   RNoContentRecord,
   Record,
   RecordKey,
+  RecordSource,
   StandingRecord,
   SubscriptionRecord,
   VersionHash,
@@ -257,9 +258,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         const {state, stateSubscriptions} = stateRef.current;
         const {mutations, mutationsSubscriptions} = stateRef.current;
 
-        const entityState = state[proxyEntity] || {dictionary: {}, list: []};
-
-        updates.map(r => {
+        updates.forEach(r => {
           if ("noContent" in r || !r.version?.hash) {
             return;
           }
@@ -267,26 +266,59 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           stateRef.current.versions[r.version.hash] = r;
         });
 
-        const isUserState = proxyEntity === entity;
-        const reduced = isUserState
-          ? applyUpdates(entityState.dictionary, mutations, updates)
-          : applyProxyUpdates(entityState.dictionary, mutations, updates);
+        const updateState = (
+          updateEntity: string,
+          updater: typeof applyUpdates,
+          mutations: ReadonlyArray<Mutation<T>>,
+          updates: ReadonlyArray<T | NoContentRecord>
+        ) => {
+          const entityState = state[updateEntity] || {dictionary: {}, list: []};
+          const reduced = updater(entityState.dictionary, mutations, updates);
+
+          if (reduced.state !== entityState.dictionary) {
+            stateRef.current.state = {
+              ...state,
+              [updateEntity]: {
+                dictionary: reduced.state,
+                list: Object.values(reduced.state),
+              },
+            };
+            return [true, reduced.mutations] as const;
+          }
+
+          return [false, reduced.mutations] as const;
+        };
+
+        const [wasUpdated, newMutations] = (() => {
+          if (proxyEntity === entity) {
+            return updateState(entity, applyUpdates, mutations, updates);
+          }
+
+          const [wasUpdated1, mutations1] = updateState(
+            proxyEntity,
+            applyProxyUpdates,
+            mutations,
+            updates.filter(u => u.source === RecordSource.PROXY)
+          );
+
+          const [wasUpdated2, mutations2] = updateState(
+            entity,
+            applyUpdates,
+            mutations1,
+            updates.filter(u => u.source !== RecordSource.PROXY)
+          );
+
+          return [wasUpdated1 || wasUpdated2, mutations2] as const;
+        })();
 
         stateRef.current.isUpdating = false;
 
-        if (reduced.state !== entityState.dictionary) {
-          stateRef.current.state = {
-            ...state,
-            [proxyEntity]: {
-              dictionary: reduced.state,
-              list: Object.values(reduced.state),
-            },
-          };
+        if (wasUpdated) {
           stateSubscriptions.forEach(s => s());
         }
 
-        if (reduced.mutations !== mutations) {
-          stateRef.current.mutations = reduced.mutations;
+        if (newMutations !== mutations) {
+          stateRef.current.mutations = newMutations;
           mutationsSubscriptions.forEach(s => s());
         }
       },
@@ -411,13 +443,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         abortController.abort();
         unsubscribe();
       };
-    }, [
-      subscribeToMutations,
-      entity,
-      client,
-      updateRecordsInState,
-      onDisconnectRequestStable,
-    ]);
+    }, [subscribeToMutations, entity, client, onDisconnectRequestStable]);
 
     //
     // Queries.

@@ -6,7 +6,6 @@ export function useSyncState() {
   const {entity} = useRecordHelpers();
   useRecordQuery(
     {
-      sources: ["self", "subscription"],
       filter: Q.or(
         Q.type(PostRecord),
         Q.and(
@@ -15,6 +14,7 @@ export function useSyncState() {
           Q.record("content.recordType", PostRecord.link)
         )
       ),
+      includeLinks: ["entity", "existential", "standing"],
     },
     {mode: "sync"}
   );

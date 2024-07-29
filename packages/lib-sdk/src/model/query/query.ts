@@ -149,7 +149,17 @@ function includeLinksIsSuperset(
   const l1 = links1 || defaultIncludeLinks;
   const l2 = links2 || defaultIncludeLinks;
 
-  return l2.every(l => l1.includes(l));
+  return Array.isSuperset(l1, l2);
+}
+
+function sourcesIsSuperset(
+  sources1: ReadonlyArray<`${RecordSource}`> | undefined,
+  sources2: ReadonlyArray<`${RecordSource}`> | undefined
+) {
+  const s1 = sources1 || defaultSources;
+  const s2 = sources2 || defaultSources;
+
+  return Array.isSuperset(s1, s2);
 }
 
 function paramsToString(
@@ -323,11 +333,7 @@ function queryIsSyncSuperset(
   query1: Query<AnyRecord>,
   query2: Query<AnyRecord>
 ) {
-  if (
-    query1.mode !== query2.mode ||
-    query1.includeLinks !== query2.includeLinks ||
-    query1.proxyTo !== query2.proxyTo
-  ) {
+  if (query1.mode !== query2.mode || query1.proxyTo !== query2.proxyTo) {
     return false;
   }
 
@@ -335,10 +341,7 @@ function queryIsSyncSuperset(
     return false;
   }
 
-  const sources1 = query1.sources || defaultSources;
-  const sources2 = query2.sources || defaultSources;
-
-  if (sources1 !== sources2 && !Array.isSuperset(sources1, sources2)) {
+  if (!sourcesIsSuperset(query1.sources, query2.sources)) {
     return false;
   }
 

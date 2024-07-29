@@ -8,6 +8,7 @@ export function useFeedPageState() {
     pageSize: 200,
     sources: ["self", "subscription"],
     filter: Q.and(Q.type(PostRecord), Q.empty("content.replyToPost")),
+    includeLinks: ["entity", "existential", "standing"],
   });
 
   const getPostKeys = useCallback(

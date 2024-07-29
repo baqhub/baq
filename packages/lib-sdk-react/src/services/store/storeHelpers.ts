@@ -6,6 +6,7 @@ import {
   Q,
   Query,
   RecordKey,
+  RecordSource,
   StandingDecision,
   StandingRecord,
   StandingRecordContent,
@@ -138,6 +139,12 @@ export function findEntityRecord<T extends AnyRecord>(
   const findRecord = findRecordByQuery(entity, proxyEntity);
   return (getState: GetState<T>) => (targetEntity: string) => {
     return findRecord(getState)({
+      sources: [
+        RecordSource.SELF,
+        RecordSource.NOTIFICATION,
+        RecordSource.SUBSCRIPTION,
+        RecordSource.RESOLUTION,
+      ],
       filter: Q.and(Q.author(targetEntity), Q.type(EntityRecord)),
     });
   };
@@ -147,6 +154,7 @@ export function findStandingRecord<T extends AnyRecord>(entity: string) {
   const findRecord = findRecordByQuery(entity, entity);
   return (getState: GetState<T>) => (publisherEntity: string) => {
     return findRecord(getState)({
+      sources: [RecordSource.SELF],
       filter: Q.and(
         Q.author(entity),
         Q.type(StandingRecord),

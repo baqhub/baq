@@ -19,7 +19,7 @@ function isSuperset<T>(
   superset: ReadonlyArray<T>,
   subset: ReadonlyArray<T>
 ): boolean {
-  return subset.every(item => superset.includes(item));
+  return superset === subset || subset.every(item => superset.includes(item));
 }
 
 export const Array = {
