@@ -1,4 +1,5 @@
 import {
+  AbortedError,
   AnyBlobLink,
   AnyRecord,
   Async,
@@ -37,7 +38,7 @@ import {
 } from "react";
 import {useSyncExternalStoreWithSelector} from "use-sync-external-store/with-selector.js";
 import {isReferenceEqual, isShallowEqual} from "../../helpers/equality.js";
-import {useDeepMemo, useStable} from "../../helpers/hooks.js";
+import {useDeepMemo, useIsMounted, useStable} from "../../helpers/hooks.js";
 import {
   ProxyStoreContextProps,
   buildAccessors,
@@ -158,6 +159,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     const {entityRecord, client, blobUrlBuilder} = identity;
     const {entity} = entityRecord.author;
     const onDisconnectRequestStable = useStable(onDisconnectRequest);
+    const {isMountedRef} = useIsMounted();
 
     const stateRef = useRef<State<T>>({
       versions: {
@@ -395,10 +397,15 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           try {
             const updatedMutations = await performMutation(activeMutation);
             stateRef.current.mutations = updatedMutations;
-          } catch (err) {
+          } catch (error) {
+            // Aborted: nothing to do.
+            if (error instanceof AbortedError) {
+              return;
+            }
+
             // Unauthorized or Forbidden: disconnect.
             if (
-              Http.isError(err, [
+              Http.isError(error, [
                 HttpStatusCode.UNAUTHORIZED,
                 HttpStatusCode.FORBIDDEN,
               ])
@@ -408,13 +415,13 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
             }
 
             // Other http error: retry.
-            if (Http.isError(err)) {
+            if (Http.isError(error)) {
               await Async.delay(1000, signal); // TODO: Evaluate exponential backoff.
               continue;
             }
 
             // Other error, unexpected.
-            throw err;
+            throw error;
           }
         }
 
@@ -442,6 +449,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
       return () => {
         abortController.abort();
         unsubscribe();
+        stop();
       };
     }, [subscribeToMutations, entity, client, onDisconnectRequestStable]);
 
@@ -604,6 +612,10 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                 query
               );
 
+              if (!isMountedRef.current) {
+                return;
+              }
+
               const responseRecords = [
                 ...response.linkedRecords,
                 ...response.records,
@@ -627,10 +639,15 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                   },
                 };
               });
-            } catch (err) {
+            } catch (error) {
+              // Unmounted: nothing to do.
+              if (!isMountedRef.current) {
+                return;
+              }
+
               // Permanent error: mark as failed.
               if (
-                Http.isError(err, [
+                Http.isError(error, [
                   HttpStatusCode.BAD_REQUEST,
                   HttpStatusCode.INTERNAL_SERVER_ERROR,
                 ])
@@ -646,7 +663,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                     [queryId]: {
                       ...currentQuery,
                       promise: undefined,
-                      error: err,
+                      error: error,
                     },
                   };
                 });
@@ -678,7 +695,14 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
         return newQuery;
       },
-      [updateQueries, findLiveQueryMatch, entity, client, updateRecords]
+      [
+        updateQueries,
+        findLiveQueryMatch,
+        entity,
+        client,
+        isMountedRef,
+        updateRecords,
+      ]
     );
 
     const registerLiveQuery = useCallback(

@@ -51,13 +51,13 @@ export function useDeepMemo<TValue>(
 }
 
 export function abortable(worker: (signal: AbortSignal) => Promise<any>) {
-  const controller = new AbortController();
+  const abort = new AbortController();
 
   // Catch aborted errors.
   async function effectAsync() {
     try {
       await null;
-      await Promise.resolve(worker(controller.signal));
+      await Promise.resolve(worker(abort.signal));
     } catch (error) {
       if (error instanceof AbortedError) {
         return;
@@ -69,7 +69,7 @@ export function abortable(worker: (signal: AbortSignal) => Promise<any>) {
   effectAsync();
 
   return () => {
-    controller.abort();
+    abort.abort();
   };
 }
 
@@ -79,6 +79,40 @@ export function useAbortable(
 ) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => abortable(effect), deps);
+}
+
+export function useUnmountSignal() {
+  const abortRef = useRef<AbortController>();
+  const abort = (() => {
+    const currentAbort = abortRef.current;
+    if (currentAbort && !currentAbort.signal.aborted) {
+      return currentAbort;
+    }
+
+    return new AbortController();
+  })();
+
+  useEffect(() => {
+    abortRef.current = abort;
+    return () => {
+      abort.abort();
+    };
+  }, [abort]);
+
+  return abort.signal;
+}
+
+export function useIsMounted() {
+  const isMountedRef = useRef(false);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
+  return {isMountedRef};
 }
 
 export function useImageUrl(blob: Blob) {
