@@ -93,7 +93,7 @@ const PostComposerModal: FC = () => {
   const colorScheme = useColorScheme();
   const isLight = colorScheme === "light";
 
-  const state = usePostComposerState();
+  const state = usePostComposerState({mention: undefined});
   const {placeholder, entity, name, text} = state;
   const {onPostPress} = state;
 

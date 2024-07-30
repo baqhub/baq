@@ -103,7 +103,7 @@ export function useUnmountSignal() {
 }
 
 export function useIsMounted() {
-  const isMountedRef = useRef(false);
+  const isMountedRef = useRef(true);
 
   useEffect(() => {
     isMountedRef.current = true;

@@ -35,8 +35,8 @@
     "expo-web-browser": "~12.8.2",
     "lodash": "^4.17.21",
     "nativewind": "4.0.36",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "react-native": "0.73.6",
     "react-native-gesture-handler": "~2.14.0",
     "react-native-get-random-values": "~1.8.0",
@@ -65,14 +65,14 @@
     "metro": "~0.80.4",
     "react-test-renderer": "18.2.0",
     "tailwindcss": "3.4.3",
-    "typescript": "5.3.3"
+    "typescript": "5.5.2"
   },
   "resolutions": {
-    "@baqhub/cli": "portal:../../packages/lib-cli",
     "@baqhub/sdk": "portal:../../packages/lib-sdk",
     "@baqhub/sdk-react": "portal:../../packages/lib-sdk-react",
     "@baqhub/sdk-react-native": "portal:../../packages/lib-sdk-react-native",
-    "@baqhub/sdk-expo": "portal:../../packages/lib-sdk-expo"
+    "@baqhub/sdk-expo": "portal:../../packages/lib-sdk-expo",
+    "react": "18.3.1"
   },
   "private": true
 }

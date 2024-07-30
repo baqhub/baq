@@ -26,8 +26,12 @@ const ButtonPressable = tw(Pressable)`
   active:pb-0
   rounded-xl
 
+  opacity-100
   bg-neutral-200
   dark:bg-neutral-700
+
+  shadow-none
+  shadow-amber-500/50
 
   ${{
     isPrimary: `
@@ -38,7 +42,6 @@ const ButtonPressable = tw(Pressable)`
       opacity-50
     `,
     isFeatured: `
-      shadow-amber-500/50
       shadow-md
     `,
   }}

@@ -6,8 +6,8 @@ export class AbortedError extends CustomError {
   }
 }
 
-function throwIfAborted(signal: AbortSignal) {
-  if (!signal.aborted) {
+function throwIfAborted(signal: AbortSignal | undefined) {
+  if (!signal?.aborted) {
     return;
   }
 
@@ -76,7 +76,7 @@ function sharePromise<T>(promiseCreator: (signal: AbortSignal) => Promise<T>) {
       };
 
       waitersCount++;
-      signal?.throwIfAborted();
+      throwIfAborted(signal);
       signal?.addEventListener("abort", onAbort);
 
       getPromise().then(
