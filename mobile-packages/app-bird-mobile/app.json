@@ -16,7 +16,7 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "9",
+      "buildNumber": "11",
       "supportsTablet": false,
       "bundleIdentifier": "com.baqhub.ios.bird",
       "splash": {
