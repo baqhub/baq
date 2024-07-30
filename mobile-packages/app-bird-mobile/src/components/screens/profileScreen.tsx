@@ -2,7 +2,7 @@ import {PostVersionHash} from "@baqhub/app-bird-shared/build/src/baq/postRecord"
 import {useProfilePageState} from "@baqhub/app-bird-shared/build/src/state/profilePageState";
 import {router} from "expo-router";
 import {FC, useCallback} from "react";
-import {StyleSheet} from "react-native";
+import {Alert, StyleSheet} from "react-native";
 import {FaceFrownIcon, PencilSquareIcon} from "react-native-heroicons/outline";
 import {Avatar} from "../../components/core/avatar";
 import {Button} from "../../components/core/button";
@@ -88,6 +88,24 @@ export const ProfileScreen: FC<ProfileScreenProps> = props => {
     });
   }, [entity]);
 
+  const onBlockButtonPress = useCallback(() => {
+    Alert.alert(
+      "Block User",
+      "Block this user across all BAQ apps? They will be unable to share content with you.",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Block",
+          style: "destructive",
+          onPress: onBlockClick,
+        },
+      ]
+    );
+  }, [onBlockClick]);
+
   const renderProfile = useCallback(() => {
     if (!profile) {
       return null;
@@ -127,7 +145,7 @@ export const ProfileScreen: FC<ProfileScreenProps> = props => {
               {isBlocked ? (
                 <Button onPress={onUnblockClick}>Unblock</Button>
               ) : (
-                <Button onPress={onBlockClick}>Block</Button>
+                <Button onPress={onBlockButtonPress}>Block</Button>
               )}
             </ProfileButton>
           </ProfileButtons>
@@ -141,7 +159,7 @@ export const ProfileScreen: FC<ProfileScreenProps> = props => {
     onFollowClick,
     onUnfollowClick,
     onUnblockClick,
-    onBlockClick,
+    onBlockButtonPress,
     onMentionClick,
     profile,
   ]);

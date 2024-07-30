@@ -1,4 +1,5 @@
 import {usePostComposerState} from "@baqhub/app-bird-shared/build/src/state/postComposerState";
+import {useConstant} from "@baqhub/sdk-react";
 import {Stack, router, useLocalSearchParams} from "expo-router";
 import isEmpty from "lodash/isEmpty";
 import {FC, useCallback, useRef, useState} from "react";
@@ -96,6 +97,7 @@ const PostComposerModal: FC = () => {
 
   const state = usePostComposerState({mention});
   const {placeholder, entity, name, text} = state;
+  const initialText = useConstant(() => text);
   const {onPostPress} = state;
 
   const textRef = useRef(text);
@@ -107,7 +109,7 @@ const PostComposerModal: FC = () => {
   }, []);
 
   const onCancelClick = useCallback(() => {
-    if (isEmpty(textRef.current)) {
+    if (isEmpty(textRef.current) || textRef.current === initialText) {
       router.back();
       return;
     }
@@ -123,7 +125,7 @@ const PostComposerModal: FC = () => {
         onPress: () => router.back(),
       },
     ]);
-  }, []);
+  }, [initialText]);
 
   const onPostButtonPress = useCallback(() => {
     onPostPress(textRef.current);
@@ -177,7 +179,7 @@ const PostComposerModal: FC = () => {
                 scrollEnabled={false}
                 placeholder={placeholder}
                 selectionColor={amber[500]}
-                defaultValue={text}
+                defaultValue={initialText}
                 onChangeText={onInputChange}
               />
             </Content>
