@@ -1,4 +1,4 @@
-import {Q, SubscriptionRecord} from "@baqhub/sdk";
+import {Q, StandingRecord, SubscriptionRecord} from "@baqhub/sdk";
 import {PostRecord} from "../baq/postRecord.js";
 import {useRecordHelpers, useRecordQuery} from "../baq/store.js";
 
@@ -8,6 +8,7 @@ export function useSyncState() {
     {
       filter: Q.or(
         Q.type(PostRecord),
+        Q.type(StandingRecord),
         Q.and(
           Q.type(SubscriptionRecord),
           Q.author(entity),
