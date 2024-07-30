@@ -1,7 +1,8 @@
 import {useAvatarState} from "@baqhub/app-bird-shared/build/src/state/avatarState";
 import {FC} from "react";
 import {Image, View} from "react-native";
-import {tw} from "../../helpers/style";
+import {NoSymbolIcon} from "react-native-heroicons/outline";
+import {Icon, tw} from "../../helpers/style";
 
 //
 // Props.
@@ -19,6 +20,7 @@ interface AvatarProps {
 //
 
 const Layout = tw(View)<AvatarSize>`
+  relative
   shrink-0
   w-9
   h-9
@@ -39,6 +41,32 @@ const Layout = tw(View)<AvatarSize>`
   }}
 `;
 
+const BlockedPill = tw(View)`
+  absolute
+
+  rounded-full
+  shadow
+  -bottom-1
+  -right-1
+  p-0.5
+
+  bg-red-500
+  dark:bg-red-600
+`;
+
+const BlockPillIcon = tw(Icon)<AvatarSize>`
+  w-4
+  h-4
+  text-white
+
+  ${{
+    large: `
+      w-6
+      h-6
+    `,
+  }}
+`;
+
 const AvatarImage = tw(Image)`
   flex-1
   w-full
@@ -51,11 +79,18 @@ const AvatarImage = tw(Image)`
 
 export const Avatar: FC<AvatarProps> = props => {
   const {entity, size} = props;
-  const {avatarUrl} = useAvatarState(entity);
+  const {avatarUrl, isBlocked} = useAvatarState(entity);
 
   return (
     <Layout variants={size}>
       <AvatarImage source={{uri: avatarUrl}} resizeMode="cover" />
+      {isBlocked && (
+        <BlockedPill variants={size}>
+          <BlockPillIcon variants={size}>
+            <NoSymbolIcon />
+          </BlockPillIcon>
+        </BlockedPill>
+      )}
     </Layout>
   );
 };

@@ -43,10 +43,12 @@ const BlockedPill = tw.div`
   absolute
 
   rounded-full
+  shadow
+  shadow-red-800/30
+
   bg-red-500
   dark:bg-red-600
   text-white
-  drop-shadow
 `;
 
 const blockedPillSizeStyle: Record<AvatarSize, string> = {
@@ -65,6 +67,7 @@ const blockedPillSizeStyle: Record<AvatarSize, string> = {
 
     w-7
     h-7
+    shadow-md
   `,
 };
 

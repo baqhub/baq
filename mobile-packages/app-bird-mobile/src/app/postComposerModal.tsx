@@ -1,5 +1,5 @@
 import {usePostComposerState} from "@baqhub/app-bird-shared/build/src/state/postComposerState";
-import {Stack, router} from "expo-router";
+import {Stack, router, useLocalSearchParams} from "expo-router";
 import isEmpty from "lodash/isEmpty";
 import {FC, useCallback, useRef, useState} from "react";
 import {
@@ -87,13 +87,14 @@ const ActionsRow = tw(Row)`
 //
 
 const PostComposerModal: FC = () => {
+  const {mention} = useLocalSearchParams<{mention?: string}>();
   const [viewHeight, setViewHeight] = useState(0);
   const dimensions = useWindowDimensions();
 
   const colorScheme = useColorScheme();
   const isLight = colorScheme === "light";
 
-  const state = usePostComposerState({mention: undefined});
+  const state = usePostComposerState({mention});
   const {placeholder, entity, name, text} = state;
   const {onPostPress} = state;
 
@@ -176,6 +177,7 @@ const PostComposerModal: FC = () => {
                 scrollEnabled={false}
                 placeholder={placeholder}
                 selectionColor={amber[500]}
+                defaultValue={text}
                 onChangeText={onInputChange}
               />
             </Content>

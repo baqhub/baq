@@ -1,6 +1,6 @@
 import {PostVersionHash} from "@baqhub/app-bird-shared/build/src/baq/postRecord";
 import {useProfilePageState} from "@baqhub/app-bird-shared/build/src/state/profilePageState";
-import {noop} from "@baqhub/sdk";
+import {router} from "expo-router";
 import {FC, useCallback} from "react";
 import {StyleSheet} from "react-native";
 import {FaceFrownIcon, PencilSquareIcon} from "react-native-heroicons/outline";
@@ -76,9 +76,17 @@ export const ProfileScreen: FC<ProfileScreenProps> = props => {
   const {getProfile, getFull} = state;
   const {isFullLoading, arePostsLoading} = state;
   const {onFollowClick, onUnfollowClick} = state;
+  const {onBlockClick, onUnblockClick} = state;
 
   const isLoading = isFullLoading || arePostsLoading;
   const profile = getProfile();
+
+  const onMentionClick = useCallback(() => {
+    router.push({
+      pathname: "/postComposerModal",
+      params: {mention: entity},
+    });
+  }, [entity]);
 
   const renderProfile = useCallback(() => {
     if (!profile) {
@@ -88,6 +96,7 @@ export const ProfileScreen: FC<ProfileScreenProps> = props => {
     const {isProxy, name, entity, bio, isOwnProfile} = profile;
     const areButtonsVisible = !isOwnProfile && !isLoading;
     const isSubscribed = !isFullLoading && Boolean(getFull()?.isSubscribed);
+    const isBlocked = !isFullLoading && Boolean(getFull()?.isBlocked);
     const showAvatar = !isProxy || !isFullLoading;
 
     return (
@@ -112,14 +121,14 @@ export const ProfileScreen: FC<ProfileScreenProps> = props => {
               )}
             </ProfileButton>
             <ProfileButton>
-              <Button onPress={noop} isDisabled>
-                Mention
-              </Button>
+              <Button onPress={onMentionClick}>Mention</Button>
             </ProfileButton>
             <ProfileButton>
-              <Button onPress={noop} isDisabled>
-                Message
-              </Button>
+              {isBlocked ? (
+                <Button onPress={onUnblockClick}>Unblock</Button>
+              ) : (
+                <Button onPress={onBlockClick}>Block</Button>
+              )}
             </ProfileButton>
           </ProfileButtons>
         )}
@@ -131,6 +140,9 @@ export const ProfileScreen: FC<ProfileScreenProps> = props => {
     isLoading,
     onFollowClick,
     onUnfollowClick,
+    onUnblockClick,
+    onBlockClick,
+    onMentionClick,
     profile,
   ]);
 
