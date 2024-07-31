@@ -1,6 +1,7 @@
 import {Column, Row, tw} from "@baqhub/ui/core/style.jsx";
 import {DiscordIcon} from "@baqhub/ui/icons/filled/discord.jsx";
 import {GithubIcon} from "@baqhub/ui/icons/filled/github.jsx";
+import {MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 import type {FC} from "react";
 import {Link} from "../link.jsx";
 import {Text} from "../style.jsx";
@@ -45,11 +46,18 @@ const Center = tw(Row)`
 
   px-3
   sm:px-5
+  lg:pl-0
   items-center
   gap-2
 `;
 
+const TitleLayout = tw(Row)`
+  w-64
+  bg-red-600
+`;
+
 const TitleLink = tw(Link)`
+  lg:hidden
   py-1
   px-3
 `;
@@ -89,6 +97,11 @@ const Spacer = tw.div`
   grow
 `;
 
+const SearchIcon = tw.div`
+  w-[21px]
+  h-[21px]
+`;
+
 //
 // Component.
 //
@@ -103,6 +116,14 @@ export const TopNav: FC = () => {
               <TitleText>BAQ</TitleText>
             </TitleLink>
             <Spacer />
+            <Links>
+              <TopNavLink href="">
+                <SearchIcon>
+                  <MagnifyingGlassIcon strokeWidth={2.5} />
+                </SearchIcon>
+              </TopNavLink>
+            </Links>
+            <Separator />
             <Items>
               <TopNavItem to="/docs/learn">Learn</TopNavItem>
               <TopNavItem to="/docs/reference">Reference</TopNavItem>
