@@ -3,7 +3,7 @@
 import {ButtonRow, Row, tw} from "@baqhub/ui/core/style.jsx";
 import {DocSearchModal, useDocSearchKeyboardEvents} from "@docsearch/react";
 import {MagnifyingGlassIcon} from "@heroicons/react/24/outline";
-import {FC, useCallback, useState} from "react";
+import {FC, useCallback, useEffect, useState} from "react";
 import {createPortal} from "react-dom";
 
 //
@@ -113,10 +113,33 @@ const SearchKey = tw.div`
 // Component.
 //
 
-const isAppleDevice = /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform || "");
+type Platform = "apple" | "other";
+
+const findPlatform = (): Platform => {
+  if (/(Mac|iPhone|iPod|iPad)/i.test(navigator.userAgent)) {
+    return "apple";
+  }
+
+  return "other";
+};
+
+const renderSearchKey = (platform: Platform) => {
+  switch (platform) {
+    case "apple":
+      return <SearchKey>⌘K</SearchKey>;
+
+    default:
+      return <SearchKey>CTRL+K</SearchKey>;
+  }
+};
 
 export const TopNavSearch: FC = () => {
+  const [platform, setPlatform] = useState<Platform>("apple");
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    setPlatform(findPlatform());
+  }, []);
 
   //
   // Event handlers.
@@ -158,7 +181,7 @@ export const TopNavSearch: FC = () => {
             </PlaceholderSearchIcon>
             <PlaceholderSearchText>Search</PlaceholderSearchText>
           </Placeholder>
-          <SearchKey>{isAppleDevice ? "⌘" : "CTRL+"}K</SearchKey>
+          {renderSearchKey(platform)}
         </LargeSearchButton>
       </LargeSearch>
       {isOpen &&

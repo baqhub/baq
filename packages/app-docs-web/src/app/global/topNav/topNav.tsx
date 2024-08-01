@@ -89,10 +89,6 @@ const Separator = tw.div`
   dark:bg-zinc-600
 `;
 
-const Spacer = tw.div`
-  grow
-`;
-
 //
 // Component.
 //
