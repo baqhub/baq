@@ -47,8 +47,9 @@ const Center = tw(Row)`
   px-3
   sm:px-5
   lg:pl-0
+
   items-center
-  gap-2
+  sm:gap-2
 `;
 
 const TitleLayout = tw(Row)`
@@ -69,7 +70,7 @@ const TitleText = tw(Text)`
 
 const Items = tw(Row)`
   px-0.5
-  gap-2
+  sm:gap-2
 `;
 
 const Links = tw(Row)`

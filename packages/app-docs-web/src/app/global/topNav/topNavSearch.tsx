@@ -13,7 +13,7 @@ import {createPortal} from "react-dom";
 const Layout = tw(Row)`
   shrink-0
   items-center
-  gap-2
+  sm:gap-2
 `;
 
 const Separator = tw.div`
