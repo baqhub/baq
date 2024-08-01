@@ -55,6 +55,7 @@ const LargeSearch = tw(Row)`
   hidden
   lg:flex
   pl-8
+  xl:pl-12
 `;
 
 const LargeSearchButton = tw(ButtonRow)`
@@ -92,7 +93,7 @@ const PlaceholderSearchIcon = tw.div`
 
 const PlaceholderSearchText = tw.div`
   text-sm
-  pr-6
+  pr-14
 `;
 
 const SearchKey = tw.div`
