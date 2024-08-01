@@ -13,7 +13,6 @@ import {
   RecordSource,
   RecordVersion,
   StandingRecord,
-  isDefined,
   never,
 } from "@baqhub/sdk";
 import {Records} from "./storeContext.js";
@@ -40,28 +39,23 @@ function updateState<T extends AnyRecord | StandingRecord>(
   }
 
   // Otherwise, filter out all the "notification_unknown" records.
-  const mapPublisherUnknownRecord = (
-    record: T | NoContentRecord
-  ): T | NoContentRecord | undefined => {
+  const isPublisherUnknownRecord = (record: T | NoContentRecord) => {
     if ("noContent" in record) {
-      return record;
+      return true;
     }
 
     if (record.source !== RecordSource.NOTIFICATION_UNKNOWN) {
-      return record;
+      return true;
     }
 
     if (record.author.entity !== update.content.publisher.entity) {
-      return record;
+      return true;
     }
 
-    return undefined;
+    return false;
   };
 
-  const filteredRecords = Object.values(state)
-    .map(mapPublisherUnknownRecord)
-    .filter(isDefined);
-
+  const filteredRecords = Object.values(state).filter(isPublisherUnknownRecord);
   return [...filteredRecords, update].reduce((result, record) => {
     result[Record.toKey(record) as any] = record;
     return result;
