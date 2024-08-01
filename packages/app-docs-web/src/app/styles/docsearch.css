@@ -44,7 +44,7 @@ html.dark {
   --docsearch-primary-color: theme(colors.amber.600);
   --docsearch-text-color: theme(colors.white);
   --docsearch-highlight-color: var(--docsearch-primary-color);
-  --docsearch-muted-color: theme(colors.zinc.500);
+  --docsearch-muted-color: theme(colors.zinc.400);
   --docsearch-container-background: theme(colors.zinc.900 / 80%);
   --docsearch-logo-color: theme(colors.amber.500);
 
