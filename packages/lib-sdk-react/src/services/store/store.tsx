@@ -18,6 +18,7 @@ import {
   Record,
   RecordKey,
   RecordSource,
+  StandingDecision,
   StandingRecord,
   SubscriptionRecord,
   VersionHash,
@@ -1378,9 +1379,9 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
   function useFindStandingDecision(entity: string | undefined) {
     const {findStandingDecision} = useProxyStoreContext().accessors;
     const selector = useCallback(
-      (state: EntityRecordsState<T>) => {
+      (state: EntityRecordsState<T>): `${StandingDecision}` => {
         if (!entity) {
-          return "undecided";
+          return StandingDecision.UNDECIDED;
         }
 
         return findStandingDecision(() => state)(entity);

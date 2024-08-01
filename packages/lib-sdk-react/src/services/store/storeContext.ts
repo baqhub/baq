@@ -17,7 +17,7 @@ export type RecordVersions<T extends AnyRecord> = {
 };
 
 export type Records<T extends AnyRecord> = {
-  [K: RecordKey<T>]: T | NoContentRecord;
+  [K: RecordKey<T | NoContentRecord>]: T | NoContentRecord;
 };
 export interface RecordsState<T extends AnyRecord> {
   dictionary: Records<T>;
