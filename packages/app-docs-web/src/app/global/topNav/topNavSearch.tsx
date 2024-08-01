@@ -1,6 +1,6 @@
 "use client";
 
-import {Row, tw} from "@baqhub/ui/core/style.jsx";
+import {ButtonRow, Row, tw} from "@baqhub/ui/core/style.jsx";
 import {DocSearchModal, useDocSearchKeyboardEvents} from "@docsearch/react";
 import {MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 import {FC, useCallback, useState} from "react";
@@ -12,8 +12,16 @@ import {createPortal} from "react-dom";
 
 const Layout = tw(Row)`
   shrink-0
+  grow
+
+  justify-end
+  lg:justify-start
+`;
+
+const SmallSearch = tw(Row)`
   items-center
   sm:gap-2
+  lg:hidden
 `;
 
 const Separator = tw.div`
@@ -26,7 +34,7 @@ const Separator = tw.div`
   dark:bg-zinc-600
 `;
 
-const SearchButton = tw.button`
+const SmallSearchButton = tw.button`
   mx-1.5
   shrink-0
   block
@@ -36,7 +44,6 @@ const SearchButton = tw.button`
   dark:text-zinc-200
   hover:text-amber-800
   dark:hover:text-amber-400
-
 `;
 
 const SearchIcon = tw.div`
@@ -44,9 +51,69 @@ const SearchIcon = tw.div`
   h-[21px]
 `;
 
+const LargeSearch = tw(Row)`
+  hidden
+  lg:flex
+  pl-8
+`;
+
+const LargeSearchButton = tw(ButtonRow)`
+  px-2
+
+  rounded-lg
+  items-center
+
+  ring-inset
+  ring-1
+  bg-zinc-100
+  ring-zinc-100
+  hover:ring-amber-600
+  dark:bg-zinc-900
+  dark:ring-zinc-900
+  dark:hover:ring-amber-600
+
+  text-zinc-500
+  dark:text-zinc-500
+
+  transition-shadow
+`;
+
+const Placeholder = tw(Row)`
+  px-1
+  py-2
+  gap-1.5
+  items-center
+`;
+
+const PlaceholderSearchIcon = tw.div`
+  w-[18px]
+  h-[18px]
+`;
+
+const PlaceholderSearchText = tw.div`
+  text-sm
+  pr-6
+`;
+
+const SearchKey = tw.div`
+  px-1
+  py-0.5
+
+  text-[11px]
+
+  rounded
+  border
+  text-zinc-500
+  border-zinc-300
+  dark:text-zinc-500
+  dark:border-zinc-700
+`;
+
 //
 // Component.
 //
+
+const isAppleDevice = /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform || "");
 
 export const TopNavSearch: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -75,12 +142,25 @@ export const TopNavSearch: FC = () => {
 
   return (
     <Layout>
-      <SearchButton>
-        <SearchIcon onClick={onOpenClick}>
-          <MagnifyingGlassIcon strokeWidth={2.5} />
-        </SearchIcon>
-      </SearchButton>
-      <Separator />
+      <SmallSearch>
+        <SmallSearchButton>
+          <SearchIcon onClick={onOpenClick}>
+            <MagnifyingGlassIcon strokeWidth={2.5} />
+          </SearchIcon>
+        </SmallSearchButton>
+        <Separator />
+      </SmallSearch>
+      <LargeSearch>
+        <LargeSearchButton onClick={onOpenClick}>
+          <Placeholder>
+            <PlaceholderSearchIcon>
+              <MagnifyingGlassIcon strokeWidth={1.5} />
+            </PlaceholderSearchIcon>
+            <PlaceholderSearchText>Search</PlaceholderSearchText>
+          </Placeholder>
+          <SearchKey>{isAppleDevice ? "⌘" : "CTRL+"}K</SearchKey>
+        </LargeSearchButton>
+      </LargeSearch>
       {isOpen &&
         createPortal(
           <DocSearchModal

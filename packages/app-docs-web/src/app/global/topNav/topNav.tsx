@@ -46,15 +46,10 @@ const Center = tw(Row)`
 
   px-3
   sm:px-5
-  lg:pl-0
+  lg:pl-64
 
   items-center
   sm:gap-2
-`;
-
-const TitleLayout = tw(Row)`
-  w-64
-  bg-red-600
 `;
 
 const TitleLink = tw(Link)`
@@ -111,7 +106,6 @@ export const TopNav: FC = () => {
             <TitleLink href="/">
               <TitleText>BAQ</TitleText>
             </TitleLink>
-            <Spacer />
             <TopNavSearch />
             <Items>
               <TopNavItem to="/docs/learn">Learn</TopNavItem>
