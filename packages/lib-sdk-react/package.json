@@ -1,6 +1,6 @@
 {
   "name": "@baqhub/sdk-react",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "",
   "type": "module",
   "sideEffects": false,
@@ -32,7 +32,7 @@
     "reactive"
   ],
   "dependencies": {
-    "@baqhub/sdk": "^0.1.13",
+    "@baqhub/sdk": "^0.1.16",
     "lodash": "^4.17.21",
     "react": "^18.3.1",
     "tslib": "^2.6.3",
