@@ -5,6 +5,8 @@ import {firaCode, inter} from "./fonts/fonts.js";
 import {AutoRefresh} from "./global/autoRefresh.jsx";
 import {DarkModeScript} from "./global/scripts/darkModeScript.jsx";
 import {TopNav} from "./global/topNav/topNav.jsx";
+
+import "@docsearch/css";
 import "./styles/index.css";
 
 //

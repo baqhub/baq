@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@baqhub/ui": "*",
+    "@docsearch/css": "3.6.1",
     "@docsearch/react": "3.6.1",
     "@heroicons/react": "2.1.4",
     "@next/mdx": "14.2.4",

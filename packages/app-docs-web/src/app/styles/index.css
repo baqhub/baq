@@ -1,4 +1,5 @@
 @import "code";
+@import "docsearch";
 
 @tailwind base;
 @tailwind components;

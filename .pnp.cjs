@@ -826,6 +826,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@baqhub/docs-web", "workspace:packages/app-docs-web"],\
           ["@baqhub/ui", "workspace:packages/lib-ui"],\
+          ["@docsearch/css", "npm:3.6.1"],\
           ["@docsearch/react", "virtual:5d672a90405c6f5d47887489ef531ab2fd03fac749388ff320a003f2abe51f8657c1c807618f7a35c5e421f938e6110552511db9f7a513f65dfd6f0ca4011fe6#npm:3.6.1"],\
           ["@heroicons/react", "virtual:5be33ab443a62cc100331133ea47d04da61badd611591deb3517bea5da396f2a2537969e19b053cbc2c5947813dc4fcf2f2b276a94819d68d89d2d8d40aa38b1#npm:2.1.4"],\
           ["@mdx-js/loader", "virtual:5d672a90405c6f5d47887489ef531ab2fd03fac749388ff320a003f2abe51f8657c1c807618f7a35c5e421f938e6110552511db9f7a513f65dfd6f0ca4011fe6#npm:3.0.1"],\
@@ -3849,16 +3850,6 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@types/react", [\
-      ["npm:18.2.23", {\
-        "packageLocation": "../../../.yarn/berry/cache/@types-react-npm-18.2.23-d0c6d9153f-10c0.zip/node_modules/@types/react/",\
-        "packageDependencies": [\
-          ["@types/react", "npm:18.2.23"],\
-          ["@types/prop-types", "npm:15.7.5"],\
-          ["@types/scheduler", "npm:0.16.3"],\
-          ["csstype", "npm:3.1.2"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:18.3.3", {\
         "packageLocation": "../../../.yarn/berry/cache/@types-react-npm-18.3.3-07e68e178e-10c0.zip/node_modules/@types/react/",\
         "packageDependencies": [\
@@ -3874,16 +3865,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../.yarn/berry/cache/@types-react-dom-npm-18.3.0-111444d3eb-10c0.zip/node_modules/@types/react-dom/",\
         "packageDependencies": [\
           ["@types/react-dom", "npm:18.3.0"],\
-          ["@types/react", "npm:18.2.23"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["@types/scheduler", [\
-      ["npm:0.16.3", {\
-        "packageLocation": "../../../.yarn/berry/cache/@types-scheduler-npm-0.16.3-887bfc0086-10c0.zip/node_modules/@types/scheduler/",\
-        "packageDependencies": [\
-          ["@types/scheduler", "npm:0.16.3"]\
+          ["@types/react", "npm:18.3.3"]\
         ],\
         "linkType": "HARD"\
       }]\

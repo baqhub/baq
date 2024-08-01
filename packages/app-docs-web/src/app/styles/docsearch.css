@@ -1,0 +1,96 @@
+:root {
+  --docsearch-primary-color: theme(colors.amber.600);
+  --docsearch-text-color: theme(colors.zinc.900);
+  --docsearch-highlight-color: var(--docsearch-primary-color);
+  --docsearch-muted-color: theme(colors.zinc.400);
+  --docsearch-container-background: theme(colors.zinc.600 / 80%);
+  --docsearch-logo-color: theme(colors.amber.600);
+
+  /* Modal. */
+  --docsearch-modal-background: theme(colors.zinc.100);
+  --docsearch-modal-shadow: 0 3px 8px 0 theme(colors.zinc.600);
+
+  /* Search box. */
+  /* --docsearch-searchbox-background: rgb(235, 237, 240); */
+  --docsearch-searchbox-focus-background: theme(colors.white);
+  --docsearch-searchbox-shadow: inset 0 0 0 2px var(--docsearch-primary-color);
+
+  /* Hit. */
+  --docsearch-hit-color: theme(colors.zinc.600);
+  --docsearch-hit-active-color: theme(colors.white);
+  --docsearch-hit-background: theme(colors.white);
+  --docsearch-hit-shadow: 0 1px 3px 0 theme(colors.zinc.300);
+
+  /* Key. */
+  --docsearch-key-background: theme(colors.zinc.200);
+  --docsearch-key-gradient: linear-gradient(
+    -225deg,
+    theme(colors.zinc.200) 0%,
+    theme(colors.zinc.50) 100%
+  );
+  --docsearch-key-shadow: inset 0 -2px 0 0 theme(colors.zinc.300),
+    inset 0 0 1px 1px theme(colors.white),
+    0 1px 2px 1px theme(colors.zinc.800 / 40%);
+  /* --docsearch-key-pressed-shadow: inset 0 -2px 0 0 #cdcde6,
+    inset 0 0 1px 1px theme(colors.white), 0 1px 1px 0 rgba(30, 35, 90, 0.4); */
+
+  /* Footer. */
+  --docsearch-footer-background: theme(colors.white);
+  --docsearch-footer-shadow: 0 -1px 0 0 theme(colors.zinc.200),
+    0 -3px 6px 0 theme(colors.zinc.700 / 12%);
+}
+
+html.dark {
+  --docsearch-primary-color: theme(colors.amber.600);
+  --docsearch-text-color: theme(colors.white);
+  --docsearch-highlight-color: var(--docsearch-primary-color);
+  --docsearch-muted-color: theme(colors.zinc.500);
+  --docsearch-container-background: theme(colors.zinc.900 / 80%);
+  --docsearch-logo-color: theme(colors.amber.500);
+
+  /* Modal. */
+  --docsearch-modal-background: theme(colors.zinc.800);
+  --docsearch-modal-shadow: 0 3px 8px 0 theme(colors.zinc.950);
+
+  /* Search box. */
+  /* --docsearch-searchbox-background: rgb(235, 237, 240); */
+  --docsearch-searchbox-focus-background: theme(colors.zinc.900);
+  --docsearch-searchbox-shadow: inset 0 0 0 2px var(--docsearch-primary-color);
+
+  /* Hit. */
+  --docsearch-hit-color: theme(colors.zinc.200);
+  --docsearch-hit-active-color: theme(colors.white);
+  --docsearch-hit-background: theme(colors.zinc.700);
+  --docsearch-hit-shadow: none;
+
+  /* Key. */
+  --docsearch-key-background: theme(colors.zinc.200);
+  --docsearch-key-gradient: linear-gradient(
+    -225deg,
+    theme(colors.zinc.600) 0%,
+    theme(colors.zinc.800) 100%
+  );
+  --docsearch-key-shadow: inset 0 -2px 0 0 theme(colors.zinc.800),
+    inset 0 0 1px 1px theme(colors.zinc.600),
+    0 2px 2px 0 theme(colors.zinc.950 / 30%);
+  /* --docsearch-key-pressed-shadow: inset 0 -2px 0 0 #cdcde6,
+    inset 0 0 1px 1px theme(colors.white), 0 1px 1px 0 rgba(30, 35, 90, 0.4); */
+
+  /* Footer. */
+  --docsearch-footer-background: theme(colors.zinc.900);
+  --docsearch-footer-shadow: 0 -1px 0 0 theme(colors.zinc.700),
+    0 -3px 6px 0 theme(colors.zinc.400 / 12%);
+}
+
+.DocSearch-NoResults {
+  color: var(--docsearch-text-color);
+}
+
+.DocSearch-NoResults .DocSearch-Screen-Icon {
+  display: inline-block;
+}
+
+a svg .cls-1,
+a svg .cls-2 {
+  fill: var(--docsearch-logo-color);
+}
