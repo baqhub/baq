@@ -42,6 +42,7 @@ export * from "./model/recordTypes/appRecord.js";
 export * from "./model/recordTypes/appScopes.js";
 export * from "./model/recordTypes/entityRecord.js";
 export * from "./model/recordTypes/serverCredentialsRecord.js";
+export * from "./model/recordTypes/standingRecord.js";
 export * from "./model/recordTypes/subscriptionRecord.js";
 export * from "./model/recordTypes/typeRecord.js";
 //

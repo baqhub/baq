@@ -1,4 +1,5 @@
 import {
+  AbortedError,
   AnyBlobLink,
   AnyRecord,
   Async,
@@ -16,6 +17,9 @@ import {
   RNoContentRecord,
   Record,
   RecordKey,
+  RecordSource,
+  StandingDecision,
+  StandingRecord,
   SubscriptionRecord,
   VersionHash,
   isDefined,
@@ -35,7 +39,7 @@ import {
 } from "react";
 import {useSyncExternalStoreWithSelector} from "use-sync-external-store/with-selector.js";
 import {isReferenceEqual, isShallowEqual} from "../../helpers/equality.js";
-import {useDeepMemo, useStable} from "../../helpers/hooks.js";
+import {useDeepMemo, useIsMounted, useStable} from "../../helpers/hooks.js";
 import {
   ProxyStoreContextProps,
   buildAccessors,
@@ -104,7 +108,12 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
   ...types: R
 ) {
   const RIntermediate = IO.union([EntityRecord, EntityRecord, ...types]);
-  const RKnownRecord = IO.union([RIntermediate, SubscriptionRecord]);
+  const RKnownRecord = IO.union([
+    RIntermediate,
+    StandingRecord,
+    SubscriptionRecord,
+  ]);
+
   const RKnownEventRecord = IO.union([RKnownRecord, RNoContentRecord]);
   type T = IO.TypeOf<typeof RKnownRecord>;
 
@@ -151,6 +160,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     const {entityRecord, client, blobUrlBuilder} = identity;
     const {entity} = entityRecord.author;
     const onDisconnectRequestStable = useStable(onDisconnectRequest);
+    const {isMountedRef} = useIsMounted();
 
     const stateRef = useRef<State<T>>({
       versions: {
@@ -251,9 +261,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         const {state, stateSubscriptions} = stateRef.current;
         const {mutations, mutationsSubscriptions} = stateRef.current;
 
-        const entityState = state[proxyEntity] || {dictionary: {}, list: []};
-
-        updates.map(r => {
+        updates.forEach(r => {
           if ("noContent" in r || !r.version?.hash) {
             return;
           }
@@ -261,26 +269,59 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           stateRef.current.versions[r.version.hash] = r;
         });
 
-        const isUserState = proxyEntity === entity;
-        const reduced = isUserState
-          ? applyUpdates(entityState.dictionary, mutations, updates)
-          : applyProxyUpdates(entityState.dictionary, mutations, updates);
+        const updateState = (
+          updateEntity: string,
+          updater: typeof applyUpdates,
+          mutations: ReadonlyArray<Mutation<T>>,
+          updates: ReadonlyArray<T | NoContentRecord>
+        ) => {
+          const entityState = state[updateEntity] || {dictionary: {}, list: []};
+          const reduced = updater(entityState.dictionary, mutations, updates);
+
+          if (reduced.state !== entityState.dictionary) {
+            stateRef.current.state = {
+              ...state,
+              [updateEntity]: {
+                dictionary: reduced.state,
+                list: Object.values(reduced.state),
+              },
+            };
+            return [true, reduced.mutations] as const;
+          }
+
+          return [false, reduced.mutations] as const;
+        };
+
+        const [wasUpdated, newMutations] = (() => {
+          if (proxyEntity === entity) {
+            return updateState(entity, applyUpdates, mutations, updates);
+          }
+
+          const [wasUpdated1, mutations1] = updateState(
+            proxyEntity,
+            applyProxyUpdates,
+            mutations,
+            updates.filter(u => u.source === RecordSource.PROXY)
+          );
+
+          const [wasUpdated2, mutations2] = updateState(
+            entity,
+            applyUpdates,
+            mutations1,
+            updates.filter(u => u.source !== RecordSource.PROXY)
+          );
+
+          return [wasUpdated1 || wasUpdated2, mutations2] as const;
+        })();
 
         stateRef.current.isUpdating = false;
 
-        if (reduced.state !== entityState.dictionary) {
-          stateRef.current.state = {
-            ...state,
-            [proxyEntity]: {
-              dictionary: reduced.state,
-              list: Object.values(reduced.state),
-            },
-          };
+        if (wasUpdated) {
           stateSubscriptions.forEach(s => s());
         }
 
-        if (reduced.mutations !== mutations) {
-          stateRef.current.mutations = reduced.mutations;
+        if (newMutations !== mutations) {
+          stateRef.current.mutations = newMutations;
           mutationsSubscriptions.forEach(s => s());
         }
       },
@@ -357,10 +398,15 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           try {
             const updatedMutations = await performMutation(activeMutation);
             stateRef.current.mutations = updatedMutations;
-          } catch (err) {
+          } catch (error) {
+            // Aborted: nothing to do.
+            if (error instanceof AbortedError) {
+              return;
+            }
+
             // Unauthorized or Forbidden: disconnect.
             if (
-              Http.isError(err, [
+              Http.isError(error, [
                 HttpStatusCode.UNAUTHORIZED,
                 HttpStatusCode.FORBIDDEN,
               ])
@@ -370,13 +416,13 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
             }
 
             // Other http error: retry.
-            if (Http.isError(err)) {
+            if (Http.isError(error)) {
               await Async.delay(1000, signal); // TODO: Evaluate exponential backoff.
               continue;
             }
 
             // Other error, unexpected.
-            throw err;
+            throw error;
           }
         }
 
@@ -404,14 +450,9 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
       return () => {
         abortController.abort();
         unsubscribe();
+        stop();
       };
-    }, [
-      subscribeToMutations,
-      entity,
-      client,
-      updateRecordsInState,
-      onDisconnectRequestStable,
-    ]);
+    }, [subscribeToMutations, entity, client, onDisconnectRequestStable]);
 
     //
     // Queries.
@@ -572,6 +613,10 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                 query
               );
 
+              if (!isMountedRef.current) {
+                return;
+              }
+
               const responseRecords = [
                 ...response.linkedRecords,
                 ...response.records,
@@ -595,10 +640,15 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                   },
                 };
               });
-            } catch (err) {
+            } catch (error) {
+              // Unmounted: nothing to do.
+              if (!isMountedRef.current) {
+                return;
+              }
+
               // Permanent error: mark as failed.
               if (
-                Http.isError(err, [
+                Http.isError(error, [
                   HttpStatusCode.BAD_REQUEST,
                   HttpStatusCode.INTERNAL_SERVER_ERROR,
                 ])
@@ -614,7 +664,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                     [queryId]: {
                       ...currentQuery,
                       promise: undefined,
-                      error: err,
+                      error: error,
                     },
                   };
                 });
@@ -646,7 +696,14 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
         return newQuery;
       },
-      [updateQueries, findLiveQueryMatch, entity, client, updateRecords]
+      [
+        updateQueries,
+        findLiveQueryMatch,
+        entity,
+        client,
+        isMountedRef,
+        updateRecords,
+      ]
     );
 
     const registerLiveQuery = useCallback(
@@ -1319,6 +1376,22 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     return useReferenceStateSelector(selector);
   }
 
+  function useFindStandingDecision(entity: string | undefined) {
+    const {findStandingDecision} = useProxyStoreContext().accessors;
+    const selector = useCallback(
+      (state: EntityRecordsState<T>): `${StandingDecision}` => {
+        if (!entity) {
+          return StandingDecision.UNDECIDED;
+        }
+
+        return findStandingDecision(() => state)(entity);
+      },
+      [findStandingDecision, entity]
+    );
+
+    return useReferenceStateSelector(selector);
+  }
+
   return {
     RKnownRecord,
     ProxyStore,
@@ -1334,5 +1407,6 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     useFindRecordByKey,
     useFindRecordByQuery,
     useFindEntityRecord,
+    useFindStandingDecision,
   };
 }

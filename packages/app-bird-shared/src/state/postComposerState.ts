@@ -4,6 +4,10 @@ import {useCallback, useState} from "react";
 import {PostRecord} from "../baq/postRecord.js";
 import {useFindEntityRecord, useRecordHelpers} from "../baq/store.js";
 
+//
+// Constants.
+//
+
 const placeholders = [
   "What's on your mind?",
   "Got something to share with the world?",
@@ -16,7 +20,19 @@ const placeholders = [
 const regexMention =
   /(?:^|[^a-zA-Z0-9_@!@#$%&*])(?:(?:@|@)(?!\/))([a-zA-Z0-9/_.]+)(?:\b(?!@|@)|$)/g;
 
-export function usePostComposerState() {
+//
+// Props.
+//
+
+interface UsePostComposerStateProps {
+  mention: string | undefined;
+}
+
+//
+// State hook.
+//
+
+export function usePostComposerState({mention}: UsePostComposerStateProps) {
   const {entity, updateRecords} = useRecordHelpers();
 
   const user = useFindEntityRecord(entity);
@@ -25,7 +41,7 @@ export function usePostComposerState() {
   }
 
   const placeholder = useConstant(() => Array.randomItem(placeholders));
-  const [text, setText] = useState("");
+  const [text, setText] = useState(mention ? `@${mention} ` : "");
 
   const onPostPress = useCallback(
     (newText?: string) => {

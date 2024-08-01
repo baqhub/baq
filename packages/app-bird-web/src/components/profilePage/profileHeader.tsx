@@ -1,7 +1,8 @@
 import {FullProfileData} from "@baqhub/bird-shared/state/profilePageState.js";
-import {Handler, noop} from "@baqhub/sdk";
+import {Handler} from "@baqhub/sdk";
 import {Button} from "@baqhub/ui/core/button.js";
 import {Column, Grid, Row, Text, tw} from "@baqhub/ui/core/style.js";
+import {useNavigate} from "@tanstack/react-router";
 import {FC} from "react";
 import {Avatar} from "../shared/avatar.js";
 
@@ -13,6 +14,8 @@ interface ProfileHeaderProps {
   profile: FullProfileData;
   onFollowClick: Handler;
   onUnfollowClick: Handler;
+  onBlockClick: Handler;
+  onUnblockClick: Handler;
 }
 
 //
@@ -63,7 +66,13 @@ const ProfileButtons = tw(Grid)`
 
 export const ProfileHeader: FC<ProfileHeaderProps> = props => {
   const {profile, onFollowClick, onUnfollowClick} = props;
-  const {entity, name, bio, isOwnProfile, isSubscribed} = profile;
+  const {onBlockClick, onUnblockClick} = props;
+  const {entity, name, bio, isOwnProfile, isSubscribed, isBlocked} = profile;
+
+  const navigate = useNavigate();
+  const onMentionClick = () => {
+    navigate({to: "/", search: {mention: entity}});
+  };
 
   return (
     <Profile>
@@ -86,12 +95,12 @@ export const ProfileHeader: FC<ProfileHeaderProps> = props => {
               Follow
             </Button>
           )}
-          <Button onClick={noop} isDisabled>
-            Mention
-          </Button>
-          <Button onClick={noop} isDisabled>
-            Message
-          </Button>
+          <Button onClick={onMentionClick}>Mention</Button>
+          {isBlocked ? (
+            <Button onClick={onUnblockClick}>Unblock</Button>
+          ) : (
+            <Button onClick={onBlockClick}>Block</Button>
+          )}
         </ProfileButtons>
       )}
     </Profile>

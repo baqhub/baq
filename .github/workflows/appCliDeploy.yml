@@ -6,6 +6,7 @@ on:
       - main
       - deploy-cli
     paths:
+      - .github/workflows/appCliDeploy.yml
       - packages/app-cli-web/**
       - packages/lib-*/**
 

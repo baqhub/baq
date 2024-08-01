@@ -1,13 +1,22 @@
 import {
   AnyRecord,
+  EntityLink,
   EntityRecord,
   NoContentRecord,
   Q,
   Query,
   RecordKey,
+  RecordSource,
+  StandingDecision,
+  StandingRecord,
+  StandingRecordContent,
   VersionHash,
 } from "@baqhub/sdk";
-import {EntityRecordsState, RecordVersions} from "./storeContext.js";
+import {
+  EntityRecordsState,
+  RecordVersions,
+  UpdateRecords,
+} from "./storeContext.js";
 
 function pickRecord<T extends AnyRecord | NoContentRecord>(
   local: T | undefined,
@@ -128,9 +137,61 @@ export function findEntityRecord<T extends AnyRecord>(
   proxyEntity: string
 ) {
   const findRecord = findRecordByQuery(entity, proxyEntity);
-  return (getState: GetState<T>) => (entity: string) => {
+  return (getState: GetState<T>) => (targetEntity: string) => {
     return findRecord(getState)({
-      filter: Q.and(Q.author(entity), Q.type(EntityRecord)),
+      sources: [
+        RecordSource.SELF,
+        RecordSource.NOTIFICATION,
+        RecordSource.SUBSCRIPTION,
+        RecordSource.RESOLUTION,
+      ],
+      filter: Q.and(Q.author(targetEntity), Q.type(EntityRecord)),
     });
   };
+}
+
+export function findStandingRecord<T extends AnyRecord>(entity: string) {
+  const findRecord = findRecordByQuery(entity, entity);
+  return (getState: GetState<T>) => (publisherEntity: string) => {
+    return findRecord(getState)({
+      sources: [RecordSource.SELF],
+      filter: Q.and(
+        Q.author(entity),
+        Q.type(StandingRecord),
+        Q.entity("content.publisher", publisherEntity)
+      ),
+    });
+  };
+}
+
+export function findStandingDecision<T extends AnyRecord>(entity: string) {
+  const findRecord = findStandingRecord(entity);
+  return (getState: GetState<T>) =>
+    (publisherEntity: string): `${StandingDecision}` => {
+      const standingRecord = findRecord(getState)(publisherEntity);
+      if (!standingRecord) {
+        return StandingDecision.UNDECIDED;
+      }
+
+      return standingRecord.content.decision;
+    };
+}
+
+export function updateStandingDecision<T extends AnyRecord>(entity: string) {
+  const findRecord = findStandingRecord(entity);
+  return (getState: GetState<T>, updateRecord: UpdateRecords<T>) =>
+    (publisherEntity: string, decision: StandingDecision) => {
+      const standingRecord = findRecord(getState)(publisherEntity);
+
+      const newContent: StandingRecordContent = {
+        publisher: EntityLink.new(publisherEntity),
+        decision,
+      };
+
+      const newStandingRecord = standingRecord
+        ? StandingRecord.update(entity, standingRecord, newContent)
+        : StandingRecord.new(entity, newContent);
+
+      updateRecord([newStandingRecord]);
+    };
 }

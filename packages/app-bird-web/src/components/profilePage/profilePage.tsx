@@ -18,6 +18,7 @@ export const ProfilePage: FC = () => {
   const {entity} = profileRoute.useParams();
   const profilePageState = useProfilePageState(entity);
   const {wrap} = profilePageState;
+
   return (
     <Suspense fallback={<LoadingPosts />}>
       {wrap(<ProfilePageContent {...profilePageState} />)}
@@ -30,6 +31,7 @@ const ProfilePageContent: FC<
 > = props => {
   const {getFull, getPostVersions} = props;
   const {onFollowClick, onUnfollowClick} = props;
+  const {onBlockClick, onUnblockClick} = props;
   const profile = getFull();
 
   if (!profile) {
@@ -47,6 +49,8 @@ const ProfilePageContent: FC<
         profile={profile}
         onFollowClick={onFollowClick}
         onUnfollowClick={onUnfollowClick}
+        onBlockClick={onBlockClick}
+        onUnblockClick={onUnblockClick}
       />
       <Suspense fallback={<LoadingPosts />}>
         <Posts getItems={getPostVersions} renderItem={renderPost}>

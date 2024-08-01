@@ -1,12 +1,7 @@
 import {unreachable} from "../../helpers/type.js";
 import {AnyRecordLink} from "../links/recordLink.js";
 import {VersionLink} from "../links/versionLink.js";
-import {
-  AnyRecord,
-  CleanRecordType,
-  RecordSource,
-  UnknownRecord,
-} from "../records/record.js";
+import {AnyRecord, CleanRecordType, UnknownRecord} from "../records/record.js";
 import {QueryLink} from "./queryLink.js";
 import {QueryLinkValue} from "./queryLinkValue.js";
 
@@ -270,12 +265,6 @@ function queryId(id: string) {
   return QueryFilter.link(QueryLink.pathLink("id", QueryLinkValue.tag(id)));
 }
 
-function querySource(source: `${RecordSource}`) {
-  return QueryFilter.link(
-    QueryLink.pathLink("source", QueryLinkValue.tag(source))
-  );
-}
-
 function queryAuthor(entity: string) {
   return queryEntity("author", entity);
 }
@@ -305,7 +294,6 @@ export const QueryFilter = {
   record: queryRecord,
   version: queryVersion,
   id: queryId,
-  source: querySource,
   author: queryAuthor,
   type: queryType,
   empty: queryEmpty,

@@ -6,6 +6,7 @@ on:
       - main
       - deploy-files
     paths:
+      - .github/workflows/appFilesDeploy.yml
       - packages/app-files-web/**
       - packages/lib-*/**
 

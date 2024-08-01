@@ -1,6 +1,7 @@
 import {buildAuthentication} from "@baqhub/app-bird-shared/build/src/baq/authentication";
 import {Store} from "@baqhub/app-bird-shared/build/src/baq/store";
 import {DateServicesProvider} from "@baqhub/app-bird-shared/build/src/components/date/dateServicesProvider";
+import {useSyncState} from "@baqhub/app-bird-shared/build/src/state/syncState";
 import {asyncStorageAdapter, secureStorageAdapter} from "@baqhub/sdk-expo";
 import {DarkTheme, DefaultTheme, ThemeProvider} from "@react-navigation/native";
 import {Locale, useLocales} from "expo-localization";
@@ -89,6 +90,7 @@ function RootLayoutContent() {
           identity={state.identity}
           onDisconnectRequest={onDisconnectRequest}
         >
+          <Sync />
           <Stack>
             <Stack.Screen name="(tabs)" options={{headerShown: false}} />
             <Stack.Screen
@@ -110,5 +112,10 @@ function RootLayoutContent() {
     </ThemeProvider>
   );
 }
+
+const Sync: FC = () => {
+  useSyncState();
+  return <></>;
+};
 
 export default RootLayout;

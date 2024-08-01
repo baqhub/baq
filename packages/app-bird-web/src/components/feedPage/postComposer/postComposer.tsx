@@ -1,8 +1,17 @@
 import {usePostComposerState} from "@baqhub/bird-shared/state/postComposerState.js";
+import {useConstant} from "@baqhub/sdk-react";
 import {Button} from "@baqhub/ui/core/button.js";
 import {Column, Grid, tw} from "@baqhub/ui/core/style.js";
-import {FC, KeyboardEvent} from "react";
+import {FC, KeyboardEvent, useEffect, useRef} from "react";
 import {Avatar} from "../../shared/avatar.js";
+
+//
+// Props.
+//
+
+interface PostComposerProps {
+  mention: string | undefined;
+}
 
 //
 // Style.
@@ -71,8 +80,8 @@ const ButtonCell = tw(Column)`
 // Component.
 //
 
-export const PostComposer: FC = () => {
-  const state = usePostComposerState();
+export const PostComposer: FC<PostComposerProps> = ({mention}) => {
+  const state = usePostComposerState({mention});
   const {placeholder, entity, text} = state;
   const {onTextChange, onPostPress} = state;
   const isValidText = Boolean(text.trim());
@@ -86,12 +95,26 @@ export const PostComposer: FC = () => {
     onPostPress();
   };
 
+  const shouldFocus = useConstant(() => Boolean(text));
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    const currentTextarea = textareaRef.current;
+    if (!shouldFocus || !currentTextarea) {
+      return;
+    }
+
+    currentTextarea.focus();
+    currentTextarea.selectionStart = currentTextarea.value.length;
+    currentTextarea.selectionEnd = currentTextarea.value.length;
+  }, [shouldFocus]);
+
   return (
     <Layout>
       <AvatarCell>
         <Avatar entity={entity} />
       </AvatarCell>
       <Textarea
+        ref={textareaRef}
         placeholder={placeholder}
         value={text}
         maxLength={400}

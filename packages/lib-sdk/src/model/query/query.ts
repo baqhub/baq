@@ -5,9 +5,15 @@ import isString from "lodash/isString.js";
 import orderBy from "lodash/orderBy.js";
 import uniqBy from "lodash/uniqBy.js";
 import {Constants} from "../../constants.js";
+import {Array} from "../../helpers/array.js";
 import {Str} from "../../helpers/string.js";
 import {isDefined} from "../../helpers/type.js";
-import {AnyRecord, NoContentRecord, RecordMode} from "../records/record.js";
+import {
+  AnyRecord,
+  NoContentRecord,
+  RecordMode,
+  RecordSource,
+} from "../records/record.js";
 import {RecordKey} from "../records/recordKey.js";
 import {normalizePath} from "./pathHelpers.js";
 import {QueryDate} from "./queryDate.js";
@@ -18,8 +24,23 @@ import {QuerySort, QuerySortDirection, QuerySortProperty} from "./querySort.js";
 // Model.
 //
 
-type IncludeLink = "entity" | "existential" | string;
-const includeLinkSpecialValues = ["entity", "existential"];
+type IncludeLink =
+  | "entity"
+  | "standing"
+  | "existential"
+  | (string & NonNullable<unknown>);
+
+const includeLinkSpecialValues: ReadonlyArray<IncludeLink> = [
+  "entity",
+  "standing",
+  "existential",
+];
+
+const defaultSources = [
+  RecordSource.SELF,
+  RecordSource.NOTIFICATION,
+  RecordSource.SUBSCRIPTION,
+];
 
 interface StaticQueryBase {
   proxyTo?: string;
@@ -41,6 +62,7 @@ export interface LiveQuery<T extends AnyRecord> extends LiveSingleQuery {
   pageSize?: number;
 
   distinct?: string;
+  sources?: ReadonlyArray<`${RecordSource}`>;
   filter?: QueryFilter<T>;
   mode?: `${RecordMode}`;
 }
@@ -97,6 +119,7 @@ function queryToQueryString<T extends AnyRecord>(query: Query<T>) {
     ["page_start", query.pageStart && QueryDate.toString(query.pageStart)],
     ["page_size", (query.pageSize || Constants.defaultPageSize).toString()],
     ["distinct", query.distinct && normalizePath(query.distinct)],
+    ["sources", query.sources?.join(",")],
     ...(filterStrings || []).map(f => ["filter", f] as const),
     ["include_links", includeLinksToString(query.includeLinks)],
     ["include_deleted", query.includeDeleted ? "true" : undefined],
@@ -126,7 +149,17 @@ function includeLinksIsSuperset(
   const l1 = links1 || defaultIncludeLinks;
   const l2 = links2 || defaultIncludeLinks;
 
-  return l2.every(l => l1.includes(l));
+  return Array.isSuperset(l1, l2);
+}
+
+function sourcesIsSuperset(
+  sources1: ReadonlyArray<`${RecordSource}`> | undefined,
+  sources2: ReadonlyArray<`${RecordSource}`> | undefined
+) {
+  const s1 = sources1 || defaultSources;
+  const s2 = sources2 || defaultSources;
+
+  return Array.isSuperset(s1, s2);
 }
 
 function paramsToString(
@@ -197,6 +230,15 @@ function filterByQuery<R extends AnyRecord, T extends R>(
       }
 
       if (query.mode && record.mode !== query.mode) {
+        return false;
+      }
+
+      // Sources.
+      const sources = query.sources || defaultSources;
+      if (
+        !sources.includes(record.source) &&
+        record.source !== RecordSource.PROXY
+      ) {
         return false;
       }
 
@@ -291,15 +333,15 @@ function queryIsSyncSuperset(
   query1: Query<AnyRecord>,
   query2: Query<AnyRecord>
 ) {
-  if (
-    query1.mode !== query2.mode ||
-    query1.includeLinks !== query2.includeLinks ||
-    query1.proxyTo !== query2.proxyTo
-  ) {
+  if (query1.mode !== query2.mode || query1.proxyTo !== query2.proxyTo) {
     return false;
   }
 
   if (!includeLinksIsSuperset(query1.includeLinks, query2.includeLinks)) {
+    return false;
+  }
+
+  if (!sourcesIsSuperset(query1.sources, query2.sources)) {
     return false;
   }
 

@@ -8,6 +8,7 @@ import {
   buildAuthentication as buildAuthenticationBase,
 } from "@baqhub/sdk-react";
 import {PostRecord} from "./postRecord.js";
+import {StandingRecord} from "./standingRecord.js";
 
 export interface BuildAuthenticationOptions {
   storage: StorageAdapter;
@@ -28,8 +29,8 @@ export function buildAuthentication(options: BuildAuthenticationOptions) {
         redirect: redirectUrl,
       },
       scopeRequest: {
-        read: [PostRecord.link],
-        write: [PostRecord.link],
+        read: [StandingRecord.link, PostRecord.link],
+        write: [StandingRecord.link, PostRecord.link],
         subscribe: [PostRecord.link],
       },
     },

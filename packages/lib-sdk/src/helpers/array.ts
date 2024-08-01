@@ -15,7 +15,15 @@ function randomItem<T>(array: ReadonlyArray<T>): T {
   return array[index]!;
 }
 
+function isSuperset<T>(
+  superset: ReadonlyArray<T>,
+  subset: ReadonlyArray<T>
+): boolean {
+  return superset === subset || subset.every(item => superset.includes(item));
+}
+
 export const Array = {
   intersperse,
   randomItem,
+  isSuperset,
 };

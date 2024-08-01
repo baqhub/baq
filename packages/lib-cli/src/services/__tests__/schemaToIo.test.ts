@@ -1,25 +1,25 @@
 import {Schema} from "@baqhub/sdk";
-import {expect, test} from "@jest/globals";
+import {expect, test} from "vitest";
 import {formatCode} from "../formatter.js";
 import {schemaToIo} from "../schemaToIo.js";
 
-test("boolean schema", () => {
+test("boolean schema", async () => {
   // Prepare.
   const schema: Schema = {
     type: "boolean",
   };
 
   // Act.
-  const schemaString = formatCode(schemaToIo(schema));
+  const schemaString = await formatCode(schemaToIo(schema));
 
   // Assert.
   expect(schemaString).toMatchInlineSnapshot(`
-    "t.boolean;
+    "SchemaIO.boolean();
     "
   `);
 });
 
-test("boolean schema with enum", () => {
+test("boolean schema with enum", async () => {
   // Prepare.
   const schema: Schema = {
     type: "boolean",
@@ -27,16 +27,16 @@ test("boolean schema with enum", () => {
   };
 
   // Act.
-  const schemaString = formatCode(schemaToIo(schema));
+  const schemaString = await formatCode(schemaToIo(schema));
 
   // Assert.
   expect(schemaString).toMatchInlineSnapshot(`
-    "t.literal(false);
+    "IO.literal(false);
     "
   `);
 });
 
-test("string schema with enum", () => {
+test("string schema with enum", async () => {
   // Prepare.
   const schema: Schema = {
     type: "string",
@@ -44,16 +44,16 @@ test("string schema with enum", () => {
   };
 
   // Act.
-  const schemaString = formatCode(schemaToIo(schema));
+  const schemaString = await formatCode(schemaToIo(schema));
 
   // Assert.
   expect(schemaString).toMatchInlineSnapshot(`
-    "t.union([t.literal("hello"), t.literal("bye")]);
+    "IO.union([IO.literal("hello"), IO.literal("bye")]);
     "
   `);
 });
 
-test("object schema", () => {
+test("object schema", async () => {
   // Prepare.
   const schema: Schema = {
     type: "object",
@@ -64,16 +64,16 @@ test("object schema", () => {
   };
 
   // Act.
-  const schemaString = formatCode(schemaToIo(schema));
+  const schemaString = await formatCode(schemaToIo(schema));
 
   // Assert.
   expect(schemaString).toMatchInlineSnapshot(`
-    "object({ firstName: t.string, lastName: t.string });
+    "IO.object({ firstName: SchemaIO.string(), lastName: SchemaIO.string() });
     "
   `);
 });
 
-test("object schema with optional properties", () => {
+test("object schema with optional properties", async () => {
   // Prepare.
   const schema: Schema = {
     type: "object",
@@ -84,19 +84,19 @@ test("object schema with optional properties", () => {
   };
 
   // Act.
-  const schemaString = formatCode(schemaToIo(schema));
+  const schemaString = await formatCode(schemaToIo(schema));
 
   // Assert.
   expect(schemaString).toMatchInlineSnapshot(`
-    "t.intersection([
-      object({ firstName: t.string }),
-      partialObject({ lastName: t.string }),
-    ]);
+    "SchemaIO.object(
+      { firstName: SchemaIO.string() },
+      { lastName: SchemaIO.string() },
+    );
     "
   `);
 });
 
-test("nested object schema", () => {
+test("nested object schema", async () => {
   // Prepare.
   const schema: Schema = {
     type: "object",
@@ -114,19 +114,23 @@ test("nested object schema", () => {
   };
 
   // Act.
-  const schemaString = formatCode(schemaToIo(schema));
+  const schemaString = await formatCode(schemaToIo(schema));
 
   // Assert.
   expect(schemaString).toMatchInlineSnapshot(`
-    "object({
-      name: t.string,
-      dateOfBirth: object({ year: t.number, month: t.number, day: t.number }),
+    "IO.object({
+      name: SchemaIO.string(),
+      dateOfBirth: IO.object({
+        year: SchemaIO.int(),
+        month: SchemaIO.int(),
+        day: SchemaIO.int(),
+      }),
     });
     "
   `);
 });
 
-test("ref schema", () => {
+test("ref schema", async () => {
   // Prepare.
   const schema: Schema = {
     definitions: {
@@ -137,12 +141,14 @@ test("ref schema", () => {
   };
 
   // Act.
-  const schemaString = formatCode(schemaToIo(schema));
+  const schemaString = await formatCode(schemaToIo(schema));
 
   // Assert.
   expect(schemaString).toMatchInlineSnapshot(`
     "(() => {
-      const RRefName: t.Type<RefName.Type> = t.recursion("Name", () => t.string);
+      const RRefName: RType<RefName.Type> = IO.recursion("Name", () =>
+        SchemaIO.string(),
+      );
 
       return RRefName;
     })();
@@ -150,7 +156,7 @@ test("ref schema", () => {
   `);
 });
 
-test("nested ref schema with shadowing", () => {
+test("nested ref schema with shadowing", async () => {
   // Prepare.
   const schema: Schema = {
     definitions: {
@@ -172,21 +178,22 @@ test("nested ref schema with shadowing", () => {
   };
 
   // Act.
-  const schemaString = formatCode(schemaToIo(schema));
+  const schemaString = await formatCode(schemaToIo(schema));
 
   // Assert.
   expect(schemaString).toMatchInlineSnapshot(`
     "(() => {
-      const RRefName: t.Type<RefName.Type> = t.recursion("Name", () => t.string);
+      const RRefName: RType<RefName.Type> = IO.recursion("Name", () =>
+        SchemaIO.string(),
+      );
 
-      return object({
+      return IO.object({
         prop1: (() => {
-          const RRefName: t.Type<PropProp1.RefName.Type> = t.recursion(
-            "Name",
-            () => t.number
+          const RRefName: RType<PropProp1.RefName.Type> = IO.recursion("Name", () =>
+            SchemaIO.int(),
           );
 
-          return object({ subProp1: RRefName });
+          return IO.object({ subProp1: RRefName });
         })(),
         prop2: RRefName,
       });
@@ -195,7 +202,7 @@ test("nested ref schema with shadowing", () => {
   `);
 });
 
-test("record link schema", () => {
+test("record link schema", async () => {
   // Prepare.
   const schema: Schema = {
     type: "record_link",
@@ -208,11 +215,11 @@ test("record link schema", () => {
   };
 
   // Act.
-  const schemaString = formatCode(schemaToIo(schema));
+  const schemaString = await formatCode(schemaToIo(schema));
 
   // Assert.
   expect(schemaString).toMatchInlineSnapshot(`
-    "recordLinkOf("types.domain.com", "f4d24f80bfc44957a49ab2df98380b1d");
+    "RecordLink.ioOf("types.domain.com", "f4d24f80bfc44957a49ab2df98380b1d");
     "
   `);
 });

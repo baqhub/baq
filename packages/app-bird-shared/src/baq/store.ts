@@ -5,6 +5,7 @@
 import {IO} from "@baqhub/sdk";
 import {createStore} from "@baqhub/sdk-react";
 import {PostRecord} from "./postRecord.js";
+import {StandingRecord} from "./standingRecord.js";
 
 export const {
   RKnownRecord,
@@ -21,6 +22,7 @@ export const {
   useFindRecordByKey,
   useFindRecordByQuery,
   useFindEntityRecord,
-} = createStore(PostRecord);
+  useFindStandingDecision,
+} = createStore(StandingRecord, PostRecord);
 
 export type KnownRecord = IO.TypeOf<typeof RKnownRecord>;

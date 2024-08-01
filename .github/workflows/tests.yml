@@ -1,0 +1,27 @@
+name: Tests
+
+on: push
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "yarn"
+
+      - name: Build
+        run: |
+          yarn install --immutable
+          yarn build
+
+      - name: Test
+        run: |
+          yarn test

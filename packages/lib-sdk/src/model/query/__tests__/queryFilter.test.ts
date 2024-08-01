@@ -1,10 +1,10 @@
-import {describe, expect, test} from "@jest/globals";
+import {describe, expect, test} from "vitest";
 import {Q, QueryFilter} from "../queryFilter.js";
 
 describe("filter superset", () => {
   test("single source pass", () => {
     // Prepare.
-    const filter = Q.source("notification");
+    const filter = Q.tag("content.type", "notification");
 
     // Act.
     const result = QueryFilter.isSuperset(filter, filter);
@@ -15,8 +15,8 @@ describe("filter superset", () => {
 
   test("single source fail", () => {
     // Prepare.
-    const filter1 = Q.source("notification");
-    const filter2 = Q.source("resolution");
+    const filter1 = Q.tag("content.type", "notification");
+    const filter2 = Q.tag("content.type", "resolution");
 
     // Act.
     const result = QueryFilter.isSuperset(filter1, filter2);
@@ -51,7 +51,7 @@ describe("filter superset", () => {
   test("simple OR pass", () => {
     // Prepare.
     const authorFilter = Q.author("test.entity.com");
-    const filter1 = Q.or(Q.source("self"), authorFilter);
+    const filter1 = Q.or(Q.tag("content.type", "notification"), authorFilter);
     const filter2 = authorFilter;
 
     // Act.
@@ -65,7 +65,7 @@ describe("filter superset", () => {
     // Prepare.
     const authorFilter = Q.author("test.entity.com");
     const filter1 = authorFilter;
-    const filter2 = Q.or(Q.source("self"), authorFilter);
+    const filter2 = Q.or(Q.tag("content.type", "notification"), authorFilter);
 
     // Act.
     const result = QueryFilter.isSuperset(filter1, filter2);
@@ -78,7 +78,7 @@ describe("filter superset", () => {
     // Prepare.
     const authorFilter = Q.author("test.entity.com");
     const filter1 = authorFilter;
-    const filter2 = Q.and(Q.source("self"), authorFilter);
+    const filter2 = Q.and(Q.tag("content.type", "notification"), authorFilter);
 
     // Act.
     const result = QueryFilter.isSuperset(filter1, filter2);
@@ -90,7 +90,7 @@ describe("filter superset", () => {
   test("simple AND fail", () => {
     // Prepare.
     const authorFilter = Q.author("test.entity.com");
-    const filter1 = Q.and(Q.source("self"), authorFilter);
+    const filter1 = Q.and(Q.tag("content.type", "notification"), authorFilter);
     const filter2 = authorFilter;
 
     // Act.
@@ -104,8 +104,11 @@ describe("filter superset", () => {
     // Prepare.
     const author1Filter = Q.author("test1.entity.com");
     const author2Filter = Q.author("test2.entity.com");
-    const filter1 = Q.and(Q.or(author1Filter, author2Filter), Q.source("self"));
-    const filter2 = Q.and(author1Filter, Q.source("self"));
+    const filter1 = Q.and(
+      Q.or(author1Filter, author2Filter),
+      Q.tag("content.type", "notification")
+    );
+    const filter2 = Q.and(author1Filter, Q.tag("content.type", "notification"));
 
     // Act.
     const result = QueryFilter.isSuperset(filter1, filter2);
@@ -118,8 +121,11 @@ describe("filter superset", () => {
     // Prepare.
     const author1Filter = Q.author("test1.entity.com");
     const author2Filter = Q.author("test2.entity.com");
-    const filter1 = Q.and(author1Filter, Q.source("self"));
-    const filter2 = Q.and(Q.or(author1Filter, author2Filter), Q.source("self"));
+    const filter1 = Q.and(author1Filter, Q.tag("content.type", "notification"));
+    const filter2 = Q.and(
+      Q.or(author1Filter, author2Filter),
+      Q.tag("content.type", "notification")
+    );
 
     // Act.
     const result = QueryFilter.isSuperset(filter1, filter2);
@@ -142,7 +148,7 @@ describe("filter superset", () => {
   test("empty AND pass", () => {
     // Prepare.
     const filter1 = Q.and();
-    const filter2 = Q.source("self");
+    const filter2 = Q.tag("content.type", "notification");
 
     // Act.
     const result = QueryFilter.isSuperset(filter1, filter2);
@@ -153,7 +159,7 @@ describe("filter superset", () => {
 
   test("empty AND fail", () => {
     // Prepare.
-    const filter1 = Q.source("self");
+    const filter1 = Q.tag("content.type", "notification");
     const filter2 = Q.and();
 
     // Act.
@@ -177,7 +183,7 @@ describe("filter superset", () => {
   test("empty OR pass", () => {
     // Prepare.
     const filter1 = Q.or();
-    const filter2 = Q.source("self");
+    const filter2 = Q.tag("content.type", "notification");
 
     // Act.
     const result = QueryFilter.isSuperset(filter1, filter2);
@@ -188,7 +194,7 @@ describe("filter superset", () => {
 
   test("empty OR fail", () => {
     // Prepare.
-    const filter1 = Q.source("self");
+    const filter1 = Q.tag("content.type", "notification");
     const filter2 = Q.or();
 
     // Act.

@@ -1,7 +1,7 @@
 import UriTemplate from "es6-url-template";
 import compact from "lodash/compact.js";
 import {Constants} from "../constants.js";
-import {Async} from "../helpers/async.js";
+import {AbortedError, Async} from "../helpers/async.js";
 import {ErrorWithData} from "../helpers/customError.js";
 import {findLink} from "../helpers/headers.js";
 import * as IO from "../helpers/io.js";
@@ -212,11 +212,25 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     query: Query<Q>,
     signal: AbortSignal
   ) {
-    const url = await expandUrlTemplate("events", {}, signal);
-    const urlAndQuery = url + Query.toQueryString(query);
-    const httpOptions: HttpOptions = {authorizationBuilder, signal};
+    try {
+      const url = await expandUrlTemplate("events", {}, signal);
+      const urlAndQuery = url + Query.toQueryString(query);
+      const httpOptions: HttpOptions = {authorizationBuilder, signal};
 
-    Api.eventSource(recordModel, onRecord, "record", urlAndQuery, httpOptions);
+      Api.eventSource(
+        recordModel,
+        onRecord,
+        "record",
+        urlAndQuery,
+        httpOptions
+      );
+    } catch (error) {
+      if (error instanceof AbortedError) {
+        return;
+      }
+
+      throw error;
+    }
   }
 
   async function postRecordBaseAsync<

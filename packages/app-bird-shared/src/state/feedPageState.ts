@@ -6,11 +6,9 @@ import {useRecordsQuery} from "../baq/store.js";
 export function useFeedPageState() {
   const {isLoading, getRecords} = useRecordsQuery({
     pageSize: 200,
-    filter: Q.and(
-      Q.type(PostRecord),
-      Q.or(Q.source("self"), Q.source("subscription")),
-      Q.empty("content.replyToPost")
-    ),
+    sources: ["self", "subscription"],
+    filter: Q.and(Q.type(PostRecord), Q.empty("content.replyToPost")),
+    includeLinks: ["entity", "existential", "standing"],
   });
 
   const getPostKeys = useCallback(

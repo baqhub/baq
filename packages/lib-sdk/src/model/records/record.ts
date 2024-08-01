@@ -23,6 +23,7 @@ export enum RecordSource {
   SELF = "self",
   RESOLUTION = "resolution",
   NOTIFICATION = "notification",
+  NOTIFICATION_UNKNOWN = "notification_unknown",
   SUBSCRIPTION = "subscription",
   PROXY = "proxy",
 }
@@ -229,12 +230,8 @@ export const RNoContentRecord: IO.Type<NoContentRecord> = IO.object({
 
   type: RAnyRecordType,
   noContent: IO.dualObject(
-    {
-      action: RNoContentRecordAction,
-    },
-    {
-      links: IO.unknown,
-    }
+    {action: RNoContentRecordAction},
+    {links: IO.unknown}
   ),
   mode: IO.defaultValue(RRecordMode, RecordMode.SYNCED),
 });

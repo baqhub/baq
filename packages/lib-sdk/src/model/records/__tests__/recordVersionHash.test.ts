@@ -1,4 +1,4 @@
-import {describe, expect, test} from "@jest/globals";
+import {describe, expect, test} from "vitest";
 import {EntityRecord, REntityRecord} from "../../recordTypes/entityRecord.js";
 import {NoContentRecord, RNoContentRecord} from "../record.js";
 import {RecordVersionHash} from "../recordVersionHash.js";

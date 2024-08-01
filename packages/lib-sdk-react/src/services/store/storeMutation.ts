@@ -8,8 +8,11 @@ import {
   RAnyEventRecord,
   RAnyRecord,
   Record,
+  RecordKey,
   RecordMode,
+  RecordSource,
   RecordVersion,
+  StandingRecord,
   never,
 } from "@baqhub/sdk";
 import {Records} from "./storeContext.js";
@@ -25,7 +28,41 @@ export interface ApplyUpdatesResult<T extends AnyRecord> {
   mutations: ReadonlyArray<Mutation<T>>;
 }
 
-export function applyUpdates<T extends AnyRecord>(
+function updateState<T extends AnyRecord | StandingRecord>(
+  state: Records<T>,
+  key: RecordKey<T | NoContentRecord>,
+  update: T | NoContentRecord
+) {
+  // Not a standing record: normal state update.
+  if ("noContent" in update || !Record.hasType(update, StandingRecord)) {
+    return {...state, [key]: update};
+  }
+
+  // Otherwise, filter out all the "notification_unknown" records.
+  const isPublisherUnknownRecord = (record: T | NoContentRecord) => {
+    if ("noContent" in record) {
+      return true;
+    }
+
+    if (record.source !== RecordSource.NOTIFICATION_UNKNOWN) {
+      return true;
+    }
+
+    if (record.author.entity !== update.content.publisher.entity) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const filteredRecords = Object.values(state).filter(isPublisherUnknownRecord);
+  return [...filteredRecords, update].reduce((result, record) => {
+    result[Record.toKey(record) as any] = record;
+    return result;
+  }, {} as Records<T>);
+}
+
+export function applyUpdates<T extends AnyRecord | StandingRecord>(
   initialState: Records<T>,
   initialMutations: ReadonlyArray<Mutation<T>>,
   updates: ReadonlyArray<T | NoContentRecord>
@@ -46,7 +83,7 @@ export function applyUpdates<T extends AnyRecord>(
         return result;
       }
 
-      const newState = {...state, [key]: update};
+      const newState = updateState(state, key, update);
 
       if (update.mode === RecordMode.SYNCED && !update.version?.hash) {
         const mutation: Mutation<T> = {
