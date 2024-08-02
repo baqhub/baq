@@ -6,6 +6,7 @@ import {AtSymbolIcon} from "react-native-heroicons/outline";
 import {HomeIcon, PencilIcon, UserIcon} from "react-native-heroicons/solid";
 import {amber, neutral, white} from "tailwindcss/colors";
 import {Icon, tw} from "../../helpers/style";
+import {useTermsModal} from "../termsModal";
 
 //
 // Style.
@@ -29,6 +30,8 @@ const TabLayout: FC = () => {
   const {entity} = useRecordHelpers();
   const colorScheme = useColorScheme();
   const isLight = colorScheme === "light";
+
+  useTermsModal();
 
   const onComposeClick = useCallback((e: NavigationEvent) => {
     e.preventDefault();
