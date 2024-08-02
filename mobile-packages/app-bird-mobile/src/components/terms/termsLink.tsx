@@ -28,6 +28,8 @@ const Layout = tw(Pressable)`
   rounded-lg
   bg-neutral-100
   active:bg-neutral-200
+  dark:bg-neutral-800
+  dark:active:bg-neutral-900
 `;
 
 const LinkText = tw(Text)`

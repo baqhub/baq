@@ -48,6 +48,7 @@ const Profile = tw(Column)`
   rounded-2xl
 
   bg-white
+  dark:bg-neutral-950
   shadow-md
   shadow-amber-500/50
 `;
@@ -70,6 +71,7 @@ const InstructionsText = tw(Text)`
   text-center
   text-base
   text-neutral-600
+  dark:text-neutral-300
   leading-7
 `;
 

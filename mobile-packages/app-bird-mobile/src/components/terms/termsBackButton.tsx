@@ -25,8 +25,11 @@ const Layout = tw(Pressable)`
 const ButtonText = tw(Text)`
   font-medium
   text-base
+
   text-amber-600
+  dark:text-amber-500
   group-active:text-amber-700
+  dark:group-active:text-amber-600
 `;
 
 //
