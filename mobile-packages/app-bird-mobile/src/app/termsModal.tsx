@@ -21,9 +21,9 @@ export function useTermsModal() {
     const termsAccepted = await TermsAccepted.find();
     Async.throwIfAborted(abort);
 
-    // if (termsAccepted || pathnameRef.current === "/termsModal") {
-    //   return;
-    // }
+    if (termsAccepted || pathnameRef.current === "/termsModal") {
+      return;
+    }
 
     await Async.delay(1000);
     router.push("/termsModal");

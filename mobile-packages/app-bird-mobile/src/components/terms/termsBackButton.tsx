@@ -16,6 +16,7 @@ interface TermsBackButtonProps extends PropsWithChildren {
 //
 
 const Layout = tw(Pressable)`
+  self-center
   group
   flex
   items-center
