@@ -7,10 +7,10 @@ import {
   NoContentRecord,
   Query,
   RecordKey,
-  StandingRecord,
 } from "@baqhub/sdk";
 import {createContext, useContext} from "react";
 import {StoreQuery} from "./storeQuery.js";
+import {UpdateRecords} from "./storeTypes.js";
 
 export type RecordVersions<T extends AnyRecord> = {
   [K: string]: T | NoContentRecord;
@@ -36,11 +36,6 @@ export type Subscription = () => void;
 export type Selector<T extends AnyRecord, R> = (
   state: EntityRecordsState<T>
 ) => R;
-
-export type UpdateRecords<T extends AnyRecord> = (
-  updates: ReadonlyArray<T | StandingRecord | NoContentRecord>,
-  proxyEntity?: string
-) => void;
 
 export interface RegisterQueryOptions {
   isFetch: boolean;

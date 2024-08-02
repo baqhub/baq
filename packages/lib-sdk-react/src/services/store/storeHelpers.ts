@@ -12,11 +12,8 @@ import {
   StandingRecordContent,
   VersionHash,
 } from "@baqhub/sdk";
-import {
-  EntityRecordsState,
-  RecordVersions,
-  UpdateRecords,
-} from "./storeContext.js";
+import {EntityRecordsState, RecordVersions} from "./storeContext.js";
+import {UpdateRecords} from "./storeTypes.js";
 
 function pickRecord<T extends AnyRecord | NoContentRecord>(
   local: T | undefined,

@@ -15,3 +15,4 @@ export * from "./helpers/storage.js";
 export * from "./services/authentication.js";
 export * from "./services/store/store.js";
 export * from "./services/store/storeQuery.js";
+export * from "./services/store/storeTypes.js";
