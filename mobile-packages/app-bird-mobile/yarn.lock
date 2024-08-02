@@ -1818,7 +1818,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@baqhub/sdk-react@portal:../../packages/lib-sdk-react::locator=app-bird-mobile%40workspace%3A."
   dependencies:
-    "@baqhub/sdk": "npm:^0.1.13"
+    "@baqhub/sdk": "npm:^0.1.16"
     lodash: "npm:^4.17.21"
     react: "npm:^18.3.1"
     tslib: "npm:^2.6.3"
