@@ -106,6 +106,14 @@ function RootLayoutContent() {
               name="postComposerModal"
               options={{presentation: "modal", headerStyle: {}}}
             />
+            <Stack.Screen
+              name="termsModal"
+              options={{
+                presentation: "modal",
+                headerShown: false,
+                gestureEnabled: false,
+              }}
+            />
           </Stack>
         </Store>
       </DateServicesProvider>
