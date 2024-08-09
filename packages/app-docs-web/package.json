@@ -33,6 +33,7 @@
     "@mdx-js/loader": "3.0.1",
     "@mdx-js/react": "3.0.1",
     "@next/bundle-analyzer": "14.2.4",
+    "@svgr/webpack": "8.1.0",
     "@types/lodash": "4.17.6",
     "@types/mdx": "2.0.13",
     "@types/node": "20.14.9",

@@ -2,8 +2,8 @@ import {Column, Row, tw} from "@baqhub/ui/core/style.jsx";
 import {DiscordIcon} from "@baqhub/ui/icons/filled/discord.jsx";
 import {GithubIcon} from "@baqhub/ui/icons/filled/github.jsx";
 import type {FC} from "react";
+import LogoSmall from "../../../docs/assets/logoSmall.svg";
 import {Link} from "../link.jsx";
-import {Text} from "../style.jsx";
 import {TopNavItem} from "./topNavItem.jsx";
 import {TopNavLink} from "./topNavLink.jsx";
 import {TopNavSearch} from "./topNavSearch.jsx";
@@ -58,9 +58,10 @@ const TitleLink = tw(Link)`
   px-3
 `;
 
-const TitleText = tw(Text)`
-  text-lg
-  font-semibold
+const TitleLogo = tw(LogoSmall)`
+  h-8
+  text-zinc-900
+  dark:text-white
 `;
 
 const Items = tw(Row)`
@@ -100,7 +101,7 @@ export const TopNav: FC = () => {
         <Content>
           <Center>
             <TitleLink href="/">
-              <TitleText>BAQ</TitleText>
+              <TitleLogo />
             </TitleLink>
             <TopNavSearch />
             <Items>

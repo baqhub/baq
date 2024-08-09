@@ -1,8 +1,8 @@
 import {Row, tw} from "@baqhub/ui/core/style.jsx";
 import {FC} from "react";
+import LogoSmall from "../../../../docs/assets/logoSmall.svg";
 import {DocsSubSectionLight} from "../../../../services/docs.js";
 import {Link} from "../../../global/link.jsx";
-import {Text} from "../../../global/style.jsx";
 import {DocsLeftNavMenu} from "./docsLeftNavMenu.jsx";
 
 //
@@ -66,9 +66,10 @@ const TitleLink = tw(Link)`
   py-1
 `;
 
-const TitleText = tw(Text)`
-  text-lg
-  font-semibold
+const TitleLogo = tw(LogoSmall)`
+  h-8
+  text-zinc-900
+  dark:text-white
 `;
 
 const Menu = tw.div`
@@ -90,7 +91,7 @@ export const DocsLeftNav: FC<DocsLeftNavProps> = props => {
         <Top>
           <TopContent>
             <TitleLink href="/">
-              <TitleText>BAQ</TitleText>
+              <TitleLogo />
             </TitleLink>
           </TopContent>
         </Top>
