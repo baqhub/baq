@@ -1,6 +1,9 @@
+"use client";
+
 import {Column, Row, tw} from "@baqhub/ui/core/style.jsx";
 import {DiscordIcon} from "@baqhub/ui/icons/filled/discord.jsx";
 import {GithubIcon} from "@baqhub/ui/icons/filled/github.jsx";
+import {usePathname} from "next/navigation.js";
 import type {FC} from "react";
 import LogoSmall from "../../../docs/assets/logoSmall.svg";
 import {SvgUniqueIds} from "../../../helpers/svgUniqueIds.jsx";
@@ -47,10 +50,27 @@ const Center = tw(Row)`
 
   px-3
   sm:px-5
-  lg:pl-64
 
   items-center
   sm:gap-2
+`;
+
+const LeftNavSpacer = tw.div`
+  hidden
+  lg:block
+  w-64
+
+  mr-1
+  xl:mr-5
+`;
+
+const Title = tw(Row)`
+  py-1
+  px-3
+  mr-6
+
+  text-zinc-900
+  dark:text-white
 `;
 
 const TitleLink = tw(Link)`
@@ -99,16 +119,30 @@ const Separator = tw.div`
 //
 
 export const TopNav: FC = () => {
+  const pn = usePathname();
+  const isDocsPath = pn.startsWith("/docs");
+
   return (
     <>
       <Layout>
         <Content>
           <Center>
-            <TitleLink href="/">
-              <SvgUniqueIds>
-                <TitleLogo />
-              </SvgUniqueIds>
-            </TitleLink>
+            {isDocsPath ? (
+              <>
+                <TitleLink href="/">
+                  <SvgUniqueIds>
+                    <TitleLogo />
+                  </SvgUniqueIds>
+                </TitleLink>
+                <LeftNavSpacer />
+              </>
+            ) : (
+              <Title>
+                <SvgUniqueIds>
+                  <TitleLogo />
+                </SvgUniqueIds>
+              </Title>
+            )}
             <TopNavSearch />
             <Items>
               <TopNavItem to="/docs/learn">Learn</TopNavItem>
