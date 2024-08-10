@@ -65,12 +65,15 @@ const TopContent = tw(Row)`
 
 const TitleLink = tw(Link)`
   py-1
+
+  text-zinc-900
+  hover:text-zinc-600
+  dark:text-white
+  dark:hover:text-neutral-200
 `;
 
 const TitleLogo = tw(LogoSmall)`
   h-8
-  text-zinc-900
-  dark:text-white
 `;
 
 const Menu = tw.div`

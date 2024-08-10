@@ -57,12 +57,15 @@ const TitleLink = tw(Link)`
   lg:hidden
   py-1
   px-3
+
+  text-zinc-900
+  hover:text-zinc-600
+  dark:text-white
+  dark:hover:text-neutral-200
 `;
 
 const TitleLogo = tw(LogoSmall)`
   h-8
-  text-zinc-900
-  dark:text-white
 `;
 
 const Items = tw(Row)`
