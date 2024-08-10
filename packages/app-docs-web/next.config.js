@@ -53,7 +53,6 @@ const nextConfig = withBundleAnalyzer(
                 dimensions: false,
                 replaceAttrValues: {
                   "#FEFEFE": "currentColor",
-                  "#F59E0B": "currentColor",
                 },
               },
             },

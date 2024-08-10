@@ -1,6 +1,7 @@
 import {Row, tw} from "@baqhub/ui/core/style.jsx";
 import {FC} from "react";
 import LogoSmall from "../../../../docs/assets/logoSmall.svg";
+import {SvgUniqueIds} from "../../../../helpers/svgUniqueIds.jsx";
 import {DocsSubSectionLight} from "../../../../services/docs.js";
 import {Link} from "../../../global/link.jsx";
 import {DocsLeftNavMenu} from "./docsLeftNavMenu.jsx";
@@ -91,7 +92,9 @@ export const DocsLeftNav: FC<DocsLeftNavProps> = props => {
         <Top>
           <TopContent>
             <TitleLink href="/">
-              <TitleLogo />
+              <SvgUniqueIds>
+                <TitleLogo />
+              </SvgUniqueIds>
             </TitleLink>
           </TopContent>
         </Top>

@@ -3,6 +3,7 @@ import {DiscordIcon} from "@baqhub/ui/icons/filled/discord.jsx";
 import {GithubIcon} from "@baqhub/ui/icons/filled/github.jsx";
 import type {FC} from "react";
 import LogoSmall from "../../../docs/assets/logoSmall.svg";
+import {SvgUniqueIds} from "../../../helpers/svgUniqueIds.jsx";
 import {Link} from "../link.jsx";
 import {TopNavItem} from "./topNavItem.jsx";
 import {TopNavLink} from "./topNavLink.jsx";
@@ -101,7 +102,9 @@ export const TopNav: FC = () => {
         <Content>
           <Center>
             <TitleLink href="/">
-              <TitleLogo />
+              <SvgUniqueIds>
+                <TitleLogo />
+              </SvgUniqueIds>
             </TitleLink>
             <TopNavSearch />
             <Items>
