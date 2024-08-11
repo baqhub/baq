@@ -38,6 +38,11 @@ const Cards = tw(Grid)`
   gap-4
 `;
 
+const FooterLayout = tw(Column)`
+  mt-14
+  md:mt-20
+`;
+
 //
 // Component.
 //
@@ -67,7 +72,9 @@ const Home: FC = () => {
           Send simple requests, or manage your entire application state.
         </HomeCard>
       </Cards>
-      <Footer />
+      <FooterLayout>
+        <Footer />
+      </FooterLayout>
     </Layout>
   );
 };

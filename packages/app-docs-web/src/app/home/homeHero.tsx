@@ -94,12 +94,12 @@ const LogoBig = tw.div`
   mdp:-m-0
   mdp:h-auto
   mdp:absolute
-  mdp:-top-4
-  mdp:-bottom-4
+  mdp:-top-14
+  mdp:-bottom-14
   mdp:-right-16
-  lg:-top-12
-  lg:-bottom-12
-  lg:-right-2
+  lg:-top-24
+  lg:-bottom-24
+  lg:-right-8
 
   aspect-square
 `;
