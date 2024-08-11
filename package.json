@@ -71,6 +71,6 @@
     "prettier": "3.3.2",
     "prettier-plugin-organize-imports": "3.2.4",
     "typescript": "5.5.2",
-    "vitest": "2.0.4"
+    "vitest": "2.0.5"
   }
 }

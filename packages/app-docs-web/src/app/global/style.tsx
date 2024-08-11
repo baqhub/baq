@@ -5,3 +5,7 @@ export const Text = tw.div`
   dark:text-white
   select-none
 `;
+
+export const TextSelect = tw(Text)`
+  select-text
+`;

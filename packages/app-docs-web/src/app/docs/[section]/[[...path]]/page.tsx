@@ -1,4 +1,4 @@
-import {tw} from "@baqhub/ui/core/style.jsx";
+import {Column, tw} from "@baqhub/ui/core/style.jsx";
 import {MDXComponents} from "mdx/types.js";
 import {Metadata} from "next";
 import {ImageProps} from "next/image.js";
@@ -12,10 +12,10 @@ import {
   findDocsPage,
   listSubSectionsForSection,
 } from "../../../../services/docs.js";
+import {Footer} from "../../../global/footer.jsx";
 import {DocsLeftNav} from "../leftNav/docsLeftNav.jsx";
 import {DocsRightNav} from "../rightNav/docsRightNav.jsx";
 import {DocsTopNav} from "../topNav/docsTopNav.jsx";
-import {Footer} from "./footer.jsx";
 import {
   MdxCode,
   MdxCompactList,
@@ -114,6 +114,10 @@ const DocsContentSection = tw.div`
   dark:text-amber-500
 `;
 
+const FooterLayout = tw(Column)`
+  mt-28
+`;
+
 function headerId(children: ReactNode) {
   return slugify(onlyText(children));
 }
@@ -191,7 +195,9 @@ const DocsPage: FC<DocsPageProps> = async ({params}) => {
               compactList={MdxCompactList}
               components={components}
             />
-            <Footer />
+            <FooterLayout>
+              <Footer />
+            </FooterLayout>
           </DocsContent>
         </DocsCenter>
         <DocsRightNav headers={headers} />

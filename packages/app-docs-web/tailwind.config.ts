@@ -4,6 +4,7 @@ import defaultTheme from "tailwindcss/defaultTheme.js";
 export default {
   darkMode: "class",
   content: [
+    "../lib-ui/**/*.{js,ts,jsx,tsx}",
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
@@ -24,8 +25,12 @@ export default {
       mono: ["var(--font-firacode)", ...defaultTheme.fontFamily.mono],
     },
     screens: {
-      ...defaultTheme.screens,
+      sm: defaultTheme.screens.sm,
+      md: defaultTheme.screens.md,
+      mdp: "930px",
+      lg: defaultTheme.screens.lg,
       xl: "1200px",
+      "2xl": defaultTheme.screens["2xl"],
     },
   },
 } satisfies Config;

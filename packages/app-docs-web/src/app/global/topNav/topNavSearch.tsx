@@ -54,8 +54,6 @@ const SearchIcon = tw.div`
 const LargeSearch = tw(Row)`
   hidden
   lg:flex
-  pl-8
-  xl:pl-12
 `;
 
 const LargeSearchButton = tw(ButtonRow)`

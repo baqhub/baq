@@ -9,7 +9,6 @@ import {FC} from "react";
 //
 
 const Layout = tw(Column)`
-  mt-28
   py-6
 
   border-t

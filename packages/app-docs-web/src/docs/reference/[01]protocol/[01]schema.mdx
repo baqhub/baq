@@ -8,7 +8,7 @@ export const metadata = {
 The BAQ Schema format was inspired by [JSON Schema](https://json-schema.org/) and [JSON Type Definition](https://jsontypedef.com/). It should look familiar to anyone with experience with either. This new format was introduced to meet the following design goals:
 
 - **Strictness**. No additional properties or items. Self-contained schema documents. No implicit behavior: each schema has a well-identified type.
-- **Schema evolution**. Two versions of a schema can be programmatically compared to ensure forward compatibility.
+- **Schema evolution**. Two versions of a schema can be programmatically compared to ensure back compatibility.
 - **Code generation**. Closely match the TypeScript type system to automatically generate accurate type definitions.
 
 {props.toc}
