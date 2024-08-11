@@ -65,9 +65,10 @@ const LeftNavSpacer = tw.div`
 `;
 
 const Title = tw(Row)`
+  shrink-0
   py-1
   px-3
-  mr-6
+  lg:mr-6
 
   text-zinc-900
   dark:text-white
@@ -75,6 +76,7 @@ const Title = tw(Row)`
 
 const TitleLink = tw(Link)`
   lg:hidden
+  shrink-0
   py-1
   px-3
 
