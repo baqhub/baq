@@ -11,12 +11,19 @@ import {HomeViewOnGithub} from "./homeViewOnGithub.jsx";
 //
 
 const Layout = tw(Column)`
-  relative
+  mdp:flex-row-reverse
+
   pt-12
-  pb-20
+  pb-14
+  md:pb-20
+
+  gap-6
+  items-center
+  mdp:items-stretch
 `;
 
 const Content = tw(Column)`
+  flex-1
   relative
 
   items-center
@@ -24,7 +31,8 @@ const Content = tw(Column)`
 `;
 
 const Logo = tw.div`
-  [&_>_svg]:h-14
+  [&_>_svg]:h-12
+  sm:[&_>_svg]:h-14
 `;
 
 const Title = tw(TextSelect)`
@@ -33,8 +41,12 @@ const Title = tw(TextSelect)`
   text-center
   mdp:text-left
 
-  text-6xl
-  leading-[70px]
+  text-4xl
+  leading-[46px]
+  sm:text-5xl
+  sm:leading-[58px]
+  mdp:text-6xl
+  mdp:leading-[70px]
   font-extrabold
 
   text-zinc-800
@@ -47,10 +59,16 @@ const SubTitle = tw(TextSelect)`
   text-center
   mdp:text-left
 
-  text-[28px]
-  leading-[40px]
+  text-xl
+  sm:text-2xl
+  sm:leading-[34px]
+  mdp:text-[28px]
+  mdp:leading-[40px]
   text-zinc-500
   dark:text-zinc-400
+`;
+
+const LineBreak = tw.br`
 `;
 
 const Buttons = tw(Row)`
@@ -58,12 +76,31 @@ const Buttons = tw(Row)`
   gap-4
 `;
 
+const LogoContainer = tw.div`
+  relative
+`;
+
+// const LogoBig = tw.div`
+//   absolute
+//   -top-4
+//   -bottom-4
+//   -right-20
+//   lg:-right-8
+//   aspect-square
+// `;
 const LogoBig = tw.div`
-  absolute
-  -top-4
-  -bottom-4
-  -right-20
-  lg:-right-8
+  -m-16
+  h-72
+  mdp:-m-0
+  mdp:h-auto
+  mdp:absolute
+  mdp:-top-4
+  mdp:-bottom-4
+  mdp:-right-16
+  lg:-top-12
+  lg:-bottom-12
+  lg:-right-2
+
   aspect-square
 `;
 
@@ -74,20 +111,22 @@ const LogoBig = tw.div`
 export const HomeHero: FC = () => {
   return (
     <Layout>
-      <LogoBig>
-        <LogoHero />
-      </LogoBig>
+      <LogoContainer>
+        <LogoBig>
+          <LogoHero />
+        </LogoBig>
+      </LogoContainer>
       <Content>
         <Logo>
           <LogoHeroText />
         </Logo>
         <Title>
-          The Federated <br />
+          The Federated <LineBreak />
           App Platform
         </Title>
         <SubTitle>
           Build connected apps faster,
-          <br />
+          <LineBreak />
           keep users in control.
         </SubTitle>
         <Buttons>

@@ -25,9 +25,12 @@ export default {
       mono: ["var(--font-firacode)", ...defaultTheme.fontFamily.mono],
     },
     screens: {
-      ...defaultTheme.screens,
+      sm: defaultTheme.screens.sm,
+      md: defaultTheme.screens.md,
       mdp: "930px",
+      lg: defaultTheme.screens.lg,
       xl: "1200px",
+      "2xl": defaultTheme.screens["2xl"],
     },
   },
 } satisfies Config;

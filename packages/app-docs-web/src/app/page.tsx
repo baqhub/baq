@@ -21,8 +21,11 @@ const Layout = tw(Column)`
   w-full
   max-w-screen-xl
 
-  pt-8
-  px-16
+  pt-2
+  px-6
+  md:pt-8
+  md:px-12
+  mdp:px-16
 `;
 
 const Cards = tw(Grid)`
@@ -32,7 +35,7 @@ const Cards = tw(Grid)`
   grid-rows-none
   auto-rows-auto
   grid-flow-row
-  gap-3
+  gap-4
 `;
 
 //
