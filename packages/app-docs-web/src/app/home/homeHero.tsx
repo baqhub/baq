@@ -1,6 +1,7 @@
 import {Column, Row, tw} from "@baqhub/ui/core/style.jsx";
 import {FC} from "react";
-import LogoHero from "../../docs/assets/logoHero.svg";
+import LogoHeroDark from "../../docs/assets/logoHeroDark.svg";
+import LogoHeroLight from "../../docs/assets/logoHeroLight.svg";
 import LogoHeroText from "../../docs/assets/logoHeroText.svg";
 import {TextSelect} from "../global/style.jsx";
 import {HomeGetStarted} from "./homeGetStarted.jsx";
@@ -80,14 +81,6 @@ const LogoContainer = tw.div`
   relative
 `;
 
-// const LogoBig = tw.div`
-//   absolute
-//   -top-4
-//   -bottom-4
-//   -right-20
-//   lg:-right-8
-//   aspect-square
-// `;
 const LogoBig = tw.div`
   -m-16
   h-72
@@ -104,6 +97,15 @@ const LogoBig = tw.div`
   aspect-square
 `;
 
+const LogoLight = tw(LogoHeroLight)`
+  dark:hidden
+`;
+
+const LogoDark = tw(LogoHeroDark)`
+  hidden
+  dark:block
+`;
+
 //
 // Component.
 //
@@ -113,7 +115,8 @@ export const HomeHero: FC = () => {
     <Layout>
       <LogoContainer>
         <LogoBig>
-          <LogoHero />
+          <LogoLight />
+          <LogoDark />
         </LogoBig>
       </LogoContainer>
       <Content>
