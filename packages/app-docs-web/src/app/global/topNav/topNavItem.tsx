@@ -30,7 +30,7 @@ const NavLink = tw(Link)`
   rounded-lg
 `;
 
-const inactiveStyle = `
+const baseStyle = `
   hover:text-amber-800
   dark:hover:text-amber-400
 `;
@@ -49,7 +49,7 @@ const activeStyle = `
 export const TopNavItem: FC<TopNavItemProps> = ({to, children}) => {
   const isActive = usePathname().startsWith(to);
   return (
-    <NavLink href={to} className={isActive ? activeStyle : inactiveStyle}>
+    <NavLink href={to} className={isActive ? activeStyle : baseStyle}>
       {children}
     </NavLink>
   );

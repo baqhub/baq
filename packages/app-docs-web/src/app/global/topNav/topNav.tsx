@@ -79,9 +79,9 @@ const TitleLink = tw(Link)`
   px-3
 
   text-zinc-900
-  hover:text-zinc-600
+  hover:text-amber-700
   dark:text-white
-  dark:hover:text-neutral-200
+  dark:hover:text-amber-400
 `;
 
 const TitleLogo = tw(LogoSmall)`

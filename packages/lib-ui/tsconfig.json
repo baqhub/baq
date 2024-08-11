@@ -7,9 +7,13 @@
     "baseUrl": "./src"
   },
   "include": [
-    "src"
+    "src",
+    "tailwind.config.ts"
   ],
   "references": [
+    {
+      "path": "../lib-config-web"
+    },
     {
       "path": "../lib-sdk"
     },

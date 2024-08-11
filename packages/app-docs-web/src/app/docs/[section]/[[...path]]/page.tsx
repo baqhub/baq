@@ -12,10 +12,10 @@ import {
   findDocsPage,
   listSubSectionsForSection,
 } from "../../../../services/docs.js";
+import {Footer} from "../../../global/footer.jsx";
 import {DocsLeftNav} from "../leftNav/docsLeftNav.jsx";
 import {DocsRightNav} from "../rightNav/docsRightNav.jsx";
 import {DocsTopNav} from "../topNav/docsTopNav.jsx";
-import {Footer} from "./footer.jsx";
 import {
   MdxCode,
   MdxCompactList,
