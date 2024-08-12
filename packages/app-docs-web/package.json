@@ -9,7 +9,8 @@
     "watch-docs": "node ./watcher.cjs",
     "build": "tsc --build && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "copy-icons": "cp ./src/docs/assets/favicon.svg ./src/app/icon.svg && cp ./src/docs/assets/faviconApple.png ./src/app/apple-icon.png && magick ./src/docs/assets/favicon32.png ./src/docs/assets/favicon16.png ./src/app/favicon.ico"
   },
   "dependencies": {
     "@baqhub/ui": "*",
