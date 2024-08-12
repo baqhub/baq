@@ -1,8 +1,9 @@
-import {Column, Row, Text, tw} from "@baqhub/ui/core/style.jsx";
+import {Column, Row, tw} from "@baqhub/ui/core/style.jsx";
 import {DiscordIcon} from "@baqhub/ui/icons/filled/discord.jsx";
 import {GithubIcon} from "@baqhub/ui/icons/filled/github.jsx";
 import {EnvelopeIcon} from "@heroicons/react/24/solid";
 import {FC} from "react";
+import {Text} from "./style.jsx";
 
 //
 // Style.
