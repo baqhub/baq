@@ -83,7 +83,7 @@ export const Footer: FC = () => {
             <GithubIcon />
           </ExternalLinkIcon>
         </ExternalLink>
-        <ExternalLink href="mailto:hello@quentez.com">
+        <ExternalLink href="mailto:hello@baq.dev">
           <ExternalLinkIcon>
             <EnvelopeIcon />
           </ExternalLinkIcon>
