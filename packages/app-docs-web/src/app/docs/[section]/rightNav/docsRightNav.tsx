@@ -12,6 +12,7 @@ import {
 } from "react";
 import {MdxHeader} from "../../../../helpers/mdxHelpers.js";
 import {Text} from "../../../global/style.jsx";
+import {DocsRightNavSubscribe} from "./docsRightNavSubscribe.jsx";
 
 //
 // Props.
@@ -40,14 +41,20 @@ const Content = tw.div`
   top-[calc(4rem_+_1px)]
   bottom-0
 
-  pointer-events-auto
+  flex
+  flex-col
   w-80
+  items-start
+
+  gap-8
   py-8
   overflow-y-auto
+  pointer-events-auto
 `;
 
 const Menu = tw.div`
   relative
+
   flex
   flex-col
 
@@ -312,6 +319,7 @@ export const DocsRightNav: FC<DocsRightNavProps> = ({headers}) => {
   return (
     <Layout>
       <Content ref={contentRef}>
+        <DocsRightNavSubscribe />
         <Menu ref={menuRef}>
           <ActiveIndicator
             style={{transform: `translateY(${activeIndicatorTop}px)`}}

@@ -20,7 +20,6 @@ const Box = tw(Row)`
   hover:bg-zinc-300
   dark:bg-zinc-700
   dark:hover:bg-zinc-600
-  transition-colors
 `;
 
 const BoxText = tw(Text)`
