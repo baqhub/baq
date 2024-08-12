@@ -34,8 +34,8 @@ const Layout = tw.div`
 
 export const metadata: Metadata = {
   title: {
-    default: "BAQ Docs",
-    template: "%s | BAQ Docs",
+    default: "BAQ | The Federated App Platform",
+    template: "%s | BAQ",
   },
   description: "Build apps on the federated BAQ platform.",
 };
