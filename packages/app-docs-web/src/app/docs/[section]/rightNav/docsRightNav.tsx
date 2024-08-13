@@ -313,7 +313,13 @@ export const DocsRightNav: FC<DocsRightNavProps> = ({headers}) => {
   const activeIndicatorTop = activeLink ? activeLink.top : 29;
 
   if (flatHeaders.length === 0) {
-    return <Layout />;
+    return (
+      <Layout>
+        <Content>
+          <DocsRightNavSubscribe />
+        </Content>
+      </Layout>
+    );
   }
 
   return (

@@ -1,6 +1,213 @@
+import {
+  EnvelopeIcon,
+  CalendarDaysIcon,
+  UsersIcon,
+  RssIcon,
+  PencilSquareIcon,
+  CodeBracketIcon,
+  HomeModernIcon,
+} from "@heroicons/react/24/outline";
+import {MdxH2} from "../../../app/docs/[section]/[[...path]]/mdx";
+import {slugify} from "../../../helpers/string";
+import {onlyText} from "react-children-utilities";
+
 export const metadata = {
   id: "7d6db6f5",
   title: "App ideas",
 };
 
+export const ImageHeader = ({icon, children}) => (
+  <MdxH2 $as="div" className="flex flex-row items-center gap-2.5">
+    <div className="w-8 text-amber-500">{icon}</div>
+    <h2
+      id={slugify(onlyText(children))}
+      className="scroll-mt-24 lg:scroll-mt-28"
+    >
+      {children}
+    </h2>
+  </MdxH2>
+);
+
 # App ideas
+
+The possibilities of the BAQ platform are nearly endless. This can be jarring at first when trying to decide what to build. To spark inspiration, here are some examples of apps that could be made to replace some of the most popular online services we use every day.
+
+{props.toc}
+
+<ImageHeader icon={<EnvelopeIcon />}>Email</ImageHeader>
+
+#### Motivation
+
+<props.compactList>
+
+- Make it easier to build clients, especially on mobile (sync, notifications).
+- Make email data accessible to other apps within the BAQ universe.
+- Email as a fallback for BAQ messaging when the other side doesn't have it.
+
+</props.compactList>
+
+#### Architecture
+
+Two record types:
+
+<props.compactList>
+
+- _Email Thread_
+- _Email Message_ (belongs to a thread)
+
+</props.compactList>
+
+Stateless bi-directional bridge:
+
+<props.compactList>
+
+- When a new email is received, create the corresponding BAQ record.
+- When a new BAQ record is created, send the corresponding email.
+
+</props.compactList>
+
+Client apps read and create the BAQ email records.
+
+_(A proof of concept of this already exists and will be made available soon)._
+
+<ImageHeader icon={<CalendarDaysIcon />}>Calendar</ImageHeader>
+
+#### Motivation
+
+<props.compactList>
+
+- Make it easier to build clients (realtime sync, no CalDav).
+- Expose calendar data to other apps (automation, dashboards, and so on).
+- Share events without a clunky email back and forth.
+
+</props.compactList>
+
+#### Architecture
+
+Two record types:
+
+<props.compactList>
+
+- _Calendar_
+- _Calendar Event_ (belongs to a calendar)
+
+</props.compactList>
+
+Query by date range to sync normal events and fetch all recurring events.
+
+Share event records with other people like any other records.
+
+Bridges to other calendar systems (Google API, CalDav, Email).
+
+<ImageHeader icon={<UsersIcon />}>Fediverse</ImageHeader>
+
+#### Motivation
+
+<props.compactList>
+
+- Follow people on Mastodon, Threads, BlueSky.
+
+</props.compactList>
+
+#### Architecture
+
+_Post_ record type.
+
+Stateless bi-directional bridge:
+
+<props.compactList>
+
+- Listen for ActivityPub activities and send BAQ notifications.
+- Listen for BAQ records and send activities.
+
+</props.compactList>
+
+<ImageHeader icon={<RssIcon />}>Reader</ImageHeader>
+
+#### Motivation
+
+<props.compactList>
+
+- Let users own their reading list.
+- Follow BAQ-powered blogs and newsletters.
+
+</props.compactList>
+
+#### Architecture
+
+_Article_ record type.
+
+RSS bridge for compatibility with existing publications.
+
+Browser extension to share web pages to.
+
+<ImageHeader icon={<PencilSquareIcon />}>Blog</ImageHeader>
+
+#### Motivation
+
+<props.compactList>
+
+- Use BAQ as a headless CMS without giving up control of the content.
+- Decouple the editor app + content storage + blog frontend.
+- Allow people to follow blogs on BAQ for rich interactions.
+
+</props.compactList>
+
+#### Architecture
+
+_Article_ record type.
+
+Client app to write and manage articles.
+
+Publicly accessible blog:
+
+<props.compactList>
+
+- Stateless server that listens for webhooks and rebuilds the blog on change.
+- OR dynamic server that queries the BAQ server and renders the
+  blog.
+- OR static JS app that fetches from BAQ directly.
+
+</props.compactList>
+
+{/* prettier-ignore */}
+<ImageHeader icon={<CodeBracketIcon />}>Source repository</ImageHeader>
+
+#### Motivation
+
+<props.compactList>
+
+- The social benefits of GitHub without the centralization (PRs, comments).
+- Fine-grained permissions at the file level.
+
+</props.compactList>
+
+#### Architecture
+
+Stateless Git bridge that exposes the Smart HTTP protocol.
+
+Client app to explore repositories, create PRs, post comments.
+
+<ImageHeader icon={<HomeModernIcon />}>Smart home</ImageHeader>
+
+#### Motivation
+
+<props.compactList>
+
+- Centralize all smart home data under the user's control.
+- Make it possible to build automation that spans multiple ecosystems.
+- Make it easier to build client apps.
+
+</props.compactList>
+
+#### Architecture
+
+_Device_ record type that holds the current state of the device.
+
+Stateless bridges to existing smart home ecosystems.
+
+Devices connect over HTTP and listen for updates to their _Device_ record.
+
+Client app updates device records to reflect user actions.
+
+Automation services can react to changes in state and update the state in return (e.g. the “switch” device record is updated, in response to which the automation service updates the “lightbulb” device record).
