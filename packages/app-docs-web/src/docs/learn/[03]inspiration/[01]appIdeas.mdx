@@ -6,6 +6,7 @@ import {
   PencilSquareIcon,
   CodeBracketIcon,
   HomeModernIcon,
+  PhotoIcon,
 } from "@heroicons/react/24/outline";
 import {MdxH2} from "../../../app/docs/[section]/[[...path]]/mdx";
 import {slugify} from "../../../helpers/string";
@@ -30,7 +31,7 @@ export const ImageHeader = ({icon, children}) => (
 
 # App ideas
 
-The possibilities of the BAQ platform are nearly endless. This can be jarring at first when trying to decide what to build. To spark inspiration, here are some examples of apps that could be made to replace some of the most popular online services we use every day.
+The possibilities of the BAQ platform are nearly endless. This can be jarring at first when trying to decide what to build. To spark inspiration, here are some examples of apps that could be created to replace some of the most popular online services we use every day.
 
 {props.toc}
 
@@ -93,11 +94,40 @@ Two record types:
 
 </props.compactList>
 
-Query by date range to sync normal events and fetch all recurring events.
+Query by date range to sync normal events + Fetch all recurring events.
 
 Share event records with other people like any other records.
 
 Bridges to other calendar systems (Google API, CalDav, Email).
+
+<ImageHeader icon={<PhotoIcon />}>Photos</ImageHeader>
+
+#### Motivation
+
+<props.compactList>
+
+- Don't lock-in a lifetime of memories in a proprietary ecosystem.
+- Let developers innovate and build better photo gallery clients.
+- Allow other apps to access photos for editing/sharing/classification/more.
+
+</props.compactList>
+
+#### Architecture
+
+Four record types:
+
+<props.compactList>
+
+- _Photo Collection_
+- _Photo_ (belongs to a collection)
+- _Photo Album_ (belongs to a collection)
+- _Photo Album Item_ (links a photo and album)
+
+</props.compactList>
+
+Photos have a list of non-destructive edits, with links to blobs for the original file, intermediate renders, and thumbnails.
+
+Tools to import from other photo gallery services.
 
 <ImageHeader icon={<UsersIcon />}>Fediverse</ImageHeader>
 
@@ -117,7 +147,7 @@ Stateless bi-directional bridge:
 
 <props.compactList>
 
-- Listen for ActivityPub activities and send BAQ notifications.
+- Listen for ActivityPub activities and send BAQ records.
 - Listen for BAQ records and send activities.
 
 </props.compactList>
@@ -163,7 +193,7 @@ Publicly accessible blog:
 
 <props.compactList>
 
-- Stateless server that listens for webhooks and rebuilds the blog on change.
+- Worker that listens for webhooks and rebuilds the blog on change.
 - OR dynamic server that queries the BAQ server and renders the
   blog.
 - OR static JS app that fetches from BAQ directly.
@@ -208,6 +238,6 @@ Stateless bridges to existing smart home ecosystems.
 
 Devices connect over HTTP and listen for updates to their _Device_ record.
 
-Client app updates device records to reflect user actions.
+Client app updates _Device_ records to reflect user actions.
 
 Automation services can react to changes in state and update the state in return (e.g. the “switch” device record is updated, in response to which the automation service updates the “lightbulb” device record).
