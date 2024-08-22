@@ -586,13 +586,13 @@ function buildAuthenticatedClient(state: AuthenticationState) {
 function fixDiscoverUrl(url: string) {
   switch (url) {
     case "https://quentez.localhost/":
-      return "http://localhost:5254/api/quentez";
+      return "http://localhost:5254/api/quentez.localhost";
 
     case "https://testaccount1.localhost/":
-      return "http://localhost:5254/api/testaccount1";
+      return "http://localhost:5254/api/testaccount1.localhost";
 
     case "https://testaccount2.localhost/":
-      return "http://localhost:5254/api/testaccount2";
+      return "http://localhost:5254/api/testaccount2.localhost";
 
     default:
       return url;
