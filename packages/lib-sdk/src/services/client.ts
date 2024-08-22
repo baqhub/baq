@@ -63,7 +63,11 @@ function fixUrl(url: string) {
     return url.replace("https://localhost", "http://localhost:5254");
   }
 
-  return url.replace("https://localhost", "http://localhost:5173");
+  if (url.startsWith("https://localhost")) {
+    return url.replace("https://localhost", "http://localhost:5173");
+  }
+
+  return url;
 }
 
 export interface Client extends ReturnType<typeof buildClientBase> {}

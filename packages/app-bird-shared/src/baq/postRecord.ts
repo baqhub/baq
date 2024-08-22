@@ -116,7 +116,7 @@ const RPostRecordContent: IO.RType<PostRecordContent> = IO.union([
 const [postRecordType, RPostRecordType] = RecordType.full(
   "types.baq.dev",
   "6ee7f69a90154b849bac528daa942bcd",
-  "2d196fe0c3395e6767cf0c0d0f0fa74aa618d4c41d73f31cd3f244caed252974",
+  "8a123eb1cb2848be6337346071df1ca1dcf6f057fe2e3bfa95a32e3f347cb919",
   RPostRecordContent
 );
 

@@ -22,6 +22,7 @@ export const {
   useFindRecordByKey,
   useFindRecordByQuery,
   useFindEntityRecord,
+  useFindStandingDecision,
 } = createStore(FolderRecord, FileRecord);
 
 export type KnownRecord = IO.TypeOf<typeof RKnownRecord>;
