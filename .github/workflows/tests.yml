@@ -3,7 +3,7 @@ name: Tests
 on: push
 
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
 

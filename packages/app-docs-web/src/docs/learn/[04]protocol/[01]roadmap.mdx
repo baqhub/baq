@@ -4,3 +4,117 @@ export const metadata = {
 };
 
 # Roadmap
+
+The BAQ platform already supports many types of apps today, but we're excited to bring new features and tools to enable developers to do even more in the future.
+
+{props.toc}
+
+Ideas or suggestions? Let us know on [Discord](https://discord.gg/jg9wMG9s83), [GitHub](https://github.com/baqhub/baq), or by [email](mailto:hello@baq.dev).
+
+## In progress
+
+- **SDK — Infinite loading**
+
+  Update the [`useRecordsQuery()`](fb201974) hook to make it easy to load more data.
+
+- **Protocol — Standard error codes**
+
+  Exhaustive specification of all the possible error codes that the API endpoints can return and their meaning.
+
+- **Protocol — Default values in Schemas**
+
+  Let BAQ Schemas specify default values for JSON properties. This will also make it possible to add new required properties when publishing new versions of a schema.
+
+## Short term
+
+_In the next few months:_
+
+- **Protocol — Sidecar records**
+
+  Attach a record to another and fetch both together. This makes it possible to extend popular record types without losing compatibility.
+
+- **Protocol — Counters**
+
+  Specify what needs to be counted and aggregated within BAQ schemas, and instantly fetch the current values when needed.
+
+- **Protocol — Federation**
+
+  Federation has been part of the protocol design from the start, but it needs documenting and public federation needs to be enabled on [BAQ.RUN](https://baq.run).
+
+- **Protocol — Content filters**
+
+  Filter records by the nature of their content. Already possible on a per-app basis, but this will make it standard. Same for content warnings.
+
+- **Tooling — Open-source server**
+
+  Single-user, open-source server that can be deployed for self-hosting or used during development to run apps locally or in CD/CI.
+
+- **Tooling — Server test suite**
+
+  Full integration test suite to validate BAQ servers. Used against [BAQ.RUN](https://baq.run) and the development server. Required for federation.
+
+- **SDK — Offline-first**
+
+  Build offline-first apps using the JS SDK. This will handle local data storage, garbage collection, re-sync on launch, and so on.
+
+- **Files app — Basic features**
+
+  Make it possible to share files and folders, display thumbnails, preview files directly. Release a mobile app.
+
+- **Messages app — Group chats**
+
+  Add group chat support with the ability to name a specific group, add/remove people over time, and leave unwanted groups.
+
+- **Bird app — Android support**
+
+  Make the mobile app available to Android users.
+
+## Medium term
+
+_In the next few years:_
+
+- **SDK — Native support**
+
+  iOS and Android native SDKs, with more platforms to follow. Let more people build on BAQ!
+
+- **Protocol — Search**
+
+  Some advanced search use-cases may always need to be handled at the app level, or by 3rd party engines. But basic search needs to be standard.
+
+- **Protocol — Real-time collaboration**
+
+  Enable instant collaborative editing through built-in CRDTs without the need for any app-specific server infrastructure.
+
+- **Protocol — E2E encryption**
+
+  Support end-to-end encryption and make it as simple as a flag when creating any type of record.
+
+- **Protocol — Payments**
+
+  Support purchases, subscriptions, micro-transactions, and attention-based payments. Simplify the online shopping experience once and for all.
+
+- **Protocol — Propagation scaling**
+
+  Update the protocol as the BAQ network grows to support the distribution of records to millions of servers and followers.
+
+- **Files app — Desktop sync**
+
+  Desktop client to seamlessly synchronize entire folders in the background with the Files app.
+
+- **Messages app — Mobile apps**
+
+  Rich messaging clients for the two major mobile platforms.
+
+- **Notes app**
+
+  Take your notes with you everywhere, safely stored on your BAQ server.
+
+- **Photos app**
+
+  Reclaim your photos and keep these precious memories under your control.
+
+## Long term
+
+- **Operating system**
+
+  What if every app you ran stored their data as BAQ records? And what if the OS itself acted as a gigantic local cache? And what if everything was always in sync between your devices? Come dream of the future with us!
