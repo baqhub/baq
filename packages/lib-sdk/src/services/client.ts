@@ -63,7 +63,11 @@ function fixUrl(url: string) {
     return url.replace("https://localhost", "http://localhost:5254");
   }
 
-  return url.replace("https://localhost", "http://localhost:5173");
+  if (url.startsWith("https://localhost")) {
+    return url.replace("https://localhost", "http://localhost:5173");
+  }
+
+  return url;
 }
 
 export interface Client extends ReturnType<typeof buildClientBase> {}
@@ -586,13 +590,13 @@ function buildAuthenticatedClient(state: AuthenticationState) {
 function fixDiscoverUrl(url: string) {
   switch (url) {
     case "https://quentez.localhost/":
-      return "http://localhost:5254/api/quentez";
+      return "http://localhost:5254/api/quentez.localhost";
 
     case "https://testaccount1.localhost/":
-      return "http://localhost:5254/api/testaccount1";
+      return "http://localhost:5254/api/testaccount1.localhost";
 
     case "https://testaccount2.localhost/":
-      return "http://localhost:5254/api/testaccount2";
+      return "http://localhost:5254/api/testaccount2.localhost";
 
     default:
       return url;

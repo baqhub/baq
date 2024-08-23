@@ -23,6 +23,7 @@ export const {
   useFindRecordByKey,
   useFindRecordByQuery,
   useFindEntityRecord,
+  useFindStandingDecision,
 } = createStore(ConversationRecord, MessageRecord, FileRecord);
 
 export type KnownRecord = IO.TypeOf<typeof RKnownRecord>;
