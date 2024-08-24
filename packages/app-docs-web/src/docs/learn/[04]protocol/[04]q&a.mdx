@@ -4,3 +4,61 @@ export const metadata = {
 };
 
 # Q&A
+
+Here are some answers to some of the most common questions around BAQ. This page will be updated over time as new questions come in.
+
+{props.toc}
+
+## How can BAQ benefit my app?
+
+There are many ways BAQ can help you make better apps, and be more productive as a developer:
+
+<props.compactList>
+
+- Authenticate users without the need for a bespoke account system.
+- Store arbitrary data on the user's server and access it from any device.
+- Update in real-time when data is updated somewhere else.
+- Share data with other BAQ users by simply setting permissions.
+- Benefit from other apps by re-using the same record types.
+
+</props.compactList>
+
+And all of this without having to write any server code.
+
+## Do I need to build my entire app on BAQ?
+
+Not at all! You can use BAQ as much or as little as you want. From just authenticating users without requiring them to sign up for your product, all the way to building an entire app on top of the [BAQ SDK](9b40fdec) to manage its data.
+
+## Why is federation not documented yet?
+
+BAQ was designed with federation in mind from the very start. However the goal with this first release was to focus on the developer experience and to see if the case could be made for a better way to build connected apps. Be assured that the work on federation is ongoing, and should see a release alongside the open source server in the next few months.
+
+See the [BAQ roadmap](6e4376bd) for more information.
+
+## Can I migrate my account to a different server?
+
+Soon! The freedom to choose where your account and data reside is a core part of the BAQ vision and something that was always part of the design. The required bricks are already in place in the initial release and this capability will be made available alongside federation over the next few months.
+
+## Can I run my own BAQ server?
+
+Soon! After the initial release of the developer tools, the focus is now moving towards federation and the open source server. The goal is to make it easy for enthusiasts to self-host and have complete control over their server. This will also provide developers with a simple way to test their apps locally.
+
+See the [BAQ roadmap](6e4376bd) for more information.
+
+## Can I implement my own BAQ server?
+
+Soon! Fostering a diverse offering of server implementations (both open source and commercial) is a core part of the BAQ vision and it's exciting to see more people wanting to jump in. Now that the initial release is out, the focus is moving towards federation and enabling 3rd party servers and bridge to see the light of day.
+
+See the [BAQ roadmap](6e4376bd) for more information.
+
+## Can I use BAQ to serve video?
+
+Yes! The [GET record_blob](36a96563) endpoint supports the `Range` header and can be used to serve HLS chunks. An official record type for video streaming will be published soon, but it's already possible to build a custom schema with the necessary [blob links](70af90d6) and use it to dynamically generate an HLS playlist.
+
+## Is BAQ related to ActivityPub?
+
+No, but BAQ shares a lot of the same vision for a decentralized, federated web. The primary focus with BAQ so far has been to provide a compelling app platform for developers to use, and social networking is only one of the many possible use cases. Bridges between the two ecosystems are not only possible, but happily encouraged as they will let more people connect and interact.
+
+## Is BAQ related to Tent?
+
+Yes! [Tent](https://blog.p2pfoundation.net/tent-open-distributed-social-networking-protocol/2012/10/02) and its vision for a new kind of federated web back in 2012 was a large part of the inspiration behind BAQ. We're extremely grateful to the Tent team for their enthusiasm and groundbreaking ideas, many of which made it into the BAQ protocol as it exists today.
