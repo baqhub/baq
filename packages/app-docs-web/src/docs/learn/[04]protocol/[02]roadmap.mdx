@@ -19,7 +19,11 @@ Ideas or suggestions? Let us know on [Discord](https://discord.gg/jg9wMG9s83), [
 
 - **Protocol — Standard error codes**
 
-  Exhaustive specification of all the possible error codes that the API endpoints can return and their meaning.
+  Publish an exhaustive specification of all the possible error codes that the API endpoints can return and their meaning.
+
+- **Protocol — Rate limiting**
+
+  Standardize the way servers should rate limit, and let the SDK automatically backoff and retry when needed.
 
 - **Protocol — Default values in Schemas**
 
@@ -40,6 +44,14 @@ _In the next few months:_
 - **Protocol — Federation**
 
   Federation has been part of the protocol design from the start, but it needs documenting and public federation needs to be enabled on [BAQ.RUN](https://baq.run).
+
+- **Protocol — Multipart blob upload**
+
+  Make it easier to upload larger blobs to a BAQ server by allowing parts of a file to be uploaded separately.
+
+- **Protocol — Account migration**
+
+  Let users move freely from one server to another without losing any of their data, apps, or connections.
 
 - **Protocol — Content filters**
 
@@ -73,9 +85,17 @@ _In the next few months:_
 
 _In the next few years:_
 
+- **Tooling — Record type repository**
+
+  Think NPM for record types. Make it easy to find popular record types and add them to an app in a click.
+
 - **SDK — Native support**
 
   iOS and Android native SDKs, with more platforms to follow. Let more people build on BAQ!
+
+- **Protocol — User groups**
+
+  Add groups of users to the record permissions. Groups can be updated down the road to grant or remove access.
 
 - **Protocol — Search**
 

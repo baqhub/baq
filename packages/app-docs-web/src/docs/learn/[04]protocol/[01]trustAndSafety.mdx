@@ -1,0 +1,38 @@
+export const metadata = {
+  id: "0a55310d",
+  title: "Trust and Safety",
+};
+
+# Trust and Safety
+
+Apps on BAQ can share content with other users, both privately and publicly. This of course comes with its own set of challenges to ensure people have safe interactions on the platform.
+
+Part of this responsibility falls onto server operators and the type of content they want to allow, but mechanisms also exist within the protocol to help protect users against unwanted content.
+
+{props.toc}
+
+## Unwanted private content
+
+One of the reasons why so much unwanted email gets through is because the default assumption with that system is that any message should end up in the recipient's inbox. Only then can the user _opt-out_ from the content they don't want to receive by unsubscribing or marking it as spam. There are ever more sophisticated systems to weed out the good from the bad, but none of them are perfect.
+
+BAQ flips this assumption on its head: by default all content from unknown senders is marked as [`notification_unknown`](), in other words: quarantined. Users can then _opt-in_ to the senders they trust and by doing so ensure that future content will be immediately visible. This is similar to how Instagram treats DMs.
+
+Additionally, servers must refuse any content that a user does not already have an app for. This ensures that invisible spam is not being needlessly stored.
+
+## Unwanted public content
+
+To give users control over the content they see, BAQ includes multiple actions they can take when faced with unwanted content. This includes blocking the author, hiding a specific record, and reporting it to the server operator.
+
+Beyond that, it's the responsibility of the server operator to have adequate content moderation policies in place that ensure a good experience for their users. But unlike traditional online services, users are free to move to other servers at the click of a button. This removes lock-in and creates a market where people can decide with their wallet what policies they want for themselves without the need for a one size fits all approach.
+
+## Content filters
+
+In order to give users further agency over what they see, they will soon be able to filter content based on attributes that can be set by the original author, but also by the user's server upon reception of the content. This makes it possible to accommodate both good and bad actors in the system, and can be used as another differentiating factor by server operators when promoting their services.
+
+This can be filters to exclude content that's not safe for work, political, or triggering, but can also be used to simply ensure the language or license of what's being returned. Regardless, the user is in control.
+
+## Content permissions
+
+Content on BAQ can be private, shared with a select few, or public for the whole world to see. This is to match the spectrum of user intent, and social apps are encouraged to add in-depth controls to let users be in charge of what they publish.
+
+With the group feature coming in a future update, sharing to a known set of people will be made easy for apps to implement. This will provide users with even more flexibility when posting online (e.g. close friends, premium subscribers, vetted followers).

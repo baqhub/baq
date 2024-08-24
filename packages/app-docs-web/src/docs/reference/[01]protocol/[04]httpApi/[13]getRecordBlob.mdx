@@ -28,6 +28,18 @@ Build the request URL by replacing the following variables in the `record_blob` 
 
 - `{file_name}`: File name of the blob within the record. This is useful when the same blob might appear multiple times in the same record under different names and content types.
 
+#### Headers
+
+<props.properties>
+
+- **`Range`** <props.pill>string</props.pill> _optional_
+
+  - Part of the blob that should be returned.
+
+  - Only supports single byte ranges.
+
+</props.properties>
+
 ### Response
 
 The blob to download is the sole content of the response.
@@ -55,6 +67,12 @@ The blob to download is the sole content of the response.
     - Public record: 1 year private, 2h shared.
     - Private record with standard authentication: 1 year private.
     - Private record with bearer token: bearer validity (max 2h), shared.
+
+- **`Content-Range`** <props.pill>string</props.pill> _optional_
+
+  - Part of the blob being returned.
+
+  - Only for requests with a `Range` header.
 
 </props.properties>
 
