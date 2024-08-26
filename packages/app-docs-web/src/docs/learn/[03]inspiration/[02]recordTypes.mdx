@@ -3,4 +3,204 @@ export const metadata = {
   title: "Record types",
 };
 
-# Popular record types
+# Record types
+
+One of the strengths of the BAQ ecosystem is the ability to re-use existing record types. In doing so, apps gain compatibility with data that users might have previously created in other apps, as well as the ability to interact with these other apps.
+
+A Record Type Registry will be introduced in the future to make it easy to find new types and publish your own. In the meantime, this page will be regularly updated with popular record types.
+
+{props.toc}
+
+## Folder and File
+
+Describe a hierarchy of folders and files that matches what people expect from desktop operating systems and similar cloud storage services.
+
+### Folder
+
+```cli
+baq add types.baq.dev+3050fc130d4142a9994af0ef7c89099e
+```
+
+_Properties:_
+
+<props.properties>
+
+- **`parent`** <props.pill href="6fda79e8">RecordLink</props.pill> _optional_
+
+  - Folder above this one in the hierarchy.
+
+  - `undefined` when at the root level.
+
+- **`name`** <props.pill>string</props.pill>
+
+  - Unique identity of this folder within the parent folder.
+
+</props.properties>
+
+Folders are unique by `parent+name` and share that unicity with files.
+
+### File
+
+```cli
+baq add types.baq.dev+2b6f7bc8ffd54c8db8062700c040e04f
+```
+
+_Properties:_
+
+<props.properties>
+
+- **`parent`** <props.pill href="6fda79e8">RecordLink</props.pill> _optional_
+
+  - Folder above this file in the hierarchy.
+
+  - `undefined` when at the root level.
+
+- **`size`** <props.pill>int</props.pill>
+
+  - Size of the attached blob in bytes.
+
+- **`blob`** <props.pill href="70af90d6">BlobLink</props.pill>
+
+  - Name and content of the file.
+
+</props.properties>
+
+Files are unique by `parent+blob.name` and share that unicity with folders.
+
+## Conversation and Message
+
+Implement instant messaging with one-to-one text or picture messages grouped under conversations.
+
+### Conversation
+
+```cli
+baq add types.baq.dev+c4094303fe334bd18de6a1f1929c3cad
+```
+
+_Notes:_
+
+<props.compactList>
+
+- Conversations do not have any content.
+
+- Participants are defined by the read permissions.
+
+- They must have two participants.
+
+- They are unique by participants.
+
+- They cannot be modified after creation.
+
+</props.compactList>
+
+#### Message
+
+```cli
+baq add types.baq.dev+05d5b9442c36433688edca64df1a264c
+```
+
+_Properties:_
+
+<props.properties>
+
+- **`conversation`** <props.pill href="6fda79e8">RecordLink</props.pill>
+
+  - Conversation this message belongs to.
+
+- **`replying_to`** <props.pill href="6fda79e8">RecordLink</props.pill> _optional_
+
+  - Other message this is a response to.
+
+- **`text`** <props.pill>string</props.pill> _optional_
+
+  - Text content of the message.
+
+  - Maximum length of `4096` unicode code points.
+
+- **`images`** <props.pill>array</props.pill> _optional_
+
+  - Images attached to this message.
+
+  - Item properties:
+
+    - **`small`** <props.pill href="70af90d6">BlobLink</props.pill> : Small thumbnail.
+    - **`medium`** <props.pill href="70af90d6">BlobLink</props.pill> : Medium thumbnail.
+    - **`large`** <props.pill href="70af90d6">BlobLink</props.pill> : Large compressed image.
+    - **`original`** <props.pill href="70af90d6">BlobLink</props.pill> : Original image.
+    - **`width`** <props.pill>int</props.pill> : Original image width in pixels.
+    - **`height`** <props.pill>int</props.pill> : Original image height in pixels.
+    - **`size`** <props.pill>int</props.pill> : Original image size in bytes.
+
+Messages require at least one of `text` or `images` to be specified.
+
+</props.properties>
+
+## Post
+
+Publish microblog posts for followers to read. Supports different media types and the ability to mention other users.
+
+```cli
+baq add types.baq.dev+6ee7f69a90154b849bac528daa942bcd
+```
+
+_Properties:_
+
+<props.properties>
+
+- **`reply_to_post`** <props.pill href="6fda79e8">RecordLink</props.pill> _optional_
+
+  - Other post this is a response to.
+
+- **`quote_post`** <props.pill href="6fda79e8">RecordLink</props.pill> _optional_
+
+  - Other post this post is quoting.
+
+- **`text`** <props.pill>string</props.pill> _optional_
+
+  - Content of the post.
+
+  - Maximum length of `512` unicode code points.
+
+- **`text_mentions`** <props.pill>array</props.pill> _optional_
+
+  - Metadata for the mentions in the `text` property.
+
+  - Item properties:
+
+    - **`mention`** <props.pill href="fa939df0">EntityLink</props.pill> : Entity to mention.
+    - **`index`** <props.pill>int</props.pill> : Start index of the mention in `text`.
+    - **`length`** <props.pill>int</props.pill> : Length of the mention in `text`.
+
+- **`images`** <props.pill>array</props.pill> _optional_
+
+  - Images attached to this post.
+
+  - Item properties:
+
+    - **`small`** <props.pill href="70af90d6">BlobLink</props.pill> : Small thumbnail.
+    - **`medium`** <props.pill href="70af90d6">BlobLink</props.pill> : Medium thumbnail.
+    - **`large`** <props.pill href="70af90d6">BlobLink</props.pill> : Large compressed image.
+    - **`width`** <props.pill>int</props.pill> : Large image width in pixels.
+    - **`height`** <props.pill>int</props.pill> : Large image height in pixels.
+    - **`size`** <props.pill>int</props.pill> : Large image size in bytes.
+    - **`mentions`** <props.pill>array</props.pill> : Mentions in this image.
+
+  - Mention properties:
+
+    - **`mention`** <props.pill href="fa939df0">EntityLink</props.pill> : Entity to mention.
+    - **`x`** <props.pill>int</props.pill> : X coordinate in the Large image.
+    - **`y`** <props.pill>int</props.pill> : Y coordinate in the Large image.
+
+</props.properties>
+
+_Notes:_
+
+<props.compactList>
+
+- Posts require at least one of `text` or `images` to be specified.
+
+- `reply_to_post` and `quote_post` are mutually exclusive.
+
+- The `index` and `length` of text mentions are in Unicode code points.
+
+</props.compactList>
