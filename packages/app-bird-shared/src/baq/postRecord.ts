@@ -37,23 +37,23 @@ export type PostRecordContent =
         width: number;
         height: number;
         size: number;
-      }>;
-      imageMentions?: ReadonlyArray<{
-        mention: EntityLink;
-        position: {x: number; y: number};
+        mentions?: ReadonlyArray<{
+          mention: EntityLink;
+          position: {x: number; y: number};
+        }>;
       }>;
     }
   | ExclusiveUnion<
       | {
           replyToPost: RecordLinkOf<
             "types.baq.dev",
-            "6ee7f69a90154b849bac528daa942bcd"
+            "d8fe40d469e0455c896b058a043829bf"
           >;
         }
       | {
           quotePost: RecordLinkOf<
             "types.baq.dev",
-            "6ee7f69a90154b849bac528daa942bcd"
+            "d8fe40d469e0455c896b058a043829bf"
           >;
         }
     >;
@@ -71,43 +71,43 @@ const RPostRecordContent: IO.RType<PostRecordContent> = IO.union([
       ),
     }
   ),
-  SchemaIO.object(
-    {
-      images: SchemaIO.array(
-        IO.object({
+  IO.object({
+    images: SchemaIO.array(
+      SchemaIO.object(
+        {
           small: BlobLink.io("image/jpeg"),
           medium: BlobLink.io("image/jpeg"),
           large: BlobLink.io("image/jpeg"),
           width: SchemaIO.int({min: 1}),
           height: SchemaIO.int({min: 1}),
           size: SchemaIO.int({min: 0}),
-        }),
-        {minItems: 1, maxItems: 4}
+        },
+        {
+          mentions: SchemaIO.array(
+            IO.object({
+              mention: EntityLink.io(),
+              position: IO.object({
+                x: SchemaIO.int({min: 0}),
+                y: SchemaIO.int({min: 0}),
+              }),
+            })
+          ),
+        }
       ),
-    },
-    {
-      imageMentions: SchemaIO.array(
-        IO.object({
-          mention: EntityLink.io(),
-          position: IO.object({
-            x: SchemaIO.int({min: 0}),
-            y: SchemaIO.int({min: 0}),
-          }),
-        })
-      ),
-    }
-  ),
+      {minItems: 1, maxItems: 4}
+    ),
+  }),
   IO.exclusiveUnion([
     IO.object({
       replyToPost: RecordLink.ioOf(
         "types.baq.dev",
-        "6ee7f69a90154b849bac528daa942bcd"
+        "d8fe40d469e0455c896b058a043829bf"
       ),
     }),
     IO.object({
       quotePost: RecordLink.ioOf(
         "types.baq.dev",
-        "6ee7f69a90154b849bac528daa942bcd"
+        "d8fe40d469e0455c896b058a043829bf"
       ),
     }),
   ]),
@@ -115,8 +115,8 @@ const RPostRecordContent: IO.RType<PostRecordContent> = IO.union([
 
 const [postRecordType, RPostRecordType] = RecordType.full(
   "types.baq.dev",
-  "6ee7f69a90154b849bac528daa942bcd",
-  "8a123eb1cb2848be6337346071df1ca1dcf6f057fe2e3bfa95a32e3f347cb919",
+  "d8fe40d469e0455c896b058a043829bf",
+  "9b55d28b043def185af3ba0bcf489d128478e61c34116a408c921eafb4329a77",
   RPostRecordContent
 );
 
