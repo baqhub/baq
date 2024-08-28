@@ -2,7 +2,7 @@
   "expo": {
     "name": "Bird",
     "slug": "app-mobile-bird",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/birdMobileIcon.png",
     "scheme": "bird",
@@ -16,7 +16,7 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "12",
+      "buildNumber": "13",
       "supportsTablet": false,
       "bundleIdentifier": "com.baqhub.ios.bird",
       "splash": {

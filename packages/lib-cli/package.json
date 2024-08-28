@@ -1,6 +1,6 @@
 {
   "name": "@baqhub/cli",
-  "version": "0.1.15",
+  "version": "0.1.18",
   "description": "",
   "type": "module",
   "scripts": {
@@ -26,7 +26,7 @@
     "command"
   ],
   "dependencies": {
-    "@baqhub/sdk": "^0.1.13",
+    "@baqhub/sdk": "^0.1.18",
     "@commander-js/extra-typings": "12.1.0",
     "@inquirer/prompts": "5.0.7",
     "ajv": "8.16.0",
