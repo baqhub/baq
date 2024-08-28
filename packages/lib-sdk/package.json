@@ -1,7 +1,24 @@
 {
   "name": "@baqhub/sdk",
-  "version": "0.1.18",
-  "description": "",
+  "version": "0.1.19",
+  "license": "MIT",
+  "description": "The official JavaScript SDK for the BAQ federated app platform.",
+  "author": "Baqhub",
+  "homepage": "https://baq.dev/",
+  "bugs": "https://github.com/baqhub/baq/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/baqhub/baq.git",
+    "directory": "packages/lib-sdk"
+  },
+  "keywords": [
+    "baq",
+    "baqhub",
+    "sdk",
+    "federated",
+    "javascript",
+    "typescript"
+  ],
   "type": "module",
   "sideEffects": false,
   "scripts": {
@@ -20,16 +37,6 @@
       "require": "./build/cjs/src/index.js"
     }
   },
-  "author": "Baqhub",
-  "license": "MIT",
-  "keywords": [
-    "baq",
-    "baqhub",
-    "sdk",
-    "federated",
-    "javascript",
-    "typescript"
-  ],
   "dependencies": {
     "@noble/curves": "^1.4.0",
     "@noble/hashes": "^1.4.0",

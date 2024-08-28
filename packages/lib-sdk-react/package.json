@@ -1,7 +1,26 @@
 {
   "name": "@baqhub/sdk-react",
-  "version": "0.1.18",
-  "description": "",
+  "version": "0.1.19",
+  "license": "MIT",
+  "description": "The official React SDK for the BAQ federated app platform.",
+  "author": "Baqhub",
+  "homepage": "https://baq.dev/",
+  "bugs": "https://github.com/baqhub/baq/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/baqhub/baq.git",
+    "directory": "packages/lib-sdk-react"
+  },
+  "keywords": [
+    "baq",
+    "baqhub",
+    "sdk",
+    "federated",
+    "javascript",
+    "typescript",
+    "react",
+    "reactive"
+  ],
   "type": "module",
   "sideEffects": false,
   "scripts": {
@@ -19,20 +38,8 @@
       "require": "./build/cjs/src/index.js"
     }
   },
-  "author": "Baqhub",
-  "license": "MIT",
-  "keywords": [
-    "baq",
-    "baqhub",
-    "sdk",
-    "federated",
-    "javascript",
-    "typescript",
-    "react",
-    "reactive"
-  ],
   "dependencies": {
-    "@baqhub/sdk": "^0.1.18",
+    "@baqhub/sdk": "^0.1.19",
     "lodash": "^4.17.21",
     "react": "^18.3.1",
     "tslib": "^2.6.3",

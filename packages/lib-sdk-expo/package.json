@@ -1,7 +1,28 @@
 {
   "name": "@baqhub/sdk-expo",
-  "version": "0.1.18",
-  "description": "",
+  "version": "0.1.19",
+  "license": "MIT",
+  "description": "The official Expo SDK for the BAQ federated app platform.",
+  "author": "Baqhub",
+  "homepage": "https://baq.dev/",
+  "bugs": "https://github.com/baqhub/baq/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/baqhub/baq.git",
+    "directory": "packages/lib-sdk-expo"
+  },
+  "keywords": [
+    "baq",
+    "baqhub",
+    "sdk",
+    "federated",
+    "javascript",
+    "typescript",
+    "react",
+    "reactive",
+    "react-native",
+    "expo"
+  ],
   "type": "module",
   "scripts": {
     "ts": "tsc --build --watch",
@@ -18,12 +39,10 @@
       "require": "./build/cjs/src/index.js"
     }
   },
-  "author": "Baqhub",
-  "license": "MIT",
   "dependencies": {
-    "@baqhub/sdk": "^0.1.18",
-    "@baqhub/sdk-react": "^0.1.18",
-    "@baqhub/sdk-react-native": "^0.1.18",
+    "@baqhub/sdk": "^0.1.19",
+    "@baqhub/sdk-react": "^0.1.19",
+    "@baqhub/sdk-react-native": "^0.1.19",
     "expo-secure-store": "^12.8.1",
     "tslib": "2.6.3"
   },

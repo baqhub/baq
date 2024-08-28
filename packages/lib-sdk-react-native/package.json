@@ -1,7 +1,27 @@
 {
   "name": "@baqhub/sdk-react-native",
-  "version": "0.1.18",
-  "description": "",
+  "version": "0.1.19",
+  "license": "MIT",
+  "description": "The official React Native SDK for the BAQ federated app platform.",
+  "author": "Baqhub",
+  "homepage": "https://baq.dev/",
+  "bugs": "https://github.com/baqhub/baq/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/baqhub/baq.git",
+    "directory": "packages/lib-sdk-react-native"
+  },
+  "keywords": [
+    "baq",
+    "baqhub",
+    "sdk",
+    "federated",
+    "javascript",
+    "typescript",
+    "react",
+    "reactive",
+    "react-native"
+  ],
   "type": "module",
   "scripts": {
     "ts": "tsc --build --watch",
@@ -18,11 +38,9 @@
       "require": "./build/cjs/src/index.js"
     }
   },
-  "author": "Baqhub",
-  "license": "MIT",
   "dependencies": {
-    "@baqhub/sdk": "^0.1.18",
-    "@baqhub/sdk-react": "^0.1.18",
+    "@baqhub/sdk": "^0.1.19",
+    "@baqhub/sdk-react": "^0.1.19",
     "@react-native-async-storage/async-storage": "^1.21.0",
     "base-64": "^1.0.0",
     "react-native-fetch-api": "^3.0.0",

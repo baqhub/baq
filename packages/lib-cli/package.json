@@ -1,7 +1,25 @@
 {
   "name": "@baqhub/cli",
-  "version": "0.1.18",
-  "description": "",
+  "version": "0.1.19",
+  "license": "MIT",
+  "description": "The official command line interface for the BAQ federated app platform.",
+  "author": "Baqhub",
+  "homepage": "https://baq.dev/",
+  "bugs": "https://github.com/baqhub/baq/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/baqhub/baq.git",
+    "directory": "packages/lib-cli"
+  },
+  "keywords": [
+    "baq",
+    "baqhub",
+    "federated",
+    "javascript",
+    "typescript",
+    "cli",
+    "command"
+  ],
   "type": "module",
   "scripts": {
     "ts": "tsc --build --watch",
@@ -14,19 +32,8 @@
   "bin": {
     "baq": "./build/src/index.js"
   },
-  "author": "Baqhub",
-  "license": "MIT",
-  "keywords": [
-    "baq",
-    "baqhub",
-    "federated",
-    "javascript",
-    "typescript",
-    "cli",
-    "command"
-  ],
   "dependencies": {
-    "@baqhub/sdk": "^0.1.18",
+    "@baqhub/sdk": "^0.1.19",
     "@commander-js/extra-typings": "12.1.0",
     "@inquirer/prompts": "5.0.7",
     "ajv": "8.16.0",

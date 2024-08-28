@@ -1,7 +1,28 @@
 {
   "name": "@baqhub/sdk-react-dom",
-  "version": "0.1.18",
-  "description": "",
+  "version": "0.1.19",
+  "license": "MIT",
+  "description": "The official React DOM SDK for the BAQ federated app platform.",
+  "author": "Baqhub",
+  "homepage": "https://baq.dev/",
+  "bugs": "https://github.com/baqhub/baq/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/baqhub/baq.git",
+    "directory": "packages/lib-sdk-react-dom"
+  },
+  "keywords": [
+    "baq",
+    "baqhub",
+    "sdk",
+    "federated",
+    "javascript",
+    "typescript",
+    "react",
+    "reactive",
+    "react-dom",
+    "dom"
+  ],
   "type": "module",
   "sideEffects": false,
   "scripts": {
@@ -19,22 +40,8 @@
       "require": "./build/cjs/src/index.js"
     }
   },
-  "author": "Baqhub",
-  "license": "MIT",
-  "keywords": [
-    "baq",
-    "baqhub",
-    "sdk",
-    "federated",
-    "javascript",
-    "typescript",
-    "react",
-    "reactive",
-    "react-dom",
-    "dom"
-  ],
   "dependencies": {
-    "@baqhub/sdk-react": "^0.1.18",
+    "@baqhub/sdk-react": "^0.1.19",
     "tslib": "^2.6.3"
   },
   "devDependencies": {

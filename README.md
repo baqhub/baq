@@ -4,18 +4,18 @@ BAQ (pronounced `/bAk/`, like “back”) is a federated app platform. It lets d
 
 This is the monorepo for all the core open-source BAQ projects:
 
-| Package                                                   |                       |                                                                                                                                                          |
-| --------------------------------------------------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [docs](packages/app-docs-web)                             | BAQ Documentation     |                                                                                                                                                          |
-| [@baqhub/cli](packages/lib-cli)                           | BAQ CLI               | [![cli version](https://img.shields.io/npm/v/@baqhub/cli.svg?label=%20&color=)](https://www.npmjs.com/package/@baqhub/cli)                               |
-| [@baqhub/sdk](packages/lib-sdk)                           | BAQ JS SDK            | [![sdk version](https://img.shields.io/npm/v/@baqhub/sdk.svg?label=%20&color=)](https://www.npmjs.com/package/@baqhub/sdk)                               |
-| [@baqhub/sdk-react](packages/lib-sdk-react)               | BAQ React SDK         | [![react sdk version](https://img.shields.io/npm/v/@baqhub/sdk-react.svg?label=%20&color=)](https://www.npmjs.com/package/@baqhub/sdk-react)             |
-| [@baqhub/sdk-react-dom](packages/lib-sdk-react-dom)       | BAQ React DOM SDK     | [![react-dom sdk version](https://img.shields.io/npm/v/@baqhub/sdk-react-dom.svg?label=%20&color=)](https://www.npmjs.com/package/@baqhub/sdk-react-dom) |
-| [@baqhub/sdk-react-native](packages/lib-sdk-react-native) | BAQ React Native SDK  |                                                                                                                                                          |
-| [@baqhub/sdk-expo](packages/lib-sdk-expo)                 | BAQ Expo SDK          |                                                                                                                                                          |
-| [files-web](packages/app-files-web)                       | Files demo web app    | [Live app](https://files.baq.dev)                                                                                                                        |
-| [messages-web](packages/app-files-web)                    | Messages demo web app | [Live app](https://messages.baq.dev)                                                                                                                     |
-| [bird-web](packages/app-bird-web)                         | Bird demo web app     | [Live app](https://bird.baq.dev)                                                                                                                         |
+| Package                                                   |                       |                                                                                                                                                                   |
+| --------------------------------------------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [docs](packages/app-docs-web)                             | BAQ Documentation     |                                                                                                                                                                   |
+| [@baqhub/cli](packages/lib-cli)                           | BAQ CLI               | [![cli version](https://img.shields.io/npm/v/@baqhub/cli.svg?label=%20&color=)](https://www.npmjs.com/package/@baqhub/cli)                                        |
+| [@baqhub/sdk](packages/lib-sdk)                           | BAQ JS SDK            | [![sdk version](https://img.shields.io/npm/v/@baqhub/sdk.svg?label=%20&color=)](https://www.npmjs.com/package/@baqhub/sdk)                                        |
+| [@baqhub/sdk-react](packages/lib-sdk-react)               | BAQ React SDK         | [![react sdk version](https://img.shields.io/npm/v/@baqhub/sdk-react.svg?label=%20&color=)](https://www.npmjs.com/package/@baqhub/sdk-react)                      |
+| [@baqhub/sdk-react-dom](packages/lib-sdk-react-dom)       | BAQ React DOM SDK     | [![react-dom sdk version](https://img.shields.io/npm/v/@baqhub/sdk-react-dom.svg?label=%20&color=)](https://www.npmjs.com/package/@baqhub/sdk-react-dom)          |
+| [@baqhub/sdk-react-native](packages/lib-sdk-react-native) | BAQ React Native SDK  | [![react-native sdk version](https://img.shields.io/npm/v/@baqhub/sdk-react-native.svg?label=%20&color=)](https://www.npmjs.com/package/@baqhub/sdk-react-native) |
+| [@baqhub/sdk-expo](packages/lib-sdk-expo)                 | BAQ Expo SDK          | [![expo sdk version](https://img.shields.io/npm/v/@baqhub/sdk-expo.svg?label=%20&color=)](https://www.npmjs.com/package/@baqhub/sdk-expo)                         |
+| [files-web](packages/app-files-web)                       | Files demo web app    | [Web app](https://files.baq.dev)                                                                                                                                  |
+| [messages-web](packages/app-files-web)                    | Messages demo web app | [Web app](https://messages.baq.dev)                                                                                                                               |
+| [bird-web](packages/app-bird-web)                         | Bird demo web app     | [Web app](https://bird.baq.dev)                                                                                                                                   |
 
 ## Getting started
 
