@@ -8,7 +8,7 @@ import {FC, useCallback} from "react";
 import {Alert} from "react-native";
 import {ArrowRightOnRectangleIcon} from "react-native-heroicons/outline";
 import {ToolbarButton} from "../../../../components/core/toolbarButton";
-import {ProfileScreen} from "../../../../components/screens/profileScreen";
+import {ProfileScreen} from "../../../../components/screens/profileScreen/profileScreen";
 
 //
 // Component.

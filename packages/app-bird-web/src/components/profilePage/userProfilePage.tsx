@@ -15,10 +15,6 @@ export const UserProfilePage: FC = () => {
     return "No profile";
   }
 
-  const renderPost = (postKey: PostRecordKey) => (
-    <PostByKey key={postKey} postKey={postKey} />
-  );
-
   const {entity, name, bio} = profile;
   return (
     <>
@@ -34,3 +30,7 @@ export const UserProfilePage: FC = () => {
     </>
   );
 };
+
+function renderPost(postKey: PostRecordKey) {
+  return <PostByKey key={postKey} postKey={postKey} />;
+}

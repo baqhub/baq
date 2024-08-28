@@ -53,10 +53,6 @@ export const OtherProfilePage: FC<OtherProfilePageProps> = ({otherEntity}) => {
     navigate({to: "/", search: {mention: entity}});
   };
 
-  const renderPost = (postVersion: PostVersionHash) => (
-    <PostByVersion key={postVersion} postVersion={postVersion} />
-  );
-
   return wrap(
     <>
       <ProfileHeader entity={entity} name={name} bio={bio}>
@@ -87,3 +83,7 @@ export const OtherProfilePage: FC<OtherProfilePageProps> = ({otherEntity}) => {
     </>
   );
 };
+
+function renderPost(postVersion: PostVersionHash) {
+  return <PostByVersion key={postVersion} postVersion={postVersion} />;
+}
