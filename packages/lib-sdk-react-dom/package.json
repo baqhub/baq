@@ -1,6 +1,6 @@
 {
   "name": "@baqhub/sdk-react-dom",
-  "version": "0.1.15",
+  "version": "0.1.18",
   "description": "",
   "type": "module",
   "sideEffects": false,
@@ -34,7 +34,7 @@
     "dom"
   ],
   "dependencies": {
-    "@baqhub/sdk-react": "^0.1.13",
+    "@baqhub/sdk-react": "^0.1.18",
     "tslib": "^2.6.3"
   },
   "devDependencies": {

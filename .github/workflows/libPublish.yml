@@ -53,6 +53,20 @@ jobs:
           access: public
           package: ./packages/lib-sdk-react-dom/
 
+      - name: Publish "lib-sdk-react-native"
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          access: public
+          package: ./packages/lib-sdk-react-native/
+
+      - name: Publish "lib-sdk-expo"
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          access: public
+          package: ./packages/lib-sdk-expo/
+
       - name: Publish "lib-cli"
         uses: JS-DevTools/npm-publish@v3
         with:

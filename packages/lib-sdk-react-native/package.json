@@ -1,6 +1,6 @@
 {
   "name": "@baqhub/sdk-react-native",
-  "version": "0.1.7",
+  "version": "0.1.18",
   "description": "",
   "type": "module",
   "scripts": {
@@ -21,8 +21,8 @@
   "author": "Baqhub",
   "license": "MIT",
   "dependencies": {
-    "@baqhub/sdk": "^0.1.7",
-    "@baqhub/sdk-react": "^0.1.7",
+    "@baqhub/sdk": "^0.1.18",
+    "@baqhub/sdk-react": "^0.1.18",
     "@react-native-async-storage/async-storage": "^1.21.0",
     "base-64": "^1.0.0",
     "react-native-fetch-api": "^3.0.0",

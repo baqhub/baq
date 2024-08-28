@@ -1,6 +1,6 @@
 {
   "name": "@baqhub/sdk-expo",
-  "version": "0.1.7",
+  "version": "0.1.18",
   "description": "",
   "type": "module",
   "scripts": {
@@ -21,9 +21,9 @@
   "author": "Baqhub",
   "license": "MIT",
   "dependencies": {
-    "@baqhub/sdk": "^0.1.7",
-    "@baqhub/sdk-react": "^0.1.7",
-    "@baqhub/sdk-react-native": "^0.1.7",
+    "@baqhub/sdk": "^0.1.18",
+    "@baqhub/sdk-react": "^0.1.18",
+    "@baqhub/sdk-react-native": "^0.1.18",
     "expo-secure-store": "^12.8.1",
     "tslib": "2.6.3"
   },
