@@ -74,7 +74,7 @@ export function useOtherProfilePageState(profileEntity: string) {
     const profile = get();
     const subscriptionRecord = getSubscriptionRecord();
 
-    if (!profile) {
+    if (!profile || profile.entity === entity) {
       return undefined;
     }
 
@@ -83,7 +83,7 @@ export function useOtherProfilePageState(profileEntity: string) {
       isSubscribed: Boolean(subscriptionRecord),
       isBlocked: decision === StandingDecision.BLOCK,
     };
-  }, [get, getSubscriptionRecord, decision]);
+  }, [get, getSubscriptionRecord, entity, decision]);
 
   const {isLoading: arePostsLoading, getRecords} = useStaticRecordsQuery({
     pageSize: 200,
@@ -102,11 +102,7 @@ export function useOtherProfilePageState(profileEntity: string) {
   const onFollowClick = useCallback(() => {
     const entityRecord = getEntityRecord();
     const subscriptionRecord = getSubscriptionRecord();
-    if (
-      !entityRecord ||
-      subscriptionRecord ||
-      entityRecord.author.entity === entity
-    ) {
+    if (!entityRecord || subscriptionRecord) {
       return;
     }
 
@@ -131,21 +127,21 @@ export function useOtherProfilePageState(profileEntity: string) {
 
   const onBlockClick = useCallback(() => {
     const entityRecord = getEntityRecord();
-    if (!entityRecord || entityRecord.author.entity === entity) {
+    if (!entityRecord) {
       return;
     }
 
     updateStandingDecision(entityRecord.author.entity, StandingDecision.BLOCK);
-  }, [entity, getEntityRecord, updateStandingDecision]);
+  }, [getEntityRecord, updateStandingDecision]);
 
   const onUnblockClick = useCallback(() => {
     const entityRecord = getEntityRecord();
-    if (!entityRecord || entityRecord.author.entity === entity) {
+    if (!entityRecord) {
       return;
     }
 
     updateStandingDecision(entityRecord.author.entity, StandingDecision.ALLOW);
-  }, [entity, getEntityRecord, updateStandingDecision]);
+  }, [getEntityRecord, updateStandingDecision]);
 
   return {
     get,
