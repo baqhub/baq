@@ -6,7 +6,7 @@ import {
   SubscriptionRecord,
 } from "@baqhub/sdk";
 import {useCallback} from "react";
-import {PostRecord} from "../baq/postRecord.js";
+import {PostRecord} from "../../baq/postRecord.js";
 import {
   useFindStandingDecision,
   useRecordHelpers,
@@ -14,22 +14,21 @@ import {
   useStaticRecordQuery,
   useStaticRecordsQuery,
   wrapInProxyStore,
-} from "../baq/store.js";
+} from "../../baq/store.js";
 
-export interface ProfileData {
+export interface OtherProfileData {
   isProxy: boolean;
   entity: string;
   name: string | undefined;
   bio: string | undefined;
-  isOwnProfile: boolean;
 }
 
-export interface FullProfileData extends ProfileData {
+export interface OtherFullProfileData extends OtherProfileData {
   isSubscribed: boolean;
   isBlocked: boolean;
 }
 
-export function useProfilePageState(profileEntity: string) {
+export function useOtherProfilePageState(profileEntity: string) {
   const {entity, updateRecords, updateStandingDecision} = useRecordHelpers();
 
   //
@@ -56,7 +55,7 @@ export function useProfilePageState(profileEntity: string) {
     proxyTo: profileEntity,
   });
 
-  const getProfile = useCallback((): ProfileData | undefined => {
+  const get = useCallback((): OtherProfileData | undefined => {
     const entityRecord = getEntityRecord();
     if (!entityRecord) {
       return undefined;
@@ -67,13 +66,12 @@ export function useProfilePageState(profileEntity: string) {
       entity: entityRecord.author.entity,
       name: entityRecord.content.profile.name,
       bio: entityRecord.content.profile.bio,
-      isOwnProfile: entityRecord.author.entity === entity,
     };
-  }, [entity, getEntityRecord]);
+  }, [getEntityRecord]);
 
   const decision = useFindStandingDecision(profileEntity);
-  const getFull = useCallback((): FullProfileData | undefined => {
-    const profile = getProfile();
+  const getFull = useCallback((): OtherFullProfileData | undefined => {
+    const profile = get();
     const subscriptionRecord = getSubscriptionRecord();
 
     if (!profile) {
@@ -85,7 +83,7 @@ export function useProfilePageState(profileEntity: string) {
       isSubscribed: Boolean(subscriptionRecord),
       isBlocked: decision === StandingDecision.BLOCK,
     };
-  }, [getProfile, getSubscriptionRecord, decision]);
+  }, [get, getSubscriptionRecord, decision]);
 
   const {isLoading: arePostsLoading, getRecords} = useStaticRecordsQuery({
     pageSize: 200,
@@ -150,7 +148,7 @@ export function useProfilePageState(profileEntity: string) {
   }, [entity, getEntityRecord, updateStandingDecision]);
 
   return {
-    getProfile,
+    get,
     getFull,
     isFullLoading,
     getPostVersions,
