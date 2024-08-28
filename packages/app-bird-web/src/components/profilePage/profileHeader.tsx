@@ -52,7 +52,7 @@ const ProfileBio = tw(Text)`
 //
 
 export const ProfileHeader: FC<ProfileHeaderProps> = props => {
-  const {entity, name, bio} = props;
+  const {entity, name, bio, children} = props;
   return (
     <Profile>
       <ProfileTop>
@@ -65,6 +65,7 @@ export const ProfileHeader: FC<ProfileHeaderProps> = props => {
         </ProfileTopAvatar>
       </ProfileTop>
       {bio && <ProfileBio>{bio}</ProfileBio>}
+      {children}
     </Profile>
   );
 };

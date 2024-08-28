@@ -57,7 +57,7 @@ export const OtherProfilePage: FC<OtherProfilePageProps> = ({otherEntity}) => {
     <PostByVersion key={postVersion} postVersion={postVersion} />
   );
 
-  return (
+  return wrap(
     <>
       <ProfileHeader entity={entity} name={name} bio={bio}>
         <ProfileButtons>
@@ -76,16 +76,14 @@ export const OtherProfilePage: FC<OtherProfilePageProps> = ({otherEntity}) => {
           )}
         </ProfileButtons>
       </ProfileHeader>
-      {wrap(
-        <Suspense fallback={<LoadingPosts />}>
-          <Posts getItems={getPostVersions} renderItem={renderPost}>
-            <EmptyPosts
-              icon={<FaceFrownIcon />}
-              text="This user hasn't posted anything!"
-            />
-          </Posts>
-        </Suspense>
-      )}
+      <Suspense fallback={<LoadingPosts />}>
+        <Posts getItems={getPostVersions} renderItem={renderPost}>
+          <EmptyPosts
+            icon={<FaceFrownIcon />}
+            text="This user hasn't posted anything!"
+          />
+        </Posts>
+      </Suspense>
     </>
   );
 };
