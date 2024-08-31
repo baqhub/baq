@@ -75,7 +75,6 @@ const Title = tw(Row)`
 `;
 
 const TitleLink = tw(Link)`
-  lg:hidden
   shrink-0
   py-1
   px-3
@@ -84,6 +83,14 @@ const TitleLink = tw(Link)`
   hover:text-amber-700
   dark:text-white
   dark:hover:text-amber-400
+`;
+
+const DocsTitleLink = tw(TitleLink)`
+  lg:hidden
+`;
+
+const DefaultTitleLink = tw(TitleLink)`
+  lg:mr-6
 `;
 
 const TitleLogo = tw(LogoSmall)`
@@ -122,29 +129,49 @@ const Separator = tw.div`
 
 export const TopNav: FC = () => {
   const pn = usePathname();
-  const isDocsPath = pn.startsWith("/docs");
+
+  const renderTitle = () => {
+    // Home, no link.
+    if (pn === "/") {
+      return (
+        <Title>
+          <SvgUniqueIds>
+            <TitleLogo />
+          </SvgUniqueIds>
+        </Title>
+      );
+    }
+
+    // Docs, link with spacer.
+    if (pn.startsWith("/docs")) {
+      return (
+        <>
+          <DocsTitleLink href="/">
+            <SvgUniqueIds>
+              <TitleLogo />
+            </SvgUniqueIds>
+          </DocsTitleLink>
+          <LeftNavSpacer />
+        </>
+      );
+    }
+
+    // Otherwise, simple link.
+    return (
+      <DefaultTitleLink href="/">
+        <SvgUniqueIds>
+          <TitleLogo />
+        </SvgUniqueIds>
+      </DefaultTitleLink>
+    );
+  };
 
   return (
     <>
       <Layout>
         <Content>
           <Center>
-            {isDocsPath ? (
-              <>
-                <TitleLink href="/">
-                  <SvgUniqueIds>
-                    <TitleLogo />
-                  </SvgUniqueIds>
-                </TitleLink>
-                <LeftNavSpacer />
-              </>
-            ) : (
-              <Title>
-                <SvgUniqueIds>
-                  <TitleLogo />
-                </SvgUniqueIds>
-              </Title>
-            )}
+            {renderTitle()}
             <TopNavSearch />
             <Items>
               <TopNavItem to="/docs/learn">Learn</TopNavItem>

@@ -37,10 +37,11 @@ const PostImage = tw.div`
   rounded-lg
   overflow-hidden
   [&_>_img]:w-full
-  [&_>_img]:opacity-80
   [&_>_img]:group-hover:scale-110
   [&_>_img]:group-hover:opacity-100
   [&_>_img]:transition-[transform,opacity]
+  [&_>_img]:opacity-90
+  dark:[&_>_img]:opacity-80
 `;
 
 const PostImageBorder = tw.div`
@@ -58,13 +59,8 @@ const PostImageBorder = tw.div`
 `;
 
 const PostDetails = tw(Column)`
-  gap-4
   pl-6
   pr-10
-`;
-
-const PostHeader = tw(Column)`
-  gap-2
 `;
 
 const PostAttributes = tw(Row)`
@@ -88,6 +84,8 @@ const PostDate = tw(TextSelect)`
 `;
 
 const PostTitle = tw(TextSelect)`
+  mt-2
+
   text-4xl
   group-hover:text-amber-600
   dark:group-hover:text-amber-400
@@ -95,6 +93,8 @@ const PostTitle = tw(TextSelect)`
 `;
 
 const PostSubtitle = tw(TextSelect)`
+  mt-3
+
   text-xl
   font-light
   text-zinc-500
@@ -102,6 +102,7 @@ const PostSubtitle = tw(TextSelect)`
 `;
 
 const PostAuthor = tw(Row)`
+  mt-4
   items-center
   gap-2
 `;
@@ -150,13 +151,11 @@ export const BlogPostItem: FC<BlogPostItemProps> = async ({post}) => {
           <PostImageBorder />
         </PostImage>
         <PostDetails>
-          <PostHeader>
-            <PostAttributes>
-              <PostCategory>news</PostCategory>
-              <PostDate>{dateToString(post.date)}</PostDate>
-            </PostAttributes>
-            <PostTitle>{post.title}</PostTitle>
-          </PostHeader>
+          <PostAttributes>
+            <PostCategory>news</PostCategory>
+            <PostDate>{dateToString(post.date)}</PostDate>
+          </PostAttributes>
+          <PostTitle>{post.title}</PostTitle>
           <PostSubtitle>{post.subTitle}</PostSubtitle>
           <PostAuthor>
             <PostAuthorImage>

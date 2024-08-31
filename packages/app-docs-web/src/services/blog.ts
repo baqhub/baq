@@ -94,6 +94,15 @@ export const blogPosts = (await loadBlogPosts()).toSorted(
   p => -p.date.getTime()
 );
 
+export function findBlogPost(path: string) {
+  const post = blogPosts.find(p => p.path === path);
+  if (!post) {
+    throw new Error("Blog Post not found.");
+  }
+
+  return post;
+}
+
 export function findBlogPostById(id: string) {
   return blogPosts.find(p => p.id === id);
 }
