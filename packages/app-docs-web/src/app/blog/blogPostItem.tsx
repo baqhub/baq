@@ -31,7 +31,8 @@ const Layout = tw(Row)`
 const PostImage = tw.div`
   relative
   w-80
-  bg-zinc-900
+  bg-zinc-100
+  dark:bg-zinc-900
 
   rounded-lg
   overflow-hidden
@@ -74,7 +75,7 @@ const PostCategory = tw(TextSelect)`
   text-xs
   font-medium
   uppercase
-  text-yellow-500
+  text-amber-600
   dark:text-amber-400
 `;
 
@@ -82,12 +83,13 @@ const PostDate = tw(TextSelect)`
   text-xs
   font-medium
   uppercase
-  text-zinc-400
+  text-zinc-500
   dark:text-zinc-400
 `;
 
 const PostTitle = tw(TextSelect)`
   text-4xl
+  group-hover:text-amber-600
   dark:group-hover:text-amber-400
   transition-colors
 `;
@@ -95,6 +97,7 @@ const PostTitle = tw(TextSelect)`
 const PostSubtitle = tw(TextSelect)`
   text-xl
   font-light
+  text-zinc-500
   dark:text-zinc-400
 `;
 
@@ -126,6 +129,7 @@ const PostAuthorImageBorder = tw.div`
 `;
 
 const PostAuthorName = tw(TextSelect)`
+  text-zinc-600
   dark:text-zinc-300
 `;
 
