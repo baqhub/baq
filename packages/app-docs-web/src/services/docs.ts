@@ -1,18 +1,36 @@
 import flatten from "lodash/flatten.js";
-import isObject from "lodash/isObject.js";
-import {Dirent} from "node:fs";
-import * as fs from "node:fs/promises";
+import {MDXComponents} from "mdx/types.js";
 import * as path from "node:path";
-import {FC} from "react";
-import {MDXProps, Metadata} from "../docs/any.mdx";
-import {slugify} from "../helpers/string.js";
+import {ComponentType, FC, ReactNode} from "react";
+import {listAndMap} from "../helpers/fileHelpers.js";
+import {slugify} from "../helpers/stringHelpers.js";
 
 //
 // Model.
 //
 
-type DocsPageData = [FC<MDXProps>, Metadata];
-type DocsTopPageData = [FC<MDXProps>, Metadata, ReadonlyArray<DocsPageData>];
+interface DocPageProps {
+  toc?: ReactNode;
+  pages?: ReactNode;
+  properties: ComponentType;
+  code: ComponentType;
+  pill: ComponentType;
+  compactList: ComponentType;
+  components?: MDXComponents;
+}
+
+interface DocPageMetadata {
+  id: string;
+  title: string;
+  summary?: string;
+}
+
+type DocsPageData = [FC<DocPageProps>, DocPageMetadata];
+type DocsTopPageData = [
+  FC<DocPageProps>,
+  DocPageMetadata,
+  ReadonlyArray<DocsPageData>,
+];
 type DocsSubSectionData = [string, ReadonlyArray<DocsTopPageData>];
 type DocsSectionData = [string, ReadonlyArray<DocsSubSectionData>];
 
@@ -20,35 +38,17 @@ type DocsSectionData = [string, ReadonlyArray<DocsSubSectionData>];
 // Data.
 //
 
-async function listAndMap<T>(
-  path: string,
-  mapper: (i: Dirent) => Promise<T | undefined>
-) {
-  try {
-    const items = await fs.readdir(path, {withFileTypes: true});
-    const tasks = items.map(mapper);
-    const results = await Promise.all(tasks);
-    return results.filter(isDefined);
-  } catch (err) {
-    if (isObject(err) && "code" in err && err.code === "ENOENT") {
-      return [];
-    }
-
-    throw err;
-  }
-}
-
 const docs = await loadDocs();
 
 function loadDocs() {
   const docsPath = path.resolve(process.cwd(), "src", "docs");
   return listAndMap(docsPath, async i => {
-    if (!i.isDirectory() || i.name === "assets") {
+    if (!i.isDirectory() || !["learn", "reference"].includes(i.name)) {
       return undefined;
     }
 
     const section = i.name;
-    const sectionPath = path.join(i.path, i.name);
+    const sectionPath = path.join(i.parentPath, i.name);
     const subSections = await loadSubSectionsAt(section, sectionPath);
 
     const result: DocsSectionData = [section, subSections];
@@ -69,9 +69,9 @@ function loadSubSectionsAt(section: string, sectionPath: string) {
       return undefined;
     }
 
-    const metadata: Metadata = imported.metadata;
+    const metadata: DocPageMetadata = imported.metadata;
 
-    const subSectionPath = path.join(i.path, subSection);
+    const subSectionPath = path.join(i.parentPath, subSection);
     const topPages = await loadTopPagesAt(mdxPath, subSectionPath);
 
     const result: DocsSubSectionData = [metadata.title, topPages];
@@ -92,10 +92,10 @@ function loadTopPagesAt(importPath: string, subSectionPath: string) {
       return undefined;
     }
 
-    const Component: FC<MDXProps> = imported.default;
-    const metadata: Metadata = imported.metadata;
+    const Component: FC<DocPageProps> = imported.default;
+    const metadata: DocPageMetadata = imported.metadata;
 
-    const topPagePath = path.join(i.path, topPage);
+    const topPagePath = path.join(i.parentPath, topPage);
     const pages = await loadPagesAt(mdxPath, topPagePath);
 
     const result: DocsTopPageData = [Component, metadata, pages];
@@ -116,8 +116,8 @@ function loadPagesAt(importPath: string, topPagePath: string) {
       return undefined;
     }
 
-    const Component: FC<MDXProps> = imported.default;
-    const metadata: Metadata = imported.metadata;
+    const Component: FC<DocPageProps> = imported.default;
+    const metadata: DocPageMetadata = imported.metadata;
 
     const result: DocsPageData = [Component, metadata];
     return result;
@@ -141,7 +141,7 @@ export interface DocsPageFull {
   title: string;
   summary: string | undefined;
   subPages: ReadonlyArray<DocsPageFull>;
-  Component: FC<MDXProps>;
+  Component: FC<DocPageProps>;
 }
 
 function docsPageToFull(
@@ -219,7 +219,7 @@ function subSectionToLight([
   };
 }
 
-export async function listSubSectionsForSection(section: string) {
+export function listSubSectionsForSection(section: string) {
   const sectionData = docs.find(([s]) => s === section);
   if (!sectionData) {
     throw new Error();
@@ -245,15 +245,5 @@ export function findDocsPage(section: string, path: string | undefined) {
 }
 
 export function findDocsPageById(id: string) {
-  const page = docsPages.find(p => p.id === id);
-
-  if (!page) {
-    throw new Error("Page not found: " + id);
-  }
-
-  return page;
-}
-
-function isDefined<T>(value: T | undefined): value is T {
-  return typeof value !== "undefined";
+  return docsPages.find(p => p.id === id);
 }

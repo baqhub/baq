@@ -2,6 +2,7 @@ import {tw} from "@baqhub/ui/core/style.jsx";
 import isString from "lodash/isString.js";
 import {ImageProps} from "next/image.js";
 import {FC} from "react";
+import {getImageAsync} from "../../../../helpers/fileHelpers.js";
 import {Image} from "../../../global/image.jsx";
 import {isServerRendering} from "../../../global/serverRender.js";
 
@@ -26,7 +27,8 @@ const Border = tw.span`
 
   rounded-lg
   border
-  border-neutral-600/30
+  border-white/30
+  mix-blend-soft-light
 `;
 
 //
@@ -50,19 +52,3 @@ export const MdxImage: FC<ImageProps> = props => {
     );
   })();
 };
-
-//
-// Image loading logic.
-//
-
-async function getImageAsync(imageName: string): Promise<ImageProps> {
-  const imported = await import(`../../../../docs/assets/${imageName}.jpg`);
-  const image: ImageProps = imported.default;
-
-  return {
-    src: image.src,
-    alt: "",
-    width: image.width,
-    height: image.height,
-  };
-}

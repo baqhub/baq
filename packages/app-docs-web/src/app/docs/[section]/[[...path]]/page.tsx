@@ -5,7 +5,7 @@ import {ImageProps} from "next/image.js";
 import {FC, ReactNode} from "react";
 import {onlyText} from "react-children-utilities";
 import {findHeaders} from "../../../../helpers/mdxHelpers.jsx";
-import {slugify} from "../../../../helpers/string.js";
+import {slugify} from "../../../../helpers/stringHelpers.js";
 import {
   docsPages,
   docsSections,
@@ -145,18 +145,16 @@ const components: MDXComponents = {
 // Component.
 //
 
-export async function generateMetadata({
-  params,
-}: DocsPageProps): Promise<Metadata> {
+export function generateMetadata({params}: DocsPageProps): Metadata {
   const {section, path} = params;
-  const page = await findDocsPage(section, path?.join("/"));
+  const page = findDocsPage(section, path?.join("/"));
   return {title: page.title};
 }
 
-const DocsPage: FC<DocsPageProps> = async ({params}) => {
+const DocsPage: FC<DocsPageProps> = ({params}) => {
   const {section, path} = params;
-  const page = await findDocsPage(section, path?.join("/"));
-  const subSections = await listSubSectionsForSection(section);
+  const page = findDocsPage(section, path?.join("/"));
+  const subSections = listSubSectionsForSection(section);
   const subSection = subSections.find(s => s.path === path?.[0]);
 
   const headers = findHeaders(

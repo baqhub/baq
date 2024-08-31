@@ -1,6 +1,5 @@
 import {FC, PropsWithChildren} from "react";
-import {matchDocPageHref} from "../../../../helpers/docPageHelpers.js";
-import {findDocsPageById} from "../../../../services/docs.js";
+import {findPagePath} from "../../../../services/pages.js";
 import {ClientLink} from "../../../global/clientLink.jsx";
 import {isServerRendering} from "../../../global/serverRender.js";
 import {MdxA} from "./mdx.jsx";
@@ -24,16 +23,12 @@ export const MdxLink: FC<MdxLinkProps> = props => {
     return children;
   }
 
-  const docPageMatch = matchDocPageHref(href);
+  const pagePath = findPagePath(href);
   const isStatic = isServerRendering();
 
-  if (docPageMatch && !isStatic) {
-    const page = findDocsPageById(docPageMatch[1]!);
-    const anchor = docPageMatch[2] || "";
-    const to = `/docs/${page.section}/${page.path}${anchor}`;
-
+  if (pagePath && !isStatic) {
     return (
-      <ClientLink href={to} passHref legacyBehavior>
+      <ClientLink href={pagePath} passHref legacyBehavior>
         <MdxA>{children}&shy;</MdxA>
       </ClientLink>
     );
