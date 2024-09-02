@@ -107,6 +107,8 @@ const Title = tw(TextSelect)`
 
   text-3xl
   md:text-4xl
+  font-medium
+  md:font-normal
   group-hover:text-amber-600
   dark:group-hover:text-amber-400
   transition-colors
@@ -119,7 +121,7 @@ const Subtitle = tw(TextSelect)`
 
   text-lg
   md:text-xl
-  font-light
+  md:font-light
   text-zinc-500
   dark:text-zinc-400
 `;
@@ -138,6 +140,9 @@ const AuthorImage = tw.div`
   rounded-full
   overflow-hidden
   select-none
+
+  bg-zinc-200
+  dark:bg-zinc-950
 `;
 
 const AuthorImageBorder = tw.div`

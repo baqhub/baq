@@ -98,6 +98,9 @@ const AuthorImage = tw.div`
   rounded-full
   overflow-hidden
   select-none
+
+  bg-zinc-200
+  dark:bg-zinc-950
 `;
 
 const AuthorImageBorder = tw.div`
