@@ -56,7 +56,7 @@ const Layout = tw(Column)`
 
 const PostContent = tw.div`
   min-w-0
-  pt-3
+  pt-2
   sm:pt-9
   px-6
   sm:px-8
