@@ -8,7 +8,7 @@ import {slugify} from "../helpers/stringHelpers.js";
 // Model.
 //
 
-interface BlogPostAuthor {
+export interface BlogPostAuthor {
   name: string;
   role: string;
   image: string;

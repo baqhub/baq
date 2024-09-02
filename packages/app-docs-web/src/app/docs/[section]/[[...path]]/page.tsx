@@ -13,9 +13,6 @@ import {
   listSubSectionsForSection,
 } from "../../../../services/docs.js";
 import {Footer} from "../../../global/footer.jsx";
-import {DocsLeftNav} from "../leftNav/docsLeftNav.jsx";
-import {DocsRightNav} from "../rightNav/docsRightNav.jsx";
-import {DocsTopNav} from "../topNav/docsTopNav.jsx";
 import {
   MdxCode,
   MdxCompactList,
@@ -31,10 +28,13 @@ import {
   MdxProperties,
   MdxStrong,
   MdxUl,
-} from "./mdx.jsx";
-import {MdxImage} from "./mdxImage.jsx";
-import {MdxLink} from "./mdxLink.jsx";
-import {MdxPill} from "./mdxPill.jsx";
+} from "../../../global/mdx/mdx.jsx";
+import {MdxImage} from "../../../global/mdx/mdxImage.jsx";
+import {MdxLink} from "../../../global/mdx/mdxLink.jsx";
+import {MdxPill} from "../../../global/mdx/mdxPill.jsx";
+import {DocsLeftNav} from "../leftNav/docsLeftNav.jsx";
+import {DocsRightNav} from "../rightNav/docsRightNav.jsx";
+import {DocsTopNav} from "../topNav/docsTopNav.jsx";
 import {SubPages} from "./subPages.jsx";
 import {Toc} from "./toc.jsx";
 
@@ -100,7 +100,6 @@ const DocsContent = tw.div`
   sm:pt-8
   px-6
   sm:px-8
-  lg:px-8
   xl:px-12
 `;
 

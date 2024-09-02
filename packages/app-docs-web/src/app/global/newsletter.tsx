@@ -1,7 +1,19 @@
+"use client";
+
 import {Column, Row, tw} from "@baqhub/ui/core/style.jsx";
 import {ArrowRightIcon, RssIcon} from "@heroicons/react/20/solid";
 import {FC, FormEvent} from "react";
-import {Text} from "../../../global/style.jsx";
+import {Text} from "./style.jsx";
+
+//
+// Props.
+//
+
+type NewsletterVariant = "normal" | "wide";
+
+interface NewsletterProps {
+  variant?: NewsletterVariant;
+}
 
 //
 // Style.
@@ -9,11 +21,18 @@ import {Text} from "../../../global/style.jsx";
 
 const Layout = tw(Column)`
   p-5
+  gap-3
+
+  sm:data-[variant=wide]:flex-row
+  sm:data-[variant=wide]:gap-5
+  sm:data-[variant=wide]:items-center
 
   border
   border-amber-500
   rounded-xl
 `;
+
+const Left = tw(Column)``;
 
 const Title = tw(Row)`
   items-center
@@ -41,7 +60,8 @@ const SubTitle = tw(Text)`
 
 const Form = tw.form`
   group
-  mt-3
+
+  sm:data-[variant=wide]:w-52
 
   flex
   flex-row
@@ -98,7 +118,8 @@ const FormSubmitIcon = tw(Text)`
 // Component.
 //
 
-export const DocsRightNavSubscribe: FC = () => {
+export const Newsletter: FC<NewsletterProps> = props => {
+  const variant = props.variant || "normal";
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     window.open("https://buttondown.email/baq", "popup");
@@ -107,19 +128,22 @@ export const DocsRightNavSubscribe: FC = () => {
   };
 
   return (
-    <Layout>
-      <Title>
-        <TitleText>Stay updated</TitleText>
-        <TitleIcon>
-          <RssIcon />
-        </TitleIcon>
-      </Title>
-      <SubTitle>Subscribe to the newsletter.</SubTitle>
+    <Layout data-variant={variant}>
+      <Left>
+        <Title>
+          <TitleText>Stay updated</TitleText>
+          <TitleIcon>
+            <RssIcon />
+          </TitleIcon>
+        </Title>
+        <SubTitle>Subscribe to the newsletter.</SubTitle>
+      </Left>
       <Form
         action="https://buttondown.email/api/emails/embed-subscribe/baq"
         method="post"
         target="popup"
         onSubmit={onSubmit}
+        data-variant={variant}
       >
         <FormInput type="email" name="email" placeholder="email@host.com" />
         <FormSubmit type="submit">

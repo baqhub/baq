@@ -76,7 +76,7 @@ export const MdxP = tw.p`
   mb-3
 
   text-zinc-600
-  dark:text-zinc-300
+  dark:text-[rgb(202,202,204)]
   leading-[1.75]
   font-normal
 `;

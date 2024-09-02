@@ -1,7 +1,7 @@
 import {FC, PropsWithChildren} from "react";
-import {findPagePath} from "../../../../services/pages.js";
-import {ClientLink} from "../../../global/clientLink.jsx";
-import {isServerRendering} from "../../../global/serverRender.js";
+import {findPagePath} from "../../../services/pages.js";
+import {ClientLink} from "../clientLink.jsx";
+import {isServerRendering} from "../serverRender.js";
 
 //
 // Props.

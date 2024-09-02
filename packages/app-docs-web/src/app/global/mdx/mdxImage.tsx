@@ -2,9 +2,9 @@ import {tw} from "@baqhub/ui/core/style.jsx";
 import isString from "lodash/isString.js";
 import {ImageProps} from "next/image.js";
 import {FC} from "react";
-import {getImageAsync} from "../../../../helpers/fileHelpers.js";
-import {Image} from "../../../global/image.jsx";
-import {isServerRendering} from "../../../global/serverRender.js";
+import {getImageAsync} from "../../../helpers/fileHelpers.js";
+import {Image} from "../image.jsx";
+import {isServerRendering} from "../serverRender.js";
 
 //
 // Style.
@@ -15,6 +15,7 @@ const Layout = tw.span`
   inline-block
   rounded-lg
   overflow-hidden
+  [&_>_img]:w-full
 `;
 
 const Border = tw.span`
@@ -29,6 +30,7 @@ const Border = tw.span`
   border
   border-white/30
   mix-blend-soft-light
+  pointer-events-none
 `;
 
 //

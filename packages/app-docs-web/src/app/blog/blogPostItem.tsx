@@ -37,11 +37,13 @@ const PostImage = tw.div`
   rounded-lg
   overflow-hidden
   [&_>_img]:w-full
-  [&_>_img]:group-hover:scale-110
+  [&_>_img]:group-hover:scale-105
   [&_>_img]:group-hover:opacity-100
   [&_>_img]:transition-[transform,opacity]
+  [&_>_img]:duration-150
   [&_>_img]:opacity-90
   dark:[&_>_img]:opacity-80
+  select-none
 `;
 
 const PostImageBorder = tw.div`
@@ -56,43 +58,57 @@ const PostImageBorder = tw.div`
   border
   border-white/30
   mix-blend-soft-light
+  pointer-events-none
 `;
 
-const PostDetails = tw(Column)`
+const Details = tw(Column)`
   pl-6
   pr-10
 `;
 
-const PostAttributes = tw(Row)`
+const Attributes = tw(Row)`
+  items-center
   gap-3
 `;
 
-const PostCategory = tw(TextSelect)`
+const Category = tw.div`
   text-xs
+  leading-3
   font-medium
   uppercase
+
+  px-0.5
+  pt-px
+
+  rounded
+  border
+  border-amber-500/40
+  bg-amber-500/20
+
   text-amber-600
   dark:text-amber-400
 `;
 
-const PostDate = tw(TextSelect)`
+const Date = tw(TextSelect)`
   text-xs
   font-medium
   uppercase
+
   text-zinc-500
   dark:text-zinc-400
 `;
 
-const PostTitle = tw(TextSelect)`
+const Title = tw(TextSelect)`
   mt-2
 
   text-4xl
   group-hover:text-amber-600
   dark:group-hover:text-amber-400
   transition-colors
+  duration-150
 `;
 
-const PostSubtitle = tw(TextSelect)`
+const Subtitle = tw(TextSelect)`
   mt-3
 
   text-xl
@@ -107,15 +123,16 @@ const PostAuthor = tw(Row)`
   gap-2
 `;
 
-const PostAuthorImage = tw.div`
+const AuthorImage = tw.div`
   relative
   w-8
   h-8
   rounded-full
   overflow-hidden
+  select-none
 `;
 
-const PostAuthorImageBorder = tw.div`
+const AuthorImageBorder = tw.div`
   block
   absolute
   top-0
@@ -127,9 +144,10 @@ const PostAuthorImageBorder = tw.div`
   border
   border-white/50
   mix-blend-soft-light
+  pointer-events-none
 `;
 
-const PostAuthorName = tw(TextSelect)`
+const AuthorName = tw(TextSelect)`
   text-zinc-600
   dark:text-zinc-300
 `;
@@ -150,21 +168,21 @@ export const BlogPostItem: FC<BlogPostItemProps> = async ({post}) => {
           <Image {...postImage} alt={post.title} />
           <PostImageBorder />
         </PostImage>
-        <PostDetails>
-          <PostAttributes>
-            <PostCategory>news</PostCategory>
-            <PostDate>{dateToString(post.date)}</PostDate>
-          </PostAttributes>
-          <PostTitle>{post.title}</PostTitle>
-          <PostSubtitle>{post.subTitle}</PostSubtitle>
+        <Details>
+          <Attributes>
+            <Category>news</Category>
+            <Date>{dateToString(post.date)}</Date>
+          </Attributes>
+          <Title>{post.title}</Title>
+          <Subtitle>{post.subTitle}</Subtitle>
           <PostAuthor>
-            <PostAuthorImage>
+            <AuthorImage>
               <Image {...authorImage} alt={post.author.name} />
-              <PostAuthorImageBorder />
-            </PostAuthorImage>
-            <PostAuthorName>{post.author.name}</PostAuthorName>
+              <AuthorImageBorder />
+            </AuthorImage>
+            <AuthorName>{post.author.name}</AuthorName>
           </PostAuthor>
-        </PostDetails>
+        </Details>
       </Layout>
     </PostLink>
   );
