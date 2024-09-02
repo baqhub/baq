@@ -15,28 +15,36 @@ const Layout = tw(Column)`
   w-full
   max-w-screen-md
   min-w-0
+
+  px-6
+  sm:px-8
 `;
 
 const Header = tw(Row)`
   items-center
   justify-center
-  pt-14
-  pb-24
-  gap-3
+  pt-16
+  pb-4
+  lg:pb-24
+  gap-2
+  sm:gap-3
 
-  border-b
+  lg:border-b
   border-zinc-200
-  dark:border-zinc-600
+  dark:border-zinc-950
 `;
 
 const HeaderTitle = tw(Text)`
-  text-6xl
+  text-5xl
+  sm:text-6xl
   font-bold
 `;
 
 const HeaderIcon = tw.div`
-  w-10
-  h-10
+  w-8
+  h-8
+  sm:w-10
+  sm:h-10
   translate-y-[1px]
 `;
 

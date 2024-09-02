@@ -23,14 +23,19 @@ const PostLink = tw(Link)`
   block
 `;
 
-const Layout = tw(Row)`
+const Layout = tw(Column)`
   group
-  items-center
+  gap-5
+  sm:gap-3
+  md:gap-4
+  sm:flex-row
+  sm:items-center
 `;
 
 const PostImage = tw.div`
   relative
-  w-80
+  sm:w-60
+  md:w-80
   bg-zinc-100
   dark:bg-zinc-900
 
@@ -62,8 +67,7 @@ const PostImageBorder = tw.div`
 `;
 
 const Details = tw(Column)`
-  pl-6
-  pr-10
+  px-2
 `;
 
 const Attributes = tw(Row)`
@@ -101,7 +105,8 @@ const Date = tw(TextSelect)`
 const Title = tw(TextSelect)`
   mt-2
 
-  text-4xl
+  text-3xl
+  md:text-4xl
   group-hover:text-amber-600
   dark:group-hover:text-amber-400
   transition-colors
@@ -109,16 +114,19 @@ const Title = tw(TextSelect)`
 `;
 
 const Subtitle = tw(TextSelect)`
-  mt-3
+  mt-1
+  md:mt-2
 
-  text-xl
+  text-lg
+  md:text-xl
   font-light
   text-zinc-500
   dark:text-zinc-400
 `;
 
 const PostAuthor = tw(Row)`
-  mt-4
+  mt-2
+  md:mt-3
   items-center
   gap-2
 `;

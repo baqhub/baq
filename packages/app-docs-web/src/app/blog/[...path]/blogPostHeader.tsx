@@ -67,23 +67,25 @@ const Date = tw(TextSelect)`
 const Title = tw(TextSelect)`
   mt-3
   sm:mt-4
-  text-4xl
+  text-3xl
   sm:text-5xl
+  font-medium
+  sm:font-normal
 `;
 
 const SubTitle = tw(TextSelect)`
-  mt-3
+  mt-2
   sm:mt-4
-  text-xl
+  text-lg
   sm:text-2xl
-  font-light
+  sm:font-light
 
   text-zinc-500
   dark:text-zinc-400
 `;
 
 const Author = tw(Row)`
-  mt-[14px]
+  mt-[10px]
   sm:mt-[18px]
   items-center
   gap-2
