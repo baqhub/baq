@@ -15,7 +15,8 @@ const Layout = tw.span`
   inline-block
   rounded-lg
   overflow-hidden
-  [&_>_img]:w-full
+  [&_>_img]:block
+  [&_>_img]:min-w-full
 `;
 
 const Border = tw.span`
