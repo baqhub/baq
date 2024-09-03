@@ -16,7 +16,7 @@ import {isServerRendering} from "../serverRender.js";
 const Layout = tw.span`
   relative
   inline-block
-  rounded-lg
+  rounded-xl
   overflow-hidden
   [&_>_img]:min-w-full
 `;
@@ -29,7 +29,7 @@ const Border = tw.span`
   bottom-0
   left-0
 
-  rounded-lg
+  rounded-xl
   border
   border-white/30
   mix-blend-soft-light
