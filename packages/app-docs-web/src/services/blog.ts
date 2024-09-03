@@ -90,9 +90,7 @@ function loadBlogPosts() {
   });
 }
 
-export const blogPosts = (await loadBlogPosts()).toSorted(
-  p => -p.date.getTime()
-);
+export const blogPosts = (await loadBlogPosts()).sort(p => -p.date.getTime());
 
 export function findBlogPost(path: string) {
   const post = blogPosts.find(p => p.path === path);
