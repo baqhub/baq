@@ -20,6 +20,7 @@ const Layout = tw(Column)`
   self-center
   w-full
   max-w-screen-xl
+  overflow-x-hidden
 
   pt-2
   px-6

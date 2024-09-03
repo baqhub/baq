@@ -3,13 +3,17 @@
 // Trick to enable fast-refresh on MDX file change.
 // From: https://github.com/gaearon/overreacted.io/pull/797
 
-const {WebSocketServer} = require("ws");
-const chokidar = require("chokidar");
+import chokidar from "chokidar";
+import * as path from "node:path";
+import {WebSocketServer} from "ws";
+import {metaToPaths} from "./scriptHelpers.js";
 
+const {directoryPath} = metaToPaths(import.meta);
+const docsDirectory = path.join(directoryPath, "..", "docs");
 const wss = new WebSocketServer({port: 3001});
 const watchCallbacks = [];
 
-const watcher = chokidar.watch("./src/docs").on("all", event => {
+const watcher = chokidar.watch(docsDirectory).on("all", event => {
   if (event === "change") {
     watchCallbacks.forEach(cb => cb());
   }

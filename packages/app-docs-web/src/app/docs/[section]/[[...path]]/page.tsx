@@ -5,7 +5,7 @@ import {ImageProps} from "next/image.js";
 import {FC, ReactNode} from "react";
 import {onlyText} from "react-children-utilities";
 import {findHeaders} from "../../../../helpers/mdxHelpers.jsx";
-import {slugify} from "../../../../helpers/string.js";
+import {slugify} from "../../../../helpers/stringHelpers.js";
 import {
   docsPages,
   docsSections,
@@ -13,9 +13,6 @@ import {
   listSubSectionsForSection,
 } from "../../../../services/docs.js";
 import {Footer} from "../../../global/footer.jsx";
-import {DocsLeftNav} from "../leftNav/docsLeftNav.jsx";
-import {DocsRightNav} from "../rightNav/docsRightNav.jsx";
-import {DocsTopNav} from "../topNav/docsTopNav.jsx";
 import {
   MdxCode,
   MdxCompactList,
@@ -31,10 +28,13 @@ import {
   MdxProperties,
   MdxStrong,
   MdxUl,
-} from "./mdx.jsx";
-import {MdxImage} from "./mdxImage.jsx";
-import {MdxLink} from "./mdxLink.jsx";
-import {MdxPill} from "./mdxPill.jsx";
+} from "../../../global/mdx/mdx.jsx";
+import {MdxImage} from "../../../global/mdx/mdxImage.jsx";
+import {MdxLink} from "../../../global/mdx/mdxLink.jsx";
+import {MdxPill} from "../../../global/mdx/mdxPill.jsx";
+import {DocsLeftNav} from "../leftNav/docsLeftNav.jsx";
+import {DocsRightNav} from "../rightNav/docsRightNav.jsx";
+import {DocsTopNav} from "../topNav/docsTopNav.jsx";
 import {SubPages} from "./subPages.jsx";
 import {Toc} from "./toc.jsx";
 
@@ -100,7 +100,6 @@ const DocsContent = tw.div`
   sm:pt-8
   px-6
   sm:px-8
-  lg:px-8
   xl:px-12
 `;
 
@@ -145,19 +144,17 @@ const components: MDXComponents = {
 // Component.
 //
 
-export async function generateMetadata({
-  params,
-}: DocsPageProps): Promise<Metadata> {
+export function generateMetadata({params}: DocsPageProps): Metadata {
   const {section, path} = params;
-  const page = await findDocsPage(section, path?.join("/"));
+  const page = findDocsPage(section, path?.join("/"));
   return {title: page.title};
 }
 
-const DocsPage: FC<DocsPageProps> = async ({params}) => {
+const DocsPage: FC<DocsPageProps> = ({params}) => {
   const {section, path} = params;
-  const page = await findDocsPage(section, path?.join("/"));
-  const subSections = await listSubSectionsForSection(section);
-  const subSection = subSections.find(s => s.path === path?.[0]);
+  const page = findDocsPage(section, path?.join("/"));
+  const subSections = listSubSectionsForSection(section);
+  const subSection = subSections.find(s => s.subSection === page.subSection);
 
   const headers = findHeaders(
     <page.Component

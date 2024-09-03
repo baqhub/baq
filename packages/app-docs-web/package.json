@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "concurrently -r 'yarn next-dev' 'yarn watch-docs'",
     "next-dev": "next dev -p 5178",
-    "watch-docs": "node ./watcher.cjs",
-    "build": "tsc --build && next build",
+    "watch-docs": "node ./src/scripts/watchDocs.js",
+    "compress-images": "node ./src/scripts/compressImages.js",
+    "build": "tsc --build && next build && yarn compress-images",
     "start": "next start",
     "lint": "next lint",
     "copy-icons": "cp ./src/docs/assets/favicon.svg ./src/app/icon.svg && cp ./src/docs/assets/faviconApple.png ./src/app/apple-icon.png && magick ./src/docs/assets/favicon32.png ./src/docs/assets/favicon16.png ./src/app/favicon.ico"
@@ -23,7 +24,7 @@
     "domutils": "3.1.0",
     "htmlparser2": "9.1.0",
     "lodash": "4.17.21",
-    "next": "14.2.5",
+    "next": "14.2.7",
     "react": "18.3.1",
     "react-children-utilities": "2.10.0",
     "react-dom": "18.3.1",

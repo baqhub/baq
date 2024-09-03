@@ -11,8 +11,8 @@ import {
   useState,
 } from "react";
 import {MdxHeader} from "../../../../helpers/mdxHelpers.js";
+import {Newsletter} from "../../../global/newsletter.jsx";
 import {Text} from "../../../global/style.jsx";
-import {DocsRightNavSubscribe} from "./docsRightNavSubscribe.jsx";
 
 //
 // Props.
@@ -316,7 +316,7 @@ export const DocsRightNav: FC<DocsRightNavProps> = ({headers}) => {
     return (
       <Layout>
         <Content>
-          <DocsRightNavSubscribe />
+          <Newsletter />
         </Content>
       </Layout>
     );
@@ -325,7 +325,7 @@ export const DocsRightNav: FC<DocsRightNavProps> = ({headers}) => {
   return (
     <Layout>
       <Content ref={contentRef}>
-        <DocsRightNavSubscribe />
+        <Newsletter />
         <Menu ref={menuRef}>
           <ActiveIndicator
             style={{transform: `translateY(${activeIndicatorTop}px)`}}

@@ -1,8 +1,7 @@
 import {FC, PropsWithChildren} from "react";
-import {matchDocPageHref} from "../../../../helpers/docPageHelpers.js";
-import {findDocsPageById} from "../../../../services/docs.js";
-import {ClientLink} from "../../../global/clientLink.jsx";
-import {isServerRendering} from "../../../global/serverRender.js";
+import {findPagePath} from "../../../services/pages.js";
+import {ClientLink} from "../clientLink.jsx";
+import {isServerRendering} from "../serverRender.js";
 
 //
 // Props.
@@ -65,14 +64,10 @@ export const MdxPill: FC<MdxPillProps> = props => {
     return <span className={spanPillStyle}>{children}</span>;
   }
 
-  const docPageMatch = matchDocPageHref(href);
-  if (docPageMatch) {
-    const page = findDocsPageById(docPageMatch[1]!);
-    const anchor = docPageMatch[2] || "";
-    const to = `/docs/${page.section}/${page.path}${anchor}`;
-
+  const pagePath = findPagePath(href);
+  if (pagePath) {
     return (
-      <ClientLink href={to} passHref legacyBehavior>
+      <ClientLink href={pagePath} passHref legacyBehavior>
         <a className={linkPillStyle}>{children}</a>
       </ClientLink>
     );

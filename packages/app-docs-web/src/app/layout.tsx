@@ -45,6 +45,8 @@ export const viewport: Viewport = {
     {color: "#d97706", media: "(prefers-color-scheme: light)"},
     {color: "#92400e", media: "(prefers-color-scheme: dark)"},
   ],
+  maximumScale: 1,
+  userScalable: false,
 };
 
 const RootLayout: FC<PropsWithChildren> = ({children}) => {
