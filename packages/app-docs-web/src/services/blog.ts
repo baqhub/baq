@@ -10,14 +10,12 @@ import {slugify} from "../helpers/stringHelpers.js";
 
 export interface BlogPostAuthor {
   name: string;
-  role: string;
   image: string;
 }
 
 const authors: Record<string, BlogPostAuthor> = {
   quentez: {
     name: "Quentin Calvez",
-    role: "Founder",
     image: "authorQuentez",
   },
 };
