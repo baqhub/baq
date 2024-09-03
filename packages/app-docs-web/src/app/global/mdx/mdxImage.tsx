@@ -2,7 +2,10 @@ import {tw} from "@baqhub/ui/core/style.jsx";
 import isString from "lodash/isString.js";
 import {ImageProps} from "next/image.js";
 import {FC} from "react";
-import {getImageAsync} from "../../../helpers/fileHelpers.js";
+import {
+  getImageAsync,
+  tryGetImageDarkAsync,
+} from "../../../helpers/fileHelpers.js";
 import {Image} from "../image.jsx";
 import {isServerRendering} from "../serverRender.js";
 
@@ -15,7 +18,6 @@ const Layout = tw.span`
   inline-block
   rounded-lg
   overflow-hidden
-  [&_>_img]:block
   [&_>_img]:min-w-full
 `;
 
@@ -47,9 +49,24 @@ export const MdxImage: FC<ImageProps> = props => {
 
   return (async () => {
     const image = await getImageAsync(src);
+    const darkImage = await tryGetImageDarkAsync(src);
+
+    const renderImage = () => {
+      if (!darkImage) {
+        return <Image {...image} alt={alt} className="block" />;
+      }
+
+      return (
+        <>
+          <Image {...image} alt={alt} className="block dark:hidden" />
+          <Image {...darkImage} alt={alt} className="hidden dark:block" />
+        </>
+      );
+    };
+
     return (
       <Layout>
-        <Image {...image} alt={alt} />
+        {renderImage()}
         <Border />
       </Layout>
     );

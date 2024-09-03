@@ -36,3 +36,21 @@ export async function getImageAsync(imageName: string): Promise<ImageProps> {
     height: image.height,
   };
 }
+
+export async function tryGetImageDarkAsync(
+  imageName: string
+): Promise<ImageProps | undefined> {
+  try {
+    const imported = await import(`../docs/assets/${imageName}Dark.jpg`);
+    const image: ImageProps = imported.default;
+
+    return {
+      src: image.src,
+      alt: "",
+      width: image.width,
+      height: image.height,
+    };
+  } catch (err) {
+    return undefined;
+  }
+}
