@@ -154,7 +154,7 @@ const DocsPage: FC<DocsPageProps> = ({params}) => {
   const {section, path} = params;
   const page = findDocsPage(section, path?.join("/"));
   const subSections = listSubSectionsForSection(section);
-  const subSection = subSections.find(s => s.path === path?.[0]);
+  const subSection = subSections.find(s => s.subSection === page.subSection);
 
   const headers = findHeaders(
     <page.Component

@@ -136,6 +136,7 @@ export const docsSections = docs.map(([section]) => section);
 
 export interface DocsPageFull {
   section: string;
+  subSection: string;
   path: string;
   id: string;
   title: string;
@@ -147,16 +148,20 @@ export interface DocsPageFull {
 function docsPageToFull(
   parentPath: string,
   section: string,
+  subSection: string,
   [Component, metadata, subPages]: DocsTopPageData | DocsPageData
 ): DocsPageFull {
   const path = `${parentPath}/${slugify(metadata.title)}`;
   return {
     section,
+    subSection,
     path,
     id: metadata.id,
     title: metadata.title,
     summary: metadata.summary,
-    subPages: (subPages || []).map(sp => docsPageToFull(path, section, sp)),
+    subPages: (subPages || []).map(sp =>
+      docsPageToFull(path, section, subSection, sp)
+    ),
     Component,
   };
 }
@@ -168,7 +173,12 @@ export const docsPages = flatten(
         const path = slugify(subSection);
         return flatten(
           topPages.map(topPage => {
-            const topPageFull = docsPageToFull(path, section, topPage);
+            const topPageFull = docsPageToFull(
+              path,
+              section,
+              subSection,
+              topPage
+            );
             return [topPageFull, ...topPageFull.subPages];
           })
         );
