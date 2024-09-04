@@ -7,6 +7,7 @@ import {DarkModeScript} from "./global/scripts/darkModeScript.jsx";
 import {TopNav} from "./global/topNav/topNav.jsx";
 
 import "@docsearch/css";
+import {Constants} from "./global/constants.js";
 import "./styles/index.css";
 
 //
@@ -38,6 +39,9 @@ export const metadata: Metadata = {
     template: "%s | BAQ",
   },
   description: "Build apps on the federated BAQ platform.",
+  openGraph: {
+    url: Constants.baseUrl,
+  },
 };
 
 export const viewport: Viewport = {

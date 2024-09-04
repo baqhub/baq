@@ -3,7 +3,9 @@ import {MDXComponents} from "mdx/types.js";
 import {Metadata} from "next";
 import {ImageProps} from "next/image.js";
 import {FC} from "react";
+import {getImageAsync} from "../../../helpers/fileHelpers.js";
 import {blogPosts, findBlogPost} from "../../../services/blog.js";
+import {Constants} from "../../global/constants.js";
 import {Footer} from "../../global/footer.jsx";
 import {
   MdxCode,
@@ -107,11 +109,31 @@ const components: MDXComponents = {
 // Component.
 //
 
-export function generateMetadata({
+export async function generateMetadata({
   params: {path},
-}: BlogPostPageProps): Metadata {
+}: BlogPostPageProps): Promise<Metadata> {
   const post = findBlogPost(path?.join("/"));
-  return {title: `${post.title} | Blog`};
+  const postImage = await getImageAsync(post.image + "Big");
+
+  return {
+    title: `${post.title} | Blog`,
+    openGraph: {
+      title: post.title,
+      description: post.subTitle,
+      type: "article",
+      url: `${Constants.baseUrl}/blog/${post.path}`,
+      publishedTime: post.date.toISOString(),
+      authors: [post.author.name],
+      images: [
+        {
+          url: Constants.baseUrl + postImage.src.toString(),
+          width: postImage.width,
+          height: postImage.height,
+          alt: post.title,
+        },
+      ],
+    },
+  };
 }
 
 const BlogPostPage: FC<BlogPostPageProps> = async ({params}) => {

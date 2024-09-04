@@ -12,6 +12,7 @@ import {
   findDocsPage,
   listSubSectionsForSection,
 } from "../../../../services/docs.js";
+import {Constants} from "../../../global/constants.js";
 import {Footer} from "../../../global/footer.jsx";
 import {
   MdxCode,
@@ -147,7 +148,16 @@ const components: MDXComponents = {
 export function generateMetadata({params}: DocsPageProps): Metadata {
   const {section, path} = params;
   const page = findDocsPage(section, path?.join("/"));
-  return {title: page.title};
+
+  return {
+    title: page.title,
+    openGraph: {
+      title: page.title,
+      description: page.summary,
+      type: "website",
+      url: `${Constants.baseUrl}/docs/${section}/${page.path}`,
+    },
+  };
 }
 
 const DocsPage: FC<DocsPageProps> = ({params}) => {
