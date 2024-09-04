@@ -21,6 +21,7 @@
     "lib-cli:build": "yarn workspace @baqhub/cli build",
     "lib-cli:test": "yarn workspace @baqhub/cli test",
     "lib-ui:build": "yarn workspace @baqhub/ui build",
+    "lib-ui:test": "yarn workspace @baqhub/ui test",
     "docs:dev": "yarn workspace @baqhub/docs-web dev",
     "docs:build": "yarn workspace @baqhub/docs-web build",
     "bird:dev": "yarn workspace @baqhub/bird-web dev",

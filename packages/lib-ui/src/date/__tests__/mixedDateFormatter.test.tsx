@@ -6,7 +6,7 @@ import {MixedDateFormatter} from "../mixedDateFormatter.js";
 describe("<MixedDateFormatter>", () => {
   function renderMixedDateFormatter(now: Date, value: Date) {
     const {container} = render(
-      <DateServicesProvider locale="en-us">
+      <DateServicesProvider locale="en-us" timeZone="UTC">
         <MixedDateFormatter now={now} value={value} />
       </DateServicesProvider>
     );
@@ -57,7 +57,7 @@ describe("<MixedDateFormatter>", () => {
     // Assert.
     expect(result).toMatchInlineSnapshot(`
       <div>
-        5:01 PM
+        1:01 AM
       </div>
     `);
   });
@@ -89,7 +89,7 @@ describe("<MixedDateFormatter>", () => {
     // Assert.
     expect(result).toMatchInlineSnapshot(`
       <div>
-        Tuesday
+        Wednesday
       </div>
     `);
   });
@@ -105,7 +105,7 @@ describe("<MixedDateFormatter>", () => {
     // Assert.
     expect(result).toMatchInlineSnapshot(`
       <div>
-        1/2/2024
+        1/3/2024
       </div>
     `);
   });
