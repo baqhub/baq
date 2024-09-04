@@ -5,11 +5,15 @@ import {useRecordByKey} from "../baq/store.js";
 import {ConversationSelectHandler} from "./homeState.js";
 import {useRecipientDisplayName} from "./recipientState.js";
 
+//
+// Hook.
+//
+
 export function useConversationItemState(
   messageKey: MessageRecordKey,
   onConversationSelect: ConversationSelectHandler
 ) {
-  const {content} = useRecordByKey(messageKey);
+  const {receivedAt, content} = useRecordByKey(messageKey);
   const conversation = useRecordByKey(RecordLink.toKey(content.conversation));
   const recipient = useRecipientDisplayName(conversation);
 
@@ -19,6 +23,7 @@ export function useConversationItemState(
 
   return {
     recipient,
+    date: receivedAt,
     lastMessage: content.text,
     onClick,
     onDeleteClick: () => {},

@@ -6,6 +6,10 @@ import {ConversationRecordKey} from "../baq/conversationRecord.js";
 import {MessageRecord, MessageRecordContent} from "../baq/messageRecord.js";
 import {useRecordHelpers} from "../baq/store.js";
 
+//
+// Model.
+//
+
 type MessageRecordImage = Extract<
   MessageRecord["content"],
   {images: any}
@@ -32,6 +36,10 @@ export interface PendingImage {
   thumbnail: Blob | undefined;
   image: MessageRecordImage | undefined;
 }
+
+//
+// Hook.
+//
 
 export function useMessageComposerState(
   conversationKey: ConversationRecordKey

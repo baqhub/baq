@@ -1,4 +1,3 @@
-import {Handler} from "@baqhub/sdk";
 import {Column, Grid, tw} from "@baqhub/ui/core/style.js";
 import {FC, Suspense, useEffect} from "react";
 import {ConversationRecordKey} from "../../baq/conversationRecord.js";
@@ -11,8 +10,8 @@ import {ConversationSelectHandler} from "../../state/homeState.js";
 import {ConversationDraftItem} from "./conversationDraftItem.js";
 import {ConversationItem} from "./conversationItem.js";
 import {ConversationsEmpty} from "./conversationsEmpty.js";
-import {ConversationsHeader} from "./conversationsHeader.js";
 import {ConversationsLoading} from "./conversationsLoading.js";
+import {Header} from "./header/header.js";
 
 //
 // Props.
@@ -20,7 +19,6 @@ import {ConversationsLoading} from "./conversationsLoading.js";
 
 interface ConversationsProps {
   selectedKey: ConversationRecordKey | undefined;
-  onComposeClick: Handler;
   onConversationSelect: ConversationSelectHandler;
 }
 
@@ -58,7 +56,7 @@ const InfoLayout = tw(Grid)`
 //
 
 export const Conversations: FC<ConversationsProps> = props => {
-  const {selectedKey, onComposeClick, onConversationSelect} = props;
+  const {selectedKey, onConversationSelect} = props;
   const {draftConversationKeys, getItemKeys} = useConversationsState();
 
   const renderLoading = () => {
@@ -72,7 +70,7 @@ export const Conversations: FC<ConversationsProps> = props => {
   return (
     <Layout>
       <HeaderLayout>
-        <ConversationsHeader onComposeClick={onComposeClick} />
+        <Header onConversationSelect={onConversationSelect} />
       </HeaderLayout>
       <Suspense fallback={renderLoading()}>
         <ConversationsContent

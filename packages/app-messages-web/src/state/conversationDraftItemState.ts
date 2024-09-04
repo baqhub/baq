@@ -4,6 +4,10 @@ import {useRecordByKey} from "../baq/store.js";
 import {ConversationSelectHandler} from "./homeState.js";
 import {useRecipientDisplayName} from "./recipientState.js";
 
+//
+// Hook.
+//
+
 export function useConversationDraftItemState(
   conversationKey: ConversationRecordKey,
   onConversationSelect: ConversationSelectHandler

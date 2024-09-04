@@ -8,7 +8,7 @@
   "scripts": {
     "ts": "tsc --build --watch",
     "build": "tsc --build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest"
   },
   "exports": {
     "./*": "./src/*"
@@ -26,12 +26,16 @@
   },
   "devDependencies": {
     "@baqhub/config-web": "*",
+    "@testing-library/dom": "10.4.0",
+    "@testing-library/react": "16.0.1",
     "@types/lodash": "4.17.6",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
+    "jsdom": "25.0.0",
     "tailwindcss": "3.4.9",
     "typescript": "5.5.2",
     "vite": "5.4.0",
-    "vite-plugin-svgr": "4.2.0"
+    "vite-plugin-svgr": "4.2.0",
+    "vitest": "2.0.5"
   }
 }

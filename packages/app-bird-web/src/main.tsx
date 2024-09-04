@@ -1,4 +1,4 @@
-import {DateServicesProvider} from "@baqhub/bird-shared/components/date/dateServicesProvider.js";
+import {DateServicesProvider} from "@baqhub/ui/date/dateServicesProvider.js";
 import {
   RouterProvider,
   createRootRoute,

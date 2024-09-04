@@ -1,5 +1,6 @@
 import {Handler, noop} from "@baqhub/sdk";
 import {Column, Row, Text, tw} from "@baqhub/ui/core/style.js";
+import {MixedDateFormatter} from "@baqhub/ui/date/mixedDateFormatter.js";
 import {OkCancelDialog} from "@baqhub/ui/layers/dialog/okCancelDialog.js";
 import {DropdownItem} from "@baqhub/ui/layers/dropdown/dropdownItem.js";
 import {useDropdown} from "@baqhub/ui/layers/dropdown/useDropdown.js";
@@ -12,6 +13,7 @@ import {FC, MouseEvent, useState} from "react";
 interface ConversationItemBaseProps {
   isSelected: boolean;
   recipient: string;
+  date?: Date;
   lastMessage?: string;
   onClick: Handler;
   onDeleteClick: Handler;
@@ -85,7 +87,8 @@ const LastMessageEmpty = tw(SecondaryText)`
 //
 
 export const ConversationItemBase: FC<ConversationItemBaseProps> = props => {
-  const {isSelected, recipient, lastMessage, onClick, onDeleteClick} = props;
+  const {isSelected, recipient, date, lastMessage} = props;
+  const {onClick, onDeleteClick} = props;
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
   const renderLastMessage = () => {
@@ -131,7 +134,11 @@ export const ConversationItemBase: FC<ConversationItemBaseProps> = props => {
     >
       <Header>
         <Title>{recipient}</Title>
-        <Date>6:14PM</Date>
+        {date && (
+          <Date>
+            <MixedDateFormatter value={date} />
+          </Date>
+        )}
       </Header>
       {renderLastMessage()}
       {dropdown.render(() => (

@@ -16,11 +16,15 @@ import {MessageRecord, MessageRecordKey} from "../baq/messageRecord.js";
 import {useRecordsQuery} from "../baq/store.js";
 
 //
-// Hook.
+// Model.
 //
 
 export type ItemKey = [MessageRecordKey, ConversationRecordKey];
 export type GetItemKeys = DataProvider<ReadonlyArray<ItemKey>>;
+
+//
+// Hook.
+//
 
 export function useConversationsState() {
   //

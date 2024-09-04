@@ -36,7 +36,12 @@ const includeLinkSpecialValues: ReadonlyArray<IncludeLink> = [
   "existential",
 ];
 
-const defaultSources = [
+const defaultIncludeLinks: ReadonlyArray<IncludeLink> = [
+  "entity",
+  "existential",
+];
+
+const defaultSources: ReadonlyArray<RecordSource> = [
   RecordSource.SELF,
   RecordSource.NOTIFICATION,
   RecordSource.SUBSCRIPTION,
@@ -145,7 +150,6 @@ function includeLinksIsSuperset(
   links1: ReadonlyArray<IncludeLink> | undefined,
   links2: ReadonlyArray<IncludeLink> | undefined
 ) {
-  const defaultIncludeLinks = ["entity", "existential"];
   const l1 = links1 || defaultIncludeLinks;
   const l2 = links2 || defaultIncludeLinks;
 
@@ -365,4 +369,6 @@ export const Query = {
   isMatch: queryIsMatch,
   isSuperset: queryIsSuperset,
   isSyncSuperset: queryIsSyncSuperset,
+  defaultIncludeLinks,
+  defaultSources,
 };

@@ -1,4 +1,4 @@
-import {Handler} from "@baqhub/sdk";
+import {HandlerOf} from "@baqhub/sdk";
 import {useConstant} from "@baqhub/sdk-react";
 import {FC, PropsWithChildren, useEffect, useMemo} from "react";
 import {
@@ -20,12 +20,13 @@ interface DateServicesProviderProps extends PropsWithChildren {
 
 export const DateServicesProvider: FC<DateServicesProviderProps> = props => {
   const {locale, children} = props;
-  const updaters = useConstant(() => new Set<Handler>());
+  const updaters = useConstant(() => new Set<HandlerOf<Date>>());
 
   useEffect(() => {
     // 30s interval.
     const intervalId = setInterval(() => {
-      updaters.forEach(u => u());
+      const now = new Date();
+      updaters.forEach(u => u(now));
     }, 30 * 1000);
 
     return () => clearInterval(intervalId);
@@ -40,7 +41,23 @@ export const DateServicesProvider: FC<DateServicesProviderProps> = props => {
         hour: "numeric",
         minute: "2-digit",
       }),
-      registerUpdater: (updater: Handler) => {
+      dayOfWeekFormat: Intl.DateTimeFormat(locale, {
+        weekday: "long",
+      }),
+      dateFormat: Intl.DateTimeFormat(locale, {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+      }),
+      timeFormat: Intl.DateTimeFormat(locale, {
+        hour: "numeric",
+        minute: "2-digit",
+      }),
+      relativeTimeFormat: new Intl.RelativeTimeFormat(locale, {
+        style: "short",
+        numeric: "auto",
+      }),
+      registerUpdater: (updater: HandlerOf<Date>) => {
         updaters.add(updater);
         return () => {
           updaters.delete(updater);
