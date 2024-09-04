@@ -21,11 +21,11 @@ import {
 export type MessageRecordContent = {
   conversation: RecordLinkOf<
     "types.baq.dev",
-    "c4094303fe334bd18de6a1f1929c3cad"
+    "7583995c51cf44ad972fdc123105e1dc"
   >;
   replyingTo?: RecordLinkOf<
     "types.baq.dev",
-    "05d5b9442c36433688edca64df1a264c"
+    "153b3cb3a2f0494e950599de1cc13ef3"
   >;
 } & (
   | {
@@ -35,9 +35,9 @@ export type MessageRecordContent = {
         medium: BlobLink<"image/jpeg">;
         large: BlobLink<"image/jpeg">;
         original: BlobLink<"image/jpeg">;
-        width: number;
-        height: number;
-        size: number;
+        originalWidth: number;
+        originalHeight: number;
+        originalSize: number;
       }>;
     }
   | {text: string}
@@ -48,13 +48,13 @@ const RMessageRecordContent: IO.RType<MessageRecordContent> = IO.intersection([
     {
       conversation: RecordLink.ioOf(
         "types.baq.dev",
-        "c4094303fe334bd18de6a1f1929c3cad"
+        "7583995c51cf44ad972fdc123105e1dc"
       ),
     },
     {
       replyingTo: RecordLink.ioOf(
         "types.baq.dev",
-        "05d5b9442c36433688edca64df1a264c"
+        "153b3cb3a2f0494e950599de1cc13ef3"
       ),
     }
   ),
@@ -67,9 +67,9 @@ const RMessageRecordContent: IO.RType<MessageRecordContent> = IO.intersection([
             medium: BlobLink.io("image/jpeg"),
             large: BlobLink.io("image/jpeg"),
             original: BlobLink.io("image/jpeg"),
-            width: SchemaIO.int({min: 1}),
-            height: SchemaIO.int({min: 1}),
-            size: SchemaIO.int({min: 0}),
+            originalWidth: SchemaIO.int({min: 1}),
+            originalHeight: SchemaIO.int({min: 1}),
+            originalSize: SchemaIO.int({min: 0}),
           }),
           {minItems: 1, maxItems: 20}
         ),
@@ -82,8 +82,8 @@ const RMessageRecordContent: IO.RType<MessageRecordContent> = IO.intersection([
 
 const [messageRecordType, RMessageRecordType] = RecordType.full(
   "types.baq.dev",
-  "05d5b9442c36433688edca64df1a264c",
-  "23bce6d64fc895203d584599ab353b2abe7344340c7d16f862812a13a677b91b",
+  "153b3cb3a2f0494e950599de1cc13ef3",
+  "a1f3b94d2f9f35654e8aa87ee07eeb04f9acda9a360847422ae80d6d29cd65cf",
   RMessageRecordContent
 );
 

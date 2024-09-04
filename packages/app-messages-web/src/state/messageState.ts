@@ -36,8 +36,8 @@ export function useMessageState(messageKey: MessageRecordKey) {
         image: MessageRecordImage
       ): MessageImage => ({
         url: buildBlobUrl(message, image.medium),
-        width: image.width,
-        height: image.height,
+        width: image.originalWidth,
+        height: image.originalHeight,
       });
 
       return {

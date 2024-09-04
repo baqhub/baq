@@ -69,7 +69,7 @@ export const ComposerDialog: FC<ComposerDialogProps> = props => {
         <Title>New conversation</Title>
         <TextBox
           size="large"
-          placeholder="Recipients..."
+          placeholder="user.domain.com"
           value={recipient}
           onChange={onRecipientChange}
           isDisabled={isResolving}

@@ -1,7 +1,7 @@
 import {Handler} from "@baqhub/sdk";
-import {PencilSquareIcon} from "@heroicons/react/20/solid";
 import {IconButton} from "@baqhub/ui/core/iconButton.js";
 import {Row, Text, tw} from "@baqhub/ui/core/style.js";
+import {PencilSquareIcon, UserIcon} from "@heroicons/react/20/solid";
 import {FC} from "react";
 
 //
@@ -20,7 +20,7 @@ const Layout = tw(Row)`
   px-6
   pt-6
   items-end
-  gap-2
+  gap-1
 `;
 
 const Title = tw(Text)`
@@ -39,6 +39,9 @@ export const ConversationsHeader: FC<ConversationsHeaderProps> = props => {
   return (
     <Layout>
       <Title>Messages</Title>
+      <IconButton onClick={onComposeClick}>
+        <UserIcon />
+      </IconButton>
       <IconButton onClick={onComposeClick}>
         <PencilSquareIcon />
       </IconButton>

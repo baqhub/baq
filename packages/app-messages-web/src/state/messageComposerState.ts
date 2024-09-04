@@ -117,9 +117,9 @@ export function useMessageComposerState(
           "image/jpeg",
           `${id}_original.jpg`
         ),
-        size: originalResponse.size,
-        width: imageSize.width,
-        height: imageSize.height,
+        originalSize: originalResponse.size,
+        originalWidth: imageSize.width,
+        originalHeight: imageSize.height,
       };
 
       onImageUpload(id, image);
