@@ -78,7 +78,7 @@ const permissions = {
 
 ### Permissions preset
 
-For common use-cases, presets are provided on the `RecordPermissions` type. Here we create a public [Post record](/todo) visible to all.
+For common use-cases, presets are provided on the `RecordPermissions` type. Here we create a public [Post record](d1f9da17#post) visible to all.
 
 ```ts
 import {RecordPermissions} from "@baqhub/sdk";
@@ -93,7 +93,7 @@ const postRecord = PostRecord.new(
 
 ### Custom permissions
 
-For more advanced situations, permissions can be crafted by hand to fit the need. Here we create a [Task record](/todo) with read access for the author and more two people, but we only notify one of them.
+For more advanced situations, permissions can be crafted by hand to fit the need. Here we create a [Task record](d1f9da17#task) with read access for the author and more two people, but we only notify one of them.
 
 ```ts
 import {TaskRecord} from "./baq/taskRecord.js";

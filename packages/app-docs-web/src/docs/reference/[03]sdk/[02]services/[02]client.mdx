@@ -59,7 +59,7 @@ const record = await client.getRecord(...);
 
   - Create a new authenticated client from an authentication state.
 
-  - Such object is obtained through [app registration](831f781d) and [authorization flow](/todo).
+  - Such object is obtained through [app registration](831f781d) and [authorization flow](9b40fdec#authenticate).
 
 </props.properties>
 
@@ -291,7 +291,7 @@ const record = await client.getRecord(...);
 
 - **<props.code>deleteRecord(linkModel, record, opts?)</props.code>**
 
-  - Delete a record by updating it with a [record tombstone](/todo).
+  - Delete a record by updating it with a [record tombstone](4b9504a7#nocontentrecord).
 
   - ##### Parameters
 
@@ -438,7 +438,7 @@ const client = Client.authenticated(authState);
 
 ### Fetch a record
 
-Once we have a client, we can use it to fetch a record by author entity and ID. Here we fetch a [Post record](/todo) and we ignore linked records altogether.
+Once we have a client, we can use it to fetch a record by author entity and ID. Here we fetch a [Post record](d1f9da17#post) and we ignore linked records altogether.
 
 ```ts
 import {IO} from "@baqhub/sdk";

@@ -192,7 +192,7 @@ Content-Type: application/json
 
 ### Filter by type and author
 
-Querying all records is rarely useful, instead we may want add a filter to only get records of a specific type. Here we add a filter for [Post records](/todo) created by the user with entity `cyril.baq.run`.
+Querying all records is rarely useful, instead we may want add a filter to only get records of a specific type. Here we add a filter for [Post records](d1f9da17#post) created by the user with entity `cyril.baq.run`.
 
 ```http
 GET /api/alice/records?filter=$['type']=types.baq.dev+6ee7f69a90154b849bac528daa942bcd,$['author']=cyril.baq.run HTTP/2

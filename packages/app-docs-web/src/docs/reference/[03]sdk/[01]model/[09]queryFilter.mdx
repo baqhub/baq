@@ -223,7 +223,7 @@ const query = {
 
 ### Author and type filter
 
-A common use-case for a query filter is to restrict the records by author and type. In this example, we want all of the [File records](/todo) created by user Alice.
+A common use-case for a query filter is to restrict the records by author and type. In this example, we want all of the [File records](d1f9da17#file) created by user Alice.
 
 ```ts
 import {Q} from "@baqhub/sdk";
@@ -242,7 +242,7 @@ const filter = Q.and(
 
 Filter conditions can be combined through multiple levels of `AND` and `OR` grouping, similar to an SQL query.
 
-Here we want all [files](/todo) and [folders](/todo) in a given parent folder. We filter by author and type, but also require the link at `content.parent` to either be empty (root folder) or to point to the provided folder record.
+Here we want all [files](d1f9da17#file) and [folders](d1f9da17#folder) in a given parent folder. We filter by author and type, but also require the link at `content.parent` to either be empty (root folder) or to point to the provided folder record.
 
 ```ts
 import {Q} from "@baqhub/sdk";

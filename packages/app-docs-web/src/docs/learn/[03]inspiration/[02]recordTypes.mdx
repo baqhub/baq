@@ -11,6 +11,28 @@ A Record Type Registry will be introduced in the future to make it easy to find 
 
 {props.toc}
 
+## Task
+
+Track something that needs to be done. Used in the [BAQ Todo](04abc82e) app tutorial.
+
+```cli
+baq add types.baq.dev+fe727f22b5c34fb185a370449e4f0128
+```
+
+_Properties:_
+
+<props.properties>
+
+- **`title`** <props.pill>string</props.pill>
+
+  - Thing to be done.
+
+- **`completed`** <props.pill>boolean</props.pill>
+
+  - Whether the task was completed.
+
+</props.properties>
+
 ## Folder and File
 
 Describe a hierarchy of folders and files that matches what people expect from desktop operating systems and similar cloud storage services.
@@ -93,7 +115,7 @@ _Notes:_
 
 </props.compactList>
 
-#### Message
+### Message
 
 ```cli
 baq add types.baq.dev+05d5b9442c36433688edca64df1a264c

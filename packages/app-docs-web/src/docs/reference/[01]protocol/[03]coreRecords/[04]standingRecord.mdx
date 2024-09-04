@@ -1,0 +1,69 @@
+export const metadata = {
+  id: "e7679293",
+  title: "Standing Record",
+  summary: "Track the standing of another user with the author.",
+};
+
+# Standing Record
+
+Track the standing of another user with the author.
+
+```json
+{
+  "publisher": {...},
+  "decision": "allow"
+}
+```
+
+{props.toc}
+
+## Reference
+
+### `StandingRecord`
+
+A private [Record](01735953) to let the author's server know how to handle new content coming from another user.
+
+#### Properties
+
+<props.properties>
+
+- **`publisher`** <props.pill href="fa939df0">EntityLink</props.pill>
+
+  - User this Standing record applies to.
+
+- **`decision`** <props.pill>enum</props.pill>
+
+  - Current standing with the author.
+
+  - Possible values:
+
+    - `allow` : Allow incoming content from this user.
+
+    - `block` : Block incoming content from this user.
+
+</props.properties>
+
+#### Notes
+
+- There can only be one Standing record for a given publisher.
+
+- Apps need to explicitly request permission to update the decision.
+
+- A Standing record with an `allow` decision is automatically created when the author first interacts with another user, if one didn't already exist.
+
+- If no Standing record exists for a given user, incoming records from that user will have a `notification_unknown` [source](01735953#record).
+
+## Examples
+
+### Block decision Standing record
+
+This is what the content of a Standing record might look like.
+
+```json
+{
+  "publisher": {
+    "entity": "bob.baq.run"
+  },
+  "decision": "block"
+}
+```
