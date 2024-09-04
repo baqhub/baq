@@ -1,7 +1,6 @@
 import {Handler} from "@baqhub/sdk";
 import {Button} from "@baqhub/ui/core/button.js";
-import {ButtonGroup} from "@baqhub/ui/core/buttonGroup.js";
-import {Column, Text, tw} from "@baqhub/ui/core/style.js";
+import {Column, Row, Text, tw} from "@baqhub/ui/core/style.js";
 import {Dialog} from "@baqhub/ui/layers/dialog/dialog.js";
 import {FC, Suspense} from "react";
 import {GetItemKeys, ItemKey} from "../../../state/conversationsState.js";
@@ -22,6 +21,8 @@ interface UnknownConversationsDialogProps {
 
 const Layout = tw(Column)`
   w-[460px]
+  max-h-[500px]
+  min-h-0
   gap-3
 `;
 
@@ -32,6 +33,14 @@ const Title = tw(Text)`
 
 const Conversations = tw(Column)`
   overflow-y-auto
+`;
+
+const Footer = tw(Row)`
+  pt-3
+  justify-end
+
+  border-t
+  border-neutral-200
 `;
 
 //
@@ -52,11 +61,11 @@ export const UnknownConversationsDialog: FC<
             <UnknownConversationsContent getItemKeys={getItemKeys} />
           </Suspense>
         </Conversations>
-        <ButtonGroup align="end">
+        <Footer>
           <Button size="large" onClick={onRequestClose}>
             Close
           </Button>
-        </ButtonGroup>
+        </Footer>
       </Layout>
     </Dialog>
   );

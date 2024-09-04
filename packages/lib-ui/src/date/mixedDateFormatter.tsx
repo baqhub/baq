@@ -1,6 +1,6 @@
 import {unreachable} from "@baqhub/sdk";
 import capitalize from "lodash/capitalize.js";
-import {FC, useEffect, useState} from "react";
+import {FC, useEffect, useMemo, useState} from "react";
 import {useDateServicesContext} from "./dateServicesContext.js";
 
 //
@@ -90,26 +90,35 @@ export const MixedDateFormatter: FC<MixedDateFormatterProps> = props => {
     return registerUpdater(now => setState(stateFromValue(now, value)));
   }, [value, registerUpdater]);
 
-  switch (state.format) {
-    case "now":
-      return "Now";
+  return useMemo(() => {
+    switch (state.format) {
+      case "now":
+        return "Now";
 
-    case "minutes":
-      return relativeTimeFormat.format(-state.number, "minutes");
+      case "minutes":
+        return relativeTimeFormat.format(-state.number, "minutes");
 
-    case "today":
-      return timeFormat.format(value);
+      case "today":
+        return timeFormat.format(value);
 
-    case "yesterday":
-      return capitalize(relativeTimeFormat.format(-1, "day"));
+      case "yesterday":
+        return capitalize(relativeTimeFormat.format(-1, "day"));
 
-    case "days":
-      return capitalize(dayOfWeekFormat.format(value));
+      case "days":
+        return capitalize(dayOfWeekFormat.format(value));
 
-    case "more":
-      return dateFormat.format(value);
+      case "more":
+        return dateFormat.format(value);
 
-    default:
-      unreachable(state.format);
-  }
+      default:
+        unreachable(state.format);
+    }
+  }, [
+    dayOfWeekFormat,
+    dateFormat,
+    timeFormat,
+    relativeTimeFormat,
+    state,
+    value,
+  ]);
 };
