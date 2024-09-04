@@ -28,13 +28,13 @@ const Layout = tw(ButtonRow)`
   enabled:any-hover:hover:bg-neutral-900/5
   enabled:active:bg-neutral-900/10
   enabled:any-hover:active:bg-neutral-900/10
-  enabled:aria-pressed:bg-neutral-900/10
-  enabled:any-hover:aria-pressed:bg-neutral-900/10
+  enabled:aria-expanded:bg-neutral-900/10
+  enabled:any-hover:aria-expanded:bg-neutral-900/10
   dark:enabled:any-hover:hover:bg-white/5
   dark:enabled:active:bg-white/10
   dark:enabled:any-hover:active:bg-white/10
-  dark:enabled:aria-pressed:bg-white/10
-  dark:enabled:any-hover:aria-pressed:bg-white/10
+  dark:enabled:aria-expanded:bg-white/10
+  dark:enabled:any-hover:aria-expanded:bg-white/10
 
   text-neutral-900
   dark:text-white
@@ -75,7 +75,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         ref={ref}
         type="button"
         disabled={isDisabled}
-        aria-pressed={isPressed}
+        aria-expanded={isPressed}
         onClick={onClick}
         className={classForSize(size)}
       >

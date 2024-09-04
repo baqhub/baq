@@ -1,9 +1,9 @@
-import {EllipsisHorizontalIcon} from "@heroicons/react/20/solid";
 import {IconButton} from "@baqhub/ui/core/iconButton.js";
 import {Column, Grid, Row, tw} from "@baqhub/ui/core/style.js";
 import {OkCancelDialog} from "@baqhub/ui/layers/dialog/okCancelDialog.js";
 import {DropdownItem} from "@baqhub/ui/layers/dropdown/dropdownItem.js";
 import {useDropdown} from "@baqhub/ui/layers/dropdown/useDropdown.js";
+import {EllipsisHorizontalIcon} from "@heroicons/react/20/solid";
 import {FC, useRef, useState} from "react";
 import {MessageRecordKey} from "../../../baq/messageRecord.js";
 import {useMessageState} from "../../../state/messageState.js";
@@ -59,7 +59,7 @@ const RemoteMessage = tw(MessageBase)`
 const ButtonLayout = tw(Grid)`
   invisible
   group-hover:visible
-  aria-pressed:visible
+  aria-expanded:visible
 `;
 
 const Spacer = tw.div`
@@ -112,7 +112,7 @@ export const ConversationMessage: FC<ConversationMessageProps> = props => {
       <Content>
         <MessageContent content={content} />
       </Content>
-      <ButtonLayout ref={buttonRef} aria-pressed={dropdown.isOpen}>
+      <ButtonLayout ref={buttonRef} aria-expanded={dropdown.isOpen}>
         <IconButton
           ref={dropdown.setReference}
           variant="circle"
