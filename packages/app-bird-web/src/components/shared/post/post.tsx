@@ -1,6 +1,6 @@
-import {RelativeDateFormatter} from "@baqhub/bird-shared/components/date/relativeDateFormatter.js";
 import {usePostState} from "@baqhub/bird-shared/state/postState.js";
 import {ButtonRow, Column, Row, Text, tw} from "@baqhub/ui/core/style.js";
+import {RelativeDateFormatter} from "@baqhub/ui/date/relativeDateFormatter.js";
 import {
   ArrowPathRoundedSquareIcon,
   ChatBubbleOvalLeftIcon,

@@ -1,4 +1,4 @@
-import {Handler} from "@baqhub/sdk";
+import {HandlerOf} from "@baqhub/sdk";
 import {createContext, useContext} from "react";
 
 //
@@ -7,11 +7,19 @@ import {createContext, useContext} from "react";
 
 export interface DateServicesContextProps {
   dateTimeFormat: Intl.DateTimeFormat;
-  registerUpdater: (updater: Handler) => () => void;
+  dateFormat: Intl.DateTimeFormat;
+  dayOfWeekFormat: Intl.DateTimeFormat;
+  timeFormat: Intl.DateTimeFormat;
+  relativeTimeFormat: Intl.RelativeTimeFormat;
+  registerUpdater: (updater: HandlerOf<Date>) => () => void;
 }
 
 const DateServicesContext = createContext<DateServicesContextProps>({
+  dayOfWeekFormat: Intl.DateTimeFormat("en-us"),
   dateTimeFormat: Intl.DateTimeFormat("en-us"),
+  dateFormat: Intl.DateTimeFormat("en-us"),
+  timeFormat: Intl.DateTimeFormat("en-us"),
+  relativeTimeFormat: new Intl.RelativeTimeFormat("en-us"),
   registerUpdater: () => () => {},
 });
 

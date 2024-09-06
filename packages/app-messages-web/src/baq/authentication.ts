@@ -10,6 +10,7 @@ import {
 import {ConversationRecord} from "./conversationRecord.js";
 import {FileRecord} from "./fileRecord.js";
 import {MessageRecord} from "./messageRecord.js";
+import {StandingRecord} from "./standingRecord.js";
 
 export interface BuildAuthenticationOptions {
   storage: StorageAdapter;
@@ -30,8 +31,18 @@ export function buildAuthentication(options: BuildAuthenticationOptions) {
         redirect: redirectUrl,
       },
       scopeRequest: {
-        read: [ConversationRecord.link, MessageRecord.link, FileRecord.link],
-        write: [ConversationRecord.link, MessageRecord.link, FileRecord.link],
+        read: [
+          StandingRecord.link,
+          ConversationRecord.link,
+          MessageRecord.link,
+          FileRecord.link,
+        ],
+        write: [
+          StandingRecord.link,
+          ConversationRecord.link,
+          MessageRecord.link,
+          FileRecord.link,
+        ],
       },
     },
   });

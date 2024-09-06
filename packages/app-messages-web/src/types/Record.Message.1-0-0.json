@@ -16,7 +16,7 @@
                 "record_types": [
                   {
                     "entity": "{var:entity}",
-                    "record_id": "c4094303fe334bd18de6a1f1929c3cad"
+                    "record_id": "7583995c51cf44ad972fdc123105e1dc"
                   }
                 ],
                 "existential": true
@@ -56,32 +56,40 @@
                         "small": {
                           "type": "blob_link",
                           "max_size": 81920,
-                          "content_types": ["image/jpeg"]
+                          "content_types": [
+                            "image/jpeg"
+                          ]
                         },
                         "medium": {
                           "type": "blob_link",
                           "max_size": 614400,
-                          "content_types": ["image/jpeg"]
+                          "content_types": [
+                            "image/jpeg"
+                          ]
                         },
                         "large": {
                           "type": "blob_link",
                           "max_size": 2097152,
-                          "content_types": ["image/jpeg"]
+                          "content_types": [
+                            "image/jpeg"
+                          ]
                         },
                         "original": {
                           "type": "blob_link",
                           "max_size": 12582912,
-                          "content_types": ["image/jpeg"]
+                          "content_types": [
+                            "image/jpeg"
+                          ]
                         },
-                        "width": {
+                        "original_width": {
                           "type": "int",
                           "min": 1
                         },
-                        "height": {
+                        "original_height": {
                           "type": "int",
                           "min": 1
                         },
-                        "size": {
+                        "original_size": {
                           "type": "int",
                           "min": 0
                         }
@@ -106,10 +114,12 @@
       },
       "permissions": {
         "type": "object",
+        "strict": true,
         "properties": {
           "read": {
             "type": "array",
-            "min_items": 1,
+            "min_items": 2,
+            "max_items": 2,
             "items": {
               "type": "entity_link"
             }

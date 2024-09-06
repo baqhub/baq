@@ -21,13 +21,14 @@ interface ConversationItemProps {
 export const ConversationItem: FC<ConversationItemProps> = props => {
   const {messageKey, isSelected, onConversationSelect} = props;
   const state = useConversationItemState(messageKey, onConversationSelect);
-  const {recipient, lastMessage} = state;
+  const {recipient, date, lastMessage} = state;
   const {onClick, onDeleteClick} = state;
 
   return (
     <ConversationItemBase
       isSelected={isSelected}
       recipient={recipient}
+      date={date}
       lastMessage={lastMessage}
       onClick={onClick}
       onDeleteClick={onDeleteClick}

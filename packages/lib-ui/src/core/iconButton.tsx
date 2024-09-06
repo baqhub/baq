@@ -1,6 +1,5 @@
 import {Handler} from "@baqhub/sdk";
 import {PropsWithChildren, forwardRef} from "react";
-import {makeVariants} from "../helpers/type.js";
 import {ButtonRow, UISize, classForSize, tw} from "./style.js";
 
 //
@@ -22,6 +21,7 @@ interface IconButtonProps extends PropsWithChildren {
 //
 
 const Layout = tw(ButtonRow)`
+  shrink-0
   p-1.5
 
   disabled:opacity-90
@@ -36,23 +36,13 @@ const Layout = tw(ButtonRow)`
   dark:enabled:aria-expanded:bg-white/10
   dark:enabled:any-hover:aria-expanded:bg-white/10
 
+  data-[variant=normal]:rounded-lg
+  data-[variant=circle]:rounded-full
+
   text-neutral-900
   dark:text-white
   disabled:text-opacity-60
 `;
-
-const NormalLayout = tw(Layout)`
-  rounded-lg
-`;
-
-const CircleLayout = tw(Layout)`
-  rounded-full
-`;
-
-const variants = makeVariants<IconButtonVariant>()({
-  normal: NormalLayout,
-  circle: CircleLayout,
-});
 
 const Content = tw.div`
   w-5
@@ -68,19 +58,18 @@ const Content = tw.div`
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
   (props, ref) => {
     const {size, variant, isDisabled, isPressed, onClick, children} = props;
-    const Component = variants[variant || "normal"];
-
     return (
-      <Component
+      <Layout
         ref={ref}
         type="button"
         disabled={isDisabled}
+        data-variant={variant || "normal"}
         aria-expanded={isPressed}
         onClick={onClick}
         className={classForSize(size)}
       >
         <Content className={classForSize(size)}>{children}</Content>
-      </Component>
+      </Layout>
     );
   }
 );

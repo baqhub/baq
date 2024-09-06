@@ -2,6 +2,10 @@ import {useMemo} from "react";
 import {MessageRecord, MessageRecordKey} from "../baq/messageRecord.js";
 import {useRecordByKey, useRecordHelpers} from "../baq/store.js";
 
+//
+// Model.
+//
+
 type MessageRecordImage = Extract<
   MessageRecord["content"],
   {images: any}
@@ -26,6 +30,10 @@ export type VisualMessageContent =
   | ImageVisualMessageContent
   | TextVisualMessageContent;
 
+//
+// Hook.
+//
+
 export function useMessageState(messageKey: MessageRecordKey) {
   const {entity, buildBlobUrl} = useRecordHelpers();
   const message = useRecordByKey(messageKey);
@@ -36,8 +44,8 @@ export function useMessageState(messageKey: MessageRecordKey) {
         image: MessageRecordImage
       ): MessageImage => ({
         url: buildBlobUrl(message, image.medium),
-        width: image.width,
-        height: image.height,
+        width: image.originalWidth,
+        height: image.originalHeight,
       });
 
       return {

@@ -8,7 +8,6 @@ import {
   RecordKey,
   RecordLink,
   RecordType,
-  SchemaIO,
   VersionHash,
 } from "@baqhub/sdk";
 
@@ -16,15 +15,15 @@ import {
 // Model.
 //
 
-export type ConversationRecordContent = {title?: string};
+export type ConversationRecordContent = {};
 
 const RConversationRecordContent: IO.RType<ConversationRecordContent> =
-  IO.partialObject({title: SchemaIO.string({minLength: 1, maxLength: 60})});
+  IO.object({});
 
 const [conversationRecordType, RConversationRecordType] = RecordType.full(
   "types.baq.dev",
-  "c4094303fe334bd18de6a1f1929c3cad",
-  "5f591617b46bb2bccdc272988550486641365fa52d9e632c787549d3910a9d2c",
+  "7583995c51cf44ad972fdc123105e1dc",
+  "e97614f368272d6d0c9c9b67173697a669f5b8ad1bc05f0a83812a8814335b50",
   RConversationRecordContent
 );
 

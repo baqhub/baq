@@ -10,6 +10,7 @@ import {ConversationRecordKey} from "../baq/conversationRecord.js";
 import {MessageRecord} from "../baq/messageRecord.js";
 import {useRecordByKey, useRecordsQuery} from "../baq/store.js";
 import {useRecipientDisplayName} from "./recipientState.js";
+
 //
 // Hook.
 //

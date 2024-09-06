@@ -28,8 +28,8 @@ const dayLength = 24 * hourLength;
 const monthLength = 30 * dayLength;
 const yearLength = 365 * monthLength;
 
-function stateFromValue(value: Date): State {
-  const timeSpan = Math.abs(Date.now() - value.getTime());
+function stateFromValue(now: Date, value: Date): State {
+  const timeSpan = Math.abs(now.getTime() - value.getTime());
 
   // Now.
   const minutes = timeSpan / minuteLength;
@@ -72,10 +72,10 @@ function stateFromValue(value: Date): State {
 export const RelativeDateFormatter: FC<RelativeDateFormatterProps> = props => {
   const {value} = props;
   const {registerUpdater} = useDateServicesContext();
-  const [state, setState] = useState(() => stateFromValue(value));
+  const [state, setState] = useState(() => stateFromValue(new Date(), value));
 
   useEffect(() => {
-    return registerUpdater(() => setState(stateFromValue(value)));
+    return registerUpdater(now => setState(stateFromValue(now, value)));
   }, [value, registerUpdater]);
 
   switch (state.format) {

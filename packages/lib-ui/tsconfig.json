@@ -8,7 +8,9 @@
   },
   "include": [
     "src",
-    "tailwind.config.ts"
+    "tailwind.config.ts",
+    "vitest.config.ts",
+    "vitest.setup.ts"
   ],
   "references": [
     {

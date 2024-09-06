@@ -1,5 +1,5 @@
-import {ArrowPathIcon} from "@heroicons/react/24/outline";
 import {Row, Text, tw} from "@baqhub/ui/core/style.js";
+import {ArrowPathIcon} from "@heroicons/react/24/outline";
 import {FC} from "react";
 
 //
@@ -26,6 +26,10 @@ const Label = tw(Text)`
   text-md
   truncate
 `;
+
+//
+// Component.
+//
 
 export const CloudPickerLoading: FC = () => {
   return (

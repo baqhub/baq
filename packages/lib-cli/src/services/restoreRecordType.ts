@@ -1,3 +1,4 @@
+import {Schema} from "@baqhub/sdk";
 import camelCase from "lodash/camelCase.js";
 import {pascalCase} from "../helpers/case.js";
 import {ProjectRecordType} from "../model/project.js";
@@ -47,10 +48,10 @@ export async function restoreRecordType(
   }
 
   // Use schema to build io-ts validation.
-  const contentSchema = schema.properties["content"];
-  if (!contentSchema) {
-    throw new Error("Schema is not valid.");
-  }
+  const contentSchema: Schema = schema.properties["content"] || {
+    type: "object",
+    properties: {},
+  };
 
   const contentTsName = `${pascalCase(name)}RecordContent`;
   const contentTs = schemaToTs(contentSchema, contentTsName);

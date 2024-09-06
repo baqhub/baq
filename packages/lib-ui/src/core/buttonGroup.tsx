@@ -16,6 +16,7 @@ interface ButtonGroupProps extends PropsWithChildren {
 //
 
 const Group = tw.div<{align: GroupAlignment}>`
+  shrink-0
   flex
   ${p => (p.align === "start" ? "justify-start" : "justify-end")}
 `;

@@ -24,6 +24,10 @@ export interface DialogProps {
 //
 
 const Layout = tw.dialog`
+  flex
+  flex-col
+  overflow-visible
+
   p-0
   bg-transparent
 
@@ -33,11 +37,6 @@ const Layout = tw.dialog`
   dark:backdrop:bg-neutral-100
 
   outline-none
-  overflow-visible
-`;
-
-const Content = tw(Grid)`
-  overflow-visible
 `;
 
 //
@@ -86,9 +85,9 @@ export const Dialog: FC<DialogProps & PropsWithChildren> = props => {
       onClose={onClose}
       onClick={onRequestClose}
     >
-      <Content onClick={onContentClick}>
+      <Grid onClick={onContentClick}>
         <DialogContent>{children}</DialogContent>
-      </Content>
+      </Grid>
     </Layout>
   );
 };
