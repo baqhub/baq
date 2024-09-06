@@ -2,9 +2,11 @@ import {Handler} from "@baqhub/sdk";
 import {Button} from "@baqhub/ui/core/button.js";
 import {Column, Row, Text, tw} from "@baqhub/ui/core/style.js";
 import {Dialog} from "@baqhub/ui/layers/dialog/dialog.js";
+import {ArrowPathIcon, CheckCircleIcon} from "@heroicons/react/24/outline";
 import {FC, Suspense} from "react";
 import {GetItemKeys, ItemKey} from "../../../state/conversationsState.js";
 import {UnknownConversationItem} from "./unknownConversationItem.js";
+import {UnknownConversationsStatus} from "./unknownConversationsStatus.js";
 
 //
 // Props.
@@ -55,9 +57,9 @@ export const UnknownConversationsDialog: FC<
   return (
     <Dialog onRequestClose={onRequestClose}>
       <Layout>
-        <Title>Unknown senders</Title>
+        <Title>Unknown Senders</Title>
         <Conversations>
-          <Suspense>
+          <Suspense fallback={<UnknownConversationsLoading />}>
             <UnknownConversationsContent getItemKeys={getItemKeys} />
           </Suspense>
         </Conversations>
@@ -82,7 +84,11 @@ const UnknownConversationsContent: FC<
   const itemKeys = getItemKeys();
 
   if (itemKeys.length === 0) {
-    return null;
+    return (
+      <UnknownConversationsStatus icon={<CheckCircleIcon />}>
+        That's all for now!
+      </UnknownConversationsStatus>
+    );
   }
 
   const renderItem = (itemKey: ItemKey) => {
@@ -90,4 +96,12 @@ const UnknownConversationsContent: FC<
   };
 
   return <>{itemKeys.map(renderItem)}</>;
+};
+
+const UnknownConversationsLoading: FC = () => {
+  return (
+    <UnknownConversationsStatus icon={<ArrowPathIcon />}>
+      Loading
+    </UnknownConversationsStatus>
+  );
 };

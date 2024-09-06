@@ -17,8 +17,8 @@
     "message": {
       "path": "src/types/Record.Message.1-0-0.json",
       "record_id": "153b3cb3a2f0494e950599de1cc13ef3",
-      "version_hash": "a1f3b94d2f9f35654e8aa87ee07eeb04f9acda9a360847422ae80d6d29cd65cf",
-      "content_hash": "553e48483b1cbe606963b9ac31e9af5d"
+      "version_hash": "c169efc698f0b42fd0b38f9a1a3430a0b31184b296c67246dd3ed31a4b701a5b",
+      "content_hash": "966ac85e159b771b4c3b024a5efaae7d"
     },
     "file": {
       "entity": "types.baq.dev",

@@ -114,6 +114,7 @@
       },
       "permissions": {
         "type": "object",
+        "strict": true,
         "properties": {
           "read": {
             "type": "array",
