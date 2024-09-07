@@ -1,4 +1,3 @@
-import {PlusIcon} from "@heroicons/react/20/solid";
 import {SubmitButton} from "@baqhub/ui/core/button.js";
 import {IconButton} from "@baqhub/ui/core/iconButton.js";
 import {Column, FormGrid, Row, tw} from "@baqhub/ui/core/style.js";
@@ -7,7 +6,9 @@ import {useFilePicker} from "@baqhub/ui/core/useFilePicker.js";
 import {resizeWithConstraints} from "@baqhub/ui/helpers/image.js";
 import {DropdownItem} from "@baqhub/ui/layers/dropdown/dropdownItem.js";
 import {useDropdown} from "@baqhub/ui/layers/dropdown/useDropdown.js";
-import {FC, FormEvent, useCallback, useState} from "react";
+import {useHasLayer} from "@baqhub/ui/layers/layerContext.js";
+import {PlusIcon} from "@heroicons/react/20/solid";
+import {FC, FormEvent, useCallback, useEffect, useRef, useState} from "react";
 import {ConversationRecordKey} from "../../../baq/conversationRecord.js";
 import {FilePickHandler} from "../../../state/cloudPicker/cloudPickerDialogState.js";
 import {
@@ -102,6 +103,22 @@ export const MessageComposer: FC<MessageComposerProps> = props => {
   const {images, text, canSend} = state;
   const {onImagePick, onImageRemove, onTextChange, onSendRequest} = state;
   const plusDropdown = useDropdown();
+
+  //
+  // Focus.
+  //
+
+  const textBoxRef = useRef<HTMLInputElement>(null);
+  const hasLayer = useHasLayer();
+
+  useEffect(() => {
+    const currentTextBox = textBoxRef.current;
+    if (!currentTextBox || hasLayer) {
+      return;
+    }
+
+    currentTextBox.focus();
+  }, [conversationKey, hasLayer]);
 
   //
   // Images.
@@ -222,6 +239,7 @@ export const MessageComposer: FC<MessageComposerProps> = props => {
         </CellFileButton>
         <CellTextBox>
           <TextBox
+            ref={textBoxRef}
             size="medium"
             placeholder="Message..."
             value={text}
