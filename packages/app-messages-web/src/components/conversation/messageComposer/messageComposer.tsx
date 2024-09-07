@@ -1,3 +1,4 @@
+import {HandlerOf} from "@baqhub/sdk";
 import {SubmitButton} from "@baqhub/ui/core/button.js";
 import {IconButton} from "@baqhub/ui/core/iconButton.js";
 import {Column, FormGrid, Row, tw} from "@baqhub/ui/core/style.js";
@@ -24,6 +25,7 @@ import {MessageComposerImage} from "./messageComposerImage.js";
 
 interface MessageComposerProps {
   conversationKey: ConversationRecordKey;
+  onSizeIncrease: HandlerOf<number>;
 }
 
 //
@@ -98,11 +100,43 @@ const imageConstraints = {
 };
 
 export const MessageComposer: FC<MessageComposerProps> = props => {
-  const {conversationKey} = props;
+  const {conversationKey, onSizeIncrease} = props;
   const state = useMessageComposerState(conversationKey);
   const {images, text, canSend} = state;
   const {onImagePick, onImageRemove, onTextChange, onSendRequest} = state;
   const plusDropdown = useDropdown();
+
+  //
+  // Size.
+  //
+
+  const layoutRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const currentLayout = layoutRef.current;
+    if (!currentLayout) {
+      return;
+    }
+
+    let lastHeight = Number.MAX_SAFE_INTEGER;
+
+    const observer = new ResizeObserver(entries => {
+      entries.forEach(entry => {
+        const newHeight = entry.borderBoxSize[0]!.blockSize;
+
+        if (newHeight > lastHeight) {
+          onSizeIncrease(newHeight - lastHeight);
+        }
+
+        lastHeight = newHeight;
+      });
+    });
+
+    observer.observe(currentLayout);
+    return () => {
+      observer.disconnect();
+    };
+  }, [onSizeIncrease]);
 
   //
   // Focus.
@@ -223,7 +257,7 @@ export const MessageComposer: FC<MessageComposerProps> = props => {
   };
 
   return (
-    <Layout>
+    <Layout ref={layoutRef}>
       <Composer onSubmit={onFormSubmit}>
         {renderImages()}
         <CellFileButton>
