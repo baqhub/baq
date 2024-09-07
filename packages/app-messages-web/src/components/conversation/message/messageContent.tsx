@@ -15,17 +15,19 @@ interface MessageContentProps {
 // Style.
 //
 
-const Layout = tw(Column)``;
+const Layout = tw(Column)`
+  py-1.5
+  gap-1
+`;
 
 const Images = tw(Column)`
-  p-2
-  pb-0
+  py-0.5
+  px-2
   gap-2
 `;
 
 const MessageText = tw.div`
   px-3
-  py-1.5
   text-neutral-900
 `;
 
@@ -35,10 +37,9 @@ const MessageText = tw.div`
 
 export const MessageContent: FC<MessageContentProps> = props => {
   const {content} = props;
-
-  if ("images" in content) {
-    return (
-      <Layout>
+  return (
+    <Layout>
+      {"images" in content && (
         <Images>
           {content.images.map((i, index) => (
             <MessageImage
@@ -49,10 +50,8 @@ export const MessageContent: FC<MessageContentProps> = props => {
             />
           ))}
         </Images>
-        {content.text && <MessageText>{content.text}</MessageText>}
-      </Layout>
-    );
-  }
-
-  return <MessageText>{content.text}</MessageText>;
+      )}
+      {content.text && <MessageText>{content.text}</MessageText>}
+    </Layout>
+  );
 };
