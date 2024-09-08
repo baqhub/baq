@@ -31,7 +31,7 @@ export const MessageImage: FC<MessageImageProps> = props => {
   const {url, width, height} = props;
   return (
     <Layout style={{aspectRatio: width / height}}>
-      <img src={url} />
+      <img width={width} height={height} src={url} />
     </Layout>
   );
 };
