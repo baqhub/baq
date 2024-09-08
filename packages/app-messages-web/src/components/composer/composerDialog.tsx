@@ -40,8 +40,8 @@ export const ComposerDialog: FC<ComposerDialogProps> = props => {
 
   const onConversationCreated = useCallback<ConversationSelectHandler>(
     conversationKey => {
-      onRequestClose();
       onConversationSelect(conversationKey);
+      onRequestClose();
     },
     [onConversationSelect, onRequestClose]
   );
