@@ -293,9 +293,7 @@ export function exclusiveUnion<
       if (successes.length === 1) {
         return t.success(successes[0]);
       } else if (successes.length > 1) {
-        return t.failures([
-          {context: c, value: u, message: "Multiple matching codecs."},
-        ]);
+        return t.failure(u, c, "Multiple matching codecs.");
       } else {
         return t.failures(errors);
       }
