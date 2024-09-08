@@ -279,14 +279,12 @@ export function exclusiveUnion<
 
       for (let i = 0; i < codecs.length; i++) {
         const codec = codecs[i]!;
-        const result = codec.validate(
-          u,
-          t.appendContext(c, String(i), codec, u)
-        );
-        if (isLeft(result)) {
-          errors.push(...result.left);
+        const r = codec.validate(u, t.appendContext(c, String(i), codec, u));
+
+        if (isLeft(r)) {
+          errors.push(...r.left);
         } else {
-          successes.push(result.right);
+          successes.push(r.right);
         }
       }
 
