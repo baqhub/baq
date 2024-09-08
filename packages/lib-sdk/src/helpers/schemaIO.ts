@@ -59,7 +59,7 @@ function schemaArray<I extends IO.Mixed>(
       }
 
       if (!validateValue(result.right)) {
-        return IO.failure(value, context);
+        return IO.failure(value, context, "Not a valid SchemaArray.");
       }
 
       return IO.success(result.right);
@@ -140,7 +140,7 @@ function schemaString(options: SchemaStringOptions = {}) {
       }
 
       if (!validateValue(result.right)) {
-        return IO.failure(value, context);
+        return IO.failure(value, context, "Not a valid SchemaString.");
       }
 
       return IO.success(result.right);
@@ -192,7 +192,7 @@ function schemaInt(options: SchemaIntOptions = {}) {
       }
 
       if (!validateValue(result.right)) {
-        return IO.failure(value, context);
+        return IO.failure(value, context, "Not a valid SchemaInt.");
       }
 
       return IO.success(result.right);
@@ -244,7 +244,7 @@ function schemaNumber(options: SchemaNumberOptions = {}) {
       }
 
       if (!validateValue(result.right)) {
-        return IO.failure(value, context);
+        return IO.failure(value, context, "Not a valid SchemaNumber.");
       }
 
       return IO.success(result.right);
