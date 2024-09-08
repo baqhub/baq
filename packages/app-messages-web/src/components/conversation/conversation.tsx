@@ -126,15 +126,19 @@ const NonEmptyConversationContent: FC<
 
   const onScroll = useMemo(
     () =>
-      throttle(() => {
-        const currentLayout = layoutRef.current;
-        if (!currentLayout) {
-          return;
-        }
+      throttle(
+        () => {
+          const currentLayout = layoutRef.current;
+          if (!currentLayout) {
+            return;
+          }
 
-        const {scrollHeight, offsetHeight, scrollTop} = currentLayout;
-        isAtEndRef.current = scrollHeight - offsetHeight - scrollTop < 10;
-      }, 100),
+          const {scrollHeight, offsetHeight, scrollTop} = currentLayout;
+          isAtEndRef.current = scrollHeight - offsetHeight - scrollTop < 10;
+        },
+        100,
+        {leading: false}
+      ),
     []
   );
 
