@@ -1,13 +1,14 @@
 import {Handler, HandlerOf, unreachable} from "@baqhub/sdk";
+import {useMergeRefs} from "@floating-ui/react";
 import {
   ChangeEvent,
-  FC,
+  forwardRef,
   InputHTMLAttributes,
   useCallback,
   useEffect,
   useRef,
 } from "react";
-import {UISize, classForSize, tw} from "./style.js";
+import {classForSize, tw, UISize} from "./style.js";
 
 //
 // Props.
@@ -115,45 +116,49 @@ function buildVariantProps(
   }
 }
 
-export const TextBox: FC<TextBoxProps> = props => {
-  const {size, shouldAutofocus, placeholder, maxLength} = props;
-  const {isReadonly, isDisabled, isInvalid, isSelected} = props;
-  const {value, onChange, onFocus, onBlur} = props;
-  const variant = props.variant || "normal";
-  const inputRef = useRef<HTMLInputElement>(null);
+export const TextBox = forwardRef<HTMLInputElement, TextBoxProps>(
+  (props, ref) => {
+    const {size, shouldAutofocus, placeholder, maxLength} = props;
+    const {isReadonly, isDisabled, isInvalid, isSelected} = props;
+    const {value, onChange, onFocus, onBlur} = props;
+    const variant = props.variant || "normal";
 
-  const onInputChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      onChange(e.target.value);
-    },
-    [onChange]
-  );
+    const inputRef = useRef<HTMLInputElement>(null);
+    const mergedRef = useMergeRefs([ref, inputRef]);
 
-  useEffect(() => {
-    const currentInput = inputRef.current;
-    if (!currentInput || !isSelected) {
-      return;
-    }
+    const onInputChange = useCallback(
+      (e: ChangeEvent<HTMLInputElement>) => {
+        onChange(e.target.value);
+      },
+      [onChange]
+    );
 
-    currentInput.select();
-  }, [isSelected]);
+    useEffect(() => {
+      const currentInput = inputRef.current;
+      if (!currentInput || !isSelected) {
+        return;
+      }
 
-  return (
-    <Input
-      ref={inputRef}
-      type="text"
-      autoFocus={shouldAutofocus}
-      placeholder={placeholder}
-      maxLength={maxLength}
-      value={value}
-      onChange={onInputChange}
-      readOnly={isReadonly}
-      disabled={isDisabled}
-      aria-invalid={isInvalid}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      className={classForSize(size)}
-      {...buildVariantProps(variant)}
-    />
-  );
-};
+      currentInput.select();
+    }, [isSelected]);
+
+    return (
+      <Input
+        ref={mergedRef}
+        type="text"
+        autoFocus={shouldAutofocus}
+        placeholder={placeholder}
+        maxLength={maxLength}
+        value={value}
+        onChange={onInputChange}
+        readOnly={isReadonly}
+        disabled={isDisabled}
+        aria-invalid={isInvalid}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        className={classForSize(size)}
+        {...buildVariantProps(variant)}
+      />
+    );
+  }
+);

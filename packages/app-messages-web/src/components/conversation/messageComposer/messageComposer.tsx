@@ -1,4 +1,4 @@
-import {PlusIcon} from "@heroicons/react/20/solid";
+import {HandlerOf} from "@baqhub/sdk";
 import {SubmitButton} from "@baqhub/ui/core/button.js";
 import {IconButton} from "@baqhub/ui/core/iconButton.js";
 import {Column, FormGrid, Row, tw} from "@baqhub/ui/core/style.js";
@@ -7,7 +7,9 @@ import {useFilePicker} from "@baqhub/ui/core/useFilePicker.js";
 import {resizeWithConstraints} from "@baqhub/ui/helpers/image.js";
 import {DropdownItem} from "@baqhub/ui/layers/dropdown/dropdownItem.js";
 import {useDropdown} from "@baqhub/ui/layers/dropdown/useDropdown.js";
-import {FC, FormEvent, useCallback, useState} from "react";
+import {useHasLayer} from "@baqhub/ui/layers/layerContext.js";
+import {PlusIcon} from "@heroicons/react/20/solid";
+import {FC, FormEvent, useCallback, useEffect, useRef, useState} from "react";
 import {ConversationRecordKey} from "../../../baq/conversationRecord.js";
 import {FilePickHandler} from "../../../state/cloudPicker/cloudPickerDialogState.js";
 import {
@@ -23,6 +25,7 @@ import {MessageComposerImage} from "./messageComposerImage.js";
 
 interface MessageComposerProps {
   conversationKey: ConversationRecordKey;
+  onSizeIncrease: HandlerOf<number>;
 }
 
 //
@@ -97,11 +100,59 @@ const imageConstraints = {
 };
 
 export const MessageComposer: FC<MessageComposerProps> = props => {
-  const {conversationKey} = props;
+  const {conversationKey, onSizeIncrease} = props;
   const state = useMessageComposerState(conversationKey);
   const {images, text, canSend} = state;
   const {onImagePick, onImageRemove, onTextChange, onSendRequest} = state;
   const plusDropdown = useDropdown();
+
+  //
+  // Size.
+  //
+
+  const layoutRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const currentLayout = layoutRef.current;
+    if (!currentLayout) {
+      return;
+    }
+
+    let lastHeight = Number.MAX_SAFE_INTEGER;
+
+    const observer = new ResizeObserver(entries => {
+      entries.forEach(entry => {
+        const newHeight = entry.borderBoxSize[0]!.blockSize;
+
+        if (newHeight > lastHeight) {
+          onSizeIncrease(newHeight - lastHeight);
+        }
+
+        lastHeight = newHeight;
+      });
+    });
+
+    observer.observe(currentLayout);
+    return () => {
+      observer.disconnect();
+    };
+  }, [onSizeIncrease]);
+
+  //
+  // Focus.
+  //
+
+  const textBoxRef = useRef<HTMLInputElement>(null);
+  const hasLayer = useHasLayer();
+
+  useEffect(() => {
+    const currentTextBox = textBoxRef.current;
+    if (!currentTextBox || hasLayer) {
+      return;
+    }
+
+    currentTextBox.focus();
+  }, [conversationKey, hasLayer]);
 
   //
   // Images.
@@ -206,7 +257,7 @@ export const MessageComposer: FC<MessageComposerProps> = props => {
   };
 
   return (
-    <Layout>
+    <Layout ref={layoutRef}>
       <Composer onSubmit={onFormSubmit}>
         {renderImages()}
         <CellFileButton>
@@ -222,6 +273,7 @@ export const MessageComposer: FC<MessageComposerProps> = props => {
         </CellFileButton>
         <CellTextBox>
           <TextBox
+            ref={textBoxRef}
             size="medium"
             placeholder="Message..."
             value={text}

@@ -1,16 +1,6 @@
 import {chain, isLeft, isRight} from "fp-ts/lib/Either.js";
 import {pipe} from "fp-ts/lib/function.js";
 import * as t from "io-ts";
-import {
-  Errors,
-  Mixed,
-  TypeOf,
-  UnionType,
-  appendContext,
-  failures,
-  identity,
-  success,
-} from "io-ts";
 import reporterBase from "io-ts-reporters";
 import camelCase from "lodash/camelCase.js";
 import isArray from "lodash/isArray.js";
@@ -140,7 +130,7 @@ function exactWithCase<C extends t.HasProps>(
       return stripKeysAndChangeCase(
         encoded,
         props,
-        identity,
+        t.identity,
         prefixAwareCase(snakeCase)
       );
     },
@@ -186,42 +176,128 @@ export function dualObject<P1 extends t.Props, P2 extends t.Props>(
 }
 
 //
+// Standard union.
+//
+
+function pushAll<A>(xs: Array<A>, ys: Array<A>): void {
+  const l = ys.length;
+  for (let i = 0; i < l; i++) {
+    xs.push(ys[i]!);
+  }
+}
+
+export function union<CS extends [t.Mixed, t.Mixed, ...Array<t.Mixed>]>(
+  codecs: CS
+): t.UnionC<CS> {
+  const name = `Union(${codecs.map(type => type.name).join(" | ")})`;
+  return new t.UnionType(
+    name,
+    (u): u is t.TypeOf<CS[number]> => codecs.some(type => type.is(u)),
+    (u, c) => {
+      const errors: t.Errors = [];
+      let result: object | undefined;
+
+      for (let i = 0; i < codecs.length; i++) {
+        const codec = codecs[i]!;
+        const r = codec.validate(u, t.appendContext(c, String(i), codec, u));
+
+        if (isLeft(r)) {
+          pushAll(errors, r.left);
+        } else if (t.UnknownRecord.is(u)) {
+          result = result
+            ? {
+                ...result,
+                ...r.right,
+              }
+            : r.right;
+        } else {
+          return t.success(r.right);
+        }
+      }
+
+      if (isDefined(result)) {
+        return t.success(result);
+      }
+
+      return t.failures(errors);
+    },
+    codecs.every(c => c.encode === t.identity)
+      ? t.identity
+      : a => {
+          let result: object | undefined;
+
+          for (const codec of codecs) {
+            if (!codec.is(a)) {
+              continue;
+            }
+
+            const value = codec.encode(a);
+            if (t.UnknownRecord.is(value)) {
+              const value = codec.encode(a);
+              result = result
+                ? {
+                    ...result,
+                    ...value,
+                  }
+                : value;
+            } else {
+              return value;
+            }
+          }
+
+          if (isDefined(result)) {
+            return result;
+          }
+
+          // https://github.com/gcanti/io-ts/pull/305
+          throw new Error(
+            `no codec found to encode value in union type ${name}`
+          );
+        },
+    codecs
+  );
+}
+
+//
+// Todo: Optimized union for records.
+//
+
+//
 // Exclusive union.
 //
 
-export function exclusiveUnion<CS extends [Mixed, Mixed, ...Array<Mixed>]>(
-  codecs: CS
-): t.Type<ExclusiveUnion<TypeOf<CS[number]>>> {
-  const name = `Exclusive(${codecs.map(type => type.name).join(" | ")})`;
-  return new UnionType(
+export function exclusiveUnion<
+  CS extends [t.Mixed, t.Mixed, ...Array<t.Mixed>],
+>(codecs: CS): t.Type<ExclusiveUnion<t.TypeOf<CS[number]>>> {
+  const name = `ExclusiveUnion(${codecs.map(type => type.name).join(" | ")})`;
+  return new t.UnionType(
     name,
-    (u): u is TypeOf<CS[number]> => codecs.some(type => type.is(u)),
+    (u): u is t.TypeOf<CS[number]> => codecs.some(type => type.is(u)),
     (u, c) => {
-      const errors: Errors = [];
+      const errors: t.Errors = [];
       const successes = [];
 
       for (let i = 0; i < codecs.length; i++) {
         const codec = codecs[i]!;
-        const result = codec.validate(u, appendContext(c, String(i), codec, u));
-        if (isLeft(result)) {
-          errors.push(...result.left);
+        const r = codec.validate(u, t.appendContext(c, String(i), codec, u));
+
+        if (isLeft(r)) {
+          errors.push(...r.left);
         } else {
-          successes.push(result.right);
+          successes.push(r.right);
         }
       }
 
       if (successes.length === 1) {
-        return success(successes[0]);
+        return t.success(successes[0]);
       } else if (successes.length > 1) {
-        return failures([
-          {context: c, value: u, message: "Multiple matching codecs."},
-        ]);
+        return t.failure(u, c, "Multiple matching codecs.");
       } else {
-        return failures(errors);
+        return t.failures(errors);
       }
     },
-    codecs.every(c => c.encode === identity)
-      ? identity
+    codecs.every(c => c.encode === t.identity)
+      ? t.identity
       : a => {
           for (const codec of codecs) {
             if (codec.is(a)) {
@@ -267,7 +343,7 @@ export function defaultValue<T, O>(type: t.Type<T, O>, defaultValue: T) {
 //
 
 export function arrayIgnore<C extends t.Mixed>(itemsType: C) {
-  type Result = ReadonlyArray<TypeOf<C>>;
+  type Result = ReadonlyArray<t.TypeOf<C>>;
 
   return new t.Type<Result>(
     "ArrayIgnoreOf" + itemsType.name,
@@ -382,7 +458,7 @@ function enumerationWithValuesBase<T extends Enum, R extends string | number>(
   {isCaseSensitive}: EnumerationWithValuesOptions = {isCaseSensitive: true}
 ) {
   // Case sensitivity.
-  const valueTransform = isCaseSensitive ? identity : toLower;
+  const valueTransform = isCaseSensitive ? t.identity : toLower;
 
   // Mapper.
   const invertedValues = map(
@@ -516,7 +592,7 @@ export const utf8Bytes = new Utf8Bytes();
 export type RType<T> = t.Type<T, unknown, unknown>;
 
 export function optional<T extends t.Any>(model: T) {
-  return t.union([t.undefined, model]);
+  return union([t.undefined, model]);
 }
 
 export function clean<T>(model: t.Type<T, any, unknown>) {

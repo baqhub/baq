@@ -99,6 +99,10 @@ export const ConversationItemBase: FC<ConversationItemBaseProps> = props => {
     return <LastMessage>{lastMessage.substring(0, 200)}</LastMessage>;
   };
 
+  const onMouseDown = (e: MouseEvent) => {
+    e.preventDefault();
+  };
+
   //
   // Dropdown.
   //
@@ -129,6 +133,7 @@ export const ConversationItemBase: FC<ConversationItemBaseProps> = props => {
   return (
     <Layout
       aria-selected={isSelected}
+      onMouseDown={onMouseDown}
       onClick={onClick}
       onContextMenu={onContextMenu}
     >

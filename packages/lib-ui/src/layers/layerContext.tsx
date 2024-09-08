@@ -1,4 +1,4 @@
-import {Handler} from "@baqhub/sdk";
+import {Handler, isDefined} from "@baqhub/sdk";
 import {createContext, useContext} from "react";
 
 //
@@ -23,4 +23,9 @@ export const LayerContextProvider = LayerContext.Provider;
 
 export function useLayerContext() {
   return useContext(LayerContext);
+}
+
+export function useHasLayer() {
+  const {topLayerId} = useLayerContext();
+  return isDefined(topLayerId);
 }
