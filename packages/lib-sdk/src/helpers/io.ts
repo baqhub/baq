@@ -259,7 +259,7 @@ export function union<CS extends [t.Mixed, t.Mixed, ...Array<t.Mixed>]>(
 }
 
 //
-// Tagged union.
+// Todo: Optimized union for records.
 //
 
 //
