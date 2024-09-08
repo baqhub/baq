@@ -87,6 +87,7 @@ export interface NoContentRecord {
 export interface CleanRecordType<T extends AnyRecord>
   extends IO.Type<T, any, unknown> {
   RType: IO.Type<T["type"], any, unknown>;
+  RContent: IO.Type<T["content"], any, unknown>;
   type: T["type"];
   link: RecordLink<T>;
   new: (entity: string, content: T["content"], options?: NewRecordOptions) => T;

@@ -1,3 +1,5 @@
+import {isLeft} from "fp-ts/lib/Either.js";
+import {Canonicalization} from "./canonicalization.js";
 import * as IO from "./io.js";
 import {Str} from "./string.js";
 import {isDefined} from "./type.js";
@@ -12,6 +14,10 @@ export interface SchemaArrayOptions {
   distinctItems?: boolean;
 }
 
+function countUniqueItems<T>(array: ReadonlyArray<T>) {
+  return new Set(array.map(Canonicalization.canonicalize)).size;
+}
+
 function schemaArray<I extends IO.Mixed>(
   itemsSchema: I,
   options: SchemaArrayOptions = {}
@@ -19,11 +25,7 @@ function schemaArray<I extends IO.Mixed>(
   const {minItems, maxItems, distinctItems} = options;
   const baseType = IO.readonlyArray(itemsSchema);
 
-  function isSchemaArray(value: unknown): value is ReadonlyArray<I["_A"]> {
-    if (!baseType.is(value)) {
-      return false;
-    }
-
+  function validateValue(value: ReadonlyArray<I["_A"]>) {
     if (isDefined(minItems) && value.length < minItems) {
       return false;
     }
@@ -32,22 +34,35 @@ function schemaArray<I extends IO.Mixed>(
       return false;
     }
 
-    if (distinctItems && new Set(value).size !== value.length) {
+    if (distinctItems && countUniqueItems(value) !== value.length) {
       return false;
     }
 
     return true;
   }
 
+  function isSchemaArray(value: unknown): value is ReadonlyArray<I["_A"]> {
+    if (!baseType.is(value)) {
+      return false;
+    }
+
+    return validateValue(value);
+  }
+
   return new IO.Type(
     "SchemaArray",
     isSchemaArray,
     (value: unknown, context) => {
-      if (!isSchemaArray(value)) {
+      const result = baseType.validate(value, context);
+      if (isLeft(result)) {
         return IO.failure(value, context);
       }
 
-      return IO.success(value);
+      if (!validateValue(result.right)) {
+        return IO.failure(value, context);
+      }
+
+      return IO.success(result.right);
     },
     value => baseType.encode(value)
   );
@@ -82,11 +97,7 @@ function schemaString(options: SchemaStringOptions = {}) {
   const {minLength, maxLength} = options;
   const baseType = IO.string;
 
-  function isSchemaString(value: unknown): value is string {
-    if (!baseType.is(value)) {
-      return false;
-    }
-
+  function validateValue(value: string) {
     // Normalization.
     if (value.normalize() !== value) {
       return false;
@@ -111,15 +122,28 @@ function schemaString(options: SchemaStringOptions = {}) {
     return true;
   }
 
+  function isSchemaString(value: unknown): value is string {
+    if (!baseType.is(value)) {
+      return false;
+    }
+
+    return validateValue(value);
+  }
+
   return new IO.Type(
     "SchemaString",
     isSchemaString,
     (value: unknown, context) => {
-      if (!isSchemaString(value)) {
+      const result = baseType.validate(value, context);
+      if (isLeft(result)) {
         return IO.failure(value, context);
       }
 
-      return IO.success(value);
+      if (!validateValue(result.right)) {
+        return IO.failure(value, context);
+      }
+
+      return IO.success(result.right);
     },
     value => baseType.encode(value)
   );
@@ -138,11 +162,7 @@ function schemaInt(options: SchemaIntOptions = {}) {
   const {min, max} = options;
   const baseType = IO.Int;
 
-  function isSchemaInt(value: unknown): value is number {
-    if (!baseType.is(value)) {
-      return false;
-    }
-
+  function validateValue(value: number) {
     if (isDefined(min) && value < min) {
       return false;
     }
@@ -154,15 +174,28 @@ function schemaInt(options: SchemaIntOptions = {}) {
     return true;
   }
 
+  function isSchemaInt(value: unknown): value is number {
+    if (!baseType.is(value)) {
+      return false;
+    }
+
+    return validateValue(value);
+  }
+
   return new IO.Type(
     "SchemaInt",
     isSchemaInt,
     (value: unknown, context) => {
-      if (!isSchemaInt(value)) {
+      const result = baseType.validate(value, context);
+      if (isLeft(result)) {
         return IO.failure(value, context);
       }
 
-      return IO.success(value);
+      if (!validateValue(result.right)) {
+        return IO.failure(value, context);
+      }
+
+      return IO.success(result.right);
     },
     value => value
   );
@@ -181,11 +214,7 @@ function schemaNumber(options: SchemaNumberOptions = {}) {
   const {min, max} = options;
   const baseType = IO.number;
 
-  function isSchemaNumber(value: unknown): value is number {
-    if (!baseType.is(value)) {
-      return false;
-    }
-
+  function validateValue(value: number) {
     if (isDefined(min) && value < min) {
       return false;
     }
@@ -197,15 +226,28 @@ function schemaNumber(options: SchemaNumberOptions = {}) {
     return true;
   }
 
+  function isSchemaNumber(value: unknown): value is number {
+    if (!baseType.is(value)) {
+      return false;
+    }
+
+    return validateValue(value);
+  }
+
   return new IO.Type(
     "SchemaNumber",
     isSchemaNumber,
     (value: unknown, context) => {
-      if (!isSchemaNumber(value)) {
+      const result = baseType.validate(value, context);
+      if (isLeft(result)) {
         return IO.failure(value, context);
       }
 
-      return IO.success(value);
+      if (!validateValue(result.right)) {
+        return IO.failure(value, context);
+      }
+
+      return IO.success(result.right);
     },
     value => value
   );

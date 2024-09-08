@@ -6,7 +6,7 @@
     "ts": "tsc --build --watch",
     "build": "tsc --build",
     "lint": "eslint \"packages/**/*.{ts,tsx,js,cjs}\"",
-    "test": "yarn workspace @baqhub/sdk vitest run && yarn workspace @baqhub/cli vitest run && yarn workspace @baqhub/ui vitest run",
+    "test": "yarn workspace @baqhub/sdk vitest run && yarn workspace @baqhub/cli vitest run && yarn workspace @baqhub/ui vitest run && yarn workspace @baqhub/messages-web vitest run",
     "pretty": "prettier --check ./packages/**/src/**/*.{js,ts,jsx,tsx,json}",
     "pretty:write": "prettier --write ./packages/**/src/**/*.{js,ts,jsx,tsx,json}",
     "lib-sdk:build": "yarn workspace @baqhub/sdk build",
@@ -37,6 +37,7 @@
     "messages:dev": "yarn workspace @baqhub/messages-web dev",
     "messages:build": "yarn workspace @baqhub/messages-web build",
     "messages:deploy": "yarn workspace @baqhub/messages-web deploy",
+    "messages:test": "yarn workspace @baqhub/messages-web test",
     "baq": "yarn workspace @baqhub/files-web baq && yarn workspace @baqhub/messages-web baq && yarn workspace @baqhub/bird-shared baq && yarn workspace @baqhub/types baq"
   },
   "author": "Baqhub",
