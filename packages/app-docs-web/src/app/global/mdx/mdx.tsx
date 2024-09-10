@@ -146,7 +146,9 @@ export const MdxProperties = tw.div`
 
 export const MdxA = tw.a`
   text-amber-700
+  [&_>_strong]:text-amber-700
   dark:text-amber-500
+  dark:[&_>_strong]:text-amber-500
   underline
   underline-offset-2
 
