@@ -1783,9 +1783,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@baqhub/sdk-expo@portal:../../packages/lib-sdk-expo::locator=app-bird-mobile%40workspace%3A."
   dependencies:
-    "@baqhub/sdk": "npm:^0.1.19"
-    "@baqhub/sdk-react": "npm:^0.1.19"
-    "@baqhub/sdk-react-native": "npm:^0.1.19"
+    "@baqhub/sdk": "npm:^0.1.20"
+    "@baqhub/sdk-react": "npm:^0.1.20"
+    "@baqhub/sdk-react-native": "npm:^0.1.20"
     expo-secure-store: "npm:^12.8.1"
     tslib: "npm:2.6.3"
   peerDependencies:
@@ -1798,8 +1798,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@baqhub/sdk-react-native@portal:../../packages/lib-sdk-react-native::locator=app-bird-mobile%40workspace%3A."
   dependencies:
-    "@baqhub/sdk": "npm:^0.1.19"
-    "@baqhub/sdk-react": "npm:^0.1.19"
+    "@baqhub/sdk": "npm:^0.1.20"
+    "@baqhub/sdk-react": "npm:^0.1.20"
     "@react-native-async-storage/async-storage": "npm:^1.21.0"
     base-64: "npm:^1.0.0"
     react-native-fetch-api: "npm:^3.0.0"
@@ -1818,7 +1818,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@baqhub/sdk-react@portal:../../packages/lib-sdk-react::locator=app-bird-mobile%40workspace%3A."
   dependencies:
-    "@baqhub/sdk": "npm:^0.1.19"
+    "@baqhub/sdk": "npm:^0.1.20"
     lodash: "npm:^4.17.21"
     react: "npm:^18.3.1"
     tslib: "npm:^2.6.3"
