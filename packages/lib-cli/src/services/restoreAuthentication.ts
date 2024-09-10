@@ -1,6 +1,6 @@
 import camelCase from "lodash/camelCase.js";
 import {pascalCase} from "../helpers/case.js";
-import {ProjectRecordTypeScope, ProjectType} from "../model/project.js";
+import {ProjectRecordTypeScope} from "../model/project.js";
 import {
   AuthenticationFileVariables,
   writeAuthenticationFile,
@@ -16,11 +16,6 @@ const defaultScopes: ReadonlyArray<ProjectRecordTypeScope> = ["read", "write"];
 export async function maybeRestoreAuthentication(projectFile: ProjectFile) {
   const {project} = projectFile;
   const {name, description, websiteUrl, type, recordTypes} = project;
-
-  // This is only for React projects.
-  if (type !== ProjectType.JS_REACT && type !== ProjectType.TS_REACT) {
-    return;
-  }
 
   // Build imports for each record type.
   const recordTypeNames = Object.keys(recordTypes);
@@ -69,7 +64,7 @@ export async function maybeRestoreAuthentication(projectFile: ProjectFile) {
   };
 
   const projectFilesPath = projectFileToProjectFilesPath(projectFile);
-  await writeAuthenticationFile(projectFilesPath, vars);
+  await writeAuthenticationFile(type, projectFilesPath, vars);
 }
 
 function maybeJsonProperty(propertyName: string, value: string | undefined) {

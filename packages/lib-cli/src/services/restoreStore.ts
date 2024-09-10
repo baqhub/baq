@@ -1,6 +1,5 @@
 import camelCase from "lodash/camelCase.js";
 import {pascalCase} from "../helpers/case.js";
-import {ProjectType} from "../model/project.js";
 import {
   ProjectFile,
   projectFileToProjectFilesPath,
@@ -9,11 +8,6 @@ import {writeStoreFile} from "./files/storeFile.js";
 
 export async function maybeRestoreStore(projectFile: ProjectFile) {
   const {type, recordTypes} = projectFile.project;
-
-  // This is only for React projects.
-  if (type !== ProjectType.JS_REACT && type !== ProjectType.TS_REACT) {
-    return;
-  }
 
   // Build imports for each record type.
   const recordTypeNames = Object.keys(recordTypes);
@@ -30,5 +24,8 @@ export async function maybeRestoreStore(projectFile: ProjectFile) {
 
   // Write the file.
   const projectFilesPath = projectFileToProjectFilesPath(projectFile);
-  await writeStoreFile(projectFilesPath, {recordTypesImport, recordTypesArg});
+  await writeStoreFile(type, projectFilesPath, {
+    recordTypesImport,
+    recordTypesArg,
+  });
 }

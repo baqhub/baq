@@ -1,0 +1,28 @@
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+import {RecordType} from "@baqhub/sdk";
+import {
+  StorageAdapter,
+  SecureStorageAdapter,
+  buildAuthentication as buildAuthenticationBase
+} from "@baqhub/sdk-react";
+{recordTypesImport}
+
+export function buildAuthentication(options) {
+  const {storage, secureStorage, redirectUrl} = options;
+  return buildAuthenticationBase({
+    storage,
+    secureStorage,
+    app: {
+      name: "{appName}",{appDescription}
+      uris: {
+        {appWebsiteUrl}
+        redirect: redirectUrl,
+      },
+      scopeRequest: {
+        {scopeRequest}
+      }
+    }
+  });
+}

@@ -59,7 +59,7 @@ export async function restoreRecordType(
 
   // Build and write record type file.
   const projectFilesPath = projectFileToProjectFilesPath(projectFile);
-  await writeRecordTypeFile(projectFilesPath, {
+  await writeRecordTypeFile(projectFile.project.type, projectFilesPath, {
     namePascalCase: pascalCase(name),
     nameCamelCase: camelCase(name),
     typeEntity,

@@ -1,0 +1,35 @@
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+import {
+  AnyBlobLink,
+  AnyRecordLink,
+  AnyTagLink,
+  BlobLink,
+  EntityLink,
+  ExclusiveUnion,
+  IO,
+  Record,
+  RecordKey,
+  RecordLink,
+  RecordLinkOf,
+  RecordType,
+  SchemaIO,
+  TagLink,
+  VersionHash
+} from "@baqhub/sdk";
+
+//
+// Model.
+//
+
+const R{namePascalCase}RecordContent = {contentIo};
+
+const [{nameCamelCase}RecordType, R{namePascalCase}RecordType] = RecordType.full(
+  "{typeEntity}",
+  "{typeRecordId}",
+  "{typeVersionHash}",
+  R{namePascalCase}RecordContent
+);
+
+export const {namePascalCase}Record = Record.io({nameCamelCase}RecordType, R{namePascalCase}RecordType, R{namePascalCase}RecordContent);

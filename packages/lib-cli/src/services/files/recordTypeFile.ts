@@ -1,9 +1,9 @@
-import memoize from "lodash/memoize.js";
 import reduce from "lodash/reduce.js";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import metaToPaths from "../../helpers/fs.js";
+import {ProjectType} from "../../model/project.js";
 import {formatCode} from "../formatter.js";
+import {Templates} from "./templates.js";
 
 //
 // Model.
@@ -23,28 +23,20 @@ export interface RecordTypeFileVariables {
 // I/O.
 //
 
-async function readTemplateFileBase(templateName: string) {
-  const {directoryPath} = metaToPaths(import.meta);
-  const templatePath = path.join(
-    directoryPath,
-    "..",
-    "..",
-    "..",
-    "..",
-    "templates",
-    templateName
-  );
-
-  return fs.readFile(templatePath, {encoding: "utf-8"});
-}
-
-export const readTemplateFile = memoize(readTemplateFileBase);
+const templatePaths: {[K in ProjectType]: string} = {
+  [ProjectType.JS]: "recordType.js.template",
+  [ProjectType.JS_REACT]: "recordType.js.template",
+  [ProjectType.TS]: "recordType.ts.template",
+  [ProjectType.TS_REACT]: "recordType.ts.template",
+};
 
 export async function writeRecordTypeFile(
+  projectType: ProjectType,
   projectFilesPath: string,
   vars: RecordTypeFileVariables
 ) {
-  const template = await readTemplateFile("recordType.ts.template");
+  const templatePath = templatePaths[projectType];
+  const template = await Templates.read(templatePath);
 
   const fileRaw = reduce(
     vars,
@@ -56,7 +48,7 @@ export async function writeRecordTypeFile(
 
   const recordTypeFilePath = path.join(
     projectFilesPath,
-    `${vars.nameCamelCase}Record.ts`
+    `${vars.nameCamelCase}Record.${Templates.extension(projectType)}`
   );
   await fs.writeFile(recordTypeFilePath, fileFormatted);
 }

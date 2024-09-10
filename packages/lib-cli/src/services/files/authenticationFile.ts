@@ -1,8 +1,9 @@
 import reduce from "lodash/reduce.js";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
+import {ProjectType} from "../../model/project.js";
 import {formatCode} from "../formatter.js";
-import {readTemplateFile} from "./recordTypeFile.js";
+import {Templates} from "./templates.js";
 
 //
 // Model.
@@ -20,11 +21,22 @@ export interface AuthenticationFileVariables {
 // I/O.
 //
 
+const templatePaths: {[K in ProjectType]?: string} = {
+  [ProjectType.JS_REACT]: "authentication.js.template",
+  [ProjectType.TS_REACT]: "authentication.ts.template",
+};
+
 export async function writeAuthenticationFile(
+  projectType: ProjectType,
   projectFilesPath: string,
   vars: AuthenticationFileVariables
 ) {
-  const template = await readTemplateFile("authentication.ts.template");
+  const templatePath = templatePaths[projectType];
+  if (!templatePath) {
+    return;
+  }
+
+  const template = await Templates.read(templatePath);
 
   const fileRaw = reduce(
     vars,
@@ -34,6 +46,9 @@ export async function writeAuthenticationFile(
 
   const fileFormatted = await formatCode(fileRaw, projectFilesPath);
 
-  const recordTypeFilePath = path.join(projectFilesPath, "authentication.ts");
+  const recordTypeFilePath = path.join(
+    projectFilesPath,
+    `authentication.${Templates.extension(projectType)}`
+  );
   await fs.writeFile(recordTypeFilePath, fileFormatted);
 }
