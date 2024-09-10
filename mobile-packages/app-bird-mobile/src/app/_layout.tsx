@@ -1,8 +1,8 @@
 import {buildAuthentication} from "@baqhub/app-bird-shared/build/src/baq/authentication";
 import {Store} from "@baqhub/app-bird-shared/build/src/baq/store";
-import {DateServicesProvider} from "@baqhub/app-bird-shared/build/src/components/date/dateServicesProvider";
 import {useSyncState} from "@baqhub/app-bird-shared/build/src/state/syncState";
 import {asyncStorageAdapter, secureStorageAdapter} from "@baqhub/sdk-expo";
+import {DateServicesProvider} from "@baqhub/ui/build/src/date/dateServicesProvider";
 import {DarkTheme, DefaultTheme, ThemeProvider} from "@react-navigation/native";
 import {Locale, useLocales} from "expo-localization";
 import {SplashScreen, Stack} from "expo-router";
@@ -34,6 +34,8 @@ const {useAuthentication} = buildAuthentication({
   secureStorage: secureStorageAdapter,
   redirectUrl,
 });
+
+const dummyFormatRelativeDate = () => "";
 
 //
 // Component.
@@ -85,7 +87,10 @@ function RootLayoutContent() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <DateServicesProvider locale={locale.languageTag}>
+      <DateServicesProvider
+        locale={locale.languageTag}
+        formatRelativeDate={dummyFormatRelativeDate}
+      >
         <Store
           identity={state.identity}
           onDisconnectRequest={onDisconnectRequest}

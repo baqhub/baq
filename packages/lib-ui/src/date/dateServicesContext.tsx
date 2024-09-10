@@ -5,23 +5,23 @@ import {createContext, useContext} from "react";
 // Context.
 //
 
+export type FormatRelativeDate = (
+  value: number,
+  unit: Intl.RelativeTimeFormatUnit
+) => string;
+
 export interface DateServicesContextProps {
   dateTimeFormat: Intl.DateTimeFormat;
   dateFormat: Intl.DateTimeFormat;
   dayOfWeekFormat: Intl.DateTimeFormat;
   timeFormat: Intl.DateTimeFormat;
-  relativeTimeFormat: Intl.RelativeTimeFormat;
+  formatRelativeDate: FormatRelativeDate;
   registerUpdater: (updater: HandlerOf<Date>) => () => void;
 }
 
-const DateServicesContext = createContext<DateServicesContextProps>({
-  dayOfWeekFormat: Intl.DateTimeFormat("en-us"),
-  dateTimeFormat: Intl.DateTimeFormat("en-us"),
-  dateFormat: Intl.DateTimeFormat("en-us"),
-  timeFormat: Intl.DateTimeFormat("en-us"),
-  relativeTimeFormat: new Intl.RelativeTimeFormat("en-us"),
-  registerUpdater: () => () => {},
-});
+const DateServicesContext = createContext<DateServicesContextProps | undefined>(
+  undefined
+);
 
 //
 // Provider.
@@ -34,5 +34,10 @@ export const DateServicesContextProvider = DateServicesContext.Provider;
 //
 
 export function useDateServicesContext() {
-  return useContext(DateServicesContext);
+  const context = useContext(DateServicesContext);
+  if (!context) {
+    throw new Error("Date Services Provider required.");
+  }
+
+  return context;
 }

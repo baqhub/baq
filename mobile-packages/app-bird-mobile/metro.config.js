@@ -16,6 +16,7 @@ const config = {
     path.resolve(projectRoot, "../../packages/lib-sdk-react"),
     path.resolve(projectRoot, "../../packages/lib-sdk-react-native"),
     path.resolve(projectRoot, "../../packages/lib-sdk-expo"),
+    path.resolve(projectRoot, "../../packages/lib-ui"),
     path.resolve(projectRoot, "../../packages/app-bird-shared"),
     projectRoot,
   ],

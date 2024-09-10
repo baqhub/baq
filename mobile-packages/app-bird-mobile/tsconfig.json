@@ -29,6 +29,9 @@
       "path": "../../packages/lib-sdk-expo/tsconfig.json"
     },
     {
+      "path": "../../packages/lib-ui/tsconfig.json"
+    },
+    {
       "path": "../../packages/app-bird-shared"
     }
   ]

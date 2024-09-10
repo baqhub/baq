@@ -19,6 +19,7 @@
     "@baqhub/sdk": "portal:../../packages/lib-sdk",
     "@baqhub/sdk-expo": "portal:../../packages/lib-sdk-expo",
     "@baqhub/sdk-react": "portal:../../packages/lib-sdk-react",
+    "@baqhub/ui": "portal:../../packages/lib-ui",
     "@expo/vector-icons": "^14.0.0",
     "@react-native-async-storage/async-storage": "1.21.0",
     "@react-navigation/native": "^6.1.9",
@@ -72,6 +73,7 @@
     "@baqhub/sdk-react": "portal:../../packages/lib-sdk-react",
     "@baqhub/sdk-react-native": "portal:../../packages/lib-sdk-react-native",
     "@baqhub/sdk-expo": "portal:../../packages/lib-sdk-expo",
+    "@baqhub/ui": "portal:../../packages/lib-ui",
     "react": "18.3.1"
   },
   "private": true

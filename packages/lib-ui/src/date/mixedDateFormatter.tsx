@@ -81,7 +81,7 @@ export const MixedDateFormatter: FC<MixedDateFormatterProps> = props => {
   const {now, value} = props;
   const dateServicesContext = useDateServicesContext();
   const {dayOfWeekFormat, dateFormat, timeFormat} = dateServicesContext;
-  const {relativeTimeFormat, registerUpdater} = dateServicesContext;
+  const {formatRelativeDate, registerUpdater} = dateServicesContext;
   const [state, setState] = useState(() =>
     stateFromValue(now || new Date(), value)
   );
@@ -96,13 +96,13 @@ export const MixedDateFormatter: FC<MixedDateFormatterProps> = props => {
         return "Now";
 
       case "minutes":
-        return relativeTimeFormat.format(-state.number, "minutes");
+        return formatRelativeDate(-state.number, "minutes");
 
       case "today":
         return timeFormat.format(value);
 
       case "yesterday":
-        return capitalize(relativeTimeFormat.format(-1, "day"));
+        return capitalize(formatRelativeDate(-1, "day"));
 
       case "days":
         return capitalize(dayOfWeekFormat.format(value));
@@ -117,7 +117,7 @@ export const MixedDateFormatter: FC<MixedDateFormatterProps> = props => {
     dayOfWeekFormat,
     dateFormat,
     timeFormat,
-    relativeTimeFormat,
+    formatRelativeDate,
     state,
     value,
   ]);

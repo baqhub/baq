@@ -4,6 +4,7 @@ import {FC, PropsWithChildren, useEffect, useMemo} from "react";
 import {
   DateServicesContextProps,
   DateServicesContextProvider,
+  FormatRelativeDate,
 } from "./dateServicesContext.js";
 
 //
@@ -13,6 +14,7 @@ import {
 interface DateServicesProviderProps extends PropsWithChildren {
   locale: string;
   timeZone?: string;
+  formatRelativeDate?: FormatRelativeDate;
 }
 
 //
@@ -20,7 +22,7 @@ interface DateServicesProviderProps extends PropsWithChildren {
 //
 
 export const DateServicesProvider: FC<DateServicesProviderProps> = props => {
-  const {locale, timeZone, children} = props;
+  const {locale, timeZone, formatRelativeDate, children} = props;
   const updaters = useConstant(() => new Set<HandlerOf<Date>>());
 
   useEffect(() => {
@@ -58,10 +60,8 @@ export const DateServicesProvider: FC<DateServicesProviderProps> = props => {
         minute: "2-digit",
         timeZone,
       }),
-      relativeTimeFormat: new Intl.RelativeTimeFormat(locale, {
-        style: "short",
-        numeric: "auto",
-      }),
+      formatRelativeDate:
+        formatRelativeDate || defaultFormatRelativeDate(locale),
       registerUpdater: (updater: HandlerOf<Date>) => {
         updaters.add(updater);
         return () => {
@@ -69,7 +69,7 @@ export const DateServicesProvider: FC<DateServicesProviderProps> = props => {
         };
       },
     }),
-    [locale, updaters]
+    [locale, timeZone, formatRelativeDate, updaters]
   );
 
   return (
@@ -78,3 +78,12 @@ export const DateServicesProvider: FC<DateServicesProviderProps> = props => {
     </DateServicesContextProvider>
   );
 };
+
+function defaultFormatRelativeDate(locale: string): FormatRelativeDate {
+  const format = new Intl.RelativeTimeFormat(locale, {
+    style: "short",
+    numeric: "auto",
+  });
+
+  return (value, unit) => format.format(value, unit);
+}

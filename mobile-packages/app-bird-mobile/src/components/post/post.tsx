@@ -1,5 +1,5 @@
-import {RelativeDateFormatter} from "@baqhub/app-bird-shared/build/src/components/date/relativeDateFormatter";
 import {usePostState} from "@baqhub/app-bird-shared/build/src/state/postState";
+import {RelativeDateFormatter} from "@baqhub/ui/build/src/date/relativeDateFormatter";
 import {Link} from "expo-router";
 import {FC, useCallback} from "react";
 import {Alert, Pressable, StyleSheet} from "react-native";
