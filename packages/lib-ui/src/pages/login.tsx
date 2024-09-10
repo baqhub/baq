@@ -1,8 +1,8 @@
 import {HandlerOf} from "@baqhub/sdk";
 import {ConnectStatus, UnauthenticatedState} from "@baqhub/sdk-react";
 import {FC, FormEvent, PropsWithChildren, useEffect, useState} from "react";
-import {SubmitButton} from "../core/button.js";
-import {Column, Text, tw} from "../core/style.js";
+import {Button, SubmitButton} from "../core/button.js";
+import {Column, Row, Text, tw} from "../core/style.js";
 import {TextBox} from "../core/textBox.js";
 
 //
@@ -50,6 +50,37 @@ export const LoginLogo = tw.img`
   select-none
 `;
 
+const RegisterBox = tw(Row)`
+  items-center
+  p-5
+
+  border
+  border-neutral-200
+  dark:border-neutral-700
+  rounded-2xl
+`;
+
+const RegisterText = tw(Text)`
+  text-lg
+  text-neutral-700
+  dark:text-neutral-200
+`;
+
+const ArrowIcon = tw.div`
+  ml-2
+  mr-3
+
+  h-5
+  w-5
+
+  text-neutral-700
+  dark:text-neutral-200
+`;
+
+const ButtonStrong = tw.strong`
+  font-semibold
+`;
+
 //
 // Component.
 //
@@ -72,6 +103,10 @@ export const Login: FC<LoginProps> = props => {
     onConnectClick(entity);
   };
 
+  const onRegisterClick = () => {
+    window.open("https://baq.run/register", "_blank");
+  };
+
   return (
     <Layout>
       <AppInfo>
@@ -90,6 +125,28 @@ export const Login: FC<LoginProps> = props => {
           Sign in
         </SubmitButton>
       </Form>
+      <RegisterBox>
+        <RegisterText>No BAQ account?</RegisterText>
+        <ArrowIcon>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            className="size-5"
+          >
+            <path
+              fillRule="evenodd"
+              d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </ArrowIcon>
+        <Button size="large" onClick={onRegisterClick}>
+          <span>
+            Register on <ButtonStrong>BAQ.RUN</ButtonStrong>
+          </span>
+        </Button>
+      </RegisterBox>
     </Layout>
   );
 };
