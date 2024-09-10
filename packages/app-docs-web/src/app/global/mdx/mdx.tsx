@@ -142,6 +142,8 @@ export const MdxProperties = tw.div`
   [&_&_>_ul_>_li]:mb-5
   [&_>_ul_p]:mt-1
   [&_>_ul_p]:mb-1
+  dark:[&_li_strong_code]:text-zinc-300
+  dark:[&_li_strong_code]:bg-zinc-700
 `;
 
 export const MdxA = tw.a`
