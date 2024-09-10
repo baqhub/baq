@@ -16,6 +16,8 @@ interface MdxPillProps extends PropsWithChildren {
 //
 
 const baseStyle = `
+  mx-1
+  [code_>_&]:mx-0
   px-1
   py-px
 
@@ -26,7 +28,7 @@ const baseStyle = `
   text-xs
   ligatures-none
   font-mono
-  font-semibold
+  font-normal
 `;
 
 const linkPillStyle = `
@@ -35,10 +37,10 @@ const linkPillStyle = `
   text-amber-700
   dark:text-amber-500
   border-amber-700
-  dark:border-amber-500
+  dark:border-amber-500/80
 
-  hover:bg-amber-100
-  dark:hover:bg-amber-900
+  hover:bg-amber-500/20
+  dark:hover:bg-amber-800/30
 
   cursor-pointer
 `;
