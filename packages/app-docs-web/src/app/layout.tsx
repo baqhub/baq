@@ -1,6 +1,7 @@
 import {tw} from "@baqhub/ui/core/style.jsx";
 import type {Metadata, Viewport} from "next";
 import {FC, PropsWithChildren} from "react";
+import twitterCardImage from "../docs/assets/twitterCard.jpg";
 import {firaCode, inter} from "./fonts/fonts.js";
 import {AutoRefresh} from "./global/autoRefresh.jsx";
 import {DarkModeScript} from "./global/scripts/darkModeScript.jsx";
@@ -33,16 +34,30 @@ const Layout = tw.div`
 // Component.
 //
 
-export const metadata: Metadata = {
-  title: {
-    default: "BAQ | The Federated App Platform",
-    template: "%s | BAQ",
-  },
-  description: "Build apps on the federated BAQ platform.",
-  openGraph: {
-    url: Constants.baseUrl,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const defaultTitle = "BAQ | The Federated App Platform";
+  return {
+    title: {
+      default: defaultTitle,
+      template: "%s | BAQ",
+    },
+    description: "Build apps on the federated BAQ platform.",
+    openGraph: {
+      url: Constants.baseUrl,
+    },
+    twitter: {
+      card: "summary",
+      images: [
+        {
+          url: twitterCardImage.src,
+          width: twitterCardImage.width,
+          height: twitterCardImage.height,
+          alt: defaultTitle,
+        },
+      ],
+    },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: [

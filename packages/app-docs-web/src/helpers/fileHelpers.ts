@@ -1,5 +1,5 @@
 import isObject from "lodash/isObject.js";
-import {ImageProps} from "next/image.js";
+import {ImageProps, StaticImageData} from "next/image.js";
 import {Dirent} from "node:fs";
 import * as fs from "node:fs/promises";
 
@@ -27,7 +27,7 @@ function isDefined<T>(value: T | undefined): value is T {
 
 export async function getImageAsync(imageName: string): Promise<ImageProps> {
   const imported = await import(`../docs/assets/${imageName}.jpg`);
-  const image: ImageProps = imported.default;
+  const image: StaticImageData = imported.default;
 
   return {
     src: image.src,

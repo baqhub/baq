@@ -1,6 +1,8 @@
 import {Column, tw} from "@baqhub/ui/core/style.jsx";
 import {MDXComponents} from "mdx/types.js";
 import {Metadata} from "next";
+import {OpenGraph} from "next/dist/lib/metadata/types/opengraph-types.js";
+import {Twitter} from "next/dist/lib/metadata/types/twitter-types.js";
 import {ImageProps} from "next/image.js";
 import {FC} from "react";
 import {getImageAsync} from "../../../helpers/fileHelpers.js";
@@ -114,6 +116,12 @@ export async function generateMetadata({
 }: BlogPostPageProps): Promise<Metadata> {
   const post = findBlogPost(path?.join("/"));
   const postImage = await getImageAsync(post.image + "Big");
+  const postImageData: OpenGraph["images"] | Twitter["images"] = {
+    url: Constants.baseUrl + postImage.src.toString(),
+    width: postImage.width,
+    height: postImage.height,
+    alt: post.title,
+  };
 
   return {
     title: `${post.title} | Blog`,
@@ -124,14 +132,10 @@ export async function generateMetadata({
       url: `${Constants.baseUrl}/blog/${post.path}`,
       publishedTime: post.date.toISOString(),
       authors: [post.author.name],
-      images: [
-        {
-          url: Constants.baseUrl + postImage.src.toString(),
-          width: postImage.width,
-          height: postImage.height,
-          alt: post.title,
-        },
-      ],
+      images: [postImageData],
+    },
+    twitter: {
+      images: [postImageData],
     },
   };
 }

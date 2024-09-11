@@ -16,7 +16,7 @@
   },
   "include": [
     "next-env.d.ts",
-    "svgr.d.ts",
+    "images.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "dist/types/**/*.ts",
