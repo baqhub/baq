@@ -120,11 +120,14 @@ const FormSubmitIcon = tw(Text)`
 
 export const Newsletter: FC<NewsletterProps> = props => {
   const variant = props.variant || "normal";
+
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
     window.open("https://buttondown.email/baq", "popup");
-    e.currentTarget.submit();
-    e.currentTarget.reset();
+
+    const form = e.currentTarget;
+    setTimeout(() => {
+      form.reset();
+    }, 100);
   };
 
   return (
