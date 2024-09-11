@@ -12,7 +12,6 @@ import {
   findDocsPage,
   listSubSectionsForSection,
 } from "../../../../services/docs.js";
-import {Constants} from "../../../global/constants.js";
 import {Footer} from "../../../global/footer.jsx";
 import {
   MdxCode,
@@ -155,7 +154,7 @@ export function generateMetadata({params}: DocsPageProps): Metadata {
       title: page.title,
       description: page.summary,
       type: "website",
-      url: `${Constants.baseUrl}/docs/${section}/${page.path}`,
+      url: `/docs/${section}/${page.path}`,
     },
   };
 }

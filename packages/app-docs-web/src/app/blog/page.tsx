@@ -3,7 +3,6 @@ import {Metadata} from "next";
 import {FC} from "react";
 import IconRss from "../../docs/assets/iconRss.svg";
 import {blogPosts} from "../../services/blog.js";
-import {Constants} from "../global/constants.js";
 import {Text} from "../global/style.jsx";
 import {BlogPostItem} from "./blogPostItem.jsx";
 
@@ -60,7 +59,7 @@ const Posts = tw(Column)`
 export const metadata: Metadata = {
   title: "Blog",
   openGraph: {
-    url: Constants.baseUrl + "/blog",
+    url: "/blog",
   },
 };
 

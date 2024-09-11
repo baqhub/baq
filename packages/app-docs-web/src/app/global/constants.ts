@@ -2,5 +2,5 @@ const domain = "baq.dev";
 
 export const Constants = {
   domain,
-  baseUrl: "https://" + domain,
+  baseUrl: new URL("https://" + domain),
 };

@@ -37,6 +37,7 @@ const Layout = tw.div`
 export async function generateMetadata(): Promise<Metadata> {
   const defaultTitle = "BAQ | The Federated App Platform";
   return {
+    metadataBase: Constants.baseUrl,
     title: {
       default: defaultTitle,
       template: "%s | BAQ",
@@ -49,7 +50,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary",
       images: [
         {
-          url: twitterCardImage.src,
+          url: twitterCardImage.src.toString(),
           width: twitterCardImage.width,
           height: twitterCardImage.height,
           alt: defaultTitle,
