@@ -35,7 +35,7 @@ const Layout = tw(Column)`
 const PostImage = tw.div`
   relative
   sm:w-60
-  md:w-80
+  md:w-72
   bg-zinc-100
   dark:bg-zinc-900
 
