@@ -72,6 +72,7 @@ export const ComposerDialog: FC<ComposerDialogProps> = props => {
           placeholder="user.domain.com"
           value={recipient}
           onChange={onRecipientChange}
+          variant="handle"
           isDisabled={isResolving}
           isSelected
         />
