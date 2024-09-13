@@ -139,7 +139,9 @@ export const TextBox = forwardRef<HTMLInputElement, TextBoxProps>(
         return;
       }
 
-      currentInput.select();
+      requestAnimationFrame(() => {
+        currentInput.select();
+      });
     }, [isSelected]);
 
     return (
