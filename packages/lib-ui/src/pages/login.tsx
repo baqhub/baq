@@ -117,6 +117,7 @@ export const Login: FC<LoginProps> = props => {
         <TextBox
           value={entity}
           onChange={setEntity}
+          variant="handle"
           size="large"
           placeholder="user.host.com"
           isDisabled={isConnecting}
