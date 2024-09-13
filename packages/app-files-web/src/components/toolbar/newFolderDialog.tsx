@@ -55,6 +55,7 @@ export const NewFolderDialog: FC<NewFolderDialogProps> = props => {
           placeholder="Folder name..."
           value={folderName}
           onChange={setFolderName}
+          isSelected
         />
         <ButtonGroup align="end">
           <Button size="large" onClick={onRequestClose}>
