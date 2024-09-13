@@ -73,6 +73,7 @@ export const ComposerDialog: FC<ComposerDialogProps> = props => {
           value={recipient}
           onChange={onRecipientChange}
           isDisabled={isResolving}
+          isSelected
         />
         <ButtonGroup align="end">
           <Button
