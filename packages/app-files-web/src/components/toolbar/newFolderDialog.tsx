@@ -51,11 +51,11 @@ export const NewFolderDialog: FC<NewFolderDialogProps> = props => {
       <Layout onSubmit={onFormSubmit}>
         <Title>New folder</Title>
         <TextBox
+          isSelected
           size="large"
           placeholder="Folder name..."
           value={folderName}
           onChange={setFolderName}
-          isSelected
         />
         <ButtonGroup align="end">
           <Button size="large" onClick={onRequestClose}>
