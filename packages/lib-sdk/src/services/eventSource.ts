@@ -37,7 +37,7 @@ import {
 
 const eventStreamContentType = "text/event-stream";
 const defaultRetryInterval = 1000; // 1s
-const defaultMonitorInterval = 20 * 1000; // 40s
+const defaultMonitorInterval = 40 * 1000; // 40s
 
 export type BuildEventSourceHeaders = (
   lastEventId: string | undefined
