@@ -315,7 +315,7 @@ function httpEventSource(
 
   fetchEventSource(api.eventSourceFetch, buildUrl(url, options.query), {
     buildHeaders,
-    onmessage: onMessage,
+    onMessage: onMessage,
     openWhenHidden: true,
     signal: options.signal,
   });

@@ -36,15 +36,16 @@ import {
 } from "./eventSourceParse.js";
 
 const eventStreamContentType = "text/event-stream";
-const defaultRetryInterval = 1000;
+const defaultRetryInterval = 1000; // 1s
+const defaultMonitorInterval = 20 * 1000; // 40s
 
 export type BuildEventSourceHeaders = (
   lastEventId: string | undefined
 ) => Record<string, string>;
 
 export interface FetchEventSourceInit extends RequestInit {
+  onMessage: (ev: EventSourceMessage) => void;
   buildHeaders?: BuildEventSourceHeaders;
-  onmessage?: (ev: EventSourceMessage) => void;
   openWhenHidden?: boolean;
 }
 
@@ -54,41 +55,59 @@ export function fetchEventSource(
   options: FetchEventSourceInit
 ) {
   return new Promise<void>(resolve => {
-    const {buildHeaders, onmessage, openWhenHidden, signal, ...rest} = options;
+    const {onMessage, buildHeaders, signal, ...rest} = options;
 
     if (signal?.aborted) {
       return;
     }
 
+    // function onVisibilityChange() {
+    //   abortController.abort(); // close existing request on every visibility change
+    //   if (!document.hidden) {
+    //     create(); // page is now visible again, recreate request.
+    //   }
+    // }
+
+    // if (!openWhenHidden) {
+    //   document.addEventListener("visibilitychange", onVisibilityChange);
+    // }
+
     let abortController: AbortController;
-    function onVisibilityChange() {
-      abortController.abort(); // close existing request on every visibility change
-      if (!document.hidden) {
-        create(); // page is now visible again, recreate request.
-      }
-    }
-
-    if (!openWhenHidden) {
-      document.addEventListener("visibilitychange", onVisibilityChange);
-    }
-
     let lastEventId: string | undefined = undefined;
     let retryInterval = defaultRetryInterval;
-    let retryTimer: any = 0;
+    let retryTimer = 0;
+    let monitorTimer = 0;
+
     function dispose() {
-      if (!openWhenHidden) {
-        document.removeEventListener("visibilitychange", onVisibilityChange);
-      }
+      // if (!openWhenHidden) {
+      //   document.removeEventListener("visibilitychange", onVisibilityChange);
+      // }
 
       clearTimeout(retryTimer);
+      clearTimeout(monitorTimer);
       abortController.abort();
     }
 
-    // if the incoming signal aborts, dispose resources and resolve:
+    // If the incoming signal aborts, dispose resources and resolve.
     signal?.addEventListener("abort", () => {
       dispose();
-      resolve(); // don't waste time constructing/logging errors
+      resolve();
     });
+
+    function scheduleRetry() {
+      dispose();
+      retryTimer = setTimeout(create, retryInterval);
+    }
+
+    function resetMonitor() {
+      clearTimeout(monitorTimer);
+      monitorTimer = setTimeout(scheduleRetry, defaultMonitorInterval);
+    }
+
+    function onMessageInternal(event: EventSourceMessage) {
+      resetMonitor();
+      return onMessage(event);
+    }
 
     async function create() {
       abortController = new AbortController();
@@ -106,6 +125,7 @@ export function fetchEventSource(
           });
 
           await defaultOnOpen(response);
+          resetMonitor();
 
           await getBytes(
             response.body!,
@@ -113,27 +133,28 @@ export function fetchEventSource(
               getMessages(
                 id => {
                   if (id) {
-                    // store the id and send it back on the next retry:
+                    // Store the id and send it back on the next retry.
                     lastEventId = id;
                   } else {
-                    // don't send the last-event-id header anymore:
+                    // Don't send the last-event-id header anymore.
                     lastEventId = undefined;
                   }
                 },
                 retry => {
                   retryInterval = retry;
                 },
-                onmessage
+                onMessageInternal
               )
             )
           );
         }
       } catch (err) {
-        if (!abortController.signal.aborted) {
-          // if we haven't aborted the request ourselves, retry.
-          clearTimeout(retryTimer);
-          retryTimer = setTimeout(create, retryInterval);
+        if (abortController.signal.aborted) {
+          return;
         }
+
+        // If we haven't aborted the request ourselves, retry.
+        scheduleRetry();
       }
     }
 
