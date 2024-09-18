@@ -15,7 +15,6 @@ import {
 import {Footer} from "../../../global/footer.jsx";
 import {
   MdxCode,
-  MdxCompactList,
   MdxH1,
   MdxH2,
   MdxH3,
@@ -29,6 +28,7 @@ import {
   MdxStrong,
   MdxUl,
 } from "../../../global/mdx/mdx.jsx";
+import {MdxCompactList} from "../../../global/mdx/mdxCompactList.jsx";
 import {MdxImage} from "../../../global/mdx/mdxImage.jsx";
 import {MdxLink} from "../../../global/mdx/mdxLink.jsx";
 import {MdxPill} from "../../../global/mdx/mdxPill.jsx";

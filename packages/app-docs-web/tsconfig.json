@@ -12,7 +12,12 @@
       }
     ],
     "baseUrl": "./src",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "@mdx/*": [
+        "./app/global/mdx/*"
+      ]
+    }
   },
   "include": [
     "next-env.d.ts",

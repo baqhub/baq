@@ -1,3 +1,6 @@
+import {MdxCompactList} from "@mdx/mdxCompactList";
+import {MdxCopyCode} from "@mdx/mdxCopyCode";
+
 export const metadata = {
   id: "7a98908e",
   title: "1. Setup the project",
@@ -13,7 +16,7 @@ In this guide we will be creating the project folder and installing the necessar
 
 For this application we've decided on a popular and familiar set of technologies to make it easier to get started.
 
-<props.compactList>
+<MdxCompactList>
 
 - **Vite** – Bundler, dev server.
 
@@ -21,21 +24,29 @@ For this application we've decided on a popular and familiar set of technologies
 
 - **TypeScript** – Type-checking.
 
-</props.compactList>
+</MdxCompactList>
 
 Let's get started by scaffolding our new project with the help of the Vite creation tool:
+
+<MdxCopyCode>
 
 ```cli
 npm create vite@latest baqtodos --template react-swc-ts
 ```
 
+</MdxCopyCode>
+
 We use the `react-swc-ts` template so that everything is ready for us to use React and TypeScript and we should already be able to run our bare-bones app:
+
+<MdxCopyCode>
 
 ```cli
 cd baqtodos
 npm i
 npm run dev
 ```
+
+</MdxCopyCode>
 
 The app should now be reachable at `http://localhost:5173/`.
 
@@ -55,13 +66,19 @@ We will also install the `todomvc-app-css` package with all the CSS we'll need s
 
 Install everything:
 
+<MdxCopyCode>
+
 ```cli
 npm i @baqhub/sdk @baqhub/sdk-react @baqhub/sdk-react-dom @baqhub/cli todomvc-app-css
 ```
 
+</MdxCopyCode>
+
 ## Remove unneeded content
 
 Finally, we clean up the Vite template by removing everything that won't be of use for what we're building:
+
+<MdxCopyCode>
 
 ```cli
 rm src/App.css
@@ -69,8 +86,11 @@ rm src/index.css
 rm src/assets/react.svg
 ```
 
+</MdxCopyCode>
+
 Replace everything in `App.tsx` to remove the default content:
 
+<MdxCopyCode>
 ```tsx
 import {FC} from "react";
 
@@ -78,6 +98,7 @@ export const App: FC = () => {
   return null;
 };
 ```
+</MdxCopyCode>
 
 Update references in `main.tsx`:
 
@@ -105,10 +126,10 @@ And update the app title in `index.html`:
 
 We're now done setting up our project.
 
-<props.compactList>
+<MdxCompactList>
 
 - The code at this state can be found on [Github](https://github.com/baqhub/app-demo-todo/tree/1-setup-project) or [StackBlitz](https://stackblitz.com/~/github.com/baqhub/app-demo-todo/tree/1-setup-project).
 
 - Next: [Build the UI](f8677e46).
 
-</props.compactList>
+</MdxCompactList>
