@@ -71,7 +71,7 @@ export const SearchDialog: FC<SearchDialogProps> = props => {
           placeholder="user.host.com"
           value={entity}
           onChange={onEntityChange}
-          variant="handle"
+          variant="entity"
           isDisabled={isResolving}
           isSelected
         />

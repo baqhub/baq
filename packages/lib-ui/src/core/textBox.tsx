@@ -14,7 +14,7 @@ import {classForSize, tw, UISize} from "./style.js";
 // Props.
 //
 
-type TextBoxVariant = "normal" | "email" | "handle" | "password";
+type TextBoxVariant = "normal" | "email" | "entity" | "handle" | "password";
 
 interface TextBoxProps {
   size?: UISize;
@@ -101,8 +101,17 @@ function buildVariantProps(
     case "email":
       return {};
 
+    case "entity":
+      return {
+        autoComplete: "off",
+        autoCapitalize: "off",
+      };
+
     case "handle":
-      return {autoComplete: "username", autoCapitalize: "off"};
+      return {
+        autoComplete: "username",
+        autoCapitalize: "off",
+      };
 
     case "password":
       return {
