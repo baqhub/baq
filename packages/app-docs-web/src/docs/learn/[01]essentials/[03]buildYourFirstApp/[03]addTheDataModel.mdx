@@ -58,9 +58,37 @@ Notice that a `store.tsx` file was also created in `src/baq`.
 
 We can now add the first record type to our app. Record types define the data model of the app and represent atomic units of data that can be fetched, updated, and deleted in one go.
 
-We have a choice between creating a new record type, or re-using an existing one. In this case we'll go with the later and use the existing Task record type.
+We have a choice between creating a new record type, or re-using an existing one. In this case we'll go with the later and use the existing Task record type that we can see defined here:
 
-Each record type is itself a BAQ record, and is identified by its author's entity and its unique ID. In this case `types.baq.dev` and `fe727f22b5c34fb185a370449e4f0128` respectively.
+```json
+{
+  "name": "task",
+  "icon_name": "task_alt",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "content": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "description": "Title of the task.",
+            "type": "string",
+            "max_length": 128
+          },
+          "completed": {
+            "description": "Whether the task was completed.",
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Each record type has a name and icon that will be used in the authorization UI, and a [schema](c64170ca) for data validation. In this case, the schema defines two properties `title` and `completed` to model a simple task.
+
+A record type is itself published as a BAQ record, and is identified by its author's entity and its unique ID. In this case `types.baq.dev` and `fe727f22b5c34fb185a370449e4f0128` respectively.
 
 We use the `add` command to download it into our project:
 
