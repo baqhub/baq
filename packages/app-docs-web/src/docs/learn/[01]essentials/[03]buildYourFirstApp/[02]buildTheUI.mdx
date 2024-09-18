@@ -82,37 +82,38 @@ export const Header: FC = () => {
 In this `Task.tsx` component we display a single task with two possible interactions: a checkbox to mark it as completed and a button to delete it.
 
 <MdxCopyCode>
+
 ```tsx
 import {FC} from "react";
 
 interface TaskProps {
-title: string;
-completed: boolean;
+  title: string;
+  completed: boolean;
 }
 
 export const Task: FC<TaskProps> = props => {
   const {title, completed} = props;
 
-const onCompletedChange = () => console.log("Completed!");
-const onDeleteClick = () => console.log("Deleted!");
+  const onCompletedChange = () => console.log("Completed!");
+  const onDeleteClick = () => console.log("Deleted!");
 
-return (
-<li className={completed ? "completed" : undefined}>
-<div className="view">
-<input
+  return (
+    <li className={completed ? "completed" : undefined}>
+      <div className="view">
+        <input
           type="checkbox"
           className="toggle"
           checked={completed}
           onChange={onCompletedChange}
         />
-<label>{title}</label>
-<button className="destroy" onClick={onDeleteClick} />
-</div>
-</li>
-);
+        <label>{title}</label>
+        <button className="destroy" onClick={onDeleteClick} />
+      </div>
+    </li>
+  );
 };
+```
 
-````
 </MdxCopyCode>
 
 ### `<TaskList>`
