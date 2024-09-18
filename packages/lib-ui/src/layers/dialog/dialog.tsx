@@ -6,7 +6,7 @@ import {
   useEffect,
   useRef,
 } from "react";
-import {Grid, tw} from "../../core/style.js";
+import {Column, tw} from "../../core/style.js";
 import {useLayerContext} from "../layerContext.js";
 import {useLayerId} from "../layerHelpers.js";
 import {DialogContent} from "./dialogContent.js";
@@ -24,10 +24,6 @@ export interface DialogProps {
 //
 
 const Layout = tw.dialog`
-  flex
-  flex-col
-  overflow-visible
-
   p-0
   bg-transparent
 
@@ -37,6 +33,10 @@ const Layout = tw.dialog`
   dark:backdrop:bg-neutral-100
 
   outline-none
+`;
+
+const ContentLayout = tw(Column)`
+  p-10
 `;
 
 //
@@ -85,9 +85,9 @@ export const Dialog: FC<DialogProps & PropsWithChildren> = props => {
       onClose={onClose}
       onClick={onRequestClose}
     >
-      <Grid onClick={onContentClick}>
+      <ContentLayout onClick={onContentClick}>
         <DialogContent>{children}</DialogContent>
-      </Grid>
+      </ContentLayout>
     </Layout>
   );
 };

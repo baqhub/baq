@@ -25,7 +25,6 @@ const Layout = tw(Column)`
   w-[460px]
   max-h-[500px]
   min-h-0
-  gap-3
 `;
 
 const Title = tw(Text)`
@@ -34,6 +33,7 @@ const Title = tw(Text)`
 `;
 
 const Conversations = tw(Column)`
+  mt-3
   overflow-y-auto
 `;
 
