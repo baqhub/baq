@@ -1,3 +1,6 @@
+import {MdxCompactList} from "@mdx/mdxCompactList";
+import {MdxCopyCode} from "@mdx/mdxCopyCode";
+
 export const metadata = {
   id: "c856ddeb",
   title: "4. Connect to a BAQ server",
@@ -30,6 +33,8 @@ Here's an overview of authentication in BAQ:
 We create a new `Login.tsx` component that will be displayed before our user is authenticated. All that we need to start the authentication process is a single text input to collect the user's entity.
 
 On "enter", we return the entity to our parent component.
+
+<MdxCopyCode>
 
 ```tsx
 import {UnauthenticatedState} from "@baqhub/sdk-react";
@@ -90,13 +95,15 @@ export const Login: FC<LoginProps> = props => {
 };
 ```
 
+</MdxCopyCode>
+
 What's new:
 
-<props.compactList>
+<MdxCompactList>
 
 - **`UnauthenticatedState`** is the SDK's authentication system state.
 
-</props.compactList>
+</MdxCompactList>
 
 Once the app is registered with the user's server, we need to navigate the browser to the provided URL for the authorization flow to begin.
 
@@ -172,7 +179,7 @@ export const App: FC = () => {
 
 What's new?
 
-<props.compactList>
+<MdxCompactList>
 
 - **`buildAuthentication`** configures the authentication system.
 
@@ -186,15 +193,19 @@ What's new?
 
 - **`Store`** manages records and keeps them in sync with the server.
 
-</props.compactList>
+</MdxCompactList>
 
 ## Test with a BAQ account
 
 That's it! The app is now ready to authenticate with a BAQ server and use it to store its data. To give it a try, create a free account on [BAQ.RUN](https://baq.run) and start the dev server if it's not already running:
 
+<MdxCopyCode>
+
 ```cli
 npm run dev
 ```
+
+</MdxCopyCode>
 
 Navigating to `http://localhost:5173/` displays the login page:
 
@@ -204,19 +215,19 @@ After going through the authorization flow with your newly created BAQ account, 
 
 Things to try:
 
-<props.compactList>
+<MdxCompactList>
 
 - **Refresh the app**. All your data is still here!
 
 - **Open two windows**. State is synchronized between instances.
 
-</props.compactList>
+</MdxCompactList>
 
 ## Next steps
 
 The app is now fully functional and can be deployed for public use.
 
-<props.compactList>
+<MdxCompactList>
 
 - The completed code can be found on [Github](https://github.com/baqhub/app-demo-todo) or [StackBlitz](https://stackblitz.com/~/github.com/baqhub/app-demo-todo).
 
@@ -226,11 +237,11 @@ The app is now fully functional and can be deployed for public use.
 
 - ...or browse [existing record types](d1f9da17) instead.
 
-</props.compactList>
+</MdxCompactList>
 
 For a more in-depth look, follow up with these helpful guides:
 
-<props.compactList>
+<MdxCompactList>
 
 - [Records in BAQ](5d7a0974)
 
@@ -242,4 +253,4 @@ For a more in-depth look, follow up with these helpful guides:
 
 - [Using the React SDK](9b40fdec)
 
-</props.compactList>
+</MdxCompactList>

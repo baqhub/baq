@@ -10,7 +10,6 @@ import {blogPosts, findBlogPost} from "../../../services/blog.js";
 import {Footer} from "../../global/footer.jsx";
 import {
   MdxCode,
-  MdxCompactList,
   MdxH4,
   MdxLi,
   MdxOl,
@@ -19,6 +18,7 @@ import {
   MdxStrong,
   MdxUl,
 } from "../../global/mdx/mdx.jsx";
+import {MdxCompactList} from "../../global/mdx/mdxCompactList.jsx";
 import {MdxImage} from "../../global/mdx/mdxImage.jsx";
 import {MdxLink} from "../../global/mdx/mdxLink.jsx";
 import {Newsletter} from "../../global/newsletter.jsx";

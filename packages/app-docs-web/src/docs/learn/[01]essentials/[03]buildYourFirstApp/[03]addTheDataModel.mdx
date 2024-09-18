@@ -1,3 +1,6 @@
+import {MdxCompactList} from "@mdx/mdxCompactList";
+import {MdxCopyCode} from "@mdx/mdxCopyCode";
+
 export const metadata = {
   id: "8fa128c6",
   title: "3. Add the data model",
@@ -17,9 +20,13 @@ The first step is to configure our BAQ project. To do this we create a `baq.json
 
 This file can be created by hand, but for convenience we will be using the BAQ CLI by running the `init` command at the root of our project:
 
+<MdxCopyCode>
+
 ```cli
 npx baq init
 ```
+
+</MdxCopyCode>
 
 This command will prompt for the following questions:
 
@@ -92,19 +99,23 @@ A record type is itself published as a BAQ record, and is identified by its auth
 
 We use the `add` command to download it into our project:
 
+<MdxCopyCode>
+
 ```cli
 npx baq add types.baq.dev+fe727f22b5c34fb185a370449e4f0128
 ```
 
+</MdxCopyCode>
+
 This does two things:
 
-<props.compactList>
+<MdxCompactList>
 
 - It updates `baq.json` with the new record type.
 
 - It adds a `taskRecord.ts` file with helpful typings and functions.
 
-</props.compactList>
+</MdxCompactList>
 
 ## Connect components
 
@@ -149,7 +160,7 @@ export const Header: FC = () => {
 
 What's new:
 
-<props.compactList>
+<MdxCompactList>
 
 - **`entity`** is the identifier for the current user.
 
@@ -157,7 +168,7 @@ What's new:
 
 - **`updateRecords()`** lets us notify the SDK of the new record.
 
-</props.compactList>
+</MdxCompactList>
 
 ### `<Task>`
 
@@ -204,7 +215,7 @@ export const Task: FC<TaskProps> = props => {
 
 What's new:
 
-<props.compactList>
+<MdxCompactList>
 
 - **`TaskRecordKey`** is an identifier for a Task record.
 
@@ -214,18 +225,18 @@ What's new:
 
 - **`Record.delete()`** helps us create a deleted record tombstone.
 
-</props.compactList>
+</MdxCompactList>
 
 ### `<TaskList>`
 
 Finally, we need to find records to display in `TaskList.tsx`. We achieve this by building a record query that will:
 
-<props.compactList>
+<MdxCompactList>
 
 - Filter by author and type to limit our results.
 - Sort the records to have new tasks at the top.
 
-</props.compactList>
+</MdxCompactList>
 
 We then pass a record key to each `<Task>` child component. We could pass the entire record instead but this approach can make testing easier down the road.
 
@@ -260,7 +271,7 @@ export const TaskList: FC = () => {
 
 What's new:
 
-<props.compactList>
+<MdxCompactList>
 
 - **`useRecordsQuery()`** runs a record query against the server.
 
@@ -268,16 +279,16 @@ What's new:
 
 - **`Record.toKey()`** provides a unique key identifier from a record.
 
-</props.compactList>
+</MdxCompactList>
 
 ## Next step
 
-We're now done adding interactivity to our components.
+We're now done adding interactivity to our components. It's expected for the app not to work at this point as we need to add authentication before it can pull actual data.
 
-<props.compactList>
+<MdxCompactList>
 
 - The code at this state can be found on [Github](https://github.com/baqhub/app-demo-todo/tree/3-add-data-model) or [StackBlitz](https://stackblitz.com/~/github.com/baqhub/app-demo-todo/tree/3-add-data-model).
 
 - Next: [Connect to a BAQ server](c856ddeb).
 
-</props.compactList>
+</MdxCompactList>

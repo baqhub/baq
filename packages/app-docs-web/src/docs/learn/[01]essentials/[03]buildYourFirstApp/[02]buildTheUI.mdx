@@ -1,3 +1,6 @@
+import {MdxCompactList} from "@mdx/mdxCompactList";
+import {MdxCopyCode} from "@mdx/mdxCopyCode";
+
 export const metadata = {
   id: "f8677e46",
   title: "2. Build the UI",
@@ -19,6 +22,7 @@ These files will go in a new `src/components` folder.
 
 In this `Header.tsx` component we display a title for the app and below it a text input to create a new task.
 
+<MdxCopyCode>
 ```tsx
 import {FC} from "react";
 
@@ -39,6 +43,7 @@ export const Header: FC = () => {
   );
 };
 ```
+</MdxCopyCode>
 
 Pressing "enter" is how the new task gets created, so we handle `onSubmit` on the form to extract the input value and reset it for the next task.
 
@@ -76,6 +81,8 @@ export const Header: FC = () => {
 
 In this `Task.tsx` component we display a single task with two possible interactions: a checkbox to mark it as completed and a button to delete it.
 
+<MdxCopyCode>
+
 ```tsx
 import {FC} from "react";
 
@@ -107,10 +114,13 @@ export const Task: FC<TaskProps> = props => {
 };
 ```
 
+</MdxCopyCode>
+
 ### `<TaskList>`
 
 In this `TaskList.tsx` component we display a list of tasks with the `<Task>` component we just created. For now we provide static titles to preview what it'll look like.
 
+<MdxCopyCode>
 ```tsx
 import {FC} from "react";
 import {Task} from "./Task";
@@ -125,7 +135,9 @@ export const TaskList: FC = () => {
     </main>
   );
 };
-```
+````
+
+</MdxCopyCode>
 
 ### `<App>`
 
@@ -151,9 +163,13 @@ export const App: FC = () => {
 
 Start the dev server if it's not running already:
 
+<MdxCopyCode>
+
 ```cli
 npm run dev
 ```
+
+</MdxCopyCode>
 
 Navigating to `http://localhost:5173/` should display the following:
 
@@ -163,10 +179,10 @@ Navigating to `http://localhost:5173/` should display the following:
 
 We're now done building our app UI.
 
-<props.compactList>
+<MdxCompactList>
 
 - The code at this state can be found on [Github](https://github.com/baqhub/app-demo-todo/tree/2-build-ui) or [StackBlitz](https://stackblitz.com/~/github.com/baqhub/app-demo-todo/tree/2-build-ui).
 
 - Next: [Add the data model](8fa128c6).
 
-</props.compactList>
+</MdxCompactList>
