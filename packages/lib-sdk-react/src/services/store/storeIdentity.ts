@@ -53,7 +53,7 @@ function buildUnauthenticatedIdentity(): StoreIdentity {
   const clients = new Map<string, Client>();
   const findClient: FindClient = e => {
     if (e === entity) {
-      throw new Error("Not supported when not authenticated.");
+      throw new Error("Authenticated Store required.");
     }
 
     const existingClient = clients.get(e);
