@@ -2132,7 +2132,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@baqhub/sdk-react@workspace:packages/lib-sdk-react"
   dependencies:
-    "@baqhub/sdk": "npm:^0.1.20"
+    "@baqhub/sdk": "npm:^0.1.22"
     "@types/lodash": "npm:4.17.7"
     "@types/react": "npm:18.3.7"
     "@types/use-sync-external-store": "npm:0.0.6"
@@ -2145,7 +2145,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@baqhub/sdk@npm:*, @baqhub/sdk@npm:^0.1.20, @baqhub/sdk@npm:^0.1.3, @baqhub/sdk@workspace:packages/lib-sdk":
+"@baqhub/sdk@npm:*, @baqhub/sdk@npm:^0.1.20, @baqhub/sdk@npm:^0.1.22, @baqhub/sdk@npm:^0.1.3, @baqhub/sdk@workspace:packages/lib-sdk":
   version: 0.0.0-use.local
   resolution: "@baqhub/sdk@workspace:packages/lib-sdk"
   dependencies:
