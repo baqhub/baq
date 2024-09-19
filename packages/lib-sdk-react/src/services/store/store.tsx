@@ -902,8 +902,12 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     type Result = ReadonlyArray<Q>;
     const mode = options.mode || "fetch";
     const storeContext = useStoreContext();
-    const {entity, findClient, updateRecords} = storeContext;
+    const {isAuthenticated, entity, findClient, updateRecords} = storeContext;
     const {registerQuery, registerLiveQuery} = storeContext;
+
+    if (!isAuthenticated) {
+      throw new Error("useRecordsQuery() requires an authenticated Store.");
+    }
 
     //
     // State.
@@ -1079,7 +1083,13 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
   function useStaticRecordsQuery<Q extends T>(requestedQuery: Query<Q>) {
     type Result = ReadonlyArray<Q>;
-    const {versions, registerQuery} = useStoreContext();
+    const {isAuthenticated, versions, registerQuery} = useStoreContext();
+
+    if (!isAuthenticated && !requestedQuery.proxyTo) {
+      throw new Error(
+        "useStaticRecordsQuery() requires an authenticated Store for non-proxied queries."
+      );
+    }
 
     //
     // State.
