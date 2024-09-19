@@ -17,6 +17,7 @@ import {
 export type FindClient = (entity: string) => Client;
 
 export interface StoreIdentity {
+  isAuthenticated: boolean;
   entityRecord: EntityRecord;
   findClient: FindClient;
   blobUrlBuilder: BlobUrlBuilder;
@@ -36,6 +37,7 @@ function buildAuthenticatedIdentity(
   const blobUrlBuilder = client.blobUrlBuilderFor(authState.entityRecord);
 
   return {
+    isAuthenticated: true,
     entityRecord: Record.toSelf(authState.entityRecord),
     findClient,
     blobUrlBuilder,
@@ -82,6 +84,7 @@ function buildUnauthenticatedIdentity(): StoreIdentity {
   };
 
   return {
+    isAuthenticated: false,
     entityRecord: {
       author: {entity},
       id: "00000000000000000000000000000000",

@@ -45,6 +45,7 @@ export interface RegisterQueryOptions {
 }
 
 export interface StoreContextProps<T extends AnyRecord> {
+  isAuthenticated: boolean;
   entity: string;
   findClient: FindClient;
   discover: Client["discover"];

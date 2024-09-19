@@ -19,15 +19,22 @@ export function useConstant<T>(builder: () => T) {
   return valueRef.current;
 }
 
-export function useStable<T extends (...args: any[]) => any>(value: T) {
+export function useStable<T extends (...args: any[]) => any>(
+  value: T | undefined
+) {
   const valueRef = useRef(value);
 
   useEffect(() => {
     valueRef.current = value;
   }, [value]);
 
-  return useCallback((...args: Parameters<T>): ReturnType<T> => {
-    return valueRef.current(...args);
+  return useCallback((...args: Parameters<T>) => {
+    const currentValue = valueRef.current;
+    if (!currentValue) {
+      return;
+    }
+
+    currentValue(...args);
   }, []);
 }
 

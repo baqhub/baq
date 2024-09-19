@@ -102,7 +102,7 @@ export function reducer(
 }
 
 export function useSearchDialogState(onEntityFound: HandlerOf<string>) {
-  const {entity, client, updateRecords} = useRecordHelpers();
+  const {entity, discover, updateRecords} = useRecordHelpers();
   const [state, dispatch] = useReducer(reducer, {
     isResolving: false,
     searchEntity: "",
@@ -141,7 +141,7 @@ export function useSearchDialogState(onEntityFound: HandlerOf<string>) {
           : `${searchEntity}.baq.run`;
 
         // Resolve the recipient.
-        const entityRecord = await client.discover(fullEntity, signal);
+        const entityRecord = await discover(fullEntity, signal);
 
         // Update the state.
         updateRecords([entityRecord], entityRecord.author.entity);
@@ -156,7 +156,7 @@ export function useSearchDialogState(onEntityFound: HandlerOf<string>) {
     });
   }, [
     entity,
-    client,
+    discover,
     isResolving,
     searchEntity,
     updateRecords,

@@ -13,11 +13,14 @@ import {
   Outlet,
   ScrollRestoration,
   createRoute,
+  useMatch,
   useNavigate,
   useParams,
 } from "@tanstack/react-router";
 import {FC, useEffect} from "react";
 import {rootRoute} from "../main.js";
+import {profileRoute} from "./profilePage/profilePage.js";
+import {PublicTopNav} from "./shared/topNav/publicTopNav.js";
 import {TopNav} from "./shared/topNav/topNav.js";
 
 //
@@ -95,7 +98,9 @@ export const App: FC = () => {
     authorizationId,
   });
 
-  if (state.status === "unauthenticated") {
+  // Login page.
+  const profileMatch = useMatch({from: profileRoute.id, shouldThrow: false});
+  if (state.status === "unauthenticated" && !profileMatch) {
     return (
       <Column>
         <Login appName="Bird" state={state} onConnectClick={onConnectRequest}>
@@ -108,6 +113,22 @@ export const App: FC = () => {
     );
   }
 
+  // Public app.
+  if (state.status === "unauthenticated") {
+    return (
+      <Store>
+        <LayerManager>
+          <Layout>
+            <Outlet />
+          </Layout>
+          <PublicTopNav />
+          <ScrollRestoration />
+        </LayerManager>
+      </Store>
+    );
+  }
+
+  // Main app.
   return (
     <Store identity={state.identity} onDisconnectRequest={onDisconnectRequest}>
       <LayerManager>

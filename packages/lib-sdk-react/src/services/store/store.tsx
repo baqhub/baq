@@ -94,7 +94,7 @@ export interface StoreEntityProviderProps extends PropsWithChildren {
 
 export interface StoreProps extends PropsWithChildren {
   identity?: StoreIdentity;
-  onDisconnectRequest: Handler;
+  onDisconnectRequest?: Handler;
 }
 
 export function createStore<R extends CleanRecordType<AnyRecord>[]>(
@@ -773,7 +773,8 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     const {versions} = stateRef.current;
     const context = useMemo<StoreContextProps<T>>(() => {
       const result: StoreContextProps<T> = {
-        entity,
+        isAuthenticated: identity.isAuthenticated,
+        entity: identity.entityRecord.author.entity,
         findClient: identity.findClient,
         discover: identity.discover,
         downloadBlob: identity.downloadBlob,
@@ -794,7 +795,6 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
       return result;
     }, [
-      entity,
       identity,
       versions,
       updateRecords,
