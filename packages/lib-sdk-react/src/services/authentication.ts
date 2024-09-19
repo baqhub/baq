@@ -6,7 +6,6 @@ import {
   AppScopes,
   Authentication,
   AuthenticationState,
-  Client,
   EntityRecord,
   Http,
   HttpStatusCode,
@@ -23,7 +22,7 @@ import {
   StorageAdapter,
 } from "../helpers/storage.js";
 import {buildFetcher} from "../helpers/suspense.js";
-import {StoreIdentity} from "./store/store.js";
+import {StoreIdentity} from "./store/storeIdentity.js";
 
 //
 // State.
@@ -304,17 +303,11 @@ export function buildAuthentication(options: BuildAuthenticationOptions) {
       authorizationId
     );
 
-    const client = Client.authenticated(localStateWithAuthorization);
-    const blobUrlBuilder = client.blobUrlBuilderFor(localState.entityRecord);
     return {
       status: AuthenticationStatus.AUTHENTICATED,
       authorizationId,
       localState,
-      identity: {
-        entityRecord: localState.entityRecord,
-        client,
-        blobUrlBuilder,
-      },
+      identity: StoreIdentity.new(localStateWithAuthorization),
     };
   }
 
@@ -359,19 +352,10 @@ export function buildAuthentication(options: BuildAuthenticationOptions) {
           authorizationId: authorizationId || localState.authorizationId,
         };
 
-        const client = Client.authenticated(localStateWithAuthorization);
-        const blobUrlBuilder = client.blobUrlBuilderFor(
-          localState.entityRecord
-        );
-
         dispatch({
           type: UseAuthenticationActionType.AUTHORIZATION_SUCCESS,
+          identity: StoreIdentity.new(localStateWithAuthorization),
           authorizationId,
-          identity: {
-            entityRecord: localState.entityRecord,
-            client,
-            blobUrlBuilder,
-          },
         });
       },
       [waitingOnFlowLocalState]
@@ -413,10 +397,11 @@ export function buildAuthentication(options: BuildAuthenticationOptions) {
       }
 
       const {authorizationId, localState, identity} = initializingLocalState;
-      const {client} = identity;
+      const {findClient} = identity;
 
       return abortable(async signal => {
         try {
+          const client = findClient(localState.entityRecord.author.entity);
           const [serverEntityRecord, serverAppRecord] = await Promise.all([
             client.getOwnRecord(
               AnyRecord,
@@ -462,16 +447,9 @@ export function buildAuthentication(options: BuildAuthenticationOptions) {
 
           await authenticationStorage.write(updatedState);
 
-          const updatedClient = Client.authenticated(updatedState);
-          const blobUrlBuilder = await updatedClient.blobUrlBuilder();
-
           dispatch({
             type: UseAuthenticationActionType.INITIALIZE_SUCCESS,
-            identity: {
-              entityRecord: serverEntityRecord.record,
-              client: updatedClient,
-              blobUrlBuilder,
-            },
+            identity: StoreIdentity.new(updatedState),
           });
         } catch (error) {
           if (error instanceof AbortedError || signal.aborted) {

@@ -146,7 +146,7 @@ class RecordClassBase<
     const model = IO.object({
       author: EntityLink.io(),
       id: IO.string,
-      source: IO.defaultValue(RRecordSource, RecordSource.SELF),
+      source: IO.defaultValue(RRecordSource, RecordSource.PROXY),
       createdAt: IO.isoDate,
       receivedAt: IO.union([IO.undefined, IO.isoDate]),
       version: IO.union([IO.undefined, RRecordVersion]),
@@ -425,6 +425,10 @@ function updateToSynced<T extends AnyRecord>(record: T): T {
   return {...record, mode: RecordMode.SYNCED};
 }
 
+function updateToSelf<T extends AnyRecord>(record: T): T {
+  return {...record, source: RecordSource.SELF};
+}
+
 function updateToResolution<T extends AnyRecord>(record: T): T {
   return {...record, source: "resolution"};
 }
@@ -466,6 +470,7 @@ export const Record = {
   isPublic: isPublicRecord,
   hasType: recordHasType,
   toSynced: updateToSynced,
+  toSelf: updateToSelf,
   toResolution: updateToResolution,
   toKey: recordToKey,
   toLink: recordToLink,

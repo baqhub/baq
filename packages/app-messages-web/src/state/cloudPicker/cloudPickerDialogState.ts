@@ -20,7 +20,7 @@ export function useCloudPickerState(
   onRequestClose: Handler
 ) {
   const [selectedVersion, setSelectedVersion] = useState<FileVersionHash>();
-  const {entity, client, recordByVersion} = useRecordHelpers();
+  const {entity, downloadBlob, recordByVersion} = useRecordHelpers();
 
   const {getRecords} = useStaticRecordsQuery({
     pageSize: 200,
@@ -49,12 +49,18 @@ export function useCloudPickerState(
 
     const fileRecord = recordByVersion(selectedVersion);
     const getBlob = async (signal: AbortSignal) => {
-      return client.downloadBlob(fileRecord, fileRecord.content.blob, signal);
+      return downloadBlob(fileRecord, fileRecord.content.blob, signal);
     };
 
     onRequestClose();
     onFilePick(getBlob);
-  }, [selectedVersion, client, recordByVersion, onFilePick, onRequestClose]);
+  }, [
+    selectedVersion,
+    downloadBlob,
+    recordByVersion,
+    onFilePick,
+    onRequestClose,
+  ]);
 
   return {
     getFileVersions,

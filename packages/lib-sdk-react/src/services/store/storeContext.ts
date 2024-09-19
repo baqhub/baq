@@ -9,6 +9,7 @@ import {
   RecordKey,
 } from "@baqhub/sdk";
 import {createContext, useContext} from "react";
+import {FindClient} from "./storeIdentity.js";
 import {StoreQuery} from "./storeQuery.js";
 import {UpdateRecords} from "./storeTypes.js";
 
@@ -44,8 +45,11 @@ export interface RegisterQueryOptions {
 }
 
 export interface StoreContextProps<T extends AnyRecord> {
+  isAuthenticated: boolean;
   entity: string;
-  client: Client;
+  findClient: FindClient;
+  discover: Client["discover"];
+  downloadBlob: Client["downloadBlob"];
   versions: RecordVersions<T>;
   updateRecords: UpdateRecords<T>;
   buildBlobUrl: <R extends T>(

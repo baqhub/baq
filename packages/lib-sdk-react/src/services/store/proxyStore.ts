@@ -30,14 +30,17 @@ export function buildHelpers<T extends AnyRecord>(
   accessors: ReturnType<typeof buildAccessors>,
   proxyEntity: string
 ) {
-  const {entity, client, versions, getStateSnapshot} = store;
+  const {isAuthenticated, entity} = store;
+  const {discover, downloadBlob, versions, getStateSnapshot} = store;
   const {updateRecords, uploadBlob, buildBlobUrl, onDisconnectRequest} = store;
   const updateStanding = updateStandingDecision<T>(entity);
 
   return {
+    isAuthenticated,
     entity,
     proxyEntity,
-    client,
+    discover,
+    downloadBlob,
     recordByVersion: recordByVersion(versions),
     recordByKey: accessors.recordByKey(getStateSnapshot),
     findRecordByKey: accessors.findRecordByKey(getStateSnapshot),

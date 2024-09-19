@@ -3,9 +3,7 @@ import {
   AnyBlobLink,
   AnyRecord,
   Async,
-  BlobUrlBuilder,
   CleanRecordType,
-  Client,
   EntityRecord,
   Handler,
   Http,
@@ -58,6 +56,7 @@ import {
   Subscription,
   buildStoreContext,
 } from "./storeContext.js";
+import {StoreIdentity} from "./storeIdentity.js";
 import {
   Mutation,
   applyProxyUpdates,
@@ -93,15 +92,9 @@ export interface StoreEntityProviderProps extends PropsWithChildren {
   entity: string;
 }
 
-export interface StoreIdentity {
-  entityRecord: EntityRecord;
-  client: Client;
-  blobUrlBuilder: BlobUrlBuilder;
-}
-
 export interface StoreProps extends PropsWithChildren {
-  identity: StoreIdentity;
-  onDisconnectRequest: Handler;
+  identity?: StoreIdentity;
+  onDisconnectRequest?: Handler;
 }
 
 export function createStore<R extends CleanRecordType<AnyRecord>[]>(
@@ -156,8 +149,12 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
   }
 
   const Store: FC<StoreProps> = props => {
-    const {identity, onDisconnectRequest, children} = props;
-    const {entityRecord, client, blobUrlBuilder} = identity;
+    const {onDisconnectRequest, children} = props;
+    const identity = useMemo(() => {
+      return props.identity || StoreIdentity.newUnauthenticated();
+    }, [props.identity]);
+
+    const {entityRecord, findClient, blobUrlBuilder} = identity;
     const {entity} = entityRecord.author;
     const onDisconnectRequestStable = useStable(onDisconnectRequest);
     const {isMountedRef} = useIsMounted();
@@ -346,6 +343,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
       const performMutation = async (mutation: Mutation<T>) => {
         // Perform the request.
+        const client = findClient(entity);
         const result = await performMutationRequest(
           RKnownRecord,
           RKnownEventRecord,
@@ -452,7 +450,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         unsubscribe();
         stop();
       };
-    }, [subscribeToMutations, entity, client, onDisconnectRequestStable]);
+    }, [subscribeToMutations, entity, findClient, onDisconnectRequestStable]);
 
     //
     // Queries.
@@ -607,6 +605,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
             keepGoing = false;
 
             try {
+              const client = findClient(query.proxyTo || entity);
               const response = await client.getRecords(
                 RKnownRecord,
                 RKnownRecord,
@@ -700,7 +699,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         updateQueries,
         findLiveQueryMatch,
         entity,
-        client,
+        findClient,
         isMountedRef,
         updateRecords,
       ]
@@ -738,6 +737,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
     const uploadBlob = useCallback(
       async (blob: Blob, signal?: AbortSignal) => {
+        const client = findClient(entity);
         const blobResponse = await client.uploadBlob(blob, signal);
 
         // TODO: Memory management.
@@ -747,7 +747,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
         return blobResponse;
       },
-      [client]
+      [findClient, entity]
     );
 
     const buildBlobUrl = useCallback(
@@ -773,8 +773,11 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     const {versions} = stateRef.current;
     const context = useMemo<StoreContextProps<T>>(() => {
       const result: StoreContextProps<T> = {
-        entity,
-        client,
+        isAuthenticated: identity.isAuthenticated,
+        entity: identity.entityRecord.author.entity,
+        findClient: identity.findClient,
+        discover: identity.discover,
+        downloadBlob: identity.downloadBlob,
         versions,
         updateRecords,
         uploadBlob,
@@ -792,8 +795,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
       return result;
     }, [
-      entity,
-      client,
+      identity,
       versions,
       updateRecords,
       uploadBlob,
@@ -900,8 +902,12 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     type Result = ReadonlyArray<Q>;
     const mode = options.mode || "fetch";
     const storeContext = useStoreContext();
-    const {entity, client, updateRecords} = storeContext;
+    const {isAuthenticated, entity, findClient, updateRecords} = storeContext;
     const {registerQuery, registerLiveQuery} = storeContext;
+
+    if (!isAuthenticated) {
+      throw new Error("useRecordsQuery() requires an authenticated Store.");
+    }
 
     //
     // State.
@@ -1043,6 +1049,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         includeDeleted: true,
       };
 
+      const client = findClient(entity);
       client.recordEventSource(
         RKnownEventRecord,
         onRecord,
@@ -1053,7 +1060,14 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         abort.abort();
         unregister();
       };
-    }, [promise, registerLiveQuery, storeQuery, client, updateRecords]);
+    }, [
+      promise,
+      registerLiveQuery,
+      storeQuery,
+      entity,
+      findClient,
+      updateRecords,
+    ]);
 
     return {
       isLoading: Boolean(promise),
@@ -1069,7 +1083,13 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
   function useStaticRecordsQuery<Q extends T>(requestedQuery: Query<Q>) {
     type Result = ReadonlyArray<Q>;
-    const {versions, registerQuery} = useStoreContext();
+    const {isAuthenticated, versions, registerQuery} = useStoreContext();
+
+    if (!isAuthenticated && !requestedQuery.proxyTo) {
+      throw new Error(
+        "useStaticRecordsQuery() requires an authenticated Store for non-proxied queries."
+      );
+    }
 
     //
     // State.

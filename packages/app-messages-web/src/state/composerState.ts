@@ -117,7 +117,7 @@ export function reducer(
 export function useComposerState(
   onConversationCreated: HandlerOf<ConversationRecordKey>
 ) {
-  const {entity, client, updateRecords} = useRecordHelpers();
+  const {entity, discover, updateRecords} = useRecordHelpers();
   const [state, dispatch] = useReducer(reducer, {
     isResolving: false,
     recipient: "",
@@ -152,7 +152,7 @@ export function useComposerState(
     return abortable(async signal => {
       try {
         // Resolve the recipient.
-        const entityRecord = await client.discover(recipient, signal);
+        const entityRecord = await discover(recipient, signal);
         const localEntityRecord = Record.toResolution(entityRecord);
 
         // Create the conversation.
@@ -178,7 +178,7 @@ export function useComposerState(
     });
   }, [
     entity,
-    client,
+    discover,
     isResolving,
     recipient,
     updateRecords,

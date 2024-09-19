@@ -44,7 +44,7 @@ export const OtherProfilePage: FC<OtherProfilePageProps> = ({otherEntity}) => {
 
   const profile = getFull();
   if (!profile) {
-    return "No profile";
+    return <EmptyPosts icon={<FaceFrownIcon />} text="Profile not found..." />;
   }
 
   const {entity, name, bio} = profile;

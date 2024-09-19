@@ -44,14 +44,14 @@
     "@baqhub/sdk-react": "^0.1.20",
     "@baqhub/sdk-react-native": "^0.1.20",
     "expo-secure-store": "^12.8.1",
-    "tslib": "2.6.3"
+    "tslib": "2.7.0"
   },
   "peerDependencies": {
     "expo": "*",
     "react-native": ">=0.60"
   },
   "devDependencies": {
-    "@types/node": "20.14.9",
+    "@types/node": "22.5.5",
     "tsconfig-to-dual-package": "1.2.0",
     "typescript": "5.5.2"
   }
