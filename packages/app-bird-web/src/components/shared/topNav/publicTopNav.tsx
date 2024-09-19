@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC, useCallback, useState} from "react";
 import {TopNavBase} from "./topNavBase.js";
 
 //
@@ -7,11 +7,20 @@ import {TopNavBase} from "./topNavBase.js";
 
 export const PublicTopNav: FC = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const onSearchClick = useCallback(() => {
+    setIsSearchOpen(true);
+  }, []);
+
+  const onSearchRequestClose = useCallback(() => {
+    setIsSearchOpen(false);
+  }, []);
+
   return (
     <TopNavBase
       isSearchOpen={isSearchOpen}
-      onSearchClick={() => setIsSearchOpen(true)}
-      onSearchRequestClose={() => setIsSearchOpen(false)}
+      onSearchClick={onSearchClick}
+      onSearchRequestClose={onSearchRequestClose}
     />
   );
 };

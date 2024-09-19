@@ -73,9 +73,9 @@ function buildUnauthenticatedIdentity(): StoreIdentity {
     return builder(record, blob, expiresInSeconds);
   };
 
-  const discover: Client["discover"] = entity => {
+  const discover: Client["discover"] = (entity, signal) => {
     const client = findClient(entity);
-    return client.getEntityRecord();
+    return client.getEntityRecord(signal);
   };
 
   const downloadBlob: Client["downloadBlob"] = (record, blob, signal) => {
