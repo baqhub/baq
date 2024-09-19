@@ -87,6 +87,21 @@ function buildClientBase(clientOptions: BuildClientOptions) {
   const getEntityRecord = Async.sharePromise(ger);
 
   //
+  // Sync entity record.
+  //
+
+  let entityRecord: EntityRecord;
+  getEntityRecord().then(e => (entityRecord = e));
+
+  function getEntityRecordSync() {
+    if (!entityRecord) {
+      throw Error("Entity record not available");
+    }
+
+    return entityRecord;
+  }
+
+  //
   // Template resolution.
   //
 
@@ -483,6 +498,7 @@ function buildClientBase(clientOptions: BuildClientOptions) {
   return {
     expandUrlTemplate,
     getEntityRecord,
+    getEntityRecordSync,
     getRecord,
     getRecordVersion,
     getOwnRecord,
