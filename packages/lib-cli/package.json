@@ -35,23 +35,22 @@
   "dependencies": {
     "@baqhub/sdk": "^0.1.20",
     "@commander-js/extra-typings": "12.1.0",
-    "@inquirer/prompts": "5.0.7",
-    "ajv": "8.16.0",
+    "@inquirer/prompts": "6.0.1",
     "commander": "12.1.0",
     "find-package-json": "1.2.0",
     "lodash": "4.17.21",
     "open": "10.1.0",
     "prettier": "3.3.2",
     "prettier-plugin-organize-imports": "3.2.4",
-    "tslib": "2.6.3",
+    "tslib": "2.7.0",
     "typescript": "5.5.2"
   },
   "devDependencies": {
     "@types/find-package-json": "1.2.6",
-    "@types/lodash": "4.17.6",
-    "@types/node": "20.14.9",
+    "@types/lodash": "4.17.7",
+    "@types/node": "22.5.5",
     "@types/prettier": "3.0.0",
     "tsconfig-to-dual-package": "1.2.0",
-    "vitest": "2.0.5"
+    "vitest": "2.1.1"
   }
 }
