@@ -57,6 +57,7 @@ const RemoteMessage = tw(MessageBase)`
 `;
 
 const ButtonLayout = tw(Grid)`
+  shrink-0
   invisible
   group-hover:visible
   aria-expanded:visible
