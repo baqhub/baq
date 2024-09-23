@@ -51,6 +51,12 @@ export const Text = tw.div`
   text-neutral-900
   dark:text-white
   select-none
+  cursor-default
+`;
+
+export const TextSelect = tw(Text)`
+  select-text
+  cursor-text
 `;
 
 export const Link = tw.a`

@@ -1,5 +1,5 @@
 import {usePostState} from "@baqhub/bird-shared/state/postState.js";
-import {ButtonRow, Column, Row, Text, tw} from "@baqhub/ui/core/style.js";
+import {ButtonRow, Column, Row, TextSelect, tw} from "@baqhub/ui/core/style.js";
 import {RelativeDateFormatter} from "@baqhub/ui/date/relativeDateFormatter.js";
 import {
   ArrowPathRoundedSquareIcon,
@@ -66,17 +66,15 @@ const UserLinkEntity = tw.span`
   dark:text-neutral-500
 `;
 
-const BodyText = tw(Text)`
+const BodyText = tw(TextSelect)`
   text-base
   font-light
   whitespace-pre-wrap
-  select-text
 `;
 
-const DateText = tw(Text)`
+const DateText = tw(TextSelect)`
   grow
 
-  select-text
   text-right
   text-base
   text-neutral-400
