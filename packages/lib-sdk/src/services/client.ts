@@ -7,6 +7,7 @@ import {findLink} from "../helpers/headers.js";
 import * as IO from "../helpers/io.js";
 import {Str} from "../helpers/string.js";
 import {findStableTimestamp} from "../helpers/time.js";
+import {noop} from "../helpers/type.js";
 import {HttpCredentialsHeader} from "../model/core/httpCredentialsHeader.js";
 import {HttpHeaders} from "../model/core/httpHeaders.js";
 import {HttpMethod} from "../model/core/httpMethod.js";
@@ -91,7 +92,7 @@ function buildClientBase(clientOptions: BuildClientOptions) {
   //
 
   let entityRecord: EntityRecord;
-  getEntityRecord().then(e => (entityRecord = e));
+  getEntityRecord().then(e => (entityRecord = e), noop);
 
   function getEntityRecordSync() {
     if (!entityRecord) {

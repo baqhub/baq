@@ -649,6 +649,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
               if (
                 Http.isError(error, [
                   HttpStatusCode.BAD_REQUEST,
+                  HttpStatusCode.NOT_FOUND,
                   HttpStatusCode.INTERNAL_SERVER_ERROR,
                 ])
               ) {
