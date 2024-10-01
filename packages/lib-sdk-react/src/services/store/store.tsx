@@ -37,7 +37,12 @@ import {
 } from "react";
 import {useSyncExternalStoreWithSelector} from "use-sync-external-store/with-selector.js";
 import {isReferenceEqual, isShallowEqual} from "../../helpers/equality.js";
-import {useDeepMemo, useIsMounted, useStable} from "../../helpers/hooks.js";
+import {
+  abortable,
+  useDeepMemo,
+  useIsMounted,
+  useStable,
+} from "../../helpers/hooks.js";
 import {
   ProxyStoreContextProps,
   buildAccessors,
@@ -46,8 +51,8 @@ import {
 } from "./proxyStore.js";
 import {
   EntityRecordsState,
-  LiveQueries,
   Queries,
+  QueriesList,
   RecordVersions,
   Records,
   RegisterQueryOptions,
@@ -63,7 +68,11 @@ import {
   applyUpdates,
   performMutationRequest,
 } from "./storeMutation.js";
-import {LiveQueryOptions, StoreQuery} from "./storeQuery.js";
+import {
+  LiveQueryOptions,
+  StaticQueryOptions,
+  StoreQuery,
+} from "./storeQuery.js";
 
 //
 // State.
@@ -75,7 +84,7 @@ interface State<T extends AnyRecord> {
   stateSubscriptions: ReadonlyArray<Subscription>;
   queries: Queries<T>;
   queriesSubscriptions: ReadonlyArray<Subscription>;
-  liveQueries: LiveQueries<T>;
+  liveQueries: QueriesList<T>;
   liveQueriesSubscriptions: ReadonlyArray<Subscription>;
   lastQueryId: number;
   mutations: ReadonlyArray<Mutation<T>>;
@@ -494,7 +503,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     }, []);
 
     const updateLiveQueries = useCallback(
-      (updater: (queries: LiveQueries<T>) => LiveQueries<T>) => {
+      (updater: (queries: QueriesList<T>) => QueriesList<T>) => {
         if (stateRef.current.isUpdating) {
           throw new Error("State is already updating.");
         }
@@ -531,34 +540,14 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
       return stateRef.current.liveQueries;
     }, []);
 
-    const findLiveQueryMatch = useCallback(
-      <Q extends T>(query: StoreQuery<T, Q>) => {
-        const {liveQueries} = stateRef.current;
-
-        for (let i = liveQueries.length - 1; i >= 0; i--) {
-          const q = liveQueries[i];
-          if (!q || q.id === query.id) {
-            continue;
-          }
-
-          if (Query.isSyncSuperset(q.query, query.query)) {
-            return q;
-          }
-        }
-
-        return undefined;
-      },
-      []
-    );
-
     const registerQuery = useCallback(
       <Q extends T>(query: Query<Q>, options: RegisterQueryOptions) => {
-        const {isFetch, isSync, isLocalTracked} = options;
-        const {queries, lastQueryId} = stateRef.current;
+        const {isFetch, isSync, isLocalTracked, refreshInterval} = options;
+        const {queries, lastQueryId, liveQueries} = stateRef.current;
         const equal = (() => {
           for (let i = lastQueryId; i > 0; i--) {
             const q = queries[i];
-            if (!q || q.isDisplayed) {
+            if (!q || q.isDisplayed || q.refreshInterval !== refreshInterval) {
               continue;
             }
 
@@ -595,7 +584,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           return undefined;
         })();
 
-        const syncMatch = match && findLiveQueryMatch(match);
+        const syncMatch = match && findLiveQueryMatch(liveQueries, match);
         const queryId = ++stateRef.current.lastQueryId;
 
         const performQuery = async () => {
@@ -634,6 +623,8 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                   [queryId]: {
                     ...currentQuery,
                     promise: undefined,
+                    error: undefined,
+                    refreshCount: currentQuery.refreshCount + 1,
                     isComplete: !response.nextPage,
                     recordVersions: response.records.map(Record.toVersionHash),
                   },
@@ -678,10 +669,38 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           }
         };
 
+        const refresh = (refreshCount: number) => {
+          updateQueries(value => {
+            const currentQuery = value[queryId];
+            if (!currentQuery) {
+              throw new Error("Query not found.");
+            }
+
+            if (
+              currentQuery.promise ||
+              refreshCount !== currentQuery.refreshCount
+            ) {
+              return value;
+            }
+
+            const promise = performQuery();
+            return {
+              ...value,
+              [queryId]: {
+                ...currentQuery,
+                promise,
+              },
+            };
+          });
+        };
+
         const newQuery: StoreQuery<T, Q> = {
           id: queryId,
           query,
           promise: syncMatch || !isFetch ? undefined : performQuery(),
+          refresh,
+          refreshCount: 0,
+          refreshInterval,
           isSync,
           isComplete: match?.isComplete || isLocalTracked,
           isDisplayed: false,
@@ -696,14 +715,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
         return newQuery;
       },
-      [
-        updateQueries,
-        findLiveQueryMatch,
-        entity,
-        findClient,
-        isMountedRef,
-        updateRecords,
-      ]
+      [updateQueries, entity, findClient, isMountedRef, updateRecords]
     );
 
     const registerLiveQuery = useCallback(
@@ -712,16 +724,8 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           return undefined;
         }
 
-        const {liveQueries} = stateRef.current;
-        for (let i = liveQueries.length - 1; i >= 0; i--) {
-          const q = liveQueries[i];
-          if (!q || q.id === query.id) {
-            continue;
-          }
-
-          if (Query.isSyncSuperset(q.query, query.query)) {
-            return undefined;
-          }
+        if (findLiveQueryMatch(stateRef.current.liveQueries, query)) {
+          return undefined;
         }
 
         updateLiveQueries(value => uniqBy([query, ...value], q => q.id));
@@ -861,23 +865,12 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
   function useShouldSync<Q extends T>(query: StoreQuery<T, Q>) {
     const selector = useCallback(
-      (liveQueries: LiveQueries<T>) => {
+      (liveQueries: QueriesList<T>) => {
         if (!query.isSync) {
           return false;
         }
 
-        for (let i = liveQueries.length - 1; i >= 0; i--) {
-          const q = liveQueries[i];
-          if (!q || q.id === query.id) {
-            continue;
-          }
-
-          if (Query.isSyncSuperset(q.query, query.query)) {
-            return false;
-          }
-        }
-
-        return true;
+        return !findLiveQueryMatch(liveQueries, query);
       },
       [query]
     );
@@ -921,13 +914,21 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
     const initialStoreQuery = useDeepMemo<StoreQuery<T, Q>>(() => {
       if (isTracked) {
-        return registerQuery(requestedQuery, {isFetch, isSync, isLocalTracked});
+        return registerQuery(requestedQuery, {
+          isFetch,
+          isSync,
+          isLocalTracked,
+          refreshInterval: undefined,
+        });
       }
 
       return {
         id: -1,
         query: requestedQuery,
         promise: undefined,
+        refresh: () => Promise.resolve(),
+        refreshCount: 0,
+        refreshInterval: undefined,
         isSync: false,
         isComplete: isLocalTracked,
         isDisplayed: true,
@@ -1082,9 +1083,15 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     };
   }
 
-  function useStaticRecordsQuery<Q extends T>(requestedQuery: Query<Q>) {
+  function useStaticRecordsQuery<Q extends T>(
+    requestedQuery: Query<Q>,
+    options: StaticQueryOptions = {}
+  ) {
     type Result = ReadonlyArray<Q>;
-    const {isAuthenticated, versions, registerQuery} = useStoreContext();
+    const storeContext = useStoreContext();
+    const {isAuthenticated, versions} = storeContext;
+    const {registerQuery} = storeContext;
+    const {refreshInterval: requestedRefreshInterval} = options;
 
     if (!isAuthenticated && !requestedQuery.proxyTo) {
       throw new Error(
@@ -1101,12 +1108,14 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         isFetch: true,
         isSync: false,
         isLocalTracked: false,
+        refreshInterval: requestedRefreshInterval,
       });
-    }, [requestedQuery]);
+    }, [requestedQuery, requestedRefreshInterval]);
 
     const trackedQuery = useQuery<Q>(initialStoreQuery.id);
     const storeQuery = trackedQuery || initialStoreQuery;
     const {query, promise, error, recordVersions} = storeQuery;
+    const {refreshInterval, refreshCount, refresh} = storeQuery;
 
     useEffect(() => {
       storeQuery.isDisplayed = true;
@@ -1166,6 +1175,21 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
       return deferredRecords;
     }, [lastStoreQuery, getRecords, deferredRecords]);
+
+    //
+    // Refresh.
+    //
+
+    useEffect(() => {
+      if (!refreshInterval || refreshCount === 0) {
+        return;
+      }
+
+      return abortable(async abort => {
+        await Async.delay(refreshInterval, abort);
+        refresh(refreshCount);
+      });
+    }, [refreshInterval, refreshCount, refresh]);
 
     //
     // Context.
@@ -1300,8 +1324,14 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     return useRecordQueryBase(queryResult);
   }
 
-  function useStaticRecordQuery<Q extends T>(requestedQuery: Query<Q>) {
-    const queryResult = useStaticRecordsQuery({...requestedQuery, pageSize: 2});
+  function useStaticRecordQuery<Q extends T>(
+    requestedQuery: Query<Q>,
+    options: StaticQueryOptions = {}
+  ) {
+    const queryResult = useStaticRecordsQuery(
+      {...requestedQuery, pageSize: 2},
+      options
+    );
     return useRecordQueryBase(queryResult);
   }
 
@@ -1430,4 +1460,22 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     useFindEntityRecord,
     useFindStandingDecision,
   };
+}
+
+function findLiveQueryMatch<T extends AnyRecord, Q extends T>(
+  liveQueries: QueriesList<T>,
+  query: StoreQuery<T, Q>
+) {
+  for (let i = liveQueries.length - 1; i >= 0; i--) {
+    const q = liveQueries[i];
+    if (!q || q.id === query.id) {
+      continue;
+    }
+
+    if (Query.isSyncSuperset(q.query, query.query)) {
+      return q;
+    }
+  }
+
+  return undefined;
 }
