@@ -4,10 +4,10 @@ export interface StoreQuery<T extends AnyRecord, Q extends T> {
   id: number;
   query: Query<Q>;
   promise: Promise<void> | undefined;
-  refreshCount: number;
   refresh: () => Promise<void>;
-  isSync: boolean;
+  refreshCount: number;
   refreshInterval: number | undefined;
+  isSync: boolean;
   isComplete: boolean;
   isDisplayed: boolean;
   error: unknown | undefined;
