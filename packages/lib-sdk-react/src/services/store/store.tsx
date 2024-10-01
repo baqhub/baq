@@ -4,6 +4,7 @@ import {
   AnyRecord,
   Async,
   CleanRecordType,
+  Constants,
   EntityRecord,
   Handler,
   Http,
@@ -18,6 +19,7 @@ import {
   RecordSource,
   StandingDecision,
   StandingRecord,
+  Str,
   SubscriptionRecord,
   VersionHash,
   isDefined,
@@ -622,9 +624,14 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                   ...value,
                   [queryId]: {
                     ...currentQuery,
+                    query: Query.setPageSize(
+                      currentQuery.query,
+                      response.pageSize
+                    ),
                     promise: undefined,
                     error: undefined,
                     refreshCount: currentQuery.refreshCount + 1,
+                    loadMoreQuery: response.nextPage,
                     isComplete: !response.nextPage,
                     recordVersions: response.records.map(Record.toVersionHash),
                   },
@@ -669,6 +676,106 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           }
         };
 
+        const performLoadMoreQuery = async (
+          loadMoreQuery: string,
+          pageSize: number
+        ) => {
+          let keepGoing = true;
+
+          while (keepGoing) {
+            keepGoing = false;
+
+            try {
+              const client = findClient(query.proxyTo || entity);
+
+              const patchedLoadMoreQuery = [
+                ["page_size", pageSize.toString()] as const,
+                ...Str.parseQuery(loadMoreQuery).filter(
+                  ([key]) => key !== "page_size"
+                ),
+              ];
+
+              const response = await client.getMoreRecords(
+                RKnownRecord,
+                RKnownRecord,
+                Str.buildQuery(patchedLoadMoreQuery)
+              );
+
+              if (!isMountedRef.current) {
+                return;
+              }
+
+              const responseRecords = [
+                ...response.linkedRecords,
+                ...response.records,
+              ];
+
+              updateRecords(responseRecords, query.proxyTo || entity);
+
+              updateQueries(value => {
+                const currentQuery = value[queryId];
+                if (!currentQuery) {
+                  throw new Error("Query not found.");
+                }
+
+                return {
+                  ...value,
+                  [queryId]: {
+                    ...currentQuery,
+                    query: Query.setPageSize(
+                      currentQuery.query,
+                      (currentQuery.query.pageSize ||
+                        Constants.defaultPageSize) + response.pageSize
+                    ),
+                    loadMorePromise: undefined,
+                    loadMoreError: undefined,
+                    loadMoreQuery: response.nextPage,
+                    isComplete: !response.nextPage,
+                    recordVersions: (currentQuery.recordVersions || []).concat(
+                      response.records.map(Record.toVersionHash)
+                    ),
+                  },
+                };
+              });
+            } catch (error) {
+              // Unmounted: nothing to do.
+              if (!isMountedRef.current) {
+                return;
+              }
+
+              // Permanent error: mark as failed.
+              if (
+                Http.isError(error, [
+                  HttpStatusCode.BAD_REQUEST,
+                  HttpStatusCode.NOT_FOUND,
+                  HttpStatusCode.INTERNAL_SERVER_ERROR,
+                ])
+              ) {
+                updateQueries(value => {
+                  const currentQuery = value[queryId];
+                  if (!currentQuery) {
+                    throw new Error("Query not found.");
+                  }
+
+                  return {
+                    ...value,
+                    [queryId]: {
+                      ...currentQuery,
+                      loadMorePromise: undefined,
+                      loadMoreError: error,
+                    },
+                  };
+                });
+                return;
+              }
+
+              // Transient error: retry.
+              await Async.delay(2000);
+              keepGoing = true;
+            }
+          }
+        };
+
         const refresh = (refreshCount: number) => {
           updateQueries(value => {
             const currentQuery = value[queryId];
@@ -694,6 +801,36 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           });
         };
 
+        const loadMore = (pageSize: number) => {
+          updateQueries(value => {
+            const currentQuery = value[queryId];
+            if (!currentQuery) {
+              throw new Error("Query not found.");
+            }
+
+            if (
+              ((currentQuery.promise || currentQuery.error) &&
+                currentQuery.refreshCount === 0) ||
+              currentQuery.loadMoreQuery ||
+              !currentQuery.loadMoreQuery
+            ) {
+              return value;
+            }
+
+            const loadMorePromise = performLoadMoreQuery(
+              currentQuery.loadMoreQuery,
+              pageSize
+            );
+            return {
+              ...value,
+              [queryId]: {
+                ...currentQuery,
+                loadMorePromise,
+              },
+            };
+          });
+        };
+
         const newQuery: StoreQuery<T, Q> = {
           id: queryId,
           query,
@@ -701,6 +838,10 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           refresh,
           refreshCount: 0,
           refreshInterval,
+          loadMorePromise: undefined,
+          loadMoreQuery: undefined,
+          loadMoreError: undefined,
+          loadMore,
           isSync,
           isComplete: match?.isComplete || isLocalTracked,
           isDisplayed: false,
@@ -926,13 +1067,17 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         id: -1,
         query: requestedQuery,
         promise: undefined,
-        refresh: () => Promise.resolve(),
+        error: undefined,
+        refresh: () => {},
         refreshCount: 0,
         refreshInterval: undefined,
+        loadMorePromise: undefined,
+        loadMoreError: undefined,
+        loadMoreQuery: undefined,
+        loadMore: () => {},
         isSync: false,
         isComplete: isLocalTracked,
         isDisplayed: true,
-        error: undefined,
         recordVersions: undefined,
       };
     }, [isFetch, isTracked, isSync, isLocalTracked, requestedQuery]);
@@ -940,6 +1085,8 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     const trackedQuery = useQuery<Q>(initialStoreQuery.id);
     const storeQuery = trackedQuery || initialStoreQuery;
     const {query, promise, error} = storeQuery;
+    const {loadMorePromise, loadMoreError, loadMoreQuery, loadMore} =
+      storeQuery;
 
     useEffect(() => {
       storeQuery.isDisplayed = true;
@@ -1074,6 +1221,10 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     return {
       isLoading: Boolean(promise),
       error,
+      canLoadMore: Boolean(loadMoreQuery),
+      isLoadingMore: Boolean(loadMorePromise),
+      loadMoreError,
+      loadMore,
       records,
       deferredRecords,
       getRecords,

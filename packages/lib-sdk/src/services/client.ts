@@ -220,6 +220,21 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     return response;
   }
 
+  async function getMoreRecords<K extends RAnyRecord, M extends RAnyRecord>(
+    knownModel: K,
+    model: M,
+    query: string,
+    signal?: AbortSignal
+  ) {
+    const url = await expandUrlTemplate("records", {}, signal);
+    const urlAndQuery = url + query;
+    const httpOptions: HttpOptions = {authorizationBuilder, signal};
+
+    const responseModel = recordsResponse(knownModel, model);
+    const [, response] = await Api.get(responseModel, urlAndQuery, httpOptions);
+    return response;
+  }
+
   async function recordEventSource<
     Q extends AnyRecord,
     R extends
@@ -475,7 +490,7 @@ function buildClientBase(clientOptions: BuildClientOptions) {
           proxyTo && (["proxy_to", proxyTo] as const),
         ]);
 
-        return url + Str.query(query);
+        return url + Str.buildQuery(query);
       };
 
       const url = fixUrl(
@@ -504,6 +519,7 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     getRecordVersion,
     getOwnRecord,
     getRecords,
+    getMoreRecords,
     recordEventSource,
     postRecord,
     postAppRecord,

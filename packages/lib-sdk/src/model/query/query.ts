@@ -132,6 +132,16 @@ function queryToQueryString<T extends AnyRecord>(query: Query<T>) {
   ]);
 }
 
+function setQueryPageSize<T extends AnyRecord>(
+  query: Query<T>,
+  newPageSize: number
+): Query<T> {
+  return {
+    ...query,
+    pageSize: newPageSize,
+  };
+}
+
 function includeLinksToString(
   includeLinks: ReadonlyArray<IncludeLink> | undefined
 ) {
@@ -173,7 +183,7 @@ function paramsToString(
     .map(p => (isDefined(p[1]) ? ([p[0], p[1]] as const) : undefined))
     .filter(isDefined);
 
-  return Str.query(filteredParams);
+  return Str.buildQuery(filteredParams);
 }
 
 function findQueryMaxDate<T extends AnyRecord>(
@@ -365,6 +375,7 @@ export const Query = {
   ofKey: buildQueryFromKey,
   singleToQueryString: singleQueryToQueryString,
   toQueryString: queryToQueryString,
+  setPageSize: setQueryPageSize,
   filter: filterByQuery,
   isMatch: queryIsMatch,
   isSuperset: queryIsSuperset,

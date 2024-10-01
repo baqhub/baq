@@ -92,7 +92,7 @@ export function useOtherProfilePageState(profileEntity: string) {
 
   const {isLoading: arePostsLoading, getRecords} = useStaticRecordsQuery(
     {
-      pageSize: 200,
+      pageSize: 5,
       filter: Q.and(Q.type(PostRecord), Q.author(profileEntity)),
       proxyTo: profileEntity,
     },

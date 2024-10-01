@@ -4,13 +4,17 @@ export interface StoreQuery<T extends AnyRecord, Q extends T> {
   id: number;
   query: Query<Q>;
   promise: Promise<void> | undefined;
+  error: unknown | undefined;
   refresh: (refreshCount: number) => void;
   refreshCount: number;
   refreshInterval: number | undefined;
+  loadMorePromise: Promise<void> | undefined;
+  loadMoreError: unknown | undefined;
+  loadMoreQuery: string | undefined;
+  loadMore: (pageSize: number) => void;
   isSync: boolean;
   isComplete: boolean;
   isDisplayed: boolean;
-  error: unknown | undefined;
   recordVersions: ReadonlyArray<string> | undefined;
 }
 
