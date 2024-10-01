@@ -10,8 +10,7 @@ export interface StoreQuery<T extends AnyRecord, Q extends T> {
   refreshInterval: number | undefined;
   loadMorePromise: Promise<void> | undefined;
   loadMoreError: unknown | undefined;
-  loadMoreQuery: string | undefined;
-  loadMore: (pageSize: number) => void;
+  loadMore: (() => void) | undefined;
   isSync: boolean;
   isComplete: boolean;
   isDisplayed: boolean;
@@ -22,8 +21,10 @@ export type LiveQueryMode = "local" | "local-tracked" | "fetch" | "sync";
 
 export interface LiveQueryOptions {
   mode?: LiveQueryMode;
+  loadMorePageSize?: number;
 }
 
 export interface StaticQueryOptions {
   refreshInterval?: number;
+  loadMorePageSize?: number;
 }

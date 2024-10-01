@@ -2,6 +2,7 @@ import {Handler} from "@baqhub/sdk";
 import {DataProvider, RendererOf} from "@baqhub/sdk-react";
 import {Column, tw} from "@baqhub/ui/core/style.js";
 import {PropsWithChildren, useEffect, useRef} from "react";
+import {LoadingMorePosts} from "./loadingMorePosts.js";
 
 //
 // Props.
@@ -9,8 +10,9 @@ import {PropsWithChildren, useEffect, useRef} from "react";
 
 interface PostsProps<T> extends PropsWithChildren {
   getItems: DataProvider<ReadonlyArray<T>>;
-  loadMoreItems: Handler;
   renderItem: RendererOf<T>;
+  isLoadingMore: boolean;
+  loadMore: Handler | undefined;
 }
 
 //
@@ -24,7 +26,8 @@ const Layout = tw(Column)``;
 //
 
 export function Posts<T>(props: PostsProps<T>) {
-  const {getItems, loadMoreItems, renderItem, children} = props;
+  const {getItems, renderItem, children} = props;
+  const {isLoadingMore, loadMore} = props;
   const items = getItems();
 
   //
@@ -35,7 +38,7 @@ export function Posts<T>(props: PostsProps<T>) {
 
   useEffect(() => {
     const currentLayout = layoutRef.current;
-    if (!currentLayout) {
+    if (!currentLayout || !loadMore) {
       return;
     }
 
@@ -45,7 +48,8 @@ export function Posts<T>(props: PostsProps<T>) {
         return;
       }
 
-      loadMoreItems();
+      console.log("Calling loadMore()");
+      loadMore();
     };
 
     const observer = new IntersectionObserver(onIntersectionChange, {
@@ -57,7 +61,7 @@ export function Posts<T>(props: PostsProps<T>) {
     return () => {
       observer.disconnect();
     };
-  }, [loadMoreItems]);
+  }, [loadMore]);
 
   //
   // Render.
@@ -67,5 +71,10 @@ export function Posts<T>(props: PostsProps<T>) {
     return children;
   }
 
-  return <Layout ref={layoutRef}>{items.map(renderItem)}</Layout>;
+  return (
+    <Layout ref={layoutRef}>
+      {items.map(renderItem)}
+      <LoadingMorePosts isLoading={Boolean(isLoadingMore || loadMore)} />
+    </Layout>
+  );
 }

@@ -43,6 +43,7 @@ export interface RegisterQueryOptions {
   isSync: boolean;
   isLocalTracked: boolean;
   refreshInterval: number | undefined;
+  loadMorePageSize: number | undefined;
 }
 
 export interface StoreContextProps<T extends AnyRecord> {

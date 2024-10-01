@@ -16,7 +16,9 @@ import {PostComposer} from "./postComposer/postComposer.js";
 //
 
 export const FeedPage: FC = () => {
-  const {getPostKeys} = useFeedPageState();
+  const state = useFeedPageState();
+  const {getPostKeys, isLoadingMore, loadMore} = state;
+
   const {mention} = feedRoute.useSearch();
 
   const renderPost = (postKey: PostRecordKey) => (
@@ -26,7 +28,12 @@ export const FeedPage: FC = () => {
   return (
     <Suspense fallback={<LoadingPosts />}>
       <PostComposer mention={mention} />
-      <Posts getItems={getPostKeys} renderItem={renderPost}>
+      <Posts
+        getItems={getPostKeys}
+        renderItem={renderPost}
+        isLoadingMore={isLoadingMore}
+        loadMore={loadMore}
+      >
         <EmptyPosts icon={<UsersIcon />} text="Follow people to see more!" />
       </Posts>
     </Suspense>

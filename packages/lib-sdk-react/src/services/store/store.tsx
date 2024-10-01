@@ -544,7 +544,8 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
     const registerQuery = useCallback(
       <Q extends T>(query: Query<Q>, options: RegisterQueryOptions) => {
-        const {isFetch, isSync, isLocalTracked, refreshInterval} = options;
+        const {isFetch, isSync, isLocalTracked} = options;
+        const {refreshInterval, loadMorePageSize} = options;
         const {queries, lastQueryId, liveQueries} = stateRef.current;
         const equal = (() => {
           for (let i = lastQueryId; i > 0; i--) {
@@ -589,6 +590,30 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         const syncMatch = match && findLiveQueryMatch(liveQueries, match);
         const queryId = ++stateRef.current.lastQueryId;
 
+        const makeLoadMore = (loadMoreQuery: string) => {
+          return () => {
+            updateQueries(value => {
+              const currentQuery = value[queryId];
+              if (!currentQuery) {
+                throw new Error("Query not found.");
+              }
+
+              if (currentQuery.loadMorePromise) {
+                return value;
+              }
+
+              const loadMorePromise = performLoadMoreQuery(loadMoreQuery);
+              return {
+                ...value,
+                [queryId]: {
+                  ...currentQuery,
+                  loadMorePromise,
+                },
+              };
+            });
+          };
+        };
+
         const performQuery = async () => {
           let keepGoing = true;
 
@@ -620,6 +645,10 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                   throw new Error("Query not found.");
                 }
 
+                const loadMore = response.nextPage
+                  ? makeLoadMore(response.nextPage)
+                  : undefined;
+
                 return {
                   ...value,
                   [queryId]: {
@@ -631,7 +660,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                     promise: undefined,
                     error: undefined,
                     refreshCount: currentQuery.refreshCount + 1,
-                    loadMoreQuery: response.nextPage,
+                    loadMore,
                     isComplete: !response.nextPage,
                     recordVersions: response.records.map(Record.toVersionHash),
                   },
@@ -676,10 +705,8 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           }
         };
 
-        const performLoadMoreQuery = async (
-          loadMoreQuery: string,
-          pageSize: number
-        ) => {
+        const performLoadMoreQuery = async (loadMoreQuery: string) => {
+          console.log("Starting load more:", loadMoreQuery);
           let keepGoing = true;
 
           while (keepGoing) {
@@ -688,17 +715,19 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
             try {
               const client = findClient(query.proxyTo || entity);
 
-              const patchedLoadMoreQuery = [
-                ["page_size", pageSize.toString()] as const,
-                ...Str.parseQuery(loadMoreQuery).filter(
-                  ([key]) => key !== "page_size"
-                ),
-              ];
+              const patchedLoadMoreQuery = loadMorePageSize
+                ? Str.buildQuery([
+                    ["page_size", loadMorePageSize.toString()] as const,
+                    ...Str.parseQuery(loadMoreQuery).filter(
+                      ([key]) => key !== "page_size"
+                    ),
+                  ])
+                : loadMoreQuery;
 
               const response = await client.getMoreRecords(
                 RKnownRecord,
                 RKnownRecord,
-                Str.buildQuery(patchedLoadMoreQuery)
+                patchedLoadMoreQuery
               );
 
               if (!isMountedRef.current) {
@@ -718,6 +747,10 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                   throw new Error("Query not found.");
                 }
 
+                const loadMore = response.nextPage
+                  ? makeLoadMore(response.nextPage)
+                  : undefined;
+
                 return {
                   ...value,
                   [queryId]: {
@@ -729,7 +762,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                     ),
                     loadMorePromise: undefined,
                     loadMoreError: undefined,
-                    loadMoreQuery: response.nextPage,
+                    loadMore,
                     isComplete: !response.nextPage,
                     recordVersions: (currentQuery.recordVersions || []).concat(
                       response.records.map(Record.toVersionHash)
@@ -801,36 +834,6 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           });
         };
 
-        const loadMore = (pageSize: number) => {
-          updateQueries(value => {
-            const currentQuery = value[queryId];
-            if (!currentQuery) {
-              throw new Error("Query not found.");
-            }
-
-            if (
-              ((currentQuery.promise || currentQuery.error) &&
-                currentQuery.refreshCount === 0) ||
-              currentQuery.loadMoreQuery ||
-              !currentQuery.loadMoreQuery
-            ) {
-              return value;
-            }
-
-            const loadMorePromise = performLoadMoreQuery(
-              currentQuery.loadMoreQuery,
-              pageSize
-            );
-            return {
-              ...value,
-              [queryId]: {
-                ...currentQuery,
-                loadMorePromise,
-              },
-            };
-          });
-        };
-
         const newQuery: StoreQuery<T, Q> = {
           id: queryId,
           query,
@@ -839,9 +842,8 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           refreshCount: 0,
           refreshInterval,
           loadMorePromise: undefined,
-          loadMoreQuery: undefined,
           loadMoreError: undefined,
-          loadMore,
+          loadMore: undefined,
           isSync,
           isComplete: match?.isComplete || isLocalTracked,
           isDisplayed: false,
@@ -1035,6 +1037,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     options: LiveQueryOptions = {}
   ) {
     type Result = ReadonlyArray<Q>;
+    const {loadMorePageSize} = options;
     const mode = options.mode || "fetch";
     const storeContext = useStoreContext();
     const {isAuthenticated, entity, findClient, updateRecords} = storeContext;
@@ -1060,6 +1063,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           isSync,
           isLocalTracked,
           refreshInterval: undefined,
+          loadMorePageSize,
         });
       }
 
@@ -1073,20 +1077,25 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         refreshInterval: undefined,
         loadMorePromise: undefined,
         loadMoreError: undefined,
-        loadMoreQuery: undefined,
-        loadMore: () => {},
+        loadMore: undefined,
         isSync: false,
         isComplete: isLocalTracked,
         isDisplayed: true,
         recordVersions: undefined,
       };
-    }, [isFetch, isTracked, isSync, isLocalTracked, requestedQuery]);
+    }, [
+      isFetch,
+      isTracked,
+      isSync,
+      isLocalTracked,
+      loadMorePageSize,
+      requestedQuery,
+    ]);
 
     const trackedQuery = useQuery<Q>(initialStoreQuery.id);
     const storeQuery = trackedQuery || initialStoreQuery;
     const {query, promise, error} = storeQuery;
-    const {loadMorePromise, loadMoreError, loadMoreQuery, loadMore} =
-      storeQuery;
+    const {loadMorePromise, loadMoreError, loadMore} = storeQuery;
 
     useEffect(() => {
       storeQuery.isDisplayed = true;
@@ -1221,7 +1230,6 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     return {
       isLoading: Boolean(promise),
       error,
-      canLoadMore: Boolean(loadMoreQuery),
       isLoadingMore: Boolean(loadMorePromise),
       loadMoreError,
       loadMore,
@@ -1260,6 +1268,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         isSync: false,
         isLocalTracked: false,
         refreshInterval: requestedRefreshInterval,
+        loadMorePageSize: undefined,
       });
     }, [requestedQuery, requestedRefreshInterval]);
 
