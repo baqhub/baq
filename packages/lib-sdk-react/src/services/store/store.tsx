@@ -669,14 +669,21 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           }
         };
 
-        const refresh = () => {
-          const promise = performQuery();
+        const refresh = (refreshCount: number) => {
           updateQueries(value => {
             const currentQuery = value[queryId];
             if (!currentQuery) {
               throw new Error("Query not found.");
             }
 
+            if (
+              currentQuery.promise ||
+              refreshCount !== currentQuery.refreshCount
+            ) {
+              return value;
+            }
+
+            const promise = performQuery();
             return {
               ...value,
               [queryId]: {
@@ -685,8 +692,6 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
               },
             };
           });
-
-          return promise;
         };
 
         const newQuery: StoreQuery<T, Q> = {
@@ -1182,7 +1187,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
       return abortable(async abort => {
         await Async.delay(refreshInterval, abort);
-        await refresh();
+        refresh(refreshCount);
       });
     }, [refreshInterval, refreshCount, refresh]);
 

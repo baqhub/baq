@@ -4,7 +4,7 @@ export interface StoreQuery<T extends AnyRecord, Q extends T> {
   id: number;
   query: Query<Q>;
   promise: Promise<void> | undefined;
-  refresh: () => Promise<void>;
+  refresh: (refreshCount: number) => void;
   refreshCount: number;
   refreshInterval: number | undefined;
   isSync: boolean;
