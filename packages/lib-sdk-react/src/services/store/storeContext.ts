@@ -30,7 +30,7 @@ export interface EntityRecordsState<T extends AnyRecord> {
 }
 
 export type Queries<T extends AnyRecord> = {[K: number]: StoreQuery<T, T>};
-export type LiveQueries<T extends AnyRecord> = ReadonlyArray<StoreQuery<T, T>>;
+export type QueriesList<T extends AnyRecord> = ReadonlyArray<StoreQuery<T, T>>;
 
 export type Subscription = () => void;
 
@@ -42,6 +42,7 @@ export interface RegisterQueryOptions {
   isFetch: boolean;
   isSync: boolean;
   isLocalTracked: boolean;
+  refreshInterval: number | undefined;
 }
 
 export interface StoreContextProps<T extends AnyRecord> {
@@ -65,7 +66,7 @@ export interface StoreContextProps<T extends AnyRecord> {
   subscribeToQueries: (callback: () => void) => () => void;
   getQueriesSnapshot: () => Queries<T>;
   subscribeToLiveQueries: (callback: () => void) => () => void;
-  getLiveQueriesSnapshot: () => LiveQueries<T>;
+  getLiveQueriesSnapshot: () => QueriesList<T>;
   registerQuery: <Q extends T>(
     query: Query<Q>,
     options: RegisterQueryOptions

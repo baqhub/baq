@@ -4,7 +4,10 @@ export interface StoreQuery<T extends AnyRecord, Q extends T> {
   id: number;
   query: Query<Q>;
   promise: Promise<void> | undefined;
+  refreshCount: number;
+  refresh: () => Promise<void>;
   isSync: boolean;
+  refreshInterval: number | undefined;
   isComplete: boolean;
   isDisplayed: boolean;
   error: unknown | undefined;
@@ -15,4 +18,8 @@ export type LiveQueryMode = "local" | "local-tracked" | "fetch" | "sync";
 
 export interface LiveQueryOptions {
   mode?: LiveQueryMode;
+}
+
+export interface StaticQueryOptions {
+  refreshInterval?: number;
 }

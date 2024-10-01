@@ -7,6 +7,8 @@ import {
   wrapInProxyStore,
 } from "../../baq/store.js";
 
+const publicProfileRefreshInterval = 120 * 1000; // 2 min;
+
 export interface PublicProfileData {
   entity: string;
   name: string | undefined;
@@ -18,11 +20,14 @@ export function usePublicProfilePageState(profileEntity: string) {
   // Fetch profile.
   //
 
-  const {getRecord: getEntityRecord} = useStaticRecordQuery({
-    filter: Q.and(Q.type(EntityRecord), Q.author(profileEntity)),
-    includeLinks: ["standing"],
-    proxyTo: profileEntity,
-  });
+  const {getRecord: getEntityRecord} = useStaticRecordQuery(
+    {
+      filter: Q.and(Q.type(EntityRecord), Q.author(profileEntity)),
+      includeLinks: ["standing"],
+      proxyTo: profileEntity,
+    },
+    {refreshInterval: publicProfileRefreshInterval}
+  );
 
   const get = useCallback((): PublicProfileData | undefined => {
     const entityRecord = getEntityRecord();
@@ -41,11 +46,14 @@ export function usePublicProfilePageState(profileEntity: string) {
   // Fetch records.
   //
 
-  const {isLoading: arePostsLoading, getRecords} = useStaticRecordsQuery({
-    pageSize: 200,
-    filter: Q.and(Q.type(PostRecord), Q.author(profileEntity)),
-    proxyTo: profileEntity,
-  });
+  const {isLoading: arePostsLoading, getRecords} = useStaticRecordsQuery(
+    {
+      pageSize: 200,
+      filter: Q.and(Q.type(PostRecord), Q.author(profileEntity)),
+      proxyTo: profileEntity,
+    },
+    {refreshInterval: publicProfileRefreshInterval}
+  );
 
   const getPostVersions = useCallback(() => {
     return getRecords().map(Record.toVersionHash);
