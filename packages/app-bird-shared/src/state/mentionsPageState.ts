@@ -5,7 +5,7 @@ import {useRecordHelpers, useRecordsQuery} from "../baq/store.js";
 
 export function useMentionsPageState() {
   const {entity} = useRecordHelpers();
-  const {isLoading, getRecords} = useRecordsQuery({
+  const {isLoading, getRecords, isLoadingMore, loadMore} = useRecordsQuery({
     pageSize: 200,
     filter: Q.and(
       Q.type(PostRecord),
@@ -21,5 +21,7 @@ export function useMentionsPageState() {
   return {
     isLoading,
     getPostKeys,
+    isLoadingMore,
+    loadMore,
   };
 }

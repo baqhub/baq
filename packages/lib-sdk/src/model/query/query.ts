@@ -142,6 +142,31 @@ function setQueryPageSize<T extends AnyRecord>(
   };
 }
 
+function toSyncQuery<T extends AnyRecord>(
+  query: Query<T>,
+  maxRecord: T
+): Query<T> {
+  const {version} = maxRecord;
+  if (!version || !version.receivedAt) {
+    throw new Error("MaxRecord needs to be synced.");
+  }
+
+  return {
+    max: undefined,
+    min: [version.receivedAt, maxRecord.id],
+    sort: ["version.receivedAt", "ascending"],
+    pageStart: undefined,
+    pageSize: 100,
+    distinct: undefined,
+    sources: query.sources,
+    filter: query.filter,
+    mode: query.mode,
+    includeLinks: query.includeLinks,
+    includeDeleted: true,
+    proxyTo: query.proxyTo,
+  };
+}
+
 function includeLinksToString(
   includeLinks: ReadonlyArray<IncludeLink> | undefined
 ) {
@@ -227,6 +252,7 @@ function filterByQuery<R extends AnyRecord, T extends R>(
 
   function filter() {
     function isMatch(record: R | NoContentRecord): record is T {
+      // Exclude deleted.
       if ("noContent" in record) {
         return false;
       }
@@ -375,6 +401,7 @@ export const Query = {
   ofKey: buildQueryFromKey,
   singleToQueryString: singleQueryToQueryString,
   toQueryString: queryToQueryString,
+  toSync: toSyncQuery,
   setPageSize: setQueryPageSize,
   filter: filterByQuery,
   isMatch: queryIsMatch,

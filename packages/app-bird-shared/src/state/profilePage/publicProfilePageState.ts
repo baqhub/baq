@@ -26,7 +26,7 @@ export function usePublicProfilePageState(profileEntity: string) {
       includeLinks: ["standing"],
       proxyTo: profileEntity,
     },
-    {refreshInterval: publicProfileRefreshInterval}
+    {refreshMode: "sync", refreshInterval: publicProfileRefreshInterval}
   );
 
   const get = useCallback((): PublicProfileData | undefined => {
@@ -46,13 +46,18 @@ export function usePublicProfilePageState(profileEntity: string) {
   // Fetch records.
   //
 
-  const {isLoading: arePostsLoading, getRecords} = useStaticRecordsQuery(
+  const {
+    isLoading: arePostsLoading,
+    getRecords,
+    isLoadingMore,
+    loadMore,
+  } = useStaticRecordsQuery(
     {
       pageSize: 200,
       filter: Q.and(Q.type(PostRecord), Q.author(profileEntity)),
       proxyTo: profileEntity,
     },
-    {refreshInterval: publicProfileRefreshInterval}
+    {refreshMode: "sync", refreshInterval: publicProfileRefreshInterval}
   );
 
   const getPostVersions = useCallback(() => {
@@ -62,6 +67,8 @@ export function usePublicProfilePageState(profileEntity: string) {
   return {
     get,
     arePostsLoading,
+    isLoadingMore,
+    loadMore,
     getPostVersions,
     wrap: wrapInProxyStore(profileEntity),
   };

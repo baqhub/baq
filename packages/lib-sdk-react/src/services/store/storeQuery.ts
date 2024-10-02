@@ -1,13 +1,20 @@
 import {AnyRecord, Query} from "@baqhub/sdk";
 
+type RefreshMode = "sync" | "full";
+
+export interface QueryRefreshSpec {
+  mode: RefreshMode;
+  interval: number;
+}
+
 export interface StoreQuery<T extends AnyRecord, Q extends T> {
   id: number;
   query: Query<Q>;
   promise: Promise<void> | undefined;
   error: unknown | undefined;
-  refresh: (refreshCount: number) => void;
+  refreshSpec: QueryRefreshSpec | undefined;
   refreshCount: number;
-  refreshInterval: number | undefined;
+  refresh: (refreshCount: number) => void;
   loadMorePromise: Promise<void> | undefined;
   loadMoreError: unknown | undefined;
   loadMore: (() => void) | undefined;
@@ -24,7 +31,25 @@ export interface LiveQueryOptions {
   loadMorePageSize?: number;
 }
 
-export interface StaticQueryOptions {
-  refreshInterval?: number;
+interface NoRefreshStaticQueryOptions {
+  refreshMode?: never;
+  refreshInterval?: never;
   loadMorePageSize?: number;
 }
+
+interface SyncRefreshStaticQueryOptions {
+  refreshMode: "sync";
+  refreshInterval: number;
+  loadMorePageSize?: number;
+}
+
+interface FullRefreshStaticQueryOptions {
+  refreshMode: "full";
+  refreshInterval: number;
+  loadMorePageSize?: never;
+}
+
+export type StaticQueryOptions =
+  | NoRefreshStaticQueryOptions
+  | SyncRefreshStaticQueryOptions
+  | FullRefreshStaticQueryOptions;

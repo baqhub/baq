@@ -10,7 +10,7 @@ import {
 } from "@baqhub/sdk";
 import {createContext, useContext} from "react";
 import {FindClient} from "./storeIdentity.js";
-import {StoreQuery} from "./storeQuery.js";
+import {QueryRefreshSpec, StoreQuery} from "./storeQuery.js";
 import {UpdateRecords} from "./storeTypes.js";
 
 export type RecordVersions<T extends AnyRecord> = {
@@ -42,7 +42,7 @@ export interface RegisterQueryOptions {
   isFetch: boolean;
   isSync: boolean;
   isLocalTracked: boolean;
-  refreshInterval: number | undefined;
+  refreshSpec: QueryRefreshSpec | undefined;
   loadMorePageSize: number | undefined;
 }
 

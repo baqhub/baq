@@ -18,7 +18,10 @@ export enum QuerySortDirection {
   DESCENDING = "descending",
 }
 
-export type QuerySort = [string, `${QuerySortDirection}`];
+export type QuerySort = [
+  `${QuerySortProperty}` | (string & NonNullable<unknown>),
+  `${QuerySortDirection}`,
+];
 
 //
 // I/O.

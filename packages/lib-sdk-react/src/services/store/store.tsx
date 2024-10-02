@@ -4,7 +4,6 @@ import {
   AnyRecord,
   Async,
   CleanRecordType,
-  Constants,
   EntityRecord,
   Handler,
   Http,
@@ -25,8 +24,10 @@ import {
   isDefined,
   isPromise,
 } from "@baqhub/sdk";
+import isEqual from "lodash/isEqual.js";
 import memoize from "lodash/memoize.js";
 import orderBy from "lodash/orderBy.js";
+import uniq from "lodash/uniq.js";
 import uniqBy from "lodash/uniqBy.js";
 import {
   FC,
@@ -72,6 +73,7 @@ import {
 } from "./storeMutation.js";
 import {
   LiveQueryOptions,
+  QueryRefreshSpec,
   StaticQueryOptions,
   StoreQuery,
 } from "./storeQuery.js";
@@ -545,12 +547,12 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     const registerQuery = useCallback(
       <Q extends T>(query: Query<Q>, options: RegisterQueryOptions) => {
         const {isFetch, isSync, isLocalTracked} = options;
-        const {refreshInterval, loadMorePageSize} = options;
+        const {refreshSpec, loadMorePageSize} = options;
         const {queries, lastQueryId, liveQueries} = stateRef.current;
         const equal = (() => {
           for (let i = lastQueryId; i > 0; i--) {
             const q = queries[i];
-            if (!q || q.isDisplayed || q.refreshInterval !== refreshInterval) {
+            if (!q || q.isDisplayed || !isEqual(q.refreshSpec, refreshSpec)) {
               continue;
             }
 
@@ -591,6 +593,11 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         const queryId = ++stateRef.current.lastQueryId;
 
         const makeLoadMore = (loadMoreQuery: string) => {
+          // Cannot load more in full refresh mode.
+          if (refreshSpec?.mode === "full") {
+            return undefined;
+          }
+
           return () => {
             updateQueries(value => {
               const currentQuery = value[queryId];
@@ -705,8 +712,149 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           }
         };
 
+        const performRefreshSyncQuery = async (
+          recordVersions: ReadonlyArray<string>
+        ) => {
+          //
+          // Find the upper boundary we currently have.
+          //
+
+          const queryRecords = recordVersions.map(
+            version => stateRef.current.versions[version]! as Q
+          );
+
+          const maxQueryRecord = orderBy(
+            queryRecords,
+            t => t.version?.receivedAt,
+            "desc"
+          )[0];
+
+          if (!maxQueryRecord) {
+            return performQuery();
+          }
+
+          const refreshQuery = Query.toSync(query, maxQueryRecord);
+
+          //
+          // Perform the refresh query.
+          //
+
+          let keepGoing = true;
+
+          while (keepGoing) {
+            keepGoing = false;
+
+            try {
+              const client = findClient(query.proxyTo || entity);
+              const response = await client.getRecords(
+                RKnownRecord,
+                RKnownRecord,
+                refreshQuery
+              );
+
+              if (!isMountedRef.current) {
+                return;
+              }
+
+              // If there are too many items to sync, full refresh.
+              if (response.nextPage) {
+                updateQueries(value => {
+                  const currentQuery = value[queryId];
+                  if (!currentQuery) {
+                    throw new Error("Query not found.");
+                  }
+
+                  return {
+                    ...value,
+                    [queryId]: {
+                      ...currentQuery,
+                      promise: undefined,
+                      error: undefined,
+                      refreshCount: 0,
+                    },
+                  };
+                });
+
+                return performQuery();
+              }
+
+              const responseRecords = [
+                ...response.linkedRecords,
+                ...response.records,
+              ];
+
+              updateRecords(responseRecords, query.proxyTo || entity);
+
+              updateQueries(value => {
+                const currentQuery = value[queryId];
+                if (!currentQuery) {
+                  throw new Error("Query not found.");
+                }
+
+                const queryRecords = (currentQuery.recordVersions || []).map(
+                  version => stateRef.current.versions[version]! as Q
+                );
+
+                const allRecords = uniqBy(
+                  response.records.concat(queryRecords),
+                  r => r.id
+                );
+                const recordVersions = Query.filter(
+                  allRecords,
+                  currentQuery.query
+                ).map(Record.toVersionHash);
+
+                return {
+                  ...value,
+                  [queryId]: {
+                    ...currentQuery,
+                    promise: undefined,
+                    error: undefined,
+                    refreshCount: currentQuery.refreshCount + 1,
+                    recordVersions,
+                  },
+                };
+              });
+            } catch (error) {
+              // Unmounted: nothing to do.
+              if (!isMountedRef.current) {
+                return;
+              }
+
+              // Permanent error: mark as failed.
+              if (
+                Http.isError(error, [
+                  HttpStatusCode.BAD_REQUEST,
+                  HttpStatusCode.NOT_FOUND,
+                  HttpStatusCode.INTERNAL_SERVER_ERROR,
+                ])
+              ) {
+                updateQueries(value => {
+                  const currentQuery = value[queryId];
+                  if (!currentQuery) {
+                    throw new Error("Query not found.");
+                  }
+
+                  return {
+                    ...value,
+                    [queryId]: {
+                      ...currentQuery,
+                      promise: undefined,
+                      error: error,
+                    },
+                  };
+                });
+                return;
+              }
+
+              // Transient error: retry.
+              await Async.delay(2000);
+              keepGoing = true;
+            }
+          }
+        };
+
         const performLoadMoreQuery = async (loadMoreQuery: string) => {
-          console.log("Starting load more:", loadMoreQuery);
           let keepGoing = true;
 
           while (keepGoing) {
@@ -751,22 +899,25 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                   ? makeLoadMore(response.nextPage)
                   : undefined;
 
+                const recordVersions = uniq(
+                  (currentQuery.recordVersions || []).concat(
+                    response.records.map(Record.toVersionHash)
+                  )
+                );
+
                 return {
                   ...value,
                   [queryId]: {
                     ...currentQuery,
                     query: Query.setPageSize(
                       currentQuery.query,
-                      (currentQuery.query.pageSize ||
-                        Constants.defaultPageSize) + response.pageSize
+                      recordVersions.length
                     ),
                     loadMorePromise: undefined,
                     loadMoreError: undefined,
                     loadMore,
                     isComplete: !response.nextPage,
-                    recordVersions: (currentQuery.recordVersions || []).concat(
-                      response.records.map(Record.toVersionHash)
-                    ),
+                    recordVersions,
                   },
                 };
               });
@@ -817,13 +968,19 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
             }
 
             if (
+              !refreshSpec ||
               currentQuery.promise ||
+              !currentQuery.recordVersions ||
               refreshCount !== currentQuery.refreshCount
             ) {
               return value;
             }
 
-            const promise = performQuery();
+            const promise =
+              refreshSpec.mode === "full"
+                ? performQuery()
+                : performRefreshSyncQuery(currentQuery.recordVersions);
+
             return {
               ...value,
               [queryId]: {
@@ -838,9 +995,9 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           id: queryId,
           query,
           promise: syncMatch || !isFetch ? undefined : performQuery(),
+          refreshSpec,
           refresh,
           refreshCount: 0,
-          refreshInterval,
           loadMorePromise: undefined,
           loadMoreError: undefined,
           loadMore: undefined,
@@ -1062,7 +1219,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           isFetch,
           isSync,
           isLocalTracked,
-          refreshInterval: undefined,
+          refreshSpec: undefined,
           loadMorePageSize,
         });
       }
@@ -1072,9 +1229,9 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         query: requestedQuery,
         promise: undefined,
         error: undefined,
-        refresh: () => {},
+        refreshSpec: undefined,
         refreshCount: 0,
-        refreshInterval: undefined,
+        refresh: () => {},
         loadMorePromise: undefined,
         loadMoreError: undefined,
         loadMore: undefined,
@@ -1250,7 +1407,6 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     const storeContext = useStoreContext();
     const {isAuthenticated, versions} = storeContext;
     const {registerQuery} = storeContext;
-    const {refreshInterval: requestedRefreshInterval} = options;
 
     if (!isAuthenticated && !requestedQuery.proxyTo) {
       throw new Error(
@@ -1263,19 +1419,25 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     //
 
     const initialStoreQuery = useDeepMemo<StoreQuery<T, Q>>(() => {
+      const refreshSpec: QueryRefreshSpec | undefined = options.refreshMode && {
+        mode: options.refreshMode,
+        interval: options.refreshInterval,
+      };
+
       return registerQuery(requestedQuery, {
         isFetch: true,
         isSync: false,
         isLocalTracked: false,
-        refreshInterval: requestedRefreshInterval,
-        loadMorePageSize: undefined,
+        refreshSpec,
+        loadMorePageSize: options.loadMorePageSize,
       });
-    }, [requestedQuery, requestedRefreshInterval]);
+    }, [requestedQuery, options]);
 
     const trackedQuery = useQuery<Q>(initialStoreQuery.id);
     const storeQuery = trackedQuery || initialStoreQuery;
     const {query, promise, error, recordVersions} = storeQuery;
-    const {refreshInterval, refreshCount, refresh} = storeQuery;
+    const {refreshSpec, refreshCount, refresh} = storeQuery;
+    const {loadMorePromise, loadMoreError, loadMore} = storeQuery;
 
     useEffect(() => {
       storeQuery.isDisplayed = true;
@@ -1341,15 +1503,15 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     //
 
     useEffect(() => {
-      if (!refreshInterval || refreshCount === 0) {
+      if (!refreshSpec || refreshCount === 0) {
         return;
       }
 
       return abortable(async abort => {
-        await Async.delay(refreshInterval, abort);
+        await Async.delay(refreshSpec.interval, abort);
         refresh(refreshCount);
       });
-    }, [refreshInterval, refreshCount, refresh]);
+    }, [refreshSpec, refreshCount, refresh]);
 
     //
     // Context.
@@ -1358,6 +1520,9 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     return {
       isLoading: Boolean(promise),
       error,
+      isLoadingMore: Boolean(loadMorePromise),
+      loadMoreError,
+      loadMore,
       hasResults: Boolean(recordVersions),
       records,
       deferredRecords,

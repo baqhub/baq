@@ -6,6 +6,7 @@ import {
   useRecordQuery,
   useRecordsQuery,
 } from "../../baq/store.js";
+import {BirdConstants} from "../constants.js";
 
 export interface UserProfileData {
   entity: string;
@@ -32,8 +33,13 @@ export function useUserProfilePageState() {
     };
   }, [getEntityRecord]);
 
-  const {isLoading: arePostsLoading, getRecords} = useRecordsQuery({
-    pageSize: 200,
+  const {
+    isLoading: arePostsLoading,
+    getRecords,
+    isLoadingMore,
+    loadMore,
+  } = useRecordsQuery({
+    pageSize: BirdConstants.listPageSize,
     filter: Q.and(Q.type(PostRecord), Q.author(entity)),
   });
 
@@ -46,5 +52,7 @@ export function useUserProfilePageState() {
     get,
     arePostsLoading,
     getPostKeys,
+    isLoadingMore,
+    loadMore,
   };
 }

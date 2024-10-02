@@ -37,6 +37,7 @@ const ProfileButtons = tw(Grid)`
 export const OtherProfilePage: FC<OtherProfilePageProps> = ({otherEntity}) => {
   const state = useOtherProfilePageState(otherEntity);
   const {getFull, getPostVersions, wrap} = state;
+  const {isLoadingMore, loadMore} = state;
   const {onFollowClick, onUnfollowClick} = state;
   const {onBlockClick, onUnblockClick} = state;
 
@@ -73,7 +74,12 @@ export const OtherProfilePage: FC<OtherProfilePageProps> = ({otherEntity}) => {
         </ProfileButtons>
       </ProfileHeader>
       <Suspense fallback={<LoadingPosts />}>
-        <Posts getItems={getPostVersions} renderItem={renderPost}>
+        <Posts
+          getItems={getPostVersions}
+          renderItem={renderPost}
+          isLoadingMore={isLoadingMore}
+          loadMore={loadMore}
+        >
           <EmptyPosts
             icon={<FaceFrownIcon />}
             text="This user hasn't posted anything!"

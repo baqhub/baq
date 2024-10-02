@@ -57,7 +57,7 @@ export function useOtherProfilePageState(profileEntity: string) {
       includeLinks: ["standing"],
       proxyTo: profileEntity,
     },
-    {refreshInterval: otherProfileRefreshInterval}
+    {refreshMode: "sync", refreshInterval: otherProfileRefreshInterval}
   );
 
   const get = useCallback((): OtherProfileData | undefined => {
@@ -90,13 +90,18 @@ export function useOtherProfilePageState(profileEntity: string) {
     };
   }, [get, getSubscriptionRecord, entity, decision]);
 
-  const {isLoading: arePostsLoading, getRecords} = useStaticRecordsQuery(
+  const {
+    isLoading: arePostsLoading,
+    getRecords,
+    isLoadingMore,
+    loadMore,
+  } = useStaticRecordsQuery(
     {
       pageSize: 5,
       filter: Q.and(Q.type(PostRecord), Q.author(profileEntity)),
       proxyTo: profileEntity,
     },
-    {refreshInterval: otherProfileRefreshInterval}
+    {refreshMode: "sync", refreshInterval: otherProfileRefreshInterval}
   );
 
   const getPostVersions = useCallback(() => {
@@ -156,6 +161,8 @@ export function useOtherProfilePageState(profileEntity: string) {
     getFull,
     isFullLoading,
     arePostsLoading,
+    isLoadingMore,
+    loadMore,
     getPostVersions,
     onFollowClick,
     onUnfollowClick,
