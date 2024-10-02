@@ -7,19 +7,26 @@ import {
   useStaticRecordsQuery,
   wrapInProxyStore,
 } from "../baq/store.js";
+import {BirdConstants} from "./constants.js";
 
 export function usePostDetailState(postKey: PostRecordKey) {
   const post = useRecordByKey(postKey);
   const author = useFindEntityRecord(post.author.entity);
 
-  const {isLoading, getRecords} = useStaticRecordsQuery({
-    pageSize: 200,
-    filter: Q.and(
-      Q.type(PostRecord),
-      Q.record("content.replyToPost", Record.toLink(post))
-    ),
-    proxyTo: post.author.entity,
-  });
+  const {isLoading, getRecords} = useStaticRecordsQuery(
+    {
+      pageSize: BirdConstants.listPageSize,
+      filter: Q.and(
+        Q.type(PostRecord),
+        Q.record("content.replyToPost", Record.toLink(post))
+      ),
+      proxyTo: post.author.entity,
+    },
+    {
+      refreshMode: "sync",
+      refreshInterval: BirdConstants.authenticatedRefreshInterval,
+    }
+  );
 
   const getReplyVersions = useCallback(
     () => getRecords().map(Record.toVersionHash),
