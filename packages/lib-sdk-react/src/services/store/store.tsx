@@ -1005,7 +1005,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           isComplete: match?.isComplete || isLocalTracked,
           isDisplayed: false,
           error: undefined,
-          recordVersions: match?.recordVersions,
+          recordVersions: match?.recordVersions?.slice(0, query.pageSize),
         };
 
         updateQueries(value => ({
