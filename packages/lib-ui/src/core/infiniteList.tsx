@@ -1,5 +1,5 @@
 import {Handler, isDefined} from "@baqhub/sdk";
-import {FC, PropsWithChildren, useEffect, useRef} from "react";
+import {FC, PropsWithChildren, RefObject, useEffect, useRef} from "react";
 import {Column} from "./style.js";
 
 //
@@ -7,9 +7,10 @@ import {Column} from "./style.js";
 //
 
 interface InfiniteListProps extends PropsWithChildren {
+  root?: RefObject<Element>;
   className?: string;
-  topThreshold?: number;
-  bottomThreshold?: number;
+  top?: number;
+  bottom?: number;
   loadMore: Handler | undefined;
 }
 
@@ -20,7 +21,8 @@ interface InfiniteListProps extends PropsWithChildren {
 const defaultThreshold = Number.MAX_SAFE_INTEGER;
 
 export const InfiniteList: FC<InfiniteListProps> = props => {
-  const {className, topThreshold, bottomThreshold, loadMore, children} = props;
+  const {root, className} = props;
+  const {top, bottom, loadMore, children} = props;
 
   //
   // Load more trigger.
@@ -44,12 +46,11 @@ export const InfiniteList: FC<InfiniteListProps> = props => {
       loadMore();
     };
 
-    const topMargin = isDefined(topThreshold) ? topThreshold : defaultThreshold;
-    const bottomMargin = isDefined(bottomThreshold)
-      ? bottomThreshold
-      : defaultThreshold;
+    const topMargin = isDefined(top) ? top : defaultThreshold;
+    const bottomMargin = isDefined(bottom) ? bottom : defaultThreshold;
 
     const observer = new IntersectionObserver(onIntersectionChange, {
+      root: root?.current,
       rootMargin: `${topMargin}px 0px ${bottomMargin}px 0px`,
       threshold: 1,
     });
@@ -58,7 +59,7 @@ export const InfiniteList: FC<InfiniteListProps> = props => {
     return () => {
       observer.disconnect();
     };
-  }, [topThreshold, bottomThreshold, loadMore]);
+  }, [root, top, bottom, loadMore]);
 
   //
   // Render.

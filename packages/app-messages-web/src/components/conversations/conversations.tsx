@@ -1,5 +1,7 @@
+import {Handler} from "@baqhub/sdk";
+import {InfiniteList} from "@baqhub/ui/core/infiniteList.js";
 import {Column, Grid, tw} from "@baqhub/ui/core/style.js";
-import {FC, Suspense, useEffect} from "react";
+import {FC, Suspense, useEffect, useRef} from "react";
 import {ConversationRecordKey} from "../../baq/conversationRecord.js";
 import {
   GetItemKeys,
@@ -37,7 +39,7 @@ const HeaderLayout = tw(Grid)`
   col-start-1
 `;
 
-const ItemsLayout = tw(Column)`
+const ScrollLayout = tw(Column)`
   p-5
   pt-2
   min-h-0
@@ -57,7 +59,8 @@ const InfoLayout = tw(Grid)`
 
 export const Conversations: FC<ConversationsProps> = props => {
   const {selectedKey, onConversationSelect} = props;
-  const {draftConversationKeys, getItemKeys} = useConversationsState();
+  const state = useConversationsState();
+  const {draftConversationKeys, getItemKeys, isLoadingMore, loadMore} = state;
 
   const renderLoading = () => {
     return (
@@ -77,6 +80,8 @@ export const Conversations: FC<ConversationsProps> = props => {
           selectedKey={selectedKey}
           draftConversationKeys={draftConversationKeys}
           getItemKeys={getItemKeys}
+          isLoadingMore={isLoadingMore}
+          loadMore={loadMore}
           onConversationSelect={onConversationSelect}
         />
       </Suspense>
@@ -88,14 +93,17 @@ interface ConversationsContentProps {
   selectedKey: ConversationRecordKey | undefined;
   draftConversationKeys: ReadonlyArray<ConversationRecordKey>;
   getItemKeys: GetItemKeys;
+  isLoadingMore: boolean;
+  loadMore: Handler | undefined;
   onConversationSelect: ConversationSelectHandler;
 }
 
 const ConversationsContent: FC<ConversationsContentProps> = props => {
   const {selectedKey, draftConversationKeys, getItemKeys} = props;
-  const {onConversationSelect} = props;
+  const {isLoadingMore, loadMore, onConversationSelect} = props;
   const itemKeys = getItemKeys();
   const totalCount = draftConversationKeys.length + itemKeys.length;
+  const scrollLayoutRef = useRef<HTMLDivElement>(null);
 
   // Select first item if needed.
   useEffect(() => {
@@ -138,9 +146,11 @@ const ConversationsContent: FC<ConversationsContentProps> = props => {
   };
 
   return (
-    <ItemsLayout>
-      {draftConversationKeys.map(renderDraftItem)}
-      {itemKeys.map(renderItem)}
-    </ItemsLayout>
+    <ScrollLayout ref={scrollLayoutRef}>
+      <InfiniteList root={scrollLayoutRef} loadMore={loadMore} bottom={200}>
+        {draftConversationKeys.map(renderDraftItem)}
+        {itemKeys.map(renderItem)}
+      </InfiniteList>
+    </ScrollLayout>
   );
 };

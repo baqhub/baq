@@ -29,9 +29,9 @@ export function Posts<T>(props: PostsProps<T>) {
   }
 
   return (
-    <InfiniteList loadMore={loadMore} bottomThreshold={200}>
+    <InfiniteList loadMore={loadMore} bottom={200}>
       {items.map(renderItem)}
-      <LoadingMorePosts isLoading={Boolean(isLoadingMore || loadMore)} />
+      <LoadingMorePosts isLoading={isLoadingMore} />
     </InfiniteList>
   );
 }
