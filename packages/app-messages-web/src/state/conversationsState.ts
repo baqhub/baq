@@ -48,7 +48,7 @@ export function useConversationsState() {
   //
 
   const {getRecords, isLoadingMore, loadMore} = useRecordsQuery({
-    pageSize: 3,
+    pageSize: 30,
     sort: [QuerySortProperty.RECEIVED_AT, QuerySortDirection.DESCENDING],
     filter: Q.type(MessageRecord),
     distinct: "content.conversation",

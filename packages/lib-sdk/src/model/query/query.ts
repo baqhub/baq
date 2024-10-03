@@ -255,6 +255,49 @@ function queryFilter<R extends AnyRecord, T extends R>(
     };
   }
 
+  function distinct() {
+    const {distinct} = query;
+    if (!distinct) {
+      return (list: ReadonlyArray<T>) => list;
+    }
+
+    const distinctValue = (record: T) => {
+      const recordValues: ReadonlyArray<any> = JSONPath({
+        path: distinct,
+        json: record,
+      }).filter(isDefined);
+
+      if (recordValues.length === 0) {
+        return `null+${record.author.entity}+${record.id}`;
+      }
+
+      // TODO: Implement link detection for correct logic.
+      const valueToString = (value: any) => {
+        if (isString(value)) {
+          return `"${value}"`;
+        }
+
+        if ("versionHash" in value) {
+          return `${value.entity}+${value.recordId}+${value.versionHash}`;
+        }
+
+        if ("recordId" in value) {
+          return `${value.entity}+${value.recordId}`;
+        }
+
+        if ("entity" in value) {
+          return value.entity;
+        }
+
+        return String(value);
+      };
+
+      return recordValues.map(valueToString).join(":");
+    };
+
+    return (list: ReadonlyArray<T>) => uniqBy(list, distinctValue);
+  }
+
   function filter() {
     function isMatch(record: R | NoContentRecord): record is T {
       // Exclude deleted.
@@ -301,49 +344,6 @@ function queryFilter<R extends AnyRecord, T extends R>(
     return (list: ReadonlyArray<R | NoContentRecord>) => {
       return list.filter(isMatch);
     };
-  }
-
-  function distinct() {
-    const {distinct} = query;
-    if (!distinct) {
-      return (list: ReadonlyArray<T>) => list;
-    }
-
-    const distinctValue = (record: T) => {
-      const recordValues: ReadonlyArray<any> = JSONPath({
-        path: distinct,
-        json: record,
-      }).filter(isDefined);
-
-      if (recordValues.length === 0) {
-        return `null+${record.author.entity}+${record.id}`;
-      }
-
-      // TODO: Implement link detection for correct logic.
-      const valueToString = (value: any) => {
-        if (isString(value)) {
-          return `"${value}"`;
-        }
-
-        if ("versionHash" in value) {
-          return `${value.entity}+${value.recordId}+${value.versionHash}`;
-        }
-
-        if ("recordId" in value) {
-          return `${value.entity}+${value.recordId}`;
-        }
-
-        if ("entity" in value) {
-          return value.entity;
-        }
-
-        return String(value);
-      };
-
-      return recordValues.map(valueToString).join(":");
-    };
-
-    return (list: ReadonlyArray<T>) => uniqBy(list, distinctValue);
   }
 
   function pageSize(): (list: ReadonlyArray<T>) => ReadonlyArray<T> {

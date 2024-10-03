@@ -32,7 +32,7 @@ export function useNonEmptyConversationState(
 
   const {getRecords, isLoadingMore, loadMore} = useRecordsQuery(
     {
-      pageSize: 3,
+      pageSize: 20,
       sort: [QuerySortProperty.RECEIVED_AT, QuerySortDirection.DESCENDING],
       filter: Q.and(
         Q.type(MessageRecord),
