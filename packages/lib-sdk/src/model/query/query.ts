@@ -276,7 +276,7 @@ function queryFilter<R extends AnyRecord, T extends R>(
 
       if (boundary) {
         const result = QueryDate.compare(recordDate, recordId, boundary);
-        if (isAscending ? result >= 0 : result <= 0) {
+        if (isAscending ? result > 0 : result < 0) {
           return false;
         }
       }

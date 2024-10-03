@@ -17,6 +17,7 @@ export interface StoreQuery<T extends AnyRecord, Q extends T> {
   refresh: (refreshCount: number) => void;
   loadMorePromise: Promise<void> | undefined;
   loadMoreError: unknown | undefined;
+  loadMoreQuery: string | undefined;
   loadMore: (() => void) | undefined;
   isSync: boolean;
   isComplete: boolean;
