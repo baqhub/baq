@@ -1,3 +1,4 @@
+import {Handler} from "@baqhub/sdk";
 import {DataProvider} from "@baqhub/sdk-react";
 import {Grid, Row, tw} from "@baqhub/ui/core/style.js";
 import throttle from "lodash/throttle.js";
@@ -78,8 +79,7 @@ interface NonEmptyConversationProps {
 const NonEmptyConversation: FC<NonEmptyConversationProps> = props => {
   const {conversationKey} = props;
   const state = useNonEmptyConversationState(conversationKey);
-
-  const {recipient, getMessageKeys} = state;
+  const {recipient, getMessageKeys, isLoadingMore, loadMore} = state;
   const deferredGetMessageKeys = useDeferredValue(getMessageKeys);
 
   return (
@@ -88,6 +88,8 @@ const NonEmptyConversation: FC<NonEmptyConversationProps> = props => {
         conversationKey={conversationKey}
         recipient={recipient}
         getMessageKeys={deferredGetMessageKeys}
+        isLoadingMore={isLoadingMore}
+        loadMore={loadMore}
       />
     </Suspense>
   );
@@ -109,12 +111,15 @@ interface NonEmptyConversationContentProps {
   conversationKey: ConversationRecordKey;
   recipient: string;
   getMessageKeys: DataProvider<ReadonlyArray<MessageRecordKey>>;
+  isLoadingMore: boolean;
+  loadMore: Handler | undefined;
 }
 
 const NonEmptyConversationContent: FC<
   NonEmptyConversationContentProps
 > = props => {
-  const {conversationKey, recipient, getMessageKeys} = props;
+  const {conversationKey, recipient} = props;
+  const {getMessageKeys, isLoadingMore, loadMore} = props;
   const deferredConversationKey = useDeferredValue(conversationKey);
 
   //
@@ -181,7 +186,11 @@ const NonEmptyConversationContent: FC<
     <Layout ref={layoutRef} onScroll={onScroll}>
       <ConversationLayout>
         <ConversationHeader recipient={recipient} />
-        <ConversationMessages getMessageKeys={getMessageKeys} />
+        <ConversationMessages
+          getMessageKeys={getMessageKeys}
+          isLoadingMore={isLoadingMore}
+          loadMore={loadMore}
+        />
         <MessageComposer
           conversationKey={conversationKey}
           onSizeIncrease={onMessageComposerSizeIncrease}

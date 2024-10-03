@@ -44,7 +44,7 @@ function stringCompare(string1: string, string2: string) {
 
 function queryDateCompare(
   recordDate: Date | undefined,
-  recordVersionHash: string | undefined,
+  recordId: string | undefined,
   queryDate: QueryDate | undefined
 ) {
   if (!recordDate || !queryDate) {
@@ -57,8 +57,8 @@ function queryDateCompare(
   }
 
   // Date + VersionHash.
-  if (queryDate[0] === recordDate && recordVersionHash) {
-    return stringCompare(recordVersionHash, queryDate[1]);
+  if (recordId && queryDate[0] === recordDate) {
+    return stringCompare(recordId, queryDate[1]);
   }
 
   return dateCompare(recordDate, queryDate[0]);

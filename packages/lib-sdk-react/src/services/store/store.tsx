@@ -2,6 +2,7 @@ import {
   AbortedError,
   AnyBlobLink,
   AnyRecord,
+  Array,
   Async,
   CleanRecordType,
   EntityRecord,
@@ -656,19 +657,19 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                   ? makeLoadMore(response.nextPage)
                   : undefined;
 
+                const last = Array.last(response.records);
+                const boundary = last && Query.findBoundary(query, last);
+
                 return {
                   ...value,
                   [queryId]: {
                     ...currentQuery,
-                    query: Query.setPageSize(
-                      currentQuery.query,
-                      response.pageSize
-                    ),
                     promise: undefined,
                     error: undefined,
                     refreshCount: currentQuery.refreshCount + 1,
                     loadMore,
                     isComplete: !response.nextPage,
+                    loadedBoundary: boundary,
                     recordVersions: response.records.map(Record.toVersionHash),
                   },
                 };
@@ -800,8 +801,9 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                   r => r.id
                 );
                 const recordVersions = Query.filter(
+                  currentQuery.query,
                   allRecords,
-                  currentQuery.query
+                  {ignorePageSize: true}
                 ).map(Record.toVersionHash);
 
                 return {
@@ -905,18 +907,18 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                   )
                 );
 
+                const last = Array.last(response.records);
+                const boundary = last && Query.findBoundary(query, last);
+
                 return {
                   ...value,
                   [queryId]: {
                     ...currentQuery,
-                    query: Query.setPageSize(
-                      currentQuery.query,
-                      recordVersions.length
-                    ),
                     loadMorePromise: undefined,
                     loadMoreError: undefined,
                     loadMore,
                     isComplete: !response.nextPage,
+                    loadedBoundary: boundary,
                     recordVersions,
                   },
                 };
@@ -1005,6 +1007,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           isComplete: match?.isComplete || isLocalTracked,
           isDisplayed: false,
           error: undefined,
+          loadedBoundary: match?.loadedBoundary,
           recordVersions: match?.recordVersions?.slice(0, query.pageSize),
         };
 
@@ -1238,6 +1241,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         isSync: false,
         isComplete: isLocalTracked,
         isDisplayed: true,
+        loadedBoundary: undefined,
         recordVersions: undefined,
       };
     }, [
@@ -1251,7 +1255,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
     const trackedQuery = useQuery<Q>(initialStoreQuery.id);
     const storeQuery = trackedQuery || initialStoreQuery;
-    const {query, promise, error} = storeQuery;
+    const {query, promise, error, loadedBoundary} = storeQuery;
     const {loadMorePromise, loadMoreError, loadMore} = storeQuery;
 
     useEffect(() => {
@@ -1268,9 +1272,12 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           return [];
         }
 
-        return Query.filter(state[entity]?.list || [], query);
+        return Query.filter(query, state[entity]?.list || [], {
+          ignorePageSize: true,
+          boundary: loadedBoundary,
+        });
       },
-      [promise, entity, query]
+      [promise, entity, query, loadedBoundary]
     );
 
     const records = useShallowStateSelector(recordsSelector);
@@ -1294,9 +1301,12 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           return records;
         }
 
-        return Query.filter(state[entity]?.list || [], deferredQuery);
+        return Query.filter(deferredQuery, state[entity]?.list || [], {
+          ignorePageSize: true,
+          boundary: loadedBoundary,
+        });
       },
-      [entity, query, deferredQuery, records]
+      [entity, query, deferredQuery, loadedBoundary, records]
     );
 
     const deferredRecords = useShallowStateSelector(deferredRecordsSelector);

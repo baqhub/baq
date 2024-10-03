@@ -22,8 +22,18 @@ function isSuperset<T>(
   return superset === subset || subset.every(item => superset.includes(item));
 }
 
+function arrayFirst<T>(arr: ReadonlyArray<T>): T | undefined {
+  return arr[0];
+}
+
+function arrayLast<T>(arr: ReadonlyArray<T>): T | undefined {
+  return arr[arr.length - 1];
+}
+
 export const Array = {
   intersperse,
   randomItem,
   isSuperset,
+  first: arrayFirst,
+  last: arrayLast,
 };

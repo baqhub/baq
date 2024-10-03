@@ -147,7 +147,7 @@ const ConversationsContent: FC<ConversationsContentProps> = props => {
 
   return (
     <ScrollLayout ref={scrollLayoutRef}>
-      <InfiniteList root={scrollLayoutRef} loadMore={loadMore} bottom={200}>
+      <InfiniteList root={scrollLayoutRef} bottom={200} loadMore={loadMore}>
         {draftConversationKeys.map(renderDraftItem)}
         {itemKeys.map(renderItem)}
       </InfiniteList>

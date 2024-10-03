@@ -1,4 +1,4 @@
-import {AnyRecord, Query} from "@baqhub/sdk";
+import {AnyRecord, Query, QueryDate} from "@baqhub/sdk";
 
 type RefreshMode = "sync" | "full";
 
@@ -21,6 +21,7 @@ export interface StoreQuery<T extends AnyRecord, Q extends T> {
   isSync: boolean;
   isComplete: boolean;
   isDisplayed: boolean;
+  loadedBoundary: QueryDate | undefined;
   recordVersions: ReadonlyArray<string> | undefined;
 }
 

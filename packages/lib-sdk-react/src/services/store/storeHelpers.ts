@@ -109,10 +109,10 @@ export function findRecordByQuery<T extends AnyRecord>(
       const state = getState();
 
       const findRecord = (findEntity: string) => {
-        const records = Query.filter(state[findEntity]?.list || [], {
-          ...query,
-          pageSize: 1,
-        });
+        const records = Query.filter(
+          {...query, pageSize: 1},
+          state[findEntity]?.list || []
+        );
 
         if (records.length > 1) {
           throw new Error("Multiple records found.");

@@ -1,5 +1,7 @@
+import {Handler} from "@baqhub/sdk";
 import {DataProvider} from "@baqhub/sdk-react";
-import {Column, tw} from "@baqhub/ui/core/style.js";
+import {InfiniteList} from "@baqhub/ui/core/infiniteList.js";
+import {tw} from "@baqhub/ui/core/style.js";
 import {FC} from "react";
 import {MessageRecordKey} from "../../baq/messageRecord.js";
 import {ConversationMessage} from "./message/message.js";
@@ -10,13 +12,15 @@ import {ConversationMessage} from "./message/message.js";
 
 interface ConversationMessagesProps {
   getMessageKeys: DataProvider<ReadonlyArray<MessageRecordKey>>;
+  isLoadingMore: boolean;
+  loadMore: Handler | undefined;
 }
 
 //
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tw(InfiniteList)`
   py-3
   justify-end
 `;
@@ -26,11 +30,15 @@ const Layout = tw(Column)`
 //
 
 export const ConversationMessages: FC<ConversationMessagesProps> = props => {
-  const {getMessageKeys} = props;
+  const {getMessageKeys, isLoadingMore, loadMore} = props;
 
-  const itemsRender = getMessageKeys().map(key => (
-    <ConversationMessage key={key} messageKey={key} />
-  ));
+  const itemsRender = getMessageKeys()
+    .toReversed()
+    .map(key => <ConversationMessage key={key} messageKey={key} />);
 
-  return <Layout>{itemsRender}</Layout>;
+  return (
+    <Layout top={200} loadMore={loadMore}>
+      {itemsRender}
+    </Layout>
+  );
 };

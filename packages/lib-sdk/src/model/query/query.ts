@@ -85,11 +85,11 @@ const defaultSortBy: QuerySort = [
 // I/O.
 //
 
-function buildQuery<T extends AnyRecord>(query: Query<T>) {
+function queryNew<T extends AnyRecord>(query: Query<T>) {
   return query;
 }
 
-function buildQueryFromKey<T extends AnyRecord>(
+function queryOfKey<T extends AnyRecord>(
   key: RecordKey<T>,
   baseQuery: SingleQuery = {}
 ) {
@@ -102,7 +102,7 @@ function buildQueryFromKey<T extends AnyRecord>(
   } as Query<T>;
 }
 
-function singleQueryToQueryString(query: SingleQuery | undefined) {
+function querySingleToQueryString(query: SingleQuery | undefined) {
   if (!query) {
     return "";
   }
@@ -132,17 +132,7 @@ function queryToQueryString<T extends AnyRecord>(query: Query<T>) {
   ]);
 }
 
-function setQueryPageSize<T extends AnyRecord>(
-  query: Query<T>,
-  newPageSize: number
-): Query<T> {
-  return {
-    ...query,
-    pageSize: newPageSize,
-  };
-}
-
-function toSyncQuery<T extends AnyRecord>(
+function queryToSync<T extends AnyRecord>(
   query: Query<T>,
   maxRecord: T
 ): Query<T> {
@@ -165,6 +155,14 @@ function toSyncQuery<T extends AnyRecord>(
     includeDeleted: true,
     proxyTo: query.proxyTo,
   };
+}
+
+function queryFindBoundary<T extends AnyRecord>(
+  query: Query<T>,
+  record: T
+): QueryDate {
+  const sort = query.sort || QuerySort.default;
+  return [QuerySort.findDateInRecord(record, sort), record.id];
 }
 
 function includeLinksToString(
@@ -233,18 +231,25 @@ function findQueryMinDate<T extends AnyRecord>(
   return query.min;
 }
 
-function filterByQuery<R extends AnyRecord, T extends R>(
+interface QueryFilterOptions {
+  ignorePageSize?: boolean;
+  boundary?: QueryDate;
+}
+
+function queryFilter<R extends AnyRecord, T extends R>(
+  query: Query<T>,
   records: ReadonlyArray<R | NoContentRecord>,
-  query: Query<T>
+  {ignorePageSize, boundary}: QueryFilterOptions = {}
 ) {
   const sortBy = query.sort || defaultSortBy;
   const sortDir = QuerySort.toDirection(sortBy);
+  const isAscending = sortDir === QuerySortDirection.ASCENDING;
 
   const maxDate = findQueryMaxDate(query, sortDir);
   const minDate = findQueryMinDate(query, sortDir);
 
   function sort() {
-    const order = sortDir === QuerySortDirection.ASCENDING ? "asc" : "desc";
+    const order = isAscending ? "asc" : "desc";
     return (list: ReadonlyArray<R | NoContentRecord>) => {
       return orderBy(list, r => QuerySort.findDateInRecord(r, sortBy), order);
     };
@@ -259,14 +264,21 @@ function filterByQuery<R extends AnyRecord, T extends R>(
 
       // Date boundaries.
       const recordDate = QuerySort.findDateInRecord(record, sortBy);
-      const recordVersionHash = record.version?.hash;
+      const recordId = record.id;
 
-      if (QueryDate.compare(recordDate, recordVersionHash, maxDate) > 0) {
+      if (QueryDate.compare(recordDate, recordId, maxDate) > 0) {
         return false;
       }
 
-      if (QueryDate.compare(recordDate, recordVersionHash, minDate) < 0) {
+      if (QueryDate.compare(recordDate, recordId, minDate) < 0) {
         return false;
+      }
+
+      if (boundary) {
+        const result = QueryDate.compare(recordDate, recordId, boundary);
+        if (isAscending ? result >= 0 : result <= 0) {
+          return false;
+        }
       }
 
       if (query.mode && record.mode !== query.mode) {
@@ -334,13 +346,17 @@ function filterByQuery<R extends AnyRecord, T extends R>(
     return (list: ReadonlyArray<T>) => uniqBy(list, distinctValue);
   }
 
-  function pageSize() {
-    return (list: ReadonlyArray<T>) => {
+  function pageSize(): (list: ReadonlyArray<T>) => ReadonlyArray<T> {
+    if (ignorePageSize) {
+      return list => list;
+    }
+
+    return list => {
       return list.slice(0, query.pageSize || Constants.defaultPageSize);
     };
   }
 
-  return flow(sort(), filter(), distinct(), pageSize())(records);
+  return flow(sort(), distinct(), filter(), pageSize())(records);
 }
 
 function queryIsMatch(query1: Query<AnyRecord>, query2: Query<AnyRecord>) {
@@ -397,13 +413,13 @@ function queryIsSyncSuperset(
 }
 
 export const Query = {
-  new: buildQuery,
-  ofKey: buildQueryFromKey,
-  singleToQueryString: singleQueryToQueryString,
+  new: queryNew,
+  ofKey: queryOfKey,
+  singleToQueryString: querySingleToQueryString,
   toQueryString: queryToQueryString,
-  toSync: toSyncQuery,
-  setPageSize: setQueryPageSize,
-  filter: filterByQuery,
+  toSync: queryToSync,
+  findBoundary: queryFindBoundary,
+  filter: queryFilter,
   isMatch: queryIsMatch,
   isSuperset: queryIsSuperset,
   isSyncSuperset: queryIsSyncSuperset,
