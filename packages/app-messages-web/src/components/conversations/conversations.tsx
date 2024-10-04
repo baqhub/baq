@@ -13,6 +13,7 @@ import {ConversationDraftItem} from "./conversationDraftItem.js";
 import {ConversationItem} from "./conversationItem.js";
 import {ConversationsEmpty} from "./conversationsEmpty.js";
 import {ConversationsLoading} from "./conversationsLoading.js";
+import {ConversationsLoadingMore} from "./conversationsLoadingMore.js";
 import {Header} from "./header/header.js";
 
 //
@@ -150,6 +151,7 @@ const ConversationsContent: FC<ConversationsContentProps> = props => {
       <InfiniteList root={scrollLayoutRef} bottom={200} loadMore={loadMore}>
         {draftConversationKeys.map(renderDraftItem)}
         {itemKeys.map(renderItem)}
+        {(loadMore || isLoadingMore) && <ConversationsLoadingMore />}
       </InfiniteList>
     </ScrollLayout>
   );
