@@ -1017,7 +1017,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           isDisplayed: false,
           error: undefined,
           loadedBoundary: match?.loadedBoundary,
-          recordVersions: match?.recordVersions?.slice(0, query.pageSize),
+          recordVersions: match?.recordVersions,
         };
 
         updateQueries(value => ({
