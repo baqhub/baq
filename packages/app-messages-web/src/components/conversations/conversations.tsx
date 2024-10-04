@@ -151,7 +151,7 @@ const ConversationsContent: FC<ConversationsContentProps> = props => {
       <InfiniteList root={scrollLayoutRef} bottom={200} loadMore={loadMore}>
         {draftConversationKeys.map(renderDraftItem)}
         {itemKeys.map(renderItem)}
-        {(loadMore || isLoadingMore) && <ConversationsLoadingMore />}
+        {loadMore && <ConversationsLoadingMore />}
       </InfiniteList>
     </ScrollLayout>
   );

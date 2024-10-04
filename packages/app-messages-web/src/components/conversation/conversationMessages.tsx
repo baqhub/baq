@@ -5,6 +5,7 @@ import {Column, tw} from "@baqhub/ui/core/style.js";
 import {FC, RefObject, useEffect, useRef} from "react";
 import {ConversationRecordKey} from "../../baq/conversationRecord.js";
 import {MessageRecordKey} from "../../baq/messageRecord.js";
+import {ConversationLoadingMore} from "./conversationLoadingMore.js";
 import {ConversationMessage} from "./message/message.js";
 
 //
@@ -89,6 +90,7 @@ export const ConversationMessages: FC<ConversationMessagesProps> = props => {
   return (
     <Layout ref={layoutRef}>
       <InfiniteList root={scrollRoot} top={200} loadMore={loadMore}>
+        {loadMore && <ConversationLoadingMore />}
         {itemsRender}
       </InfiniteList>
     </Layout>
