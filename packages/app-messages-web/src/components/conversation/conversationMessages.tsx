@@ -1,7 +1,11 @@
+import {Handler, HandlerOf} from "@baqhub/sdk";
 import {DataProvider} from "@baqhub/sdk-react";
+import {InfiniteList} from "@baqhub/ui/core/infiniteList.js";
 import {Column, tw} from "@baqhub/ui/core/style.js";
-import {FC} from "react";
+import {FC, RefObject, useEffect, useRef} from "react";
+import {ConversationRecordKey} from "../../baq/conversationRecord.js";
 import {MessageRecordKey} from "../../baq/messageRecord.js";
+import {ConversationLoadingMore} from "./conversationLoadingMore.js";
 import {ConversationMessage} from "./message/message.js";
 
 //
@@ -9,7 +13,12 @@ import {ConversationMessage} from "./message/message.js";
 //
 
 interface ConversationMessagesProps {
+  scrollRoot: RefObject<Element>;
+  conversationKey: ConversationRecordKey;
   getMessageKeys: DataProvider<ReadonlyArray<MessageRecordKey>>;
+  isLoadingMore: boolean;
+  loadMore: Handler | undefined;
+  onSizeIncrease: HandlerOf<number>;
 }
 
 //
@@ -26,11 +35,64 @@ const Layout = tw(Column)`
 //
 
 export const ConversationMessages: FC<ConversationMessagesProps> = props => {
-  const {getMessageKeys} = props;
+  const {
+    scrollRoot,
+    conversationKey,
+    getMessageKeys,
+    isLoadingMore,
+    loadMore,
+    onSizeIncrease,
+  } = props;
 
-  const itemsRender = getMessageKeys().map(key => (
-    <ConversationMessage key={key} messageKey={key} />
-  ));
+  //
+  // Size changes.
+  //
 
-  return <Layout>{itemsRender}</Layout>;
+  const layoutRef = useRef<HTMLDivElement>(null);
+  const lastHeightRef = useRef(0);
+
+  useEffect(() => {
+    lastHeightRef.current = 0;
+  }, [conversationKey]);
+
+  useEffect(() => {
+    const currentLayout = layoutRef.current;
+    if (!currentLayout) {
+      return;
+    }
+
+    const observer = new ResizeObserver(entries => {
+      entries.forEach(entry => {
+        const newHeight = entry.borderBoxSize[0]!.blockSize;
+
+        if (newHeight > lastHeightRef.current) {
+          onSizeIncrease(newHeight - lastHeightRef.current);
+        }
+
+        lastHeightRef.current = newHeight;
+      });
+    });
+
+    observer.observe(currentLayout);
+    return () => {
+      observer.disconnect();
+    };
+  }, [onSizeIncrease]);
+
+  //
+  // Render.
+  //
+
+  const itemsRender = getMessageKeys()
+    .toReversed()
+    .map(key => <ConversationMessage key={key} messageKey={key} />);
+
+  return (
+    <Layout ref={layoutRef}>
+      <InfiniteList root={scrollRoot} top={200} loadMore={loadMore}>
+        {loadMore && <ConversationLoadingMore />}
+        {itemsRender}
+      </InfiniteList>
+    </Layout>
+  );
 };

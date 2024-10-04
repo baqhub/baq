@@ -30,10 +30,10 @@ export function useNonEmptyConversationState(
   // Messages.
   //
 
-  const {getRecords} = useRecordsQuery(
+  const {getRecords, isLoadingMore, loadMore} = useRecordsQuery(
     {
-      pageSize: 200,
-      sort: [QuerySortProperty.RECEIVED_AT, QuerySortDirection.ASCENDING],
+      pageSize: 20,
+      sort: [QuerySortProperty.RECEIVED_AT, QuerySortDirection.DESCENDING],
       filter: Q.and(
         Q.type(MessageRecord),
         Q.record("content.conversation", Record.toLink(conversation))
@@ -58,5 +58,7 @@ export function useNonEmptyConversationState(
   return {
     recipient,
     getMessageKeys,
+    isLoadingMore,
+    loadMore,
   };
 }

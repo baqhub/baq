@@ -8,7 +8,6 @@ import isNumber from "lodash/isNumber.js";
 import isString from "lodash/isString.js";
 import map from "lodash/map.js";
 import snakeCase from "lodash/snakeCase.js";
-import toLower from "lodash/toLower.js";
 import {fixImport} from "./fixImport.js";
 import {ExclusiveUnion, isDefined} from "./type.js";
 
@@ -451,6 +450,10 @@ interface EnumerationWithValuesOptions {
   isCaseSensitive: boolean;
 }
 
+function toLowerCase(source: string) {
+  return source.toLowerCase();
+}
+
 function enumerationWithValuesBase<T extends Enum, R extends string | number>(
   name: string,
   sourceEnum: T,
@@ -458,7 +461,7 @@ function enumerationWithValuesBase<T extends Enum, R extends string | number>(
   {isCaseSensitive}: EnumerationWithValuesOptions = {isCaseSensitive: true}
 ) {
   // Case sensitivity.
-  const valueTransform = isCaseSensitive ? t.identity : toLower;
+  const valueTransform = isCaseSensitive ? t.identity : toLowerCase;
 
   // Mapper.
   const invertedValues = map(

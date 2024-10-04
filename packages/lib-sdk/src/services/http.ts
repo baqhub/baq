@@ -219,7 +219,7 @@ function buildUrl(url: string, query: HttpQuery | undefined) {
     )
     .filter(isDefined);
 
-  return url + Str.query(queryArray);
+  return url + Str.buildQuery(queryArray);
 }
 
 function conformBody(body: unknown) {

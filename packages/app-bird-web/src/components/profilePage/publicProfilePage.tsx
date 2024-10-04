@@ -25,6 +25,7 @@ export const PublicProfilePage: FC<PublicProfilePageProps> = ({
 }) => {
   const state = usePublicProfilePageState(publicEntity);
   const {get, getPostVersions, wrap} = state;
+  const {isLoadingMore, loadMore} = state;
 
   const profile = get();
   if (!profile) {
@@ -37,7 +38,12 @@ export const PublicProfilePage: FC<PublicProfilePageProps> = ({
     <>
       <ProfileHeader entity={entity} name={name} bio={bio} />
       <Suspense fallback={<LoadingPosts />}>
-        <Posts getItems={getPostVersions} renderItem={renderPost}>
+        <Posts
+          getItems={getPostVersions}
+          renderItem={renderPost}
+          isLoadingMore={isLoadingMore}
+          loadMore={loadMore}
+        >
           <EmptyPosts
             icon={<FaceFrownIcon />}
             text="This user hasn't posted anything!"

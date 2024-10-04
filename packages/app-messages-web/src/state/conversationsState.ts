@@ -47,8 +47,8 @@ export function useConversationsState() {
   // Synced conversations.
   //
 
-  const {getRecords} = useRecordsQuery({
-    pageSize: 200,
+  const {getRecords, isLoadingMore, loadMore} = useRecordsQuery({
+    pageSize: 30,
     sort: [QuerySortProperty.RECEIVED_AT, QuerySortDirection.DESCENDING],
     filter: Q.type(MessageRecord),
     distinct: "content.conversation",
@@ -68,5 +68,7 @@ export function useConversationsState() {
   return {
     draftConversationKeys,
     getItemKeys,
+    isLoadingMore,
+    loadMore,
   };
 }

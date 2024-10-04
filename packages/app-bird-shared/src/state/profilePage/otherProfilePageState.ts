@@ -15,8 +15,7 @@ import {
   useStaticRecordsQuery,
   wrapInProxyStore,
 } from "../../baq/store.js";
-
-export const otherProfileRefreshInterval = 60 * 1000; // 1 min.
+import {BirdConstants} from "../constants.js";
 
 export interface OtherProfileData {
   isProxy: boolean;
@@ -57,7 +56,10 @@ export function useOtherProfilePageState(profileEntity: string) {
       includeLinks: ["standing"],
       proxyTo: profileEntity,
     },
-    {refreshInterval: otherProfileRefreshInterval}
+    {
+      refreshMode: "sync",
+      refreshInterval: BirdConstants.authenticatedRefreshInterval,
+    }
   );
 
   const get = useCallback((): OtherProfileData | undefined => {
@@ -90,13 +92,21 @@ export function useOtherProfilePageState(profileEntity: string) {
     };
   }, [get, getSubscriptionRecord, entity, decision]);
 
-  const {isLoading: arePostsLoading, getRecords} = useStaticRecordsQuery(
+  const {
+    isLoading: arePostsLoading,
+    getRecords,
+    isLoadingMore,
+    loadMore,
+  } = useStaticRecordsQuery(
     {
-      pageSize: 200,
+      pageSize: BirdConstants.listPageSize,
       filter: Q.and(Q.type(PostRecord), Q.author(profileEntity)),
       proxyTo: profileEntity,
     },
-    {refreshInterval: otherProfileRefreshInterval}
+    {
+      refreshMode: "sync",
+      refreshInterval: BirdConstants.authenticatedRefreshInterval,
+    }
   );
 
   const getPostVersions = useCallback(() => {
@@ -156,6 +166,8 @@ export function useOtherProfilePageState(profileEntity: string) {
     getFull,
     isFullLoading,
     arePostsLoading,
+    isLoadingMore,
+    loadMore,
     getPostVersions,
     onFollowClick,
     onUnfollowClick,

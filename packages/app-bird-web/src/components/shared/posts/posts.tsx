@@ -1,6 +1,8 @@
+import {Handler} from "@baqhub/sdk";
 import {DataProvider, RendererOf} from "@baqhub/sdk-react";
-import {Column, tw} from "@baqhub/ui/core/style.js";
+import {InfiniteList} from "@baqhub/ui/core/infiniteList.js";
 import {PropsWithChildren} from "react";
+import {LoadingMorePosts} from "./loadingMorePosts.js";
 
 //
 // Props.
@@ -9,13 +11,9 @@ import {PropsWithChildren} from "react";
 interface PostsProps<T> extends PropsWithChildren {
   getItems: DataProvider<ReadonlyArray<T>>;
   renderItem: RendererOf<T>;
+  isLoadingMore: boolean;
+  loadMore: Handler | undefined;
 }
-
-//
-// Style.
-//
-
-const Layout = tw(Column)``;
 
 //
 // Component.
@@ -23,11 +21,17 @@ const Layout = tw(Column)``;
 
 export function Posts<T>(props: PostsProps<T>) {
   const {getItems, renderItem, children} = props;
+  const {isLoadingMore, loadMore} = props;
   const items = getItems();
 
   if (items.length === 0) {
     return children;
   }
 
-  return <Layout>{items.map(renderItem)}</Layout>;
+  return (
+    <InfiniteList loadMore={loadMore} bottom={200}>
+      {items.map(renderItem)}
+      {loadMore && <LoadingMorePosts isLoading={isLoadingMore} />}
+    </InfiniteList>
+  );
 }

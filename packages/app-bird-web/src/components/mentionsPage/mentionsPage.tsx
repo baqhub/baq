@@ -14,7 +14,7 @@ import {Posts} from "../shared/posts/posts.js";
 //
 
 export const MentionsPage: FC = () => {
-  const {getPostKeys} = useMentionsPageState();
+  const {getPostKeys, isLoadingMore, loadMore} = useMentionsPageState();
 
   const renderPost = (postKey: PostRecordKey) => (
     <PostByKey key={postKey} postKey={postKey} />
@@ -22,7 +22,12 @@ export const MentionsPage: FC = () => {
 
   return (
     <Suspense fallback={<LoadingPosts />}>
-      <Posts getItems={getPostKeys} renderItem={renderPost}>
+      <Posts
+        getItems={getPostKeys}
+        renderItem={renderPost}
+        isLoadingMore={isLoadingMore}
+        loadMore={loadMore}
+      >
         <EmptyPosts
           icon={<ChatBubbleBottomCenterTextIcon />}
           text="You haven't been mentioned yet!"

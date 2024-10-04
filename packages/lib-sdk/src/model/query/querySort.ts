@@ -18,7 +18,10 @@ export enum QuerySortDirection {
   DESCENDING = "descending",
 }
 
-export type QuerySort = [string, `${QuerySortDirection}`];
+export type QuerySort = [
+  `${QuerySortProperty}` | (string & NonNullable<unknown>),
+  `${QuerySortDirection}`,
+];
 
 //
 // I/O.
@@ -28,6 +31,16 @@ const querySortDirectionMap: {[K in `${QuerySortDirection}`]: string} = {
   [QuerySortDirection.ASCENDING]: "asc",
   [QuerySortDirection.DESCENDING]: "desc",
 };
+
+const querySortDefault: QuerySort = [
+  QuerySortProperty.VERSION_RECEIVED_AT,
+  QuerySortDirection.DESCENDING,
+];
+
+const querySortSyncDefault: QuerySort = [
+  QuerySortProperty.VERSION_RECEIVED_AT,
+  QuerySortDirection.ASCENDING,
+];
 
 function querySortToString(querySort: QuerySort) {
   const property = normalizePath(querySort[0]);
@@ -68,6 +81,8 @@ function findDateInRecord(
 }
 
 export const QuerySort = {
+  default: querySortDefault,
+  syncDefault: querySortSyncDefault,
   toString: querySortToString,
   toDirection: querySortToDirection,
   findDateInRecord,

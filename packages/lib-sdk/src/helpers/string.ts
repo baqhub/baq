@@ -1,3 +1,5 @@
+import {isDefined} from "./type.js";
+
 function randomStringOfLength(length: number) {
   function toHex(num: number) {
     return num.toString(16).padStart(2, "0");
@@ -6,6 +8,18 @@ function randomStringOfLength(length: number) {
   const array = new Uint8Array(Math.ceil(length / 2));
   crypto.getRandomValues(array);
   return Array.from(array, toHex).join("").substring(0, length);
+}
+
+function parseQueryString(source: string) {
+  return [...source.matchAll(/[?&]?(?:([^=]+)=([^&]+))/g)]
+    .map(([_, key, value]) => {
+      if (!key || !value) {
+        return undefined;
+      }
+
+      return [decodeURIComponent(key), decodeURIComponent(value)] as const;
+    })
+    .filter(isDefined);
 }
 
 function buildQueryString(params: ReadonlyArray<readonly [string, string]>) {
@@ -90,7 +104,8 @@ export const Str = {
   random: randomStringOfLength,
   toUrlBase64: base64UrlEncode,
   fromUrlBase64: base64UrlDecode,
-  query: buildQueryString,
+  parseQuery: parseQueryString,
+  buildQuery: buildQueryString,
   unicodeLength,
   unicodeIndex,
   jsLength,

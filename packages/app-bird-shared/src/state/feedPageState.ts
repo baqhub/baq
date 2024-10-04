@@ -2,10 +2,11 @@ import {Q, Record} from "@baqhub/sdk";
 import {useCallback} from "react";
 import {PostRecord} from "../baq/postRecord.js";
 import {useRecordsQuery} from "../baq/store.js";
+import {BirdConstants} from "./constants.js";
 
 export function useFeedPageState() {
-  const {isLoading, getRecords} = useRecordsQuery({
-    pageSize: 200,
+  const {isLoading, isLoadingMore, loadMore, getRecords} = useRecordsQuery({
+    pageSize: BirdConstants.listPageSize,
     sources: ["self", "subscription"],
     filter: Q.and(Q.type(PostRecord), Q.empty("content.replyToPost")),
     includeLinks: ["entity", "existential", "standing"],
@@ -19,5 +20,7 @@ export function useFeedPageState() {
   return {
     isLoading,
     getPostKeys,
+    isLoadingMore,
+    loadMore,
   };
 }

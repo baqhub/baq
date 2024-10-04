@@ -1,15 +1,7 @@
+import {Handler} from "@baqhub/sdk";
 import {DataProvider} from "@baqhub/sdk-react";
 import {Grid, Row, tw} from "@baqhub/ui/core/style.js";
-import throttle from "lodash/throttle.js";
-import {
-  FC,
-  Suspense,
-  useCallback,
-  useDeferredValue,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-} from "react";
+import {FC, Suspense, useCallback, useDeferredValue, useRef} from "react";
 import {ConversationRecordKey} from "../../baq/conversationRecord.js";
 import {MessageRecordKey} from "../../baq/messageRecord.js";
 import {useNonEmptyConversationState} from "../../state/conversationState.js";
@@ -35,6 +27,7 @@ const Layout = tw(Row)`
   relative
   min-h-0
   overflow-auto
+  overflow-anchor-none
 
   justify-center
   bg-neutral-200
@@ -78,9 +71,10 @@ interface NonEmptyConversationProps {
 const NonEmptyConversation: FC<NonEmptyConversationProps> = props => {
   const {conversationKey} = props;
   const state = useNonEmptyConversationState(conversationKey);
-
-  const {recipient, getMessageKeys} = state;
+  const {recipient, getMessageKeys, isLoadingMore, loadMore} = state;
   const deferredGetMessageKeys = useDeferredValue(getMessageKeys);
+  const deferredIsLoadingMore = useDeferredValue(isLoadingMore);
+  const deferredLoadMore = useDeferredValue(loadMore);
 
   return (
     <Suspense fallback={<Loading />}>
@@ -88,6 +82,8 @@ const NonEmptyConversation: FC<NonEmptyConversationProps> = props => {
         conversationKey={conversationKey}
         recipient={recipient}
         getMessageKeys={deferredGetMessageKeys}
+        isLoadingMore={deferredIsLoadingMore}
+        loadMore={deferredLoadMore}
       />
     </Suspense>
   );
@@ -109,12 +105,15 @@ interface NonEmptyConversationContentProps {
   conversationKey: ConversationRecordKey;
   recipient: string;
   getMessageKeys: DataProvider<ReadonlyArray<MessageRecordKey>>;
+  isLoadingMore: boolean;
+  loadMore: Handler | undefined;
 }
 
 const NonEmptyConversationContent: FC<
   NonEmptyConversationContentProps
 > = props => {
-  const {conversationKey, recipient, getMessageKeys} = props;
+  const {conversationKey, recipient} = props;
+  const {getMessageKeys, isLoadingMore, loadMore} = props;
   const deferredConversationKey = useDeferredValue(conversationKey);
 
   //
@@ -122,51 +121,8 @@ const NonEmptyConversationContent: FC<
   //
 
   const layoutRef = useRef<HTMLDivElement>(null);
-  const isAtEndRef = useRef(true);
 
-  const onScroll = useMemo(
-    () =>
-      throttle(
-        () => {
-          const currentLayout = layoutRef.current;
-          if (!currentLayout) {
-            return;
-          }
-
-          const {scrollHeight, offsetHeight, scrollTop} = currentLayout;
-          isAtEndRef.current = scrollHeight - offsetHeight - scrollTop < 10;
-        },
-        100,
-        {leading: false}
-      ),
-    []
-  );
-
-  useLayoutEffect(() => {
-    isAtEndRef.current = true;
-  }, [deferredConversationKey]);
-
-  const keys = getMessageKeys();
-  const lastKey = keys[keys.length - 1];
-
-  useLayoutEffect(() => {
-    const currentLayout = layoutRef.current;
-    if (!currentLayout) {
-      return;
-    }
-
-    // Only scroll if we're close to the bottom.
-    const currentIsAtEnd = isAtEndRef.current;
-    if (!currentIsAtEnd) {
-      return;
-    }
-
-    const {scrollHeight, offsetHeight} = currentLayout;
-    const newScrollTop = scrollHeight - offsetHeight;
-    currentLayout.scrollTo({top: newScrollTop});
-  }, [lastKey]);
-
-  const onMessageComposerSizeIncrease = useCallback((delta: number) => {
+  const onComponentSizeIncrease = useCallback((delta: number) => {
     const currentLayout = layoutRef.current;
     if (!currentLayout) {
       return;
@@ -178,13 +134,20 @@ const NonEmptyConversationContent: FC<
   }, []);
 
   return (
-    <Layout ref={layoutRef} onScroll={onScroll}>
+    <Layout ref={layoutRef}>
       <ConversationLayout>
         <ConversationHeader recipient={recipient} />
-        <ConversationMessages getMessageKeys={getMessageKeys} />
+        <ConversationMessages
+          scrollRoot={layoutRef}
+          conversationKey={deferredConversationKey}
+          getMessageKeys={getMessageKeys}
+          isLoadingMore={isLoadingMore}
+          loadMore={loadMore}
+          onSizeIncrease={onComponentSizeIncrease}
+        />
         <MessageComposer
           conversationKey={conversationKey}
-          onSizeIncrease={onMessageComposerSizeIncrease}
+          onSizeIncrease={onComponentSizeIncrease}
         />
       </ConversationLayout>
     </Layout>

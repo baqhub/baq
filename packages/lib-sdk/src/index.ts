@@ -24,6 +24,7 @@ export * from "./model/links/recordLink.js";
 export * from "./model/links/tagLink.js";
 export * from "./model/local/authenticationState.js";
 export * from "./model/query/query.js";
+export * from "./model/query/queryDate.js";
 export * from "./model/query/queryFilter.js";
 export * from "./model/query/querySort.js";
 //

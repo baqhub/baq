@@ -9,7 +9,7 @@ import {Posts} from "../shared/posts/posts.js";
 import {ProfileHeader} from "./profileHeader.js";
 
 export const UserProfilePage: FC = () => {
-  const {get, getPostKeys} = useUserProfilePageState();
+  const {get, getPostKeys, isLoadingMore, loadMore} = useUserProfilePageState();
   const profile = get();
   if (!profile) {
     return "No profile";
@@ -20,7 +20,12 @@ export const UserProfilePage: FC = () => {
     <>
       <ProfileHeader entity={entity} name={name} bio={bio} />
       <Suspense fallback={<LoadingPosts />}>
-        <Posts getItems={getPostKeys} renderItem={renderPost}>
+        <Posts
+          getItems={getPostKeys}
+          renderItem={renderPost}
+          isLoadingMore={isLoadingMore}
+          loadMore={loadMore}
+        >
           <EmptyPosts
             icon={<PencilSquareIcon />}
             text="You haven't posted anything!"

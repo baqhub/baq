@@ -19,15 +19,15 @@ function queryDateToString(queryDate: QueryDate) {
 }
 
 function dateCompare(date1: Date, date2: Date) {
-  if (date1 === date2) {
-    return 0;
-  }
-
   if (date1 > date2) {
     return 1;
   }
 
-  return -1;
+  if (date1 < date2) {
+    return -1;
+  }
+
+  return 0;
 }
 
 function stringCompare(string1: string, string2: string) {
@@ -44,7 +44,7 @@ function stringCompare(string1: string, string2: string) {
 
 function queryDateCompare(
   recordDate: Date | undefined,
-  recordVersionHash: string | undefined,
+  recordId: string | undefined,
   queryDate: QueryDate | undefined
 ) {
   if (!recordDate || !queryDate) {
@@ -57,11 +57,12 @@ function queryDateCompare(
   }
 
   // Date + VersionHash.
-  if (queryDate[0] === recordDate && recordVersionHash) {
-    return stringCompare(recordVersionHash, queryDate[1]);
+  const dateResult = dateCompare(recordDate, queryDate[0]);
+  if (recordId && dateResult === 0) {
+    return stringCompare(recordId, queryDate[1]);
   }
 
-  return dateCompare(recordDate, queryDate[0]);
+  return dateResult;
 }
 
 export const QueryDate = {

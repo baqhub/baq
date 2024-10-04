@@ -46,8 +46,8 @@
     "use-sync-external-store": "^1.2.2"
   },
   "devDependencies": {
-    "@types/lodash": "4.17.7",
-    "@types/react": "18.3.7",
+    "@types/lodash": "4.17.9",
+    "@types/react": "18.3.11",
     "@types/use-sync-external-store": "0.0.6",
     "tsconfig-to-dual-package": "1.2.0",
     "typescript": "5.5.2"
