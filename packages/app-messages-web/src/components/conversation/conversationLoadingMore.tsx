@@ -7,9 +7,8 @@ import {FC} from "react";
 //
 
 const Layout = tw(Column)`
-  h-10
+  p-2
   items-center
-  justify-center
 `;
 
 const Icon = tw(Text)`

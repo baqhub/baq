@@ -31,7 +31,7 @@ export function Posts<T>(props: PostsProps<T>) {
   return (
     <InfiniteList loadMore={loadMore} bottom={200}>
       {items.map(renderItem)}
-      <LoadingMorePosts isLoading={isLoadingMore} />
+      {loadMore && <LoadingMorePosts isLoading={isLoadingMore} />}
     </InfiniteList>
   );
 }
