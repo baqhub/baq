@@ -627,6 +627,11 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         };
 
         const performQuery = async () => {
+          const queryState1 = stateRef.current.queries[queryId];
+          if (queryState1?.loadMorePromise) {
+            await queryState1.loadMorePromise;
+          }
+
           let keepGoing = true;
 
           while (keepGoing) {
@@ -671,6 +676,8 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                     promise: undefined,
                     error: undefined,
                     refreshCount: currentQuery.refreshCount + 1,
+                    loadMorePromise: undefined,
+                    loadMoreError: undefined,
                     loadMoreQuery: response.nextPage,
                     loadMore,
                     isComplete: !response.nextPage,
@@ -718,14 +725,22 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           }
         };
 
-        const performRefreshSyncQuery = async (
-          recordVersions: ReadonlyArray<string>
-        ) => {
+        const performRefreshSyncQuery = async () => {
+          const queryState1 = stateRef.current.queries[queryId]!;
+          if (queryState1.loadMorePromise) {
+            await queryState1.loadMorePromise;
+          }
+
           //
           // Find the upper boundary we currently have.
           //
 
-          const queryRecords = recordVersions.map(
+          const queryState2 = stateRef.current.queries[queryId]!;
+          if (!queryState2.recordVersions) {
+            throw new Error("Missing record versions.");
+          }
+
+          const queryRecords = queryState2.recordVersions.map(
             version => stateRef.current.versions[version]! as Q
           );
 
@@ -791,7 +806,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                 const recordVersions = Query.filter(
                   currentQuery.query,
                   allRecords,
-                  {ignorePageSize: true}
+                  {ignorePageSize: true, boundary: currentQuery.loadedBoundary}
                 ).map(Record.toVersionHash);
 
                 return {
@@ -845,6 +860,17 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         };
 
         const performLoadMoreQuery = async (loadMoreQuery: string) => {
+          const queryState1 = stateRef.current.queries[queryId]!;
+          if (queryState1.promise) {
+            await queryState1.promise;
+          }
+
+          await null;
+          const queryState2 = stateRef.current.queries[queryId]!;
+          if (!queryState2.loadMorePromise) {
+            return;
+          }
+
           let keepGoing = true;
 
           while (keepGoing) {
@@ -970,7 +996,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
             const promise =
               refreshSpec.mode === "full"
                 ? performQuery()
-                : performRefreshSyncQuery(currentQuery.recordVersions);
+                : performRefreshSyncQuery();
 
             return {
               ...value,
