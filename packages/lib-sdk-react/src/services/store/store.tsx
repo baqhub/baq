@@ -570,6 +570,10 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         }
 
         const match = (() => {
+          if (isLocalTracked) {
+            return undefined;
+          }
+
           for (let i = lastQueryId; i > 0; i--) {
             const q = queries[i];
             if (!q) {
@@ -670,7 +674,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                     loadMoreQuery: response.nextPage,
                     loadMore,
                     isComplete: !response.nextPage,
-                    loadedBoundary: boundary,
+                    loadedBoundary: response.nextPage ? boundary : undefined,
                     recordVersions: response.records.map(Record.toVersionHash),
                   },
                 };
@@ -920,7 +924,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                     loadMoreQuery: response.nextPage,
                     loadMore,
                     isComplete: !response.nextPage,
-                    loadedBoundary: boundary,
+                    loadedBoundary: response.nextPage ? boundary : undefined,
                     recordVersions,
                   },
                 };
