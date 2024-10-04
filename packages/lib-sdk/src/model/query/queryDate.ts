@@ -57,11 +57,12 @@ function queryDateCompare(
   }
 
   // Date + VersionHash.
-  if (recordId && queryDate[0] === recordDate) {
+  const dateResult = dateCompare(recordDate, queryDate[0]);
+  if (recordId && dateResult === 0) {
     return stringCompare(recordId, queryDate[1]);
   }
 
-  return dateCompare(recordDate, queryDate[0]);
+  return dateResult;
 }
 
 export const QueryDate = {
