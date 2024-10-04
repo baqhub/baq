@@ -764,23 +764,6 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
               // If there are too many items to sync, full refresh.
               if (response.nextPage) {
-                updateQueries(value => {
-                  const currentQuery = value[queryId];
-                  if (!currentQuery) {
-                    throw new Error("Query not found.");
-                  }
-
-                  return {
-                    ...value,
-                    [queryId]: {
-                      ...currentQuery,
-                      promise: undefined,
-                      error: undefined,
-                      refreshCount: 0,
-                    },
-                  };
-                });
-
                 return performQuery();
               }
 
