@@ -144,7 +144,7 @@ function queryToSync<T extends AnyRecord>(
   return {
     max: undefined,
     min: [version.receivedAt, maxRecord.id],
-    sort: ["version.receivedAt", "ascending"],
+    sort: QuerySort.syncDefault,
     pageStart: undefined,
     pageSize: 100,
     distinct: undefined,

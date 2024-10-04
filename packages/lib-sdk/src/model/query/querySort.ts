@@ -37,6 +37,11 @@ const querySortDefault: QuerySort = [
   QuerySortDirection.DESCENDING,
 ];
 
+const querySortSyncDefault: QuerySort = [
+  QuerySortProperty.VERSION_RECEIVED_AT,
+  QuerySortDirection.ASCENDING,
+];
+
 function querySortToString(querySort: QuerySort) {
   const property = normalizePath(querySort[0]);
   const direction = querySortDirectionMap[querySort[1]];
@@ -77,6 +82,7 @@ function findDateInRecord(
 
 export const QuerySort = {
   default: querySortDefault,
+  syncDefault: querySortSyncDefault,
   toString: querySortToString,
   toDirection: querySortToDirection,
   findDateInRecord,
