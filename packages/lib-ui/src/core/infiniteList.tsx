@@ -42,7 +42,6 @@ export const InfiniteList: FC<InfiniteListProps> = props => {
         return;
       }
 
-      console.log("Calling loadMore()");
       loadMore();
     };
 
