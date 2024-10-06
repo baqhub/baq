@@ -27,6 +27,9 @@ const Layout = tw.dialog`
   p-0
   bg-transparent
 
+  max-h-full
+  max-w-full
+
   backdrop:opacity-20
   backdrop:bg-neutral-900
   dark:backdrop:opacity-10
@@ -36,7 +39,7 @@ const Layout = tw.dialog`
 `;
 
 const ContentLayout = tw(Column)`
-  p-10
+  p-6
 `;
 
 //
