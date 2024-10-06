@@ -40,6 +40,7 @@ const Layout = tw.dialog`
 
 const ContentLayout = tw(Column)`
   p-6
+  sm:p-10
 `;
 
 //
