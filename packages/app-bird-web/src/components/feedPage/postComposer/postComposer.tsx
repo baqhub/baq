@@ -71,6 +71,22 @@ const Sizer = tw.div`
   max-h-[300px]
 `;
 
+const Placeholder = tw.div`
+  col-start-2
+  row-start-1
+
+  p-1.5
+  select-none
+  pointer-events-none
+
+  truncate
+  text-neutral-400
+  dark:text-neutral-500
+
+  hidden
+  peer-placeholder-shown:block
+`;
+
 const ButtonCell = tw(Column)`
   col-start-3
   justify-end
@@ -115,7 +131,7 @@ export const PostComposer: FC<PostComposerProps> = ({mention}) => {
       </AvatarCell>
       <Textarea
         ref={textareaRef}
-        placeholder={placeholder}
+        placeholder=""
         value={text}
         maxLength={400}
         rows={1}
@@ -124,6 +140,7 @@ export const PostComposer: FC<PostComposerProps> = ({mention}) => {
         required
       />
       <Sizer>{text}&nbsp;</Sizer>
+      <Placeholder>{placeholder}</Placeholder>
       <ButtonCell>
         <Button
           variant="primary"
