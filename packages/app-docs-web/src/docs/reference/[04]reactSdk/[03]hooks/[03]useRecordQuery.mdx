@@ -85,21 +85,21 @@ This hook returns a [`UseRecordQueryResult`](#userecordqueryresult) object.
 
   - Whether the query is currently being performed.
 
-- **`error`** <props.pill href="/todo">BaqError</props.pill> _optional_
+- **`error`** <props.pill>BaqError</props.pill> _optional_
 
   - An error that happened while performing the query, if any.
 
-- **`record`** <props.pill href="/todo">Record</props.pill> _optional_
+- **`record`** <props.pill href="4b9504a7">Record</props.pill> _optional_
 
   - Resulting record, if found.
 
     The record is updated when a new version is fetched/received.
 
-- **`deferredRecord`** <props.pill href="/todo">Record</props.pill> _optional_
+- **`deferredRecord`** <props.pill href="4b9504a7">Record</props.pill> _optional_
 
   - Same as `record` but when the `query` changes it only gets updated after the request completes. This is helpful to keep the previous view on screen while loading new data.
 
-- **`getRecord`** <props.pill href="/todo">() => Record | undefined</props.pill>
+- **`getRecord`** <props.pill href="4b9504a7">() => Record | undefined</props.pill>
 
   - Same as `record`, but compatible with [React Suspense](https://react.dev/reference/react/Suspense).
 
@@ -107,7 +107,7 @@ This hook returns a [`UseRecordQueryResult`](#userecordqueryresult) object.
 
     The promise completes when the response is received.
 
-- **`getDeferredRecord`** <props.pill href="/todo">() => Record | undefined</props.pill>
+- **`getDeferredRecord`** <props.pill href="4b9504a7">() => Record | undefined</props.pill>
 
   - Same as `deferredRecord`, but compatible with [React Suspense](https://react.dev/reference/react/Suspense).
 

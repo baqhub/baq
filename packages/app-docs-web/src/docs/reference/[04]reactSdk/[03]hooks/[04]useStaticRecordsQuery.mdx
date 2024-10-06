@@ -52,6 +52,10 @@ function TodoList() {
 
   - Query to run against the store and user's server.
 
+- **`options`** <props.pill href="#usestaticrecordsqueryoptions">UseStaticRecordsQueryOptions</props.pill> _optional_
+
+  - Advanced controls over the behavior of the hook.
+
 </props.properties>
 
 #### Returns
@@ -65,6 +69,27 @@ This hook returns a [`UseStaticRecordsQueryResult`](#usestaticrecordsqueryresult
 - The resulting records will not change until the query changes.
 
 - Proxied queries are supported.
+
+### `UseStaticRecordsQueryOptions`
+
+<props.properties>
+
+- **`refreshMode`** <props.pill>enum</props.pill> _optional_
+
+  - Control the behavior of the hook.
+
+    - `"fetch"` _default_ : Perform the query and listen for realtime updates after that.
+    - `"sync"`: Only listen for realtime updates without performing the initial query.
+    - `"local"`: Only query the local store.
+    - `"local-tracked"`: Only query the local store and mark this query as "loaded".
+
+- **`refreshInterval`** <props.pill>int</props.pill> _optional_
+
+- **`loadMorePageSize`** <props.pill>int</props.pill> _optional_
+
+  - Override `query.pageSize` when loading more records.
+
+</props.properties>
 
 ### `UseStaticRecordsQueryResult`
 

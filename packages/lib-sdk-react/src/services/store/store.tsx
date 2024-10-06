@@ -74,10 +74,12 @@ import {
   performMutationRequest,
 } from "./storeMutation.js";
 import {
-  LiveQueryOptions,
   QueryRefreshSpec,
-  StaticQueryOptions,
   StoreQuery,
+  UseRecordQueryOptions,
+  UseRecordsQueryOptions,
+  UseStaticRecordQueryOptions,
+  UseStaticRecordsQueryOptions,
 } from "./storeQuery.js";
 
 //
@@ -1219,7 +1221,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
   function useRecordsQuery<Q extends T>(
     requestedQuery: LiveQuery<Q>,
-    options: LiveQueryOptions = {}
+    options: UseRecordsQueryOptions = {}
   ) {
     type Result = ReadonlyArray<Q>;
     const {loadMorePageSize} = options;
@@ -1438,7 +1440,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
   function useStaticRecordsQuery<Q extends T>(
     requestedQuery: Query<Q>,
-    options: StaticQueryOptions = {}
+    options: UseStaticRecordsQueryOptions = {}
   ) {
     type Result = ReadonlyArray<Q>;
     const storeContext = useStoreContext();
@@ -1676,7 +1678,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
   function useRecordQuery<Q extends T>(
     requestedQuery: LiveQuery<Q>,
-    options: LiveQueryOptions = {}
+    options: UseRecordQueryOptions = {}
   ) {
     // TODO: Use nextPage info instead of requesting 2.
     const queryResult = useRecordsQuery(
@@ -1688,7 +1690,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
   function useStaticRecordQuery<Q extends T>(
     requestedQuery: Query<Q>,
-    options: StaticQueryOptions = {}
+    options: UseStaticRecordQueryOptions = {}
   ) {
     const queryResult = useStaticRecordsQuery(
       {...requestedQuery, pageSize: 2},

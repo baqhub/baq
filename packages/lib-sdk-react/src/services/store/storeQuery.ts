@@ -1,5 +1,9 @@
 import {AnyRecord, Query, QueryDate} from "@baqhub/sdk";
 
+//
+// StoreQuery.
+//
+
 type RefreshMode = "sync" | "full";
 
 export interface QueryRefreshSpec {
@@ -27,32 +31,59 @@ export interface StoreQuery<T extends AnyRecord, Q extends T> {
   recordVersions: ReadonlyArray<string> | undefined;
 }
 
+//
+// UseQuery.
+//
+
 export type LiveQueryMode = "local" | "local-tracked" | "fetch" | "sync";
 
-export interface LiveQueryOptions {
+export interface UseRecordsQueryOptions {
   mode?: LiveQueryMode;
   loadMorePageSize?: number;
 }
 
-interface NoRefreshStaticQueryOptions {
+export interface UseRecordQueryOptions {
+  mode?: LiveQueryMode;
+}
+
+//
+// UseStaticQuery.
+//
+
+interface NoRefreshUseStaticRecordsQueryOptions {
   refreshMode?: never;
   refreshInterval?: never;
   loadMorePageSize?: number;
 }
 
-interface SyncRefreshStaticQueryOptions {
+interface SyncRefreshUseStaticRecordsQueryOptions {
   refreshMode: "sync";
   refreshInterval: number;
   loadMorePageSize?: number;
 }
 
-interface FullRefreshStaticQueryOptions {
+interface FullRefreshUseStaticRecordsQueryOptions {
   refreshMode: "full";
   refreshInterval: number;
   loadMorePageSize?: never;
 }
 
-export type StaticQueryOptions =
-  | NoRefreshStaticQueryOptions
-  | SyncRefreshStaticQueryOptions
-  | FullRefreshStaticQueryOptions;
+export type UseStaticRecordsQueryOptions =
+  | NoRefreshUseStaticRecordsQueryOptions
+  | SyncRefreshUseStaticRecordsQueryOptions
+  | FullRefreshUseStaticRecordsQueryOptions;
+
+interface SyncRefreshUseStaticRecordQueryOptions {
+  refreshMode: "sync";
+  refreshInterval: number;
+}
+
+interface FullRefreshUseStaticRecordQueryOptions {
+  refreshMode: "full";
+  refreshInterval: number;
+}
+
+export type UseStaticRecordQueryOptions =
+  | Record<string, never>
+  | SyncRefreshUseStaticRecordQueryOptions
+  | FullRefreshUseStaticRecordQueryOptions;
