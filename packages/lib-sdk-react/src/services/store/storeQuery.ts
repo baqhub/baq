@@ -14,6 +14,7 @@ export interface StoreQuery<T extends AnyRecord, Q extends T> {
   error: unknown | undefined;
   refreshSpec: QueryRefreshSpec | undefined;
   refreshCount: number;
+  refreshBoundary: QueryDate | undefined;
   refresh: (refreshCount: number) => void;
   loadMorePromise: Promise<void> | undefined;
   loadMoreError: unknown | undefined;

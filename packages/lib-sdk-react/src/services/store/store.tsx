@@ -13,6 +13,7 @@ import {
   LiveQuery,
   NoContentRecord,
   Query,
+  QueryDate,
   RNoContentRecord,
   Record,
   RecordKey,
@@ -666,8 +667,20 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                   ? makeLoadMore(response.nextPage)
                   : undefined;
 
+                // Loaded boundary.
                 const last = Array.last(response.records);
-                const boundary = last && Query.findBoundary(query, last);
+                const loadedBoundary =
+                  response.nextPage && last
+                    ? Query.findBoundary(query, last)
+                    : undefined;
+
+                // Refresh boundary.
+                const max = orderBy(
+                  response.records,
+                  t => t.version!.receivedAt,
+                  "desc"
+                )[0];
+                const refreshBoundary = max && Query.findBoundary(query, max);
 
                 return {
                   ...value,
@@ -676,12 +689,13 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                     promise: undefined,
                     error: undefined,
                     refreshCount: currentQuery.refreshCount + 1,
+                    refreshBoundary,
                     loadMorePromise: undefined,
                     loadMoreError: undefined,
                     loadMoreQuery: response.nextPage,
                     loadMore,
                     isComplete: !response.nextPage,
-                    loadedBoundary: response.nextPage ? boundary : undefined,
+                    loadedBoundary,
                     recordVersions: response.records.map(Record.toVersionHash),
                   },
                 };
@@ -736,25 +750,11 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           //
 
           const queryState2 = stateRef.current.queries[queryId]!;
-          if (!queryState2.recordVersions) {
-            throw new Error("Missing record versions.");
-          }
-
-          const queryRecords = queryState2.recordVersions.map(
-            version => stateRef.current.versions[version]! as Q
-          );
-
-          const maxQueryRecord = orderBy(
-            queryRecords,
-            t => t.version?.receivedAt,
-            "desc"
-          )[0];
-
-          if (!maxQueryRecord) {
+          if (!queryState2.refreshBoundary) {
             return performQuery();
           }
 
-          const refreshQuery = Query.toSync(query, maxQueryRecord);
+          const refreshQuery = Query.toSync(query, queryState2.refreshBoundary);
 
           //
           // Perform the refresh query.
@@ -799,15 +799,20 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                   version => stateRef.current.versions[version]! as Q
                 );
 
-                const allRecords = uniqBy(
-                  response.records.concat(queryRecords),
-                  r => r.id
-                );
                 const recordVersions = Query.filter(
                   currentQuery.query,
-                  allRecords,
+                  uniqBy(response.records.concat(queryRecords), r => r.id),
                   {ignorePageSize: true, boundary: currentQuery.loadedBoundary}
                 ).map(Record.toVersionHash);
+
+                const max = orderBy(
+                  response.records,
+                  t => t.version!.receivedAt,
+                  "desc"
+                )[0];
+                const refreshBoundary: QueryDate | undefined =
+                  (max && [max.version!.receivedAt!, max.id]) ||
+                  currentQuery.refreshBoundary;
 
                 return {
                   ...value,
@@ -816,6 +821,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
                     promise: undefined,
                     error: undefined,
                     refreshCount: currentQuery.refreshCount + 1,
+                    refreshBoundary,
                     recordVersions,
                   },
                 };
@@ -1015,6 +1021,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
           refreshSpec,
           refresh,
           refreshCount: 0,
+          refreshBoundary: undefined,
           loadMorePromise: undefined,
           loadMoreError: undefined,
           loadMoreQuery: match?.loadMoreQuery,
@@ -1252,6 +1259,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
         error: undefined,
         refreshSpec: undefined,
         refreshCount: 0,
+        refreshBoundary: undefined,
         refresh: () => {},
         loadMorePromise: undefined,
         loadMoreError: undefined,

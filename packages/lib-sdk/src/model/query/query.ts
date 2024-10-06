@@ -134,16 +134,11 @@ function queryToQueryString<T extends AnyRecord>(query: Query<T>) {
 
 function queryToSync<T extends AnyRecord>(
   query: Query<T>,
-  maxRecord: T
+  boundary: QueryDate
 ): Query<T> {
-  const {version} = maxRecord;
-  if (!version || !version.receivedAt) {
-    throw new Error("MaxRecord needs to be synced.");
-  }
-
   return {
     max: undefined,
-    min: [version.receivedAt, maxRecord.id],
+    min: boundary,
     sort: QuerySort.syncDefault,
     pageStart: undefined,
     pageSize: 100,
@@ -258,10 +253,10 @@ function queryFilter<R extends AnyRecord, T extends R>(
   function distinct() {
     const {distinct} = query;
     if (!distinct) {
-      return (list: ReadonlyArray<T>) => list;
+      return (list: ReadonlyArray<R | NoContentRecord>) => list;
     }
 
-    const distinctValue = (record: T) => {
+    const distinctValue = (record: R | NoContentRecord) => {
       const recordValues: ReadonlyArray<any> = JSONPath({
         path: distinct,
         json: record,
@@ -295,7 +290,8 @@ function queryFilter<R extends AnyRecord, T extends R>(
       return recordValues.map(valueToString).join(":");
     };
 
-    return (list: ReadonlyArray<T>) => uniqBy(list, distinctValue);
+    return (list: ReadonlyArray<R | NoContentRecord>) =>
+      uniqBy(list, distinctValue);
   }
 
   function filter() {

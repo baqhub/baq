@@ -1,6 +1,6 @@
 import {isDefined} from "./type.js";
 
-function randomStringOfLength(length: number) {
+function random(length: number) {
   function toHex(num: number) {
     return num.toString(16).padStart(2, "0");
   }
@@ -10,7 +10,7 @@ function randomStringOfLength(length: number) {
   return Array.from(array, toHex).join("").substring(0, length);
 }
 
-function parseQueryString(source: string) {
+function parseQuery(source: string) {
   return [...source.matchAll(/[?&]?(?:([^=]+)=([^&]+))/g)]
     .map(([_, key, value]) => {
       if (!key || !value) {
@@ -22,7 +22,7 @@ function parseQueryString(source: string) {
     .filter(isDefined);
 }
 
-function buildQueryString(params: ReadonlyArray<readonly [string, string]>) {
+function buildQuery(params: ReadonlyArray<readonly [string, string]>) {
   const queryString = params
     .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
     .join("&");
@@ -34,14 +34,14 @@ function buildQueryString(params: ReadonlyArray<readonly [string, string]>) {
 // Base64.
 //
 
-function base64UrlEncode(source: string) {
+function toUrlBase64(source: string) {
   return btoa(source)
     .replaceAll("+", "-")
     .replaceAll("/", "_")
     .replaceAll("=", "");
 }
 
-function base64UrlDecode(source: string) {
+function fromUrlBase64(source: string) {
   const unescaped = source
     .replaceAll("_", "/")
     .replaceAll("-", "+")
@@ -101,11 +101,11 @@ function jsLength(source: string, length: number) {
 }
 
 export const Str = {
-  random: randomStringOfLength,
-  toUrlBase64: base64UrlEncode,
-  fromUrlBase64: base64UrlDecode,
-  parseQuery: parseQueryString,
-  buildQuery: buildQueryString,
+  random,
+  toUrlBase64,
+  fromUrlBase64,
+  parseQuery,
+  buildQuery,
   unicodeLength,
   unicodeIndex,
   jsLength,
