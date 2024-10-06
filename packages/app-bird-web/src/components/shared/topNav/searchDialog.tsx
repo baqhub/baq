@@ -21,13 +21,14 @@ interface SearchDialogProps {
 //
 
 const Layout = tw(FormColumn)`
-w-96
-gap-3
+  w-96
+  max-w-full
+  gap-3
 `;
 
 const Title = tw(Text)`
-text-2xl
-font-semibold
+  text-2xl
+  font-semibold
 `;
 
 //

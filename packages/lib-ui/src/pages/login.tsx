@@ -2,7 +2,7 @@ import {HandlerOf} from "@baqhub/sdk";
 import {ConnectStatus, UnauthenticatedState} from "@baqhub/sdk-react";
 import {FC, FormEvent, PropsWithChildren, useEffect, useState} from "react";
 import {Button, SubmitButton} from "../core/button.js";
-import {Column, Row, Text, tw} from "../core/style.js";
+import {Column, Text, tw} from "../core/style.js";
 import {TextBox} from "../core/textBox.js";
 
 //
@@ -22,6 +22,7 @@ interface LoginProps extends PropsWithChildren {
 const Layout = tw(Column)`
   flex-1
 
+  px-5
   gap-20
   items-center
   justify-center
@@ -50,7 +51,9 @@ export const LoginLogo = tw.img`
   select-none
 `;
 
-const RegisterBox = tw(Row)`
+const RegisterBox = tw(Column)`
+  sm:flex-row
+
   items-center
   p-5
 
@@ -67,14 +70,26 @@ const RegisterText = tw(Text)`
 `;
 
 const ArrowIcon = tw.div`
-  ml-2
-  mr-3
-
   h-5
   w-5
 
   text-neutral-700
   dark:text-neutral-200
+`;
+
+const ArrowIconDown = tw(ArrowIcon)`
+  sm:hidden
+
+  mt-2
+  mb-3
+`;
+
+const ArrowIconRight = tw(ArrowIcon)`
+  hidden
+  sm:block
+
+  ml-2
+  mr-3
 `;
 
 const ButtonStrong = tw.strong`
@@ -128,7 +143,21 @@ export const Login: FC<LoginProps> = props => {
       </Form>
       <RegisterBox>
         <RegisterText>No BAQ account?</RegisterText>
-        <ArrowIcon>
+        <ArrowIconDown>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            className="size-5"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 3a.75.75 0 0 1 .75.75v10.638l3.96-4.158a.75.75 0 1 1 1.08 1.04l-5.25 5.5a.75.75 0 0 1-1.08 0l-5.25-5.5a.75.75 0 1 1 1.08-1.04l3.96 4.158V3.75A.75.75 0 0 1 10 3Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </ArrowIconDown>
+        <ArrowIconRight>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
@@ -141,7 +170,7 @@ export const Login: FC<LoginProps> = props => {
               clipRule="evenodd"
             />
           </svg>
-        </ArrowIcon>
+        </ArrowIconRight>
         <Button size="large" onClick={onRegisterClick}>
           <span>
             Register on <ButtonStrong>BAQ.RUN</ButtonStrong>

@@ -1,11 +1,11 @@
 import {FC, PropsWithChildren} from "react";
-import {Grid, tw} from "../../core/style.js";
+import {Column, tw} from "../../core/style.js";
 
 //
 // Style.
 //
 
-const Layout = tw(Grid)`
+const Layout = tw(Column)`
   p-6
 
   rounded-xl
