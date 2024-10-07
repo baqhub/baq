@@ -129,7 +129,7 @@ This hook returns a [`UseRecordsQueryResult`](#userecordsqueryresult) object.
 
   - Loads one more page of records.
 
-  - `undefined` if all matching records have been fetched.
+  - Is `undefined` if all matching records have been fetched.
 
 - **`isLoadingMore`** <props.pill>boolean</props.pill>
 
@@ -260,7 +260,7 @@ function TodoList({getRecords}) {
 
 ### Infinite loading
 
-Use the `loadMore()` function to load more data when the user reaches the end of a list.
+For queries with many matching records, only a subset is fetched initially. We use the `loadMore()` function to load more data when the user reaches the end of the list.
 
 ```jsx
 import {useRecordsQuery} from "./baq/store.js";

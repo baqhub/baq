@@ -27,7 +27,7 @@ export function usePublicProfilePageState(profileEntity: string) {
     },
     {
       refreshMode: "sync",
-      refreshInterval: BirdConstants.unauthenticatedRefreshInterval,
+      refreshIntervalSeconds: BirdConstants.unauthenticatedRefreshInterval,
     }
   );
 
@@ -61,7 +61,7 @@ export function usePublicProfilePageState(profileEntity: string) {
     },
     {
       refreshMode: "sync",
-      refreshInterval: BirdConstants.unauthenticatedRefreshInterval,
+      refreshIntervalSeconds: BirdConstants.unauthenticatedRefreshInterval,
     }
   );
 

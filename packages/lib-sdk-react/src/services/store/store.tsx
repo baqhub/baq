@@ -74,12 +74,12 @@ import {
   performMutationRequest,
 } from "./storeMutation.js";
 import {
-  QueryRefreshSpec,
   StoreQuery,
   UseRecordQueryOptions,
   UseRecordsQueryOptions,
   UseStaticRecordQueryOptions,
   UseStaticRecordsQueryOptions,
+  staticRecordQueryOptionsToRefreshSpec,
 } from "./storeQuery.js";
 
 //
@@ -1458,16 +1458,11 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     //
 
     const initialStoreQuery = useDeepMemo<StoreQuery<T, Q>>(() => {
-      const refreshSpec: QueryRefreshSpec | undefined = options.refreshMode && {
-        mode: options.refreshMode,
-        interval: options.refreshInterval,
-      };
-
       return registerQuery(requestedQuery, {
         isFetch: true,
         isSync: false,
         isLocalTracked: false,
-        refreshSpec,
+        refreshSpec: staticRecordQueryOptionsToRefreshSpec(options),
         loadMorePageSize: options.loadMorePageSize,
       });
     }, [requestedQuery, options]);
@@ -1690,8 +1685,13 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
   function useStaticRecordQuery<Q extends T>(
     requestedQuery: Query<Q>,
-    options: UseStaticRecordQueryOptions = {}
+    {refreshIntervalSeconds}: UseStaticRecordQueryOptions = {}
   ) {
+    const options: UseStaticRecordsQueryOptions | undefined =
+      refreshIntervalSeconds
+        ? {refreshMode: "full", refreshIntervalSeconds}
+        : undefined;
+
     const queryResult = useStaticRecordsQuery(
       {...requestedQuery, pageSize: 2},
       options

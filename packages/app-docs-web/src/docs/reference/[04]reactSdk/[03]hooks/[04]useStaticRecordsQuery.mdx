@@ -70,20 +70,25 @@ This hook returns a [`UseStaticRecordsQueryResult`](#usestaticrecordsqueryresult
 
 - Proxied queries are supported.
 
+- Can be used with an unauthenticated `<Store>` (proxied queries only).
+
 ### `UseStaticRecordsQueryOptions`
 
 <props.properties>
 
 - **`refreshMode`** <props.pill>enum</props.pill> _optional_
 
-  - Control the behavior of the hook.
+  - Control how the hook should refresh its data.
 
-    - `"fetch"` _default_ : Perform the query and listen for realtime updates after that.
-    - `"sync"`: Only listen for realtime updates without performing the initial query.
-    - `"local"`: Only query the local store.
-    - `"local-tracked"`: Only query the local store and mark this query as "loaded".
+    - `"none"` _default_ : Don't automatically refresh.
+    - `"sync"`: Fetch newly updated records.
+    - `"full"`: Re-fetch all records (incompatible with `loadMore()`).
 
-- **`refreshInterval`** <props.pill>int</props.pill> _optional_
+- **`refreshIntervalSeconds`** <props.pill>int</props.pill> _optional_
+
+  - How often to refresh the data, in seconds.
+
+  - Defaults to **30s** if a `refreshMode` is specified.
 
 - **`loadMorePageSize`** <props.pill>int</props.pill> _optional_
 
@@ -127,6 +132,18 @@ This hook returns a [`UseStaticRecordsQueryResult`](#usestaticrecordsqueryresult
 
   - Same as `deferredRecords`, but compatible with [React Suspense](https://react.dev/reference/react/Suspense).
 
+- **`loadMore`** <props.pill>() => void | undefined</props.pill>
+
+  - Loads one more page of records.
+
+  - Incompatible with `refreshMode=full`.
+
+  - Is `undefined` if all matching records have been fetched.
+
+- **`isLoadingMore`** <props.pill>boolean</props.pill>
+
+  - Whether a query for more data is currently being performed.
+
 </props.properties>
 
 ## Usage
@@ -154,6 +171,42 @@ function Profile({profileEntity}) {
     <List>
       {records.map(r => (
         <Post key={Record.toVersionHash(r)} record={r} />
+      ))}
+    </List>
+  );
+}
+```
+
+### Refresh automatically
+
+There are times when it might not be practical or desired to display realtime data, but we might still want to occasionally refresh the view with the latest available records. In this example, we display a list of recent comments that updates every minute.
+
+```jsx
+import {Q, Record} from "@baqhub/sdk";
+import {useStaticRecordsQuery} from "./baq/store.js";
+import {CommentRecord} from "./baq/commentRecord.js";
+
+function FiveMostRecentComments({profileEntity}) {
+  const {isLoading, records} = useStaticRecordsQuery(
+    {
+      pageSize: 5,
+      sort: ["received_at", "descending"],
+      filter: Q.type(CommentRecord),
+    },
+    {
+      refreshMode: "full",
+      refreshIntervalSeconds: 60,
+    }
+  );
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  return (
+    <List>
+      {records.map(r => (
+        <Comment key={Record.toVersionHash(r)} record={r} />
       ))}
     </List>
   );

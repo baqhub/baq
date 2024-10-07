@@ -58,7 +58,7 @@ export function useOtherProfilePageState(profileEntity: string) {
     },
     {
       refreshMode: "sync",
-      refreshInterval: BirdConstants.authenticatedRefreshInterval,
+      refreshIntervalSeconds: BirdConstants.authenticatedRefreshInterval,
     }
   );
 
@@ -105,7 +105,7 @@ export function useOtherProfilePageState(profileEntity: string) {
     },
     {
       refreshMode: "sync",
-      refreshInterval: BirdConstants.authenticatedRefreshInterval,
+      refreshIntervalSeconds: BirdConstants.authenticatedRefreshInterval,
     }
   );
 

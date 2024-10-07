@@ -42,6 +42,10 @@ function Profile() {
 
   - Query to run against the store and user's server.
 
+- **`options`** <props.pill href="#usestaticrecordqueryoptions">UseStaticRecordQueryOptions</props.pill> _optional_
+
+  - Advanced controls over the behavior of the hook.
+
 </props.properties>
 
 #### Returns
@@ -57,6 +61,18 @@ This hook returns a [`UseStaticRecordQueryResult`](#usestaticrecordqueryresult) 
 - After the request completes, the record will not change until the query changes.
 
 - Proxied queries are supported.
+
+- Can be used with an unauthenticated `<Store>` (proxied queries only).
+
+### `UseStaticRecordQueryOptions`
+
+<props.properties>
+
+- **`refreshIntervalSeconds`** <props.pill>int</props.pill> _optional_
+
+  - How often to refresh the data, in seconds.
+
+</props.properties>
 
 ### `UseStaticRecordQueryResult`
 
@@ -113,6 +129,33 @@ function Name({entity}) {
   if (!record && isLoading) {
     return <Loading />;
   }
+
+  if (!record) {
+    return <NotFound />;
+  }
+
+  return <div>Name: {record.content.profile.name}</div>;
+}
+```
+
+### Refresh automatically
+
+Proxied queries do not support realtime updates, but they can still be refreshed automatically. In this example, we refresh the user's profile every minute.
+
+```jsx
+import {Q, EntityRecord} from "@baqhub/sdk";
+import {useStaticRecordQuery} from "./baq/store.js";
+
+function Name({entity}) {
+  const {isLoading, record} = useStaticRecordQuery(
+    {
+      filter: Q.and(Q.type(EntityRecord), Q.author(entity)),
+      proxyTo: entity,
+    },
+    {
+      refreshIntervalSeconds: 60,
+    }
+  );
 
   if (!record) {
     return <NotFound />;

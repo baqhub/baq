@@ -51,20 +51,20 @@ export interface UseRecordQueryOptions {
 //
 
 interface NoRefreshUseStaticRecordsQueryOptions {
-  refreshMode?: never;
-  refreshInterval?: never;
+  refreshMode?: "none";
+  refreshIntervalSeconds?: never;
   loadMorePageSize?: number;
 }
 
 interface SyncRefreshUseStaticRecordsQueryOptions {
   refreshMode: "sync";
-  refreshInterval: number;
+  refreshIntervalSeconds: number;
   loadMorePageSize?: number;
 }
 
 interface FullRefreshUseStaticRecordsQueryOptions {
   refreshMode: "full";
-  refreshInterval: number;
+  refreshIntervalSeconds: number;
   loadMorePageSize?: never;
 }
 
@@ -73,17 +73,19 @@ export type UseStaticRecordsQueryOptions =
   | SyncRefreshUseStaticRecordsQueryOptions
   | FullRefreshUseStaticRecordsQueryOptions;
 
-interface SyncRefreshUseStaticRecordQueryOptions {
-  refreshMode: "sync";
-  refreshInterval: number;
+export interface UseStaticRecordQueryOptions {
+  refreshIntervalSeconds?: number;
 }
 
-interface FullRefreshUseStaticRecordQueryOptions {
-  refreshMode: "full";
-  refreshInterval: number;
-}
+export function staticRecordQueryOptionsToRefreshSpec(
+  options: UseStaticRecordsQueryOptions
+): QueryRefreshSpec | undefined {
+  if (!options.refreshMode || options.refreshMode === "none") {
+    return undefined;
+  }
 
-export type UseStaticRecordQueryOptions =
-  | Record<string, never>
-  | SyncRefreshUseStaticRecordQueryOptions
-  | FullRefreshUseStaticRecordQueryOptions;
+  return {
+    mode: options.refreshMode,
+    interval: (options.refreshIntervalSeconds || 30) * 1000, // Default: 30s.
+  };
+}

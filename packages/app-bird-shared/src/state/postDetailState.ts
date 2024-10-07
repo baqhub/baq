@@ -24,7 +24,7 @@ export function usePostDetailState(postKey: PostRecordKey) {
     },
     {
       refreshMode: "sync",
-      refreshInterval: BirdConstants.authenticatedRefreshInterval,
+      refreshIntervalSeconds: BirdConstants.authenticatedRefreshInterval,
     }
   );
 
