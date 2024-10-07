@@ -28,7 +28,7 @@ Here it is in action with a list of comments:
 ```jsx
 function Comments(postLink) {
   // The pageSize is used for both the initial request
-  // and then later on when loading more.
+  // and then later when loading more.
   const {getRecords, loadMore, isLoadingMore} = useRecordsQuery({
     pageSize: 20,
     sort: ["received_at", "ascending"],
