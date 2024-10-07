@@ -39,7 +39,7 @@ function Comments(postLink) {
   });
 
   // loadMore() can be called multiple times.
-  // If the request is in flight it will be ignored.
+  // If a request is in flight it will be ignored.
   return (
     <InfiniteList onEndReached={loadMore}>
       {getRecords().map(...)}
