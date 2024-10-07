@@ -7,7 +7,7 @@ import {Screen} from "../../../components/core/screen";
 import {ToolbarButton} from "../../../components/core/toolbarButton";
 import {PostByKey} from "../../../components/post/postByKey";
 import {EmptyPosts} from "../../../components/posts/emptyPosts";
-import {LoadingPosts} from "../../../components/posts/loadingPosts";
+import {Loading} from "../../../components/posts/loading";
 import {Posts} from "../../../components/posts/posts";
 
 //
@@ -15,7 +15,10 @@ import {Posts} from "../../../components/posts/posts";
 //
 
 const FeedTab: FC = () => {
-  const {isLoading, getPostKeys} = useFeedPageState();
+  const state = useFeedPageState();
+  const {isLoading, getPostKeys} = state;
+  const {isLoadingMore, loadMore} = state;
+
   return (
     <Screen>
       <Stack.Screen
@@ -34,6 +37,8 @@ const FeedTab: FC = () => {
         renderItem={renderPost}
         renderLoading={renderLoading}
         renderEmpty={renderEmpty}
+        loadMore={loadMore}
+        isLoadingMore={isLoadingMore}
       />
     </Screen>
   );
@@ -44,7 +49,7 @@ function renderPost(key: PostRecordKey) {
 }
 
 function renderLoading() {
-  return <LoadingPosts />;
+  return <Loading />;
 }
 
 function renderEmpty() {

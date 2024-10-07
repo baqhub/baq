@@ -42,6 +42,7 @@ export const OtherProfileScreen: FC<OtherProfileScreenProps> = props => {
   const {routePrefix, otherEntity} = props;
   const state = useOtherProfilePageState(decodeURIComponent(otherEntity));
   const {get, getFull} = state;
+  const {isLoadingMore, loadMore} = state;
   const {isFullLoading, arePostsLoading} = state;
   const {onFollowClick, onUnfollowClick} = state;
   const {onBlockClick, onUnblockClick} = state;
@@ -150,6 +151,8 @@ export const OtherProfileScreen: FC<OtherProfileScreenProps> = props => {
       <Posts
         isLoading={isLoading}
         getItems={getPostVersions}
+        isLoadingMore={isLoadingMore}
+        loadMore={loadMore}
         renderItem={renderPost}
         renderHeader={renderProfile}
         renderLoading={renderLoading}

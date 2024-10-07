@@ -1,7 +1,9 @@
+import {Handler} from "@baqhub/sdk";
 import {DataProvider, Renderer} from "@baqhub/sdk-react";
 import {ReactElement, useCallback, useMemo} from "react";
 import {FlatList, ListRenderItemInfo} from "react-native";
 import {Column, tw} from "../../helpers/style";
+import {LoadingMore} from "./loadingMore";
 
 //
 // Props.
@@ -10,6 +12,8 @@ import {Column, tw} from "../../helpers/style";
 interface PostsProps<T> {
   isLoading: boolean;
   getItems: DataProvider<ReadonlyArray<T>>;
+  isLoadingMore: boolean;
+  loadMore: Handler | undefined;
   renderItem: (item: T) => ReactElement;
   renderHeader?: Renderer;
   renderLoading: Renderer;
@@ -30,7 +34,12 @@ const Layout = tw(Column)`
 
 export function Posts<T extends string>(props: PostsProps<T>) {
   const {isLoading, getItems} = props;
+  const {isLoadingMore, loadMore} = props;
   const {renderItem, renderHeader, renderLoading, renderEmpty} = props;
+
+  //
+  // Items.
+  //
 
   const [isEmpty, items] = useMemo(() => {
     const items = isLoading ? [] : getItems();
@@ -44,6 +53,10 @@ export function Posts<T extends string>(props: PostsProps<T>) {
 
     return renderItem(item.item);
   };
+
+  //
+  // Footer.
+  //
 
   const renderFooter = useCallback(() => {
     if (isLoading) {
@@ -59,6 +72,10 @@ export function Posts<T extends string>(props: PostsProps<T>) {
 
   const extraData = useMemo(() => ({renderHeader}), [renderHeader]);
 
+  //
+  // Render.
+  //
+
   if (isLoading || isEmpty) {
     return (
       <Layout>
@@ -68,12 +85,16 @@ export function Posts<T extends string>(props: PostsProps<T>) {
     );
   }
 
+  const footer = loadMore && <LoadingMore isLoading={isLoadingMore} />;
   return (
     <FlatList
       data={items}
       keyExtractor={k => k || "header"}
       renderItem={renderListItem}
       extraData={extraData}
+      onEndReached={loadMore}
+      onEndReachedThreshold={0.4}
+      ListFooterComponent={footer}
     />
   );
 }

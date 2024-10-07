@@ -20,7 +20,7 @@ const SpinnerIcon = tw(Icon)`
 // Component.
 //
 
-export const LoadingPosts: FC = () => {
+export const Loading: FC = () => {
   return (
     <Centered>
       <Spinner>
