@@ -19,8 +19,7 @@ export async function GET() {
     updated: new Date(),
     generator: "BAQ Blog",
     feedLinks: {
-      json: `http://${url}blog/json`,
-      atom: `http://${url}blog/atom`,
+      atom: `http://${url}blog/atom.xml`,
     },
   });
 

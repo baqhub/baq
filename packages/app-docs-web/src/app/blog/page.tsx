@@ -65,7 +65,7 @@ export const metadata: Metadata = {
   },
   alternates: {
     types: {
-      "application/atom+xml": "/blog/atom",
+      "application/atom+xml": "/blog/atom.xml",
     },
   },
 };
@@ -79,7 +79,7 @@ const BlogPage: FC = () => {
     <Layout>
       <Header>
         <HeaderTitle>Blog</HeaderTitle>
-        <HeaderIconLink target="_blank" href="/blog/atom">
+        <HeaderIconLink target="_blank" href="/blog/atom.xml">
           <IconRss />
         </HeaderIconLink>
       </Header>
