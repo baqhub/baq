@@ -22,7 +22,6 @@ export function usePublicProfilePageState(profileEntity: string) {
   const {getRecord: getEntityRecord} = useStaticRecordQuery(
     {
       filter: Q.and(Q.type(EntityRecord), Q.author(profileEntity)),
-      includeLinks: ["standing"],
       proxyTo: profileEntity,
     },
     {refreshIntervalSeconds: BirdConstants.unauthenticatedRefreshInterval}
