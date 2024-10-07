@@ -38,9 +38,13 @@ function Profile() {
 
 <props.properties>
 
-- **`query`** <props.pill href="/todo">RecordQuery</props.pill>
+- **`query`** <props.pill href="c4e4e2a0">Query</props.pill>
 
   - Query to run against the store and user's server.
+
+- **`options`** <props.pill href="#usestaticrecordqueryoptions">UseStaticRecordQueryOptions</props.pill> _optional_
+
+  - Advanced controls over the behavior of the hook.
 
 </props.properties>
 
@@ -58,6 +62,18 @@ This hook returns a [`UseStaticRecordQueryResult`](#usestaticrecordqueryresult) 
 
 - Proxied queries are supported.
 
+- Can be used with an unauthenticated `<Store>` (proxied queries only).
+
+### `UseStaticRecordQueryOptions`
+
+<props.properties>
+
+- **`refreshIntervalSeconds`** <props.pill>int</props.pill> _optional_
+
+  - How often to refresh, in seconds.
+
+</props.properties>
+
 ### `UseStaticRecordQueryResult`
 
 <props.properties>
@@ -66,19 +82,19 @@ This hook returns a [`UseStaticRecordQueryResult`](#usestaticrecordqueryresult) 
 
   - Whether the query is currently being performed.
 
-- **`error`** <props.pill href="/todo">BaqError</props.pill> _optional_
+- **`error`** <props.pill>BaqError</props.pill> _optional_
 
   - An error that happened while performing the query, if any.
 
-- **`record`** <props.pill href="/todo">Record</props.pill> _optional_
+- **`record`** <props.pill href="4b9504a7">Record</props.pill> _optional_
 
   - Resulting record, if found.
 
-- **`deferredRecord`** <props.pill href="/todo">Record</props.pill> _optional_
+- **`deferredRecord`** <props.pill href="4b9504a7">Record</props.pill> _optional_
 
   - Same as `record` but when the `query` changes it only gets updated after the request completes. This is helpful to keep the previous view on screen while loading new data.
 
-- **`getRecord`** <props.pill href="/todo">() => Record | undefined</props.pill>
+- **`getRecord`** <props.pill href="4b9504a7">() => Record | undefined</props.pill>
 
   - Same as `record`, but compatible with [React Suspense](https://react.dev/reference/react/Suspense).
 
@@ -86,7 +102,7 @@ This hook returns a [`UseStaticRecordQueryResult`](#usestaticrecordqueryresult) 
 
     The promise completes when the response is received.
 
-- **`getDeferredRecord`** <props.pill href="/todo">() => Record | undefined</props.pill>
+- **`getDeferredRecord`** <props.pill href="4b9504a7">() => Record | undefined</props.pill>
 
   - Same as `deferredRecord`, but compatible with [React Suspense](https://react.dev/reference/react/Suspense).
 
@@ -113,6 +129,33 @@ function Name({entity}) {
   if (!record && isLoading) {
     return <Loading />;
   }
+
+  if (!record) {
+    return <NotFound />;
+  }
+
+  return <div>Name: {record.content.profile.name}</div>;
+}
+```
+
+### Refresh automatically
+
+Proxied queries do not support realtime updates, but they can still be refreshed automatically. In this example, we refresh the user's profile every minute.
+
+```jsx
+import {Q, EntityRecord} from "@baqhub/sdk";
+import {useStaticRecordQuery} from "./baq/store.js";
+
+function Name({entity}) {
+  const {isLoading, record} = useStaticRecordQuery(
+    {
+      filter: Q.and(Q.type(EntityRecord), Q.author(entity)),
+      proxyTo: entity,
+    },
+    {
+      refreshIntervalSeconds: 60,
+    }
+  );
 
   if (!record) {
     return <NotFound />;

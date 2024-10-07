@@ -25,10 +25,7 @@ export function usePublicProfilePageState(profileEntity: string) {
       includeLinks: ["standing"],
       proxyTo: profileEntity,
     },
-    {
-      refreshMode: "sync",
-      refreshInterval: BirdConstants.unauthenticatedRefreshInterval,
-    }
+    {refreshIntervalSeconds: BirdConstants.unauthenticatedRefreshInterval}
   );
 
   const get = useCallback((): PublicProfileData | undefined => {
@@ -61,7 +58,7 @@ export function usePublicProfilePageState(profileEntity: string) {
     },
     {
       refreshMode: "sync",
-      refreshInterval: BirdConstants.unauthenticatedRefreshInterval,
+      refreshIntervalSeconds: BirdConstants.unauthenticatedRefreshInterval,
     }
   );
 

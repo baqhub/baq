@@ -48,9 +48,13 @@ function TodoList() {
 
 <props.properties>
 
-- **`query`** <props.pill href="/todo">RecordQuery</props.pill>
+- **`query`** <props.pill href="c4e4e2a0">Query</props.pill>
 
   - Query to run against the store and user's server.
+
+- **`options`** <props.pill href="#usestaticrecordsqueryoptions">UseStaticRecordsQueryOptions</props.pill> _optional_
+
+  - Advanced controls over the behavior of the hook.
 
 </props.properties>
 
@@ -66,6 +70,32 @@ This hook returns a [`UseStaticRecordsQueryResult`](#usestaticrecordsqueryresult
 
 - Proxied queries are supported.
 
+- Can be used with an unauthenticated `<Store>` (proxied queries only).
+
+### `UseStaticRecordsQueryOptions`
+
+<props.properties>
+
+- **`refreshMode`** <props.pill>enum</props.pill> _optional_
+
+  - Control how the hook should refresh its data.
+
+    - `"none"` _default_ : Don't automatically refresh.
+    - `"sync"`: Fetch newly updated records.
+    - `"full"`: Re-fetch all records (incompatible with `loadMore()`).
+
+- **`refreshIntervalSeconds`** <props.pill>int</props.pill> _optional_
+
+  - How often to refresh, in seconds.
+
+  - Defaults to **30s** if a `refreshMode` is specified.
+
+- **`loadMorePageSize`** <props.pill>int</props.pill> _optional_
+
+  - Override `query.pageSize` when loading more records.
+
+</props.properties>
+
 ### `UseStaticRecordsQueryResult`
 
 <props.properties>
@@ -78,19 +108,19 @@ This hook returns a [`UseStaticRecordsQueryResult`](#usestaticrecordsqueryresult
 
   - Whether some results are already available (cached query).
 
-- **`error`** <props.pill href="/todo">BaqError</props.pill> _optional_
+- **`error`** <props.pill>BaqError</props.pill> _optional_
 
   - An error that happened while performing the query, if any.
 
-- **`records`** <props.pill href="/todo">Record[]</props.pill>
+- **`records`** <props.pill href="4b9504a7">Record[]</props.pill>
 
   - Resulting array of records.
 
-- **`deferredRecords`** <props.pill href="/todo">Record[]</props.pill>
+- **`deferredRecords`** <props.pill href="4b9504a7">Record[]</props.pill>
 
   - Same as `records` but when the `query` changes it only gets updated after the request completes. This is helpful to keep the previous view on screen while loading new data.
 
-- **`getRecords`** <props.pill href="/todo">() => Record[]</props.pill>
+- **`getRecords`** <props.pill href="4b9504a7">() => Record[]</props.pill>
 
   - Same as `records`, but compatible with [React Suspense](https://react.dev/reference/react/Suspense).
 
@@ -98,9 +128,21 @@ This hook returns a [`UseStaticRecordsQueryResult`](#usestaticrecordsqueryresult
 
     The promise completes when the response is received.
 
-- **`getDeferredRecords`** <props.pill href="/todo">() => Record[]</props.pill>
+- **`getDeferredRecords`** <props.pill href="4b9504a7">() => Record[]</props.pill>
 
   - Same as `deferredRecords`, but compatible with [React Suspense](https://react.dev/reference/react/Suspense).
+
+- **`loadMore`** <props.pill>() => void | undefined</props.pill>
+
+  - Loads one more page of records.
+
+  - Incompatible with `refreshMode=full`.
+
+  - Is `undefined` if all matching records have been fetched.
+
+- **`isLoadingMore`** <props.pill>boolean</props.pill>
+
+  - Whether a query for more data is currently being performed.
 
 </props.properties>
 
@@ -129,6 +171,42 @@ function Profile({profileEntity}) {
     <List>
       {records.map(r => (
         <Post key={Record.toVersionHash(r)} record={r} />
+      ))}
+    </List>
+  );
+}
+```
+
+### Refresh automatically
+
+There are times when it might not be practical or desired to receive realtime updates, but we may still want to occasionally refresh the view with the latest available records. In this example, we display a list of recent comments that updates every minute.
+
+```jsx
+import {Q, Record} from "@baqhub/sdk";
+import {useStaticRecordsQuery} from "./baq/store.js";
+import {CommentRecord} from "./baq/commentRecord.js";
+
+function FiveMostRecentComments({profileEntity}) {
+  const {isLoading, records} = useStaticRecordsQuery(
+    {
+      pageSize: 5,
+      sort: ["received_at", "descending"],
+      filter: Q.type(CommentRecord),
+    },
+    {
+      refreshMode: "full",
+      refreshIntervalSeconds: 60,
+    }
+  );
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  return (
+    <List>
+      {records.map(r => (
+        <Comment key={Record.toVersionHash(r)} record={r} />
       ))}
     </List>
   );
