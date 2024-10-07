@@ -1,6 +1,6 @@
 {
   "name": "@baqhub/cli",
-  "version": "0.1.20",
+  "version": "0.1.23",
   "license": "MIT",
   "description": "The official command line interface for the BAQ federated app platform.",
   "author": "Baqhub",
@@ -33,7 +33,7 @@
     "baq": "./build/src/index.js"
   },
   "dependencies": {
-    "@baqhub/sdk": "^0.1.20",
+    "@baqhub/sdk": "^0.1.23",
     "@commander-js/extra-typings": "12.1.0",
     "@inquirer/prompts": "6.0.1",
     "commander": "12.1.0",
