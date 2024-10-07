@@ -14,3 +14,9 @@ declare module "*.jpg" {
   const content: StaticImageData;
   export default content;
 }
+
+declare module "*.png" {
+  import {StaticImageData} from "next/image.js";
+  const content: StaticImageData;
+  export default content;
+}

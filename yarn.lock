@@ -1995,6 +1995,7 @@ __metadata:
     dom-serializer: "npm:2.0.0"
     domutils: "npm:3.1.0"
     eslint: "npm:8.57.0"
+    feed: "npm:4.2.2"
     htmlparser2: "npm:9.1.0"
     lodash: "npm:4.17.21"
     next: "npm:14.2.14"
@@ -6969,6 +6970,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"feed@npm:4.2.2":
+  version: 4.2.2
+  resolution: "feed@npm:4.2.2"
+  dependencies:
+    xml-js: "npm:^1.6.11"
+  checksum: 10c0/c0849bde569da94493224525db00614fd1855a5d7c2e990f6e8637bd0298e85c3d329efe476cba77e711e438c3fb48af60cd5ef0c409da5bcd1f479790b0a372
+  languageName: node
+  linkType: hard
+
 "file-entry-cache@npm:^6.0.1":
   version: 6.0.1
   resolution: "file-entry-cache@npm:6.0.1"
@@ -10499,6 +10509,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sax@npm:^1.2.4":
+  version: 1.4.1
+  resolution: "sax@npm:1.4.1"
+  checksum: 10c0/6bf86318a254c5d898ede6bd3ded15daf68ae08a5495a2739564eb265cd13bcc64a07ab466fb204f67ce472bb534eb8612dac587435515169593f4fffa11de7c
+  languageName: node
+  linkType: hard
+
 "saxes@npm:^6.0.0":
   version: 6.0.0
   resolution: "saxes@npm:6.0.0"
@@ -12398,6 +12415,17 @@ __metadata:
     utf-8-validate:
       optional: true
   checksum: 10c0/aec4ef4eb65821a7dde7b44790f8699cfafb7978c9b080f6d7a98a7f8fc0ce674c027073a78574c94786ba7112cc90fa2cc94fc224ceba4d4b1030cff9662494
+  languageName: node
+  linkType: hard
+
+"xml-js@npm:^1.6.11":
+  version: 1.6.11
+  resolution: "xml-js@npm:1.6.11"
+  dependencies:
+    sax: "npm:^1.2.4"
+  bin:
+    xml-js: ./bin/cli.js
+  checksum: 10c0/c83631057f10bf90ea785cee434a8a1a0030c7314fe737ad9bf568a281083b565b28b14c9e9ba82f11fc9dc582a3a907904956af60beb725be1c9ad4b030bc5a
   languageName: node
   linkType: hard
 

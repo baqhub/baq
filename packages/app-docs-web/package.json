@@ -22,6 +22,7 @@
     "default-import": "2.0.1",
     "dom-serializer": "2.0.0",
     "domutils": "3.1.0",
+    "feed": "4.2.2",
     "htmlparser2": "9.1.0",
     "lodash": "4.17.21",
     "next": "14.2.14",
