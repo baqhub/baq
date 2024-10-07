@@ -5,6 +5,7 @@
   "scripts": {
     "ts": "tsc --build --watch",
     "build": "tsc --build",
+    "build-all": "yarn workspace @baqhub/sdk build && yarn workspace @baqhub/sdk-react build && yarn workspace @baqhub/sdk-react-native build && yarn workspace @baqhub/sdk-expo build && yarn workspace @baqhub/ui build",
     "lint": "eslint \"packages/**/*.{ts,tsx,js,cjs}\"",
     "test": "yarn workspace @baqhub/sdk vitest run && yarn workspace @baqhub/cli vitest run && yarn workspace @baqhub/ui vitest run && yarn workspace @baqhub/messages-web vitest run",
     "pretty": "prettier --check ./packages/**/src/**/*.{js,ts,jsx,tsx,json}",
