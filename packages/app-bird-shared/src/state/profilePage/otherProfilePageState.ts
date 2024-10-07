@@ -56,10 +56,7 @@ export function useOtherProfilePageState(profileEntity: string) {
       includeLinks: ["standing"],
       proxyTo: profileEntity,
     },
-    {
-      refreshMode: "sync",
-      refreshIntervalSeconds: BirdConstants.authenticatedRefreshInterval,
-    }
+    {refreshIntervalSeconds: BirdConstants.authenticatedRefreshInterval}
   );
 
   const get = useCallback((): OtherProfileData | undefined => {
