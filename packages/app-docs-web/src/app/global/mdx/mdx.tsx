@@ -58,6 +58,8 @@ export const MdxBlogH2 = tw.h2`
   mt-10
   mb-3.5
   [&_+_*]:mt-0
+  scroll-mt-8
+  lg:scroll-mt-20
 
   text-xl
   font-semibold

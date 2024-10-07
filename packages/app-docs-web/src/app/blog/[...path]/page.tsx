@@ -4,9 +4,11 @@ import {Metadata} from "next";
 import {OpenGraph} from "next/dist/lib/metadata/types/opengraph-types.js";
 import {Twitter} from "next/dist/lib/metadata/types/twitter-types.js";
 import {ImageProps} from "next/image.js";
-import {FC} from "react";
+import {FC, ReactNode} from "react";
+import {onlyText} from "react-children-utilities";
 import {getImageAsync} from "../../../helpers/fileHelpers.js";
 import {findHeaders} from "../../../helpers/mdxHelpers.jsx";
+import {slugify} from "../../../helpers/stringHelpers.js";
 import {blogPosts, findBlogPost} from "../../../services/blog.js";
 import {Toc} from "../../docs/[section]/[[...path]]/toc.jsx";
 import {Footer} from "../../global/footer.jsx";
@@ -84,9 +86,13 @@ const FooterLayout = tw(Column)`
   md:px-0
 `;
 
+function headerId(children: ReactNode) {
+  return slugify(onlyText(children));
+}
+
 const components: MDXComponents = {
   h1: () => null,
-  h2: ({children}) => <MdxBlogH2>{children}</MdxBlogH2>,
+  h2: ({children}) => <MdxBlogH2 id={headerId(children)}>{children}</MdxBlogH2>,
   p: ({children}) => <MdxP>{children}</MdxP>,
   ul: ({children}) => (
     <MdxCompactList>
