@@ -50,6 +50,7 @@ const HeaderIcon = tw.div`
 
 const Posts = tw(Column)`
   py-14
+  gap-12
 `;
 
 //
