@@ -54,6 +54,17 @@ export const MdxH3 = tw.h3`
   dark:text-white
 `;
 
+export const MdxBlogH2 = tw.h2`
+  mt-10
+  mb-3.5
+  [&_+_*]:mt-0
+
+  text-xl
+  font-semibold
+  text-zinc-900
+  dark:text-white
+`;
+
 export const MdxH4 = tw.h4`
   mt-10
   mb-3.5

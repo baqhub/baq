@@ -1,0 +1,118 @@
+export const metadata = {
+  id: "73387759",
+  authorId: "quentez",
+  date: "2024-10-07T17:30:00.000Z",
+  title: "React SDK v0.1.23",
+  subTitle: "Infinite loading, auto-refresh, and more",
+  image: "blog02",
+};
+
+# React SDK v0.1.23
+
+Available today, this new release of the [BAQ React SDK](https://www.npmjs.com/package/@baqhub/sdk-react) comes with exciting new features to make it even easier to fetch and display records:
+
+{props.toc}
+
+## Infinite loading
+
+When dealing with large quantities of data, it's often preferable to only fetch a subset at first and then load more as needed.
+
+Support for this is now built-in through two new properties returned by the [`useRecordsQuery()`](fb201974) and [`useStaticRecordsQuery()`](51552e0d) hooks:
+
+- **`loadMore()`** — A function to load another page of records. Set to `undefined` when all available records have been loaded.
+
+- **`isLoadingMore`** — Whether we're currently loading more data.
+
+Here it is in action with a list of comments:
+
+```jsx
+function Comments(postLink) {
+  // The pageSize is used for both the initial request
+  // and then later when loading more.
+  const {getRecords, loadMore, isLoadingMore} = useRecordsQuery({
+    pageSize: 20,
+    sort: ["received_at", "ascending"],
+    filter: Q.and(
+      Q.type(CommentRecord),
+      Q.link(QueryLink.pathLink("content.post", postLink))
+    ),
+  });
+
+  // loadMore() can be called multiple times.
+  // If a request is in flight it will be ignored.
+  return (
+    <InfiniteList onEndReached={loadMore}>
+      {getRecords().map(...)}
+      {isLoadingMore && <LoadingMore />}
+    </InfiniteList>
+  );
+}
+```
+
+## Auto-refresh static queries
+
+There are situations when static queries are preferable to live, realtime queries:
+
+- Highly volatile datasets.
+
+- Manually paginated lists (no infinite loading).
+
+- Proxied queries.
+
+- Use with an unauthenticated `<Store>`.
+
+Nevertheless, it might still be convenient to refresh the records from time to time, depending on the use case. This is where the new options for [`useStaticRecordQuery()`](a88164a4) and [`useStaticRecordsQuery()`](51552e0d) come in:
+
+- **`refreshMode`** — How to refresh the query (`full`, or `sync` for a diff).
+
+- **`refreshInterval`** — How often to refresh (default: 30s).
+
+And here's an example where we refresh the posts from John every 60s:
+
+```jsx
+const {isLoading, getRecords} = useStaticRecordsQuery(
+  {
+    pageSize: 20,
+    filter: Q.and(Q.type(PostRecord), Q.author("john.baq.run")),
+    proxyTo: "john.baq.run",
+  },
+  {
+    refreshMode: "sync",
+    refreshIntervalSeconds: 60,
+  }
+);
+```
+
+## Unauthenticated \<Store\> support
+
+Many features of the SDK are designed to interact with a BAQ server as an authenticated user, but with this release it is now possible to have a [`<Store>`](f1e914a6) component with no `identity` for use on public webpages, without an authenticated user.
+
+This feature was used to implement public profile pages like [this one](https://bird.hair/profile/quentez.baq.run).
+
+Here's what the code looks like to fetch a basic user profile:
+
+```jsx
+import {PostRecord} from "../baq/postRecord.js";
+import {Store, useStaticRecordQuery} from "../../baq/store.js";
+import {EntityRecord} from "@baqhub/sdk";
+
+function App() {
+  return (
+    <Store>
+      <Profile profileEntity="john.baq.run" />
+    </Store>
+  );
+}
+
+function Profile({profileEntity}) {
+  const {getRecord} = useStaticRecordQuery({
+    filter: Q.and(Q.type(EntityRecord), Q.author(profileEntity)),
+    proxyTo: profileEntity,
+  });
+
+  const {author, profile} = getRecord().content;
+  return <div>{profile.name || author.entity}</div>;
+}
+```
+
+The demo apps have been updated to take advantage of the new SDK, and I'm excited to see what people build with these new features!

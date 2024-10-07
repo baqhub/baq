@@ -1,6 +1,6 @@
 {
   "name": "@baqhub/sdk-react-dom",
-  "version": "0.1.20",
+  "version": "0.1.23",
   "license": "MIT",
   "description": "The official React DOM SDK for the BAQ federated app platform.",
   "author": "Baqhub",
@@ -41,7 +41,7 @@
     }
   },
   "dependencies": {
-    "@baqhub/sdk-react": "^0.1.20",
+    "@baqhub/sdk-react": "^0.1.23",
     "tslib": "^2.7.0"
   },
   "devDependencies": {

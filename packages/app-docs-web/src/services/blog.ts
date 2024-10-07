@@ -1,6 +1,6 @@
 import {MDXComponents} from "mdx/types.js";
 import * as path from "node:path";
-import {FC} from "react";
+import {FC, ReactNode} from "react";
 import {listAndMap} from "../helpers/fileHelpers.js";
 import {slugify} from "../helpers/stringHelpers.js";
 
@@ -21,6 +21,7 @@ const authors: Record<string, BlogPostAuthor> = {
 };
 
 interface BlogPostProps {
+  toc?: ReactNode;
   components?: MDXComponents;
 }
 
