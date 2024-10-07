@@ -48,7 +48,7 @@ function TodoList() {
 
 <props.properties>
 
-- **`query`** <props.pill href="/todo">RecordQuery</props.pill>
+- **`query`** <props.pill href="c4e4e2a0">Query</props.pill>
 
   - Query to run against the store and user's server.
 
@@ -108,19 +108,19 @@ This hook returns a [`UseStaticRecordsQueryResult`](#usestaticrecordsqueryresult
 
   - Whether some results are already available (cached query).
 
-- **`error`** <props.pill href="/todo">BaqError</props.pill> _optional_
+- **`error`** <props.pill>BaqError</props.pill> _optional_
 
   - An error that happened while performing the query, if any.
 
-- **`records`** <props.pill href="/todo">Record[]</props.pill>
+- **`records`** <props.pill href="4b9504a7">Record[]</props.pill>
 
   - Resulting array of records.
 
-- **`deferredRecords`** <props.pill href="/todo">Record[]</props.pill>
+- **`deferredRecords`** <props.pill href="4b9504a7">Record[]</props.pill>
 
   - Same as `records` but when the `query` changes it only gets updated after the request completes. This is helpful to keep the previous view on screen while loading new data.
 
-- **`getRecords`** <props.pill href="/todo">() => Record[]</props.pill>
+- **`getRecords`** <props.pill href="4b9504a7">() => Record[]</props.pill>
 
   - Same as `records`, but compatible with [React Suspense](https://react.dev/reference/react/Suspense).
 
@@ -128,7 +128,7 @@ This hook returns a [`UseStaticRecordsQueryResult`](#usestaticrecordsqueryresult
 
     The promise completes when the response is received.
 
-- **`getDeferredRecords`** <props.pill href="/todo">() => Record[]</props.pill>
+- **`getDeferredRecords`** <props.pill href="4b9504a7">() => Record[]</props.pill>
 
   - Same as `deferredRecords`, but compatible with [React Suspense](https://react.dev/reference/react/Suspense).
 
