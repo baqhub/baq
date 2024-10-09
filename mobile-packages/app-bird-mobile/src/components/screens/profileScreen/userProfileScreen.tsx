@@ -25,6 +25,7 @@ export const UserProfileScreen: FC<UserProfileScreenProps> = props => {
   const {routePrefix} = props;
   const state = useUserProfilePageState();
   const {get, arePostsLoading, getPostKeys} = state;
+  const {isLoadingMore, loadMore} = state;
   const profile = get();
 
   const renderProfile = useCallback(() => {
@@ -59,6 +60,8 @@ export const UserProfileScreen: FC<UserProfileScreenProps> = props => {
       <Posts
         isLoading={arePostsLoading}
         getItems={getPostKeys}
+        isLoadingMore={isLoadingMore}
+        loadMore={loadMore}
         renderItem={renderPost}
         renderHeader={renderProfile}
         renderLoading={renderLoading}

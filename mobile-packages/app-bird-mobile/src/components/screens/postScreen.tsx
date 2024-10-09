@@ -151,6 +151,8 @@ export const PostScreen: FC<PostScreenProps> = props => {
       <Posts
         isLoading={isLoading}
         getItems={getReplyVersions}
+        isLoadingMore={false}
+        loadMore={undefined}
         renderItem={renderReply}
         renderHeader={renderPost}
         renderLoading={renderLoading}

@@ -1,4 +1,8 @@
-import {useProfilePageState} from "@baqhub/app-bird-shared/build/src/state/profilePage/profilePageState";
+import {
+  ProfilePageMode,
+  useProfilePageState,
+} from "@baqhub/app-bird-shared/build/src/state/profilePage/profilePageState";
+import {never} from "@baqhub/sdk";
 import {FC} from "react";
 import {OtherProfileScreen} from "./otherProfileScreen";
 import {UserProfileScreen} from "./userProfileScreen";
@@ -18,11 +22,18 @@ interface ProfileScreenProps {
 
 export const ProfileScreen: FC<ProfileScreenProps> = props => {
   const {routePrefix, entity} = props;
-  const {isUser} = useProfilePageState(entity);
+  const {mode} = useProfilePageState(entity);
 
-  if (isUser) {
-    return <UserProfileScreen routePrefix={routePrefix} />;
+  switch (mode) {
+    case ProfilePageMode.USER:
+      return <UserProfileScreen routePrefix={routePrefix} />;
+
+    case ProfilePageMode.OTHER_USER:
+      return (
+        <OtherProfileScreen routePrefix={routePrefix} otherEntity={entity} />
+      );
+
+    default:
+      never();
   }
-
-  return <OtherProfileScreen routePrefix={routePrefix} otherEntity={entity} />;
 };

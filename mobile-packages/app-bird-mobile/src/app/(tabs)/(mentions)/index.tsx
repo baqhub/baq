@@ -6,7 +6,7 @@ import {UsersIcon} from "react-native-heroicons/outline";
 import {Screen} from "../../../components/core/screen";
 import {PostByKey} from "../../../components/post/postByKey";
 import {EmptyPosts} from "../../../components/posts/emptyPosts";
-import {LoadingPosts} from "../../../components/posts/loadingPosts";
+import {Loading} from "../../../components/posts/loading";
 import {Posts} from "../../../components/posts/posts";
 
 //
@@ -14,13 +14,18 @@ import {Posts} from "../../../components/posts/posts";
 //
 
 const MentionsTab: FC = () => {
-  const {isLoading, getPostKeys} = useMentionsPageState();
+  const state = useMentionsPageState();
+  const {isLoading, getPostKeys} = state;
+  const {isLoadingMore, loadMore} = state;
+
   return (
     <Screen>
       <Stack.Screen options={{title: "Mentions"}} />
       <Posts
         isLoading={isLoading}
         getItems={getPostKeys}
+        isLoadingMore={isLoadingMore}
+        loadMore={loadMore}
         renderItem={renderPost}
         renderLoading={renderLoading}
         renderEmpty={renderEmpty}
@@ -34,7 +39,7 @@ function renderPost(key: PostRecordKey) {
 }
 
 function renderLoading() {
-  return <LoadingPosts />;
+  return <Loading />;
 }
 
 function renderEmpty() {

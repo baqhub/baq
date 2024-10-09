@@ -21,8 +21,8 @@ const Spinner = tw(View)`
 const SpinnerIcon = tw(Icon)`
   w-7
   h-7
-  text-neutral-400
-  dark:text-neutral-600
+  text-neutral-500
+  dark:text-neutral-500
 `;
 
 //
