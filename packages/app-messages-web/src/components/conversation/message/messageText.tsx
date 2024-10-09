@@ -23,10 +23,10 @@ const Link = tw.a`
 // Component.
 //
 
-function renderLink({href, content}: LinkProps) {
+function renderLink({href, children}: LinkProps) {
   return (
     <Link href={href} target="_blank">
-      {content}
+      {children}
     </Link>
   );
 }

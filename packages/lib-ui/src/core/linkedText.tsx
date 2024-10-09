@@ -9,7 +9,7 @@ import {FC, PropsWithChildren, useCallback} from "react";
 
 export interface LinkProps {
   href: string;
-  content: string;
+  children: string;
 }
 
 interface LinkedTextProps extends PropsWithChildren {
@@ -27,7 +27,7 @@ export const LinkedText: FC<LinkedTextProps> = props => {
     (token: IntermediateRepresentation) => {
       return renderLink({
         href: token.attributes["href"]!,
-        content: token.content,
+        children: token.content,
       });
     },
     [renderLink]

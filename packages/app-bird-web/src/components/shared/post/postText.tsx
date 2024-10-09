@@ -1,6 +1,6 @@
 import {Mention} from "@baqhub/bird-shared/state/postState.js";
 import {Str} from "@baqhub/sdk";
-import {LinkedText, LinkProps} from "@baqhub/ui/core/linkedText.js";
+import {LinkedText} from "@baqhub/ui/core/linkedText.js";
 import {FC, ReactNode} from "react";
 import {PostLink} from "./postLink.js";
 import {PostMention} from "./postMention.js";
@@ -18,14 +18,10 @@ interface PostTextProps {
 // Components.
 //
 
-function renderLink({href, content}: LinkProps) {
-  return <PostLink href={href}>{content}</PostLink>;
-}
-
 export const PostText: FC<PostTextProps> = props => {
   const {text, textMentions} = props;
   if (!textMentions || textMentions.length === 0) {
-    return <LinkedText renderLink={renderLink}>{text}</LinkedText>;
+    return <LinkedText renderLink={PostLink}>{text}</LinkedText>;
   }
 
   return textMentions
@@ -37,7 +33,7 @@ export const PostText: FC<PostTextProps> = props => {
       if (index === 0 && jsIndex > 0) {
         const beforeText = text.slice(0, jsIndex);
         result.push(
-          <LinkedText key="before" renderLink={renderLink}>
+          <LinkedText key="before" renderLink={PostLink}>
             {beforeText}
           </LinkedText>
         );
@@ -61,7 +57,7 @@ export const PostText: FC<PostTextProps> = props => {
         const afterTextEnd = nextMention ? nextMention.index : text.length;
         const afterText = text.slice(mentionEnd, afterTextEnd);
         result.push(
-          <LinkedText key={"after-" + index} renderLink={renderLink}>
+          <LinkedText key={"after-" + index} renderLink={PostLink}>
             {afterText}
           </LinkedText>
         );
