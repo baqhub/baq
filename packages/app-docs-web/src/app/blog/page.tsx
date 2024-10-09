@@ -40,7 +40,8 @@ const HeaderTitle = tw(Text)`
   font-bold
 `;
 
-const HeaderIcon = tw.div`
+const HeaderIconLink = tw.a`
+  block
   w-8
   h-8
   sm:w-10
@@ -50,6 +51,7 @@ const HeaderIcon = tw.div`
 
 const Posts = tw(Column)`
   py-14
+  gap-12
 `;
 
 //
@@ -60,6 +62,11 @@ export const metadata: Metadata = {
   title: "Blog",
   openGraph: {
     url: "/blog",
+  },
+  alternates: {
+    types: {
+      "application/atom+xml": "/blog/atom.xml",
+    },
   },
 };
 
@@ -72,9 +79,9 @@ const BlogPage: FC = () => {
     <Layout>
       <Header>
         <HeaderTitle>Blog</HeaderTitle>
-        <HeaderIcon>
+        <HeaderIconLink target="_blank" href="/blog/atom.xml">
           <IconRss />
-        </HeaderIcon>
+        </HeaderIconLink>
       </Header>
       <Posts>{posts}</Posts>
     </Layout>

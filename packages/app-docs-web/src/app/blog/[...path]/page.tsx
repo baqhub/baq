@@ -4,13 +4,17 @@ import {Metadata} from "next";
 import {OpenGraph} from "next/dist/lib/metadata/types/opengraph-types.js";
 import {Twitter} from "next/dist/lib/metadata/types/twitter-types.js";
 import {ImageProps} from "next/image.js";
-import {FC} from "react";
+import {FC, ReactNode} from "react";
+import {onlyText} from "react-children-utilities";
 import {getImageAsync} from "../../../helpers/fileHelpers.js";
+import {findHeaders} from "../../../helpers/mdxHelpers.jsx";
+import {slugify} from "../../../helpers/stringHelpers.js";
 import {blogPosts, findBlogPost} from "../../../services/blog.js";
+import {Toc} from "../../docs/[section]/[[...path]]/toc.jsx";
 import {Footer} from "../../global/footer.jsx";
 import {
+  MdxBlogH2,
   MdxCode,
-  MdxH4,
   MdxLi,
   MdxOl,
   MdxP,
@@ -82,9 +86,13 @@ const FooterLayout = tw(Column)`
   md:px-0
 `;
 
+function headerId(children: ReactNode) {
+  return slugify(onlyText(children));
+}
+
 const components: MDXComponents = {
   h1: () => null,
-  h2: ({children}) => <MdxH4>{children}</MdxH4>,
+  h2: ({children}) => <MdxBlogH2 id={headerId(children)}>{children}</MdxBlogH2>,
   p: ({children}) => <MdxP>{children}</MdxP>,
   ul: ({children}) => (
     <MdxCompactList>
@@ -143,6 +151,9 @@ const BlogPostPage: FC<BlogPostPageProps> = async ({params}) => {
   const {path} = params;
   const post = findBlogPost(path?.join("/"));
 
+  const headers = findHeaders(<post.Component components={components} />);
+  const toc = <Toc headers={headers} />;
+
   return (
     <Layout>
       <BlogPostHeader
@@ -153,7 +164,7 @@ const BlogPostPage: FC<BlogPostPageProps> = async ({params}) => {
         author={post.author}
       />
       <PostContent>
-        <post.Component components={components} />
+        <post.Component toc={toc} components={components} />
       </PostContent>
       <NewsletterLayout>
         <Newsletter variant="wide" />

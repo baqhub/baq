@@ -27,7 +27,7 @@ Provide a record store to all components inside. This is required when using any
 
 <props.properties>
 
-- **`identity`** <props.pill href="f0829f85">StoreIdentity</props.pill>
+- **`identity`** <props.pill href="f0829f85">StoreIdentity</props.pill> _optional_
 
   - Authentication information for the current user. This can be provided by the [`useAuthentication`](00491e8c) hook, or manually constructed.
 
@@ -35,7 +35,7 @@ Provide a record store to all components inside. This is required when using any
 
 #### Notes
 
-- The `<Store>` requires an authenticated user. To query public BAQ data without authentication, use a [`Client`](/docs/reference/client) directly.
+- When a `<Store>` is used without an `identity`, only the static hooks can be used and only with proxied queries.
 
 ## Usage
 
@@ -61,5 +61,33 @@ function App() {
       <Home /> {/* Rest of the app */}
     </Store>
   );
+}
+```
+
+### Unauthenticated Store
+
+A Store can also be used without authentication with static hooks and proxied queries to fetch public records. In this example we retrieve a user profile:
+
+```jsx
+import {buildAuthentication} from "../baq/authentication.js";
+import {Store} from "./baq/store.js";
+
+function App() {
+  const {profileEntity} = useRoute();
+  return (
+    <Store>
+      <Profile profileEntity={profileEntity} />
+    </Store>
+  );
+}
+
+function Profile({profileEntity}) {
+  const {getRecord} = useStaticRecordQuery({
+    filter: Q.and(Q.type(EntityRecord), Q.author(profileEntity)),
+    proxyTo: profileEntity,
+  });
+
+  const {author, profile} = getRecord().content;
+  return <div>{profile.name || author.entity}</div>;
 }
 ```

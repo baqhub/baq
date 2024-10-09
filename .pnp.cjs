@@ -3325,6 +3325,7 @@ const RAW_RUNTIME_STATE =
           ["dom-serializer", "npm:2.0.0"],\
           ["domutils", "npm:3.1.0"],\
           ["eslint", "npm:8.57.0"],\
+          ["feed", "npm:4.2.2"],\
           ["htmlparser2", "npm:9.1.0"],\
           ["lodash", "npm:4.17.21"],\
           ["next", "virtual:5d672a90405c6f5d47887489ef531ab2fd03fac749388ff320a003f2abe51f8657c1c807618f7a35c5e421f938e6110552511db9f7a513f65dfd6f0ca4011fe6#npm:14.2.14"],\
@@ -9433,6 +9434,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["feed", [\
+      ["npm:4.2.2", {\
+        "packageLocation": "../../../.yarn/berry/cache/feed-npm-4.2.2-0c45e7a1e4-10c0.zip/node_modules/feed/",\
+        "packageDependencies": [\
+          ["feed", "npm:4.2.2"],\
+          ["xml-js", "npm:1.6.11"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["file-entry-cache", [\
       ["npm:6.0.1", {\
         "packageLocation": "../../../.yarn/berry/cache/file-entry-cache-npm-6.0.1-31965cf0af-10c0.zip/node_modules/file-entry-cache/",\
@@ -13378,6 +13389,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["sax", [\
+      ["npm:1.4.1", {\
+        "packageLocation": "../../../.yarn/berry/cache/sax-npm-1.4.1-503b1923cb-10c0.zip/node_modules/sax/",\
+        "packageDependencies": [\
+          ["sax", "npm:1.4.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["saxes", [\
       ["npm:6.0.0", {\
         "packageLocation": "../../../.yarn/berry/cache/saxes-npm-6.0.0-31558949f5-10c0.zip/node_modules/saxes/",\
@@ -15774,6 +15794,16 @@ const RAW_RUNTIME_STATE =
           "@types/utf-8-validate",\
           "bufferutil",\
           "utf-8-validate"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["xml-js", [\
+      ["npm:1.6.11", {\
+        "packageLocation": "../../../.yarn/berry/cache/xml-js-npm-1.6.11-56742b7fb0-10c0.zip/node_modules/xml-js/",\
+        "packageDependencies": [\
+          ["xml-js", "npm:1.6.11"],\
+          ["sax", "npm:1.4.1"]\
         ],\
         "linkType": "HARD"\
       }]\

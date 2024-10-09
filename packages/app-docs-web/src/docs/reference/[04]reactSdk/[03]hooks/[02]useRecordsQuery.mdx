@@ -272,12 +272,10 @@ function List() {
     });
 
   return (
-    <Suspense fallback={<LoadingIndicator />}>
-      <InfiniteScrollView onEndReached={loadMore}>
-        {getRecords().map(renderItem)}
-        {isLoadingMore && <LoadingMoreIndicator />}
-      </InfiniteScrollView>
-    </Suspense>
+    <InfiniteList onEndReached={loadMore}>
+      {getRecords().map(renderItem)}
+      {isLoadingMore && <LoadingMoreIndicator />}
+    </InfiniteList>
   );
 }
 ```

@@ -1,6 +1,6 @@
 import {MDXComponents} from "mdx/types.js";
 import * as path from "node:path";
-import {FC} from "react";
+import {FC, ReactNode} from "react";
 import {listAndMap} from "../helpers/fileHelpers.js";
 import {slugify} from "../helpers/stringHelpers.js";
 
@@ -10,17 +10,20 @@ import {slugify} from "../helpers/stringHelpers.js";
 
 export interface BlogPostAuthor {
   name: string;
+  email: string;
   image: string;
 }
 
 const authors: Record<string, BlogPostAuthor> = {
   quentez: {
     name: "Quentin Calvez",
+    email: "quentin@baqhub.com",
     image: "authorQuentez",
   },
 };
 
 interface BlogPostProps {
+  toc?: ReactNode;
   components?: MDXComponents;
 }
 
@@ -30,6 +33,7 @@ interface BlogPostMetadata {
   date: string;
   title: string;
   subTitle: string;
+  description: string;
   image: string;
 }
 
@@ -40,6 +44,7 @@ export interface BlogPost {
   date: Date;
   title: string;
   subTitle: string;
+  description: string;
   image: string;
   Component: FC<BlogPostProps>;
 }
@@ -82,6 +87,7 @@ function loadBlogPosts() {
       date,
       title: metadata.title,
       subTitle: metadata.subTitle,
+      description: metadata.description,
       image: metadata.image,
       Component,
     };
