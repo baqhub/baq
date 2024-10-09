@@ -2,6 +2,7 @@ import {Column, tw} from "@baqhub/ui/core/style.js";
 import {FC} from "react";
 import {VisualMessageContent} from "../../../state/messageState.js";
 import {MessageImage} from "./messageImage.js";
+import {MessageText} from "./messageText.js";
 
 //
 // Props.
@@ -24,11 +25,6 @@ const Images = tw(Column)`
   py-0.5
   px-2
   gap-2
-`;
-
-const MessageText = tw.div`
-  px-3
-  text-neutral-900
 `;
 
 //

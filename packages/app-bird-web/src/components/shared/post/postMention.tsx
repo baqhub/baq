@@ -1,3 +1,4 @@
+import {tw} from "@baqhub/ui/core/style.js";
 import {Link} from "@tanstack/react-router";
 import {FC, PropsWithChildren} from "react";
 
@@ -13,14 +14,14 @@ interface PostMentionProps extends PropsWithChildren {
 // Style.
 //
 
-const mentionLinkStyle = `
+const MentionLink = tw(Link)`
   font-normal
   text-amber-800
   dark:text-amber-500
 
   hover:underline
   underline-offset-2
-`;
+` as typeof Link;
 
 //
 // Component.
@@ -29,8 +30,8 @@ const mentionLinkStyle = `
 export const PostMention: FC<PostMentionProps> = props => {
   const {entity, children} = props;
   return (
-    <Link to="/profile/$entity" params={{entity}} className={mentionLinkStyle}>
+    <MentionLink to="/profile/$entity" params={{entity}}>
       {children}
-    </Link>
+    </MentionLink>
   );
 };
