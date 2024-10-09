@@ -1,7 +1,7 @@
 import {Handler} from "@baqhub/sdk";
-import {Column, Row, Text, tw} from "@baqhub/ui/core/style.js";
+import {Column, Row, tw} from "@baqhub/ui/core/style.js";
 import {MagnifyingGlassIcon} from "@heroicons/react/24/outline";
-import {Link, useNavigate} from "@tanstack/react-router";
+import {Link, useLocation, useNavigate} from "@tanstack/react-router";
 import {PropsWithChildren, useCallback, type FC} from "react";
 import {SearchDialog} from "./searchDialog.js";
 import {TopNavItem} from "./topNavItem.js";
@@ -42,14 +42,32 @@ const Center = tw(Row)`
   gap-2
 `;
 
-const titleLinkStyle = `
+const TitleLink = tw(Link)`
   py-1
   px-3
-`;
 
-const TitleText = tw(Text)`
   text-lg
   font-semibold
+  select-none
+
+  text-neutral-900
+  hover:text-amber-800
+  active:text-amber-700
+  dark:text-white
+  dark:hover:text-amber-400
+  dark:active:text-amber-500
+` as typeof Link;
+
+const TitleText = tw.div`
+  py-1
+  px-3
+
+  text-lg
+  font-semibold
+  select-none
+
+  text-neutral-900
+  dark:text-white
 `;
 
 const Items = tw(Row)`
@@ -68,6 +86,7 @@ const Spacer = tw.div`
 export const TopNavBase: FC<TopNavBaseProps> = props => {
   const {isSearchOpen, onSearchClick, onSearchRequestClose, children} = props;
 
+  const {pathname} = useLocation();
   const navigate = useNavigate();
   const onEntityFound = useCallback(
     (entity: string) => {
@@ -80,9 +99,11 @@ export const TopNavBase: FC<TopNavBaseProps> = props => {
     <>
       <Layout>
         <Center>
-          <Link to="/" className={titleLinkStyle}>
+          {pathname === "/" ? (
             <TitleText>Bird</TitleText>
-          </Link>
+          ) : (
+            <TitleLink to="/">Bird</TitleLink>
+          )}
           <Spacer />
           <Items>
             <TopNavItem onClick={onSearchClick}>
