@@ -1,6 +1,8 @@
 import {Mention} from "@baqhub/bird-shared/state/postState.js";
 import {Str} from "@baqhub/sdk";
-import {FC, Fragment, ReactNode} from "react";
+import {LinkedText, LinkProps} from "@baqhub/ui/core/linkedText.js";
+import {FC, ReactNode} from "react";
+import {PostLink} from "./postLink.js";
 import {PostMention} from "./postMention.js";
 
 //
@@ -16,10 +18,14 @@ interface PostTextProps {
 // Components.
 //
 
+function renderLink({href, content}: LinkProps) {
+  return <PostLink href={href}>{content}</PostLink>;
+}
+
 export const PostText: FC<PostTextProps> = props => {
   const {text, textMentions} = props;
   if (!textMentions || textMentions.length === 0) {
-    return text;
+    return <LinkedText renderLink={renderLink}>{text}</LinkedText>;
   }
 
   return textMentions
@@ -30,7 +36,11 @@ export const PostText: FC<PostTextProps> = props => {
       // If first, add text before.
       if (index === 0 && jsIndex > 0) {
         const beforeText = text.slice(0, jsIndex);
-        result.push(<Fragment key="before">{beforeText}</Fragment>);
+        result.push(
+          <LinkedText key="before" renderLink={renderLink}>
+            {beforeText}
+          </LinkedText>
+        );
       }
 
       const jsLength = Str.jsLength(text.slice(jsIndex), mention.length);
@@ -50,7 +60,11 @@ export const PostText: FC<PostTextProps> = props => {
         const nextMention = textMentions[index + 1];
         const afterTextEnd = nextMention ? nextMention.index : text.length;
         const afterText = text.slice(mentionEnd, afterTextEnd);
-        result.push(<Fragment key={"after-" + index}>{afterText}</Fragment>);
+        result.push(
+          <LinkedText key={"after-" + index} renderLink={renderLink}>
+            {afterText}
+          </LinkedText>
+        );
       }
 
       return result;
