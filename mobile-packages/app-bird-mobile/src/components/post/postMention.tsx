@@ -1,6 +1,5 @@
 import {Link} from "expo-router";
 import {FC, PropsWithChildren} from "react";
-import {TouchableOpacity} from "react-native";
 import {Text, tw} from "../../helpers/style";
 
 //
@@ -15,17 +14,10 @@ interface PostMentionProps extends PropsWithChildren {
 // Style.
 //
 
-const MentionButton = tw(TouchableOpacity)`
-  -mb-[3px]
-`;
-
 const Mention = tw(Text)`
-  text-lg
-  font-light
-  leading-7
-
   text-amber-700
   dark:text-amber-500
+  active:opacity-50
 `;
 
 //
@@ -42,9 +34,9 @@ export const PostMention: FC<PostMentionProps> = props => {
       }}
       asChild
     >
-      <MentionButton>
-        <Mention numberOfLines={1}>{children}</Mention>
-      </MentionButton>
+      <Mention numberOfLines={1} suppressHighlighting>
+        {children}
+      </Mention>
     </Link>
   );
 };

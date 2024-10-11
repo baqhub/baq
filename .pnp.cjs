@@ -3552,7 +3552,6 @@ const RAW_RUNTIME_STATE =
           ["@types/react", "npm:18.3.3"],\
           ["@types/react-dom", "npm:18.3.0"],\
           ["jsdom", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:25.0.1"],\
-          ["linkify-react", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:4.1.3"],\
           ["linkifyjs", "npm:4.1.3"],\
           ["lodash", "npm:4.17.21"],\
           ["react", "npm:18.3.1"],\
@@ -10666,32 +10665,6 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../.yarn/berry/cache/lines-and-columns-npm-1.2.4-d6c7cc5799-10c0.zip/node_modules/lines-and-columns/",\
         "packageDependencies": [\
           ["lines-and-columns", "npm:1.2.4"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["linkify-react", [\
-      ["npm:4.1.3", {\
-        "packageLocation": "../../../.yarn/berry/cache/linkify-react-npm-4.1.3-98d267481d-10c0.zip/node_modules/linkify-react/",\
-        "packageDependencies": [\
-          ["linkify-react", "npm:4.1.3"]\
-        ],\
-        "linkType": "SOFT"\
-      }],\
-      ["virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:4.1.3", {\
-        "packageLocation": "./.yarn/__virtual__/linkify-react-virtual-f6e480a1bf/4/.yarn/berry/cache/linkify-react-npm-4.1.3-98d267481d-10c0.zip/node_modules/linkify-react/",\
-        "packageDependencies": [\
-          ["linkify-react", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:4.1.3"],\
-          ["@types/linkifyjs", null],\
-          ["@types/react", "npm:18.3.3"],\
-          ["linkifyjs", "npm:4.1.3"],\
-          ["react", "npm:18.3.1"]\
-        ],\
-        "packagePeers": [\
-          "@types/linkifyjs",\
-          "@types/react",\
-          "linkifyjs",\
-          "react"\
         ],\
         "linkType": "HARD"\
       }]\

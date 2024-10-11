@@ -14,7 +14,6 @@ import {Posts} from "../../components/posts/posts";
 import {Column, Row, Text, tw} from "../../helpers/style";
 import {PostByVersion} from "../post/postByVersion";
 import {PostText} from "../post/postText";
-import {PostMention} from "./postMention";
 
 //
 // Props.
@@ -63,7 +62,6 @@ const AuthorEntity = tw(Text)`
 
 const Body = tw(Text)`
   text-lg
-  font-light
   leading-7
 `;
 
@@ -111,11 +109,7 @@ export const PostScreen: FC<PostScreenProps> = props => {
             </AuthorButton>
           </Link>
           <Body>
-            <PostText
-              text={text}
-              textMentions={textMentions}
-              MentionComponent={PostMention}
-            />
+            <PostText text={text} textMentions={textMentions} />
           </Body>
         </Content>
         <Info

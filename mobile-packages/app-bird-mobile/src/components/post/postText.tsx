@@ -1,31 +1,49 @@
 import {Mention} from "@baqhub/app-bird-shared/build/src/state/postState";
 import {Str} from "@baqhub/sdk";
+import {LinkedText, LinkProps} from "@baqhub/ui/build/src/core/linkedText";
 import sortBy from "lodash/sortBy";
-import {ComponentType, FC, PropsWithChildren, ReactNode} from "react";
+import {FC, PropsWithChildren, ReactNode} from "react";
 import {Text} from "react-native";
+import {PostLink} from "./postLink";
+import {PostMention} from "./postMention";
 
 //
 // Props.
 //
 
-interface MentionComponentProps extends PropsWithChildren {
-  entity: string;
-}
-
 interface PostTextProps {
   text: string;
   textMentions: ReadonlyArray<Mention> | undefined;
-  MentionComponent: ComponentType<MentionComponentProps>;
 }
 
 //
 // Component.
 //
 
+function renderText(source: string) {
+  return <Text>{source}</Text>;
+}
+
+function renderLink(props: LinkProps) {
+  return <PostLink {...props} />;
+}
+
+const MobileLinkedText: FC<PropsWithChildren> = ({children}) => {
+  return (
+    <LinkedText
+      newLineToBr={false}
+      renderText={renderText}
+      renderLink={renderLink}
+    >
+      {children}
+    </LinkedText>
+  );
+};
+
 export const PostText: FC<PostTextProps> = props => {
-  const {text, textMentions, MentionComponent} = props;
+  const {text, textMentions} = props;
   if (!textMentions || textMentions.length === 0) {
-    return text;
+    return <MobileLinkedText>{text}</MobileLinkedText>;
   }
 
   return sortBy(textMentions, m => m.index).reduce((result, mention, index) => {
@@ -34,7 +52,9 @@ export const PostText: FC<PostTextProps> = props => {
     // If first, add text before.
     if (index === 0 && jsIndex > 0) {
       const beforeText = text.slice(0, jsIndex);
-      result.push(<Text key="before">{beforeText}</Text>);
+      result.push(
+        <MobileLinkedText key="before">{beforeText}</MobileLinkedText>
+      );
     }
 
     const jsLength = Str.jsLength(text.slice(jsIndex), mention.length);
@@ -44,9 +64,9 @@ export const PostText: FC<PostTextProps> = props => {
     // Add mention.
     const {entity} = mention.mention;
     result.push(
-      <MentionComponent key={"mention-" + index} entity={entity}>
+      <PostMention key={"mention-" + index} entity={entity}>
         {mentionText}
-      </MentionComponent>
+      </PostMention>
     );
 
     // Add text after.
@@ -54,7 +74,9 @@ export const PostText: FC<PostTextProps> = props => {
       const nextMention = textMentions[index + 1];
       const afterTextEnd = nextMention ? nextMention.index : text.length;
       const afterText = text.slice(mentionEnd, afterTextEnd);
-      result.push(<Text key={"after-" + index}>{afterText}</Text>);
+      result.push(
+        <MobileLinkedText key={"after-" + index}>{afterText}</MobileLinkedText>
+      );
     }
 
     return result;

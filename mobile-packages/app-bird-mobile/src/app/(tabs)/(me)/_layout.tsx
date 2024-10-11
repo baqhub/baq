@@ -14,6 +14,7 @@ const OwnProfileStackLayout: FC = () => {
   return (
     <Stack
       screenOptions={{
+        fullScreenGestureEnabled: true,
         headerStyle: {
           backgroundColor: isLight ? white : neutral[950],
         },

@@ -111,11 +111,6 @@ const BodyText = tw(Text)`
   leading-5
 `;
 
-const MentionText = tw(Text)`
-  text-amber-700
-  dark:text-amber-500
-`;
-
 const Actions = tw(Row)`
   -mt-0.5
   -mx-2
@@ -295,7 +290,6 @@ export const Post: FC<PostProps> = props => {
               <PostText
                 text={text}
                 textMentions={textMentions}
-                MentionComponent={MentionText}
               />
             </BodyText>
             <Actions>
