@@ -1552,7 +1552,8 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
     //
 
     return {
-      isLoading: Boolean(promise),
+      isLoading: Boolean(promise) && refreshCount === 0,
+      isRefreshing: Boolean(promise) && refreshCount > 0,
       error,
       isLoadingMore: Boolean(loadMorePromise),
       loadMoreError,
