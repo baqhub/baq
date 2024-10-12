@@ -1,32 +1,12 @@
-import {Stack} from "expo-router";
 import {FC} from "react";
-import {useColorScheme} from "react-native";
-import {amber, neutral, white} from "tailwindcss/colors";
+import {Stack} from "../../../components/core/stack";
 
 //
 // Component.
 //
 
 const MentionsStackLayout: FC = () => {
-  const colorScheme = useColorScheme();
-  const isLight = colorScheme === "light";
-
-  return (
-    <Stack
-      screenOptions={{
-        fullScreenGestureEnabled: true,
-        headerStyle: {
-          backgroundColor: isLight ? white : neutral[950],
-        },
-        headerShadowVisible: false,
-        headerBackTitleVisible: false,
-        headerTintColor: isLight ? amber[400] : amber[500],
-        headerTitleStyle: {
-          color: isLight ? neutral[950] : white,
-        },
-      }}
-    />
-  );
+  return <Stack />;
 };
 
 export default MentionsStackLayout;
