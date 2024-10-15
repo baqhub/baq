@@ -288,6 +288,7 @@ export const Post: FC<PostProps> = props => {
             </InfoRow>
             <BodyText>
               <PostText
+                routePrefix={routePrefix}
                 text={text}
                 textMentions={textMentions}
               />

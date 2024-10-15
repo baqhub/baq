@@ -7,6 +7,7 @@ import {Text, tw} from "../../helpers/style";
 //
 
 interface PostMentionProps extends PropsWithChildren {
+  routePrefix: string;
   entity: string;
 }
 
@@ -25,11 +26,11 @@ const Mention = tw(Text)`
 //
 
 export const PostMention: FC<PostMentionProps> = props => {
-  const {entity, children} = props;
+  const {routePrefix, entity, children} = props;
   return (
     <Link
       href={{
-        pathname: "../profile/[entity]",
+        pathname: `${routePrefix}/profile/[entity]` as any,
         params: {entity},
       }}
       asChild

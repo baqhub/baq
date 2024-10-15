@@ -93,7 +93,7 @@ export const PostScreen: FC<PostScreenProps> = props => {
         <Content>
           <Link
             href={{
-              pathname: "../profile/[entity]",
+              pathname: `${routePrefix}/profile/[entity]` as any,
               params: {entity: authorEntity},
             }}
             asChild
@@ -109,7 +109,11 @@ export const PostScreen: FC<PostScreenProps> = props => {
             </AuthorButton>
           </Link>
           <Body>
-            <PostText text={text} textMentions={textMentions} />
+            <PostText
+              routePrefix={routePrefix}
+              text={text}
+              textMentions={textMentions}
+            />
           </Body>
         </Content>
         <Info

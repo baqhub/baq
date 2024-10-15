@@ -12,6 +12,7 @@ import {PostMention} from "./postMention";
 //
 
 interface PostTextProps {
+  routePrefix: string;
   text: string;
   textMentions: ReadonlyArray<Mention> | undefined;
 }
@@ -41,7 +42,7 @@ const MobileLinkedText: FC<PropsWithChildren> = ({children}) => {
 };
 
 export const PostText: FC<PostTextProps> = props => {
-  const {text, textMentions} = props;
+  const {routePrefix, text, textMentions} = props;
   if (!textMentions || textMentions.length === 0) {
     return <MobileLinkedText>{text}</MobileLinkedText>;
   }
@@ -64,7 +65,11 @@ export const PostText: FC<PostTextProps> = props => {
     // Add mention.
     const {entity} = mention.mention;
     result.push(
-      <PostMention key={"mention-" + index} entity={entity}>
+      <PostMention
+        key={"mention-" + index}
+        routePrefix={routePrefix}
+        entity={entity}
+      >
         {mentionText}
       </PostMention>
     );
