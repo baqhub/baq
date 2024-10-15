@@ -1,6 +1,5 @@
 import {Link} from "expo-router";
 import {FC, PropsWithChildren} from "react";
-import {TouchableOpacity} from "react-native";
 import {Text, tw} from "../../helpers/style";
 
 //
@@ -8,6 +7,7 @@ import {Text, tw} from "../../helpers/style";
 //
 
 interface PostMentionProps extends PropsWithChildren {
+  routePrefix: string;
   entity: string;
 }
 
@@ -15,17 +15,10 @@ interface PostMentionProps extends PropsWithChildren {
 // Style.
 //
 
-const MentionButton = tw(TouchableOpacity)`
-  -mb-[3px]
-`;
-
 const Mention = tw(Text)`
-  text-lg
-  font-light
-  leading-7
-
   text-amber-700
   dark:text-amber-500
+  active:opacity-50
 `;
 
 //
@@ -33,18 +26,18 @@ const Mention = tw(Text)`
 //
 
 export const PostMention: FC<PostMentionProps> = props => {
-  const {entity, children} = props;
+  const {routePrefix, entity, children} = props;
   return (
     <Link
       href={{
-        pathname: "../profile/[entity]",
+        pathname: `${routePrefix}/profile/[entity]` as any,
         params: {entity},
       }}
       asChild
     >
-      <MentionButton>
-        <Mention numberOfLines={1}>{children}</Mention>
-      </MentionButton>
+      <Mention numberOfLines={1} suppressHighlighting>
+        {children}
+      </Mention>
     </Link>
   );
 };

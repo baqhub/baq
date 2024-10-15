@@ -14,7 +14,6 @@ import {Posts} from "../../components/posts/posts";
 import {Column, Row, Text, tw} from "../../helpers/style";
 import {PostByVersion} from "../post/postByVersion";
 import {PostText} from "../post/postText";
-import {PostMention} from "./postMention";
 
 //
 // Props.
@@ -63,7 +62,6 @@ const AuthorEntity = tw(Text)`
 
 const Body = tw(Text)`
   text-lg
-  font-light
   leading-7
 `;
 
@@ -95,7 +93,7 @@ export const PostScreen: FC<PostScreenProps> = props => {
         <Content>
           <Link
             href={{
-              pathname: "../profile/[entity]",
+              pathname: `${routePrefix}/profile/[entity]` as any,
               params: {entity: authorEntity},
             }}
             asChild
@@ -112,9 +110,9 @@ export const PostScreen: FC<PostScreenProps> = props => {
           </Link>
           <Body>
             <PostText
+              routePrefix={routePrefix}
               text={text}
               textMentions={textMentions}
-              MentionComponent={PostMention}
             />
           </Body>
         </Content>

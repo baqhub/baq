@@ -1,5 +1,9 @@
-import {HandlerOf} from "@baqhub/sdk";
-import {ConnectStatus, UnauthenticatedState} from "@baqhub/sdk-react";
+import {Async, HandlerOf} from "@baqhub/sdk";
+import {
+  abortable,
+  ConnectStatus,
+  UnauthenticatedState,
+} from "@baqhub/sdk-react";
 import {openAuthSessionAsync} from "expo-web-browser";
 import {FC, useCallback, useEffect, useRef, useState} from "react";
 import {
@@ -75,15 +79,17 @@ export const Login: FC<LoginProps> = props => {
       return;
     }
 
-    (async () => {
+    return abortable(async signal => {
       const result = await openAuthSessionAsync(state.flowUrl, redirectUrl);
+      Async.throwIfAborted(signal);
+
       if (result.type !== "success") {
         onAuthResult(undefined);
         return;
       }
 
       onAuthResult(result.url);
-    })();
+    });
   }, [state, redirectUrl, onAuthResult]);
 
   return (
