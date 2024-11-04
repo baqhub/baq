@@ -41,10 +41,10 @@
   "dependencies": {
     "@baqhub/sdk": "^0.1.23",
     "@baqhub/sdk-react": "^0.1.23",
-    "@react-native-async-storage/async-storage": "^1.21.0",
+    "@react-native-async-storage/async-storage": "^1.23.1",
     "base-64": "^1.0.0",
     "react-native-fetch-api": "^3.0.0",
-    "react-native-get-random-values": "~1.8.0",
+    "react-native-get-random-values": "~1.11.0",
     "react-native-polyfill-globals": "^3.1.0",
     "react-native-url-polyfill": "^2.0.0",
     "text-encoding": "^0.7.0",
