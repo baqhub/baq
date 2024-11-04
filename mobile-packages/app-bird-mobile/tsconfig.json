@@ -5,7 +5,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitReturns": true,
-    "noImplicitAny": true,
+    "noImplicitAny": true
   },
   "include": [
     "src/**/*.ts",
@@ -13,7 +13,8 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "tailwind.d.ts",
-    "global.d.ts"
+    "global.d.ts",
+    "nativewind-env.d.ts"
   ],
   "references": [
     {
