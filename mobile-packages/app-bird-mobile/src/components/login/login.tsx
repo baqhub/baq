@@ -8,15 +8,15 @@ import {openAuthSessionAsync} from "expo-web-browser";
 import {FC, useCallback, useEffect, useRef, useState} from "react";
 import {
   Image,
+  Keyboard,
   KeyboardAvoidingView,
-  Platform,
   SafeAreaView,
+  TextInput,
   View,
 } from "react-native";
 import birdLogo from "../../../assets/images/birdMobileLogo.png";
 import {Centered, tw} from "../../helpers/style";
 import {Button} from "../core/button";
-import {TextBox} from "../core/textBox";
 
 //
 // Props.
@@ -60,12 +60,27 @@ export const Login: FC<LoginProps> = props => {
   const isConnecting = state.connectStatus !== ConnectStatus.IDLE;
   const [hasFocus, setHasFocus] = useState(false);
 
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  useEffect(() => {
+    if (!isRefreshing) {
+      return;
+    }
+
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 1000);
+  }, [isRefreshing]);
+
   const entityRef = useRef("");
   const onEntityChange = useCallback((newEntity: string) => {
     entityRef.current = newEntity;
   }, []);
 
   const onContinueButtonPress = () => {
+    Keyboard.dismiss();
+    return;
+
     const currentEntity = entityRef.current;
     if (currentEntity.length < 4) {
       return;
@@ -92,24 +107,30 @@ export const Login: FC<LoginProps> = props => {
     });
   }, [state, redirectUrl, onAuthResult]);
 
+  console.log("Re-rendering", Date.now());
+  if (isRefreshing) {
+    return null;
+  }
+
   return (
-    <SafeArea>
+    <SafeArea collapsable={false}>
       <KeyboardAvoidingView
         className="flex-1"
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior="padding"
+        collapsable={false}
       >
-        <Layout>
+        <Layout collapsable={false}>
           <Image source={birdLogo} />
           <EntityLayout>
-            <TextBox
+            <TextInput
               placeholder="user.host.com"
-              isDisabled={isConnecting}
+              // isDisabled={isConnecting}
               defaultValue={entityRef.current}
               enterKeyHint="go"
               onFocus={() => setHasFocus(true)}
               onBlur={() => setHasFocus(false)}
-              onChange={onEntityChange}
-              onSubmit={onContinueButtonPress}
+              // onChange={onEntityChange}
+              // onSubmit={onContinueButtonPress}
             />
             <Button
               variant="primary"

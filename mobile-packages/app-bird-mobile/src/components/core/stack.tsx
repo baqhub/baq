@@ -14,7 +14,7 @@ export const Stack: FC<PropsWithChildren> = () => {
           backgroundColor: isLight ? white : neutral[950],
         },
         headerShadowVisible: false,
-        headerBackTitleVisible: false,
+        headerBackTitle: undefined,
         headerTintColor: isLight ? amber[400] : amber[500],
         headerTitleStyle: {
           color: isLight ? neutral[950] : white,

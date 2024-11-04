@@ -33,7 +33,7 @@ const MeProfileScreen: FC = () => {
   );
 };
 
-const HeaderRight: FC<{canGoBack: boolean}> = props => {
+const HeaderRight: FC<{canGoBack: boolean | undefined}> = props => {
   const {canGoBack} = props;
   const {entity, onDisconnectRequest} = useRecordHelpers();
 
