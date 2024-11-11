@@ -1,5 +1,3 @@
-console.log("Loading config.");
-
 const {existsSync} = require("fs");
 const {createRequire} = require("module");
 const {resolve} = require("path");
@@ -22,7 +20,7 @@ const config = {
   bracketSpacing: false,
   arrowParens: "avoid",
   trailingComma: "es5",
-  tailwindFunctions: ["tw"],
+  tailwindFunctions: ["tiwi"],
   tailwindPreserveWhitespace: true,
   plugins: [
     absRequire.resolve("prettier-plugin-organize-imports"),
