@@ -1,6 +1,6 @@
-import { tw } from "@baqhub/ui/core/style.jsx";
+import tiwi from "tiwi";
 
-export const MdxCompactList = tw.div`
+export const MdxCompactList = tiwi.div`
   [&_li]:mt-1
   [&_li]:mb-1
 

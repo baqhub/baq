@@ -1,9 +1,10 @@
-import {Column, tw} from "@baqhub/ui/core/style.jsx";
+import {Column} from "@baqhub/ui/core/style.jsx";
 import {MDXComponents} from "mdx/types.js";
 import {Metadata} from "next";
 import {ImageProps} from "next/image.js";
 import {FC, ReactNode} from "react";
 import {onlyText} from "react-children-utilities";
+import tiwi from "tiwi";
 import {findHeaders} from "../../../../helpers/mdxHelpers.jsx";
 import {slugify} from "../../../../helpers/stringHelpers.js";
 import {
@@ -69,7 +70,7 @@ export async function generateStaticParams(): Promise<DocsPageParams[]> {
 // Style.
 //
 
-const Docs = tw.div`
+const Docs = tiwi.div`
   self-center
   w-full
   max-w-screen-2xl
@@ -79,7 +80,7 @@ const Docs = tw.div`
   flex-row
 `;
 
-const DocsCenter = tw.div`
+const DocsCenter = tiwi.div`
   grow
   shrink
   min-w-0
@@ -90,7 +91,7 @@ const DocsCenter = tw.div`
   justify-center
 `;
 
-const DocsContent = tw.div`
+const DocsContent = tiwi.div`
   grow
   shrink
   min-w-0
@@ -103,7 +104,7 @@ const DocsContent = tw.div`
   xl:px-12
 `;
 
-const DocsContentSection = tw.div`
+const DocsContentSection = tiwi.div`
   sm:hidden
   mb-3
 
@@ -113,7 +114,7 @@ const DocsContentSection = tw.div`
   dark:text-amber-500
 `;
 
-const FooterLayout = tw(Column)`
+const FooterLayout = tiwi(Column)`
   mt-28
 `;
 

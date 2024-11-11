@@ -1,7 +1,8 @@
 import {Handler} from "@baqhub/sdk";
+import {ButtonRow, Text} from "@baqhub/ui/core/style.js";
 import {PhotoIcon} from "@heroicons/react/24/outline";
-import {ButtonRow, Text, tw} from "@baqhub/ui/core/style.js";
 import {FC} from "react";
+import tiwi from "tiwi";
 import {FileVersionHash} from "../../baq/fileRecord.js";
 import {useCloudPickerFileState} from "../../state/cloudPicker/cloudPickerFileState.js";
 
@@ -19,7 +20,7 @@ interface CloudPickerFileProps {
 // Style.
 //
 
-const LayoutButton = tw(ButtonRow)`
+const LayoutButton = tiwi(ButtonRow)`
   p-2
   gap-1.5
   items-center
@@ -34,14 +35,14 @@ const selectedStyle = `
   hover:bg-neutral-200
 `;
 
-const Icon = tw.div`
+const Icon = tiwi.div`
   shrink-0
   w-6
   h-6
   text-neutral-900
 `;
 
-const Label = tw(Text)`
+const Label = tiwi(Text)`
   text-md
   truncate
 `;

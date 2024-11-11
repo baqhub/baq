@@ -1,17 +1,18 @@
-import {Column, Text, tw} from "@baqhub/ui/core/style.js";
+import {Column, Text} from "@baqhub/ui/core/style.js";
 import {ArrowPathIcon} from "@heroicons/react/24/outline";
 import {FC} from "react";
+import tiwi from "tiwi";
 
 //
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   p-2
   items-center
 `;
 
-const Icon = tw(Text)`
+const Icon = tiwi(Text)`
   w-6
   h-6
 `;

@@ -1,6 +1,6 @@
-import {tw} from "@baqhub/ui/core/style.jsx";
 import type {Metadata, Viewport} from "next";
 import {FC, PropsWithChildren} from "react";
+import tiwi from "tiwi";
 import twitterCardImage from "../docs/assets/twitterCard.jpg";
 import {firaCode, inter} from "./fonts/fonts.js";
 import {AutoRefresh} from "./global/autoRefresh.jsx";
@@ -15,7 +15,7 @@ import "./styles/index.css";
 // Style.
 //
 
-const Background = tw.div`
+const Background = tiwi.div`
   fixed
   -inset-y-80
   w-full
@@ -24,7 +24,7 @@ const Background = tw.div`
   dark:bg-zinc-800
 `;
 
-const Layout = tw.div`
+const Layout = tiwi.div`
   relative
   flex
   flex-col

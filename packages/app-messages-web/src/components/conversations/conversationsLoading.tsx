@@ -1,24 +1,25 @@
+import {Column, Text} from "@baqhub/ui/core/style.js";
 import {ArrowPathIcon} from "@heroicons/react/24/outline";
-import {Column, Text, tw} from "@baqhub/ui/core/style.js";
 import {FC} from "react";
+import tiwi from "tiwi";
 
 //
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   items-center
   justify-center
   gap-3
 `;
 
-const Icon = tw(ArrowPathIcon)`
+const Icon = tiwi(ArrowPathIcon)`
   w-9
   h-9
   text-neutral-500
 `;
 
-const Label = tw(Text)`
+const Label = tiwi(Text)`
   max-w-full
 
   text-neutral-600

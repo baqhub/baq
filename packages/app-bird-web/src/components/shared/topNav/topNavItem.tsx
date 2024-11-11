@@ -1,7 +1,7 @@
 import {Handler} from "@baqhub/sdk";
-import {tw} from "@baqhub/ui/core/style.js";
 import {Link, ToOptions} from "@tanstack/react-router";
 import {FC, PropsWithChildren} from "react";
+import tiwi from "tiwi";
 
 //
 // Props.
@@ -17,7 +17,7 @@ interface TopNavItemProps extends PropsWithChildren {
 // Style.
 //
 
-const Button = tw.button`
+const Button = tiwi.button`
   px-2.5
   py-1.5
 
@@ -41,7 +41,7 @@ const Button = tw.button`
   group-data-[status=active]:dark:hover:text-amber-200
 `;
 
-const Icon = tw.div`
+const Icon = tiwi.div`
   w-5
   h-5
 `;

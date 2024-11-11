@@ -1,6 +1,7 @@
 import {Handler} from "@baqhub/sdk";
 import {FC, PropsWithChildren} from "react";
-import {ButtonRow, Text, tw} from "../../core/style.js";
+import tiwi from "tiwi";
+import {ButtonRow, Text} from "../../core/style.js";
 import {useDropdownContext} from "./dropdownContext.js";
 
 //
@@ -15,7 +16,7 @@ interface DropdownItemProps extends PropsWithChildren {
 // Style.
 //
 
-const Layout = tw(ButtonRow)`
+const Layout = tiwi(ButtonRow)`
   group/item
   px-3
   py-1.5
@@ -25,7 +26,7 @@ const Layout = tw(ButtonRow)`
   active:bg-amber-600
 `;
 
-const Label = tw(Text)`
+const Label = tiwi(Text)`
   group-hover/item:text-white
 `;
 

@@ -5,7 +5,7 @@ import {Store} from "@baqhub/bird-shared/baq/store.js";
 import {useSyncState} from "@baqhub/bird-shared/state/syncState.js";
 import {useConstant} from "@baqhub/sdk-react";
 import {localStorageAdapter} from "@baqhub/sdk-react-dom";
-import {Column, tw} from "@baqhub/ui/core/style.js";
+import {Column} from "@baqhub/ui/core/style.js";
 import {LayerManager} from "@baqhub/ui/layers/layerManager.js";
 import {Login, LoginLogo} from "@baqhub/ui/pages/login.js";
 import {
@@ -18,6 +18,7 @@ import {
   useParams,
 } from "@tanstack/react-router";
 import {FC, useEffect} from "react";
+import tiwi from "tiwi";
 import {rootRoute} from "../main.js";
 import {profileRoute} from "./profilePage/profilePage.js";
 import {PublicTopNav} from "./shared/topNav/publicTopNav.js";
@@ -40,7 +41,7 @@ const {useAuthentication} = buildAuthentication({
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   self-stretch
   justify-self-center
 
@@ -52,12 +53,12 @@ const Layout = tw(Column)`
   sm:px-5
 `;
 
-const Footer = tw(Column)`
+const Footer = tiwi(Column)`
   items-center
   p-5
 `;
 
-const PrivacyLink = tw(Link)`
+const PrivacyLink = tiwi(Link)`
   hover:underline
   underline-offset-2
 

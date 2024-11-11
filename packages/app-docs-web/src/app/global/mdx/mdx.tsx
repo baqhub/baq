@@ -1,6 +1,6 @@
-import {tw} from "@baqhub/ui/core/style.jsx";
+import tiwi from "tiwi";
 
-export const MdxH1 = tw.h1`
+export const MdxH1 = tiwi.h1`
   mb-6
   lg:scroll-mt-28
 
@@ -10,7 +10,7 @@ export const MdxH1 = tw.h1`
   dark:text-white
 `;
 
-export const MdxH2 = tw.h2`
+export const MdxH2 = tiwi.h2`
   mt-12
   mb-5
   pt-6
@@ -30,7 +30,7 @@ export const MdxH2 = tw.h2`
   dark:text-white
 `;
 
-export const MdxH3 = tw.h3`
+export const MdxH3 = tiwi.h3`
   mt-12
   mb-4
   pt-6
@@ -54,7 +54,7 @@ export const MdxH3 = tw.h3`
   dark:text-white
 `;
 
-export const MdxBlogH2 = tw.h2`
+export const MdxBlogH2 = tiwi.h2`
   mt-10
   mb-3.5
   [&_+_*]:mt-0
@@ -67,7 +67,7 @@ export const MdxBlogH2 = tw.h2`
   dark:text-white
 `;
 
-export const MdxH4 = tw.h4`
+export const MdxH4 = tiwi.h4`
   mt-10
   mb-3.5
   [&_+_*]:mt-0
@@ -78,13 +78,13 @@ export const MdxH4 = tw.h4`
   dark:text-white
 `;
 
-export const MdxH5 = tw.h5`
+export const MdxH5 = tiwi.h5`
   italic
   underline
   underline-offset-2
 `;
 
-export const MdxP = tw.p`
+export const MdxP = tiwi.p`
   mt-3
   mb-3
 
@@ -94,7 +94,7 @@ export const MdxP = tw.p`
   font-normal
 `;
 
-export const MdxUl = tw.ul`
+export const MdxUl = tiwi.ul`
   mt-5
   mb-5
   pl-6
@@ -106,7 +106,7 @@ export const MdxUl = tw.ul`
   dark:marker:text-zinc-300
 `;
 
-export const MdxOl = tw.ol`
+export const MdxOl = tiwi.ol`
   mt-5
   mb-5
   pl-6
@@ -119,7 +119,7 @@ export const MdxOl = tw.ol`
   dark:marker:text-zinc-400
 `;
 
-export const MdxLi = tw.li`
+export const MdxLi = tiwi.li`
   mt-3
   mb-3
   [&_li]:mt-1
@@ -134,7 +134,7 @@ export const MdxLi = tw.li`
   dark:text-zinc-300
 `;
 
-export const MdxProperties = tw.div`
+export const MdxProperties = tiwi.div`
   [&_>_ul]:list-none
   [&_>_ul]:pl-0
   [&_>_ul_>_li_>_ul]:list-none
@@ -147,7 +147,7 @@ export const MdxProperties = tw.div`
   dark:[&_li_strong_code]:bg-zinc-700
 `;
 
-export const MdxA = tw.a`
+export const MdxA = tiwi.a`
   text-amber-700
   [&_>_strong]:text-amber-700
   dark:text-amber-500
@@ -165,13 +165,13 @@ export const MdxA = tw.a`
   duration-100
 `;
 
-export const MdxStrong = tw.strong`
+export const MdxStrong = tiwi.strong`
   text-zinc-800
   dark:text-zinc-100
   font-semibold
 `;
 
-export const MdxPre = tw.pre`
+export const MdxPre = tiwi.pre`
   flex
   flex-row
 
@@ -194,7 +194,7 @@ export const MdxPre = tw.pre`
   dark:bg-zinc-900
 `;
 
-export const MdxCode = tw.code`
+export const MdxCode = tiwi.code`
   px-1
   py-0.5
 

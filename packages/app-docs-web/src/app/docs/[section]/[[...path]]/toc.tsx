@@ -1,5 +1,5 @@
-import {tw} from "@baqhub/ui/core/style.jsx";
 import {FC} from "react";
+import tiwi from "tiwi";
 import {MdxHeader} from "../../../../helpers/mdxHelpers.js";
 import {MdxA, MdxLi, MdxP, MdxUl} from "../../../global/mdx/mdx.jsx";
 
@@ -15,7 +15,7 @@ export interface TocProps {
 // Style.
 //
 
-const TocLi = tw(MdxLi)`
+const TocLi = tiwi(MdxLi)`
   mt-1
   mb-1
 

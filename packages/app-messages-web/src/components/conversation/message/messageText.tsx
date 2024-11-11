@@ -1,17 +1,17 @@
 import {LinkedText, LinkProps} from "@baqhub/ui/core/linkedText.js";
-import {tw} from "@baqhub/ui/core/style.js";
 import {FC, PropsWithChildren} from "react";
+import tiwi from "tiwi";
 
 //
 // Style.
 //
 
-const Layout = tw.div`
+const Layout = tiwi.div`
   px-3
   text-neutral-900
 `;
 
-const Link = tw.a`
+const Link = tiwi.a`
   break-all
   text-amber-700
 

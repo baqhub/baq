@@ -12,17 +12,10 @@
   "editor.quickSuggestions": {
     "strings": "on"
   },
-  "tailwindCSS.includeLanguages": {
-    "typescript": "javascript", // if you are using typescript
-    "typescriptreact": "javascript" // if you are using typescript with react
-  },
   "tailwindCSS.experimental.classRegex": [
-    // "tw`([^`]*)", // tw`...`
-    "tw\\.[^`]+`([^`]*)`", // tw.xxx<xxx>`...`
-    // "tw\\(.*?\\).*?`([^`]*)", // tw(Component)<xxx>`...`,
     [
-      "tw\\(.*?\\).*?([^;]*)",
-      "[\"'`\\}]([^\"'`\\$]*).*?[\"'`\\$]"
+      "(?:tiwi|tw)[.(][^`]+([^;]*)",
+      "[\"'`\\}]([^\"'`\\$]*)[\"'`\\$]"
     ]
   ],
   "movets.skipWarning": true,
@@ -78,6 +71,7 @@
     "svgr",
     "tailwindcss",
     "tanstack",
+    "tiwi",
     "typeof",
     "unfollow",
     "unicity",

@@ -1,6 +1,7 @@
 import {DataProvider} from "@baqhub/sdk-react";
-import {Column, tw} from "@baqhub/ui/core/style.js";
+import {Column} from "@baqhub/ui/core/style.js";
 import {FC, Suspense} from "react";
+import tiwi from "tiwi";
 import {ItemKey} from "../state/homeState.js";
 import {Item} from "./item.js";
 import {ItemListEmpty} from "./itemListEmpty.js";
@@ -19,10 +20,17 @@ interface ItemListProps {
 // Style.
 //
 
-const Layout = tw(Column)<{$isLoading: boolean}>`
+const Layout = tiwi(Column)`
   py-3
   overflow-auto
-  ${p => (p.$isLoading ? "opacity-50 pointer-events-none" : "opacity-100")}
+
+  "opacity-100"
+  ${{
+    isLoading: `
+      opacity-50
+      pointer-events-none
+    `,
+  }}
 `;
 
 //
@@ -37,7 +45,7 @@ export const ItemList: FC<ItemListProps> = props => {
   };
 
   return (
-    <Layout $isLoading={isLoading}>
+    <Layout variants={{isLoading}}>
       <Suspense fallback={renderLoading()}>
         <ItemListContent getItemKeys={getItemKeys} />
       </Suspense>

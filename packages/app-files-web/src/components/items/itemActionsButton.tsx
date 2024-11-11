@@ -1,10 +1,11 @@
 import {IconButton} from "@baqhub/ui/core/iconButton.js";
-import {Grid, Text, tw} from "@baqhub/ui/core/style.js";
+import {Grid, Text} from "@baqhub/ui/core/style.js";
 import {OkCancelDialog} from "@baqhub/ui/layers/dialog/okCancelDialog.js";
 import {DropdownItem} from "@baqhub/ui/layers/dropdown/dropdownItem.js";
 import {useDropdown} from "@baqhub/ui/layers/dropdown/useDropdown.js";
 import {EllipsisHorizontalIcon} from "@heroicons/react/24/outline";
 import {FC, useState} from "react";
+import tiwi from "tiwi";
 import {FileRecordKey} from "../../baq/fileRecord.js";
 import {FolderRecordKey} from "../../baq/folderRecord.js";
 import {useItemActionsState} from "../../state/itemActionsState.js";
@@ -25,7 +26,7 @@ interface ItemActionsProps {
 // Style.
 //
 
-const ItemName = tw(Text)`
+const ItemName = tiwi(Text)`
   inline-block
   max-w-[20ch]
   align-bottom

@@ -1,9 +1,10 @@
 import {Handler} from "@baqhub/sdk";
 import {Button} from "@baqhub/ui/core/button.js";
-import {Column, Row, Text, tw} from "@baqhub/ui/core/style.js";
+import {Column, Row, Text} from "@baqhub/ui/core/style.js";
 import {Dialog} from "@baqhub/ui/layers/dialog/dialog.js";
 import {ArrowPathIcon, CheckCircleIcon} from "@heroicons/react/24/outline";
 import {FC, Suspense} from "react";
+import tiwi from "tiwi";
 import {GetItemKeys, ItemKey} from "../../../state/conversationsState.js";
 import {UnknownConversationItem} from "./unknownConversationItem.js";
 import {UnknownConversationsStatus} from "./unknownConversationsStatus.js";
@@ -21,23 +22,23 @@ interface UnknownConversationsDialogProps {
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   w-[460px]
   max-h-[500px]
   min-h-0
 `;
 
-const Title = tw(Text)`
+const Title = tiwi(Text)`
   text-2xl
   font-semibold
 `;
 
-const Conversations = tw(Column)`
+const Conversations = tiwi(Column)`
   mt-3
   overflow-y-auto
 `;
 
-const Footer = tw(Row)`
+const Footer = tiwi(Row)`
   pt-3
   justify-end
 

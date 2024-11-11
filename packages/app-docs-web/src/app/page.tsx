@@ -1,4 +1,4 @@
-import {Column, Grid, tw} from "@baqhub/ui/core/style.jsx";
+import {Column, Grid} from "@baqhub/ui/core/style.jsx";
 import {
   ArrowPathIcon,
   BoltIcon,
@@ -8,6 +8,7 @@ import {
   SwatchIcon,
 } from "@heroicons/react/24/outline";
 import {FC} from "react";
+import tiwi from "tiwi";
 import {Footer} from "./global/footer.jsx";
 import {HomeCard} from "./home/homeCard.jsx";
 import {HomeHero} from "./home/homeHero.jsx";
@@ -16,7 +17,7 @@ import {HomeHero} from "./home/homeHero.jsx";
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   self-center
   w-full
   max-w-screen-xl
@@ -29,7 +30,7 @@ const Layout = tw(Column)`
   mdp:px-16
 `;
 
-const Cards = tw(Grid)`
+const Cards = tiwi(Grid)`
   grid-cols-1
   md:grid-cols-2
   lg:grid-cols-3
@@ -39,7 +40,7 @@ const Cards = tw(Grid)`
   gap-4
 `;
 
-const FooterLayout = tw(Column)`
+const FooterLayout = tiwi(Column)`
   mt-14
   md:mt-20
 `;

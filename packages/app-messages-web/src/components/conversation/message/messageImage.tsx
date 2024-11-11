@@ -1,5 +1,5 @@
-import {tw} from "@baqhub/ui/core/style.js";
 import {FC} from "react";
+import tiwi from "tiwi";
 
 //
 // Props.
@@ -15,7 +15,7 @@ interface MessageImageProps {
 // Style.
 //
 
-const Layout = tw.div`
+const Layout = tiwi.div`
   max-w-80
   max-h-96
   rounded-lg

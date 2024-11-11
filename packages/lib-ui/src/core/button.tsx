@@ -1,7 +1,7 @@
 import {Handler} from "@baqhub/sdk";
 import {FC, PropsWithChildren, useEffect, useRef} from "react";
-import {makeVariants} from "../helpers/type.js";
-import {ButtonRow, UISize, classForSize, tw} from "./style.js";
+import tiwi from "tiwi";
+import {ButtonRow, UISize} from "./style.js";
 
 //
 // Props.
@@ -24,14 +24,19 @@ interface ButtonProps extends ButtonBaseProps {
 // Style.
 //
 
-const Box = tw(ButtonRow)`
+const StyledButton = tiwi(ButtonRow)<UISize | ButtonVariant>`
   items-center
   justify-center
   px-3
   pt-2
   pb-1.5
-  [&.size-lg]:px-4
-  [&.size-lg]:py-2
+
+  ${{
+    large: `
+      px-4
+      py-2
+    `,
+  }}
 
   disabled:opacity-90
   bg-neutral-100
@@ -59,24 +64,23 @@ const Box = tw(ButtonRow)`
   disabled:text-opacity-60
   dark:text-white
   dark:disabled:text-opacity-80
-`;
 
-const variants = makeVariants<ButtonVariant>()({
-  normal: Box,
-  primary: tw(Box)`
-    disabled:opacity-80
-    bg-amber-300
-    border-amber-400
-    enabled:any-hover:hover:bg-amber-400
-    enabled:any-hover:hover:border-amber-500
-    focus-visible:border-amber-500
-    dark:bg-amber-600
-    dark:border-amber-500
-    dark:enabled:any-hover:hover:bg-amber-500
-    dark:enabled:any-hover:hover:border-amber-400
-    dark:focus-visible:border-amber-400
-  `,
-});
+  ${{
+    primary: `
+      disabled:opacity-80
+      bg-amber-300
+      border-amber-400
+      enabled:any-hover:hover:bg-amber-400
+      enabled:any-hover:hover:border-amber-500
+      focus-visible:border-amber-500
+      dark:bg-amber-600
+      dark:border-amber-500
+      dark:enabled:any-hover:hover:bg-amber-500
+      dark:enabled:any-hover:hover:border-amber-400
+      dark:focus-visible:border-amber-400
+    `,
+  }}
+`;
 
 //
 // Component.
@@ -84,7 +88,6 @@ const variants = makeVariants<ButtonVariant>()({
 
 export const Button: FC<ButtonProps> = props => {
   const {size, variant, shouldAutofocus, isDisabled, onClick, children} = props;
-  const Component = variants[variant || "normal"];
   const componentRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -100,21 +103,20 @@ export const Button: FC<ButtonProps> = props => {
   }, [shouldAutofocus]);
 
   return (
-    <Component
+    <StyledButton
       ref={componentRef}
-      className={classForSize(size)}
+      variants={[size, variant]}
       type="button"
       disabled={isDisabled}
       onClick={onClick}
     >
       {children}
-    </Component>
+    </StyledButton>
   );
 };
 
 export const SubmitButton: FC<ButtonBaseProps> = props => {
   const {size, variant, shouldAutofocus, isDisabled, children} = props;
-  const Component = variants[variant || "normal"];
   const componentRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -130,13 +132,13 @@ export const SubmitButton: FC<ButtonBaseProps> = props => {
   }, [shouldAutofocus]);
 
   return (
-    <Component
+    <StyledButton
       ref={componentRef}
-      className={classForSize(size)}
+      variants={[size, variant]}
       type="submit"
       disabled={isDisabled}
     >
       {children}
-    </Component>
+    </StyledButton>
   );
 };

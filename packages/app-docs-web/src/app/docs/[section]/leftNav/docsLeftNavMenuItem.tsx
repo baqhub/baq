@@ -1,5 +1,5 @@
-import {tw} from "@baqhub/ui/core/style.jsx";
 import {FC, PropsWithChildren} from "react";
+import tiwi from "tiwi";
 import {Link} from "../../../global/link.jsx";
 
 //
@@ -16,7 +16,7 @@ interface DocsLeftNavMenuItemProps extends PropsWithChildren {
 // Style.
 //
 
-const MenuLink = tw(Link)`
+const MenuLink = tiwi(Link)`
   truncate
   text-sm
   font-medium

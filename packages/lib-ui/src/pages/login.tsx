@@ -1,8 +1,9 @@
 import {HandlerOf} from "@baqhub/sdk";
 import {ConnectStatus, UnauthenticatedState} from "@baqhub/sdk-react";
 import {FC, FormEvent, PropsWithChildren, useEffect, useState} from "react";
+import tiwi from "tiwi";
 import {Button, SubmitButton} from "../core/button.js";
-import {Column, Text, tw} from "../core/style.js";
+import {Column, Text} from "../core/style.js";
 import {TextBox} from "../core/textBox.js";
 
 //
@@ -19,7 +20,7 @@ interface LoginProps extends PropsWithChildren {
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   flex-1
 
   px-5
@@ -28,30 +29,30 @@ const Layout = tw(Column)`
   justify-center
 `;
 
-const AppInfo = tw(Column)`
+const AppInfo = tiwi(Column)`
   items-center
   gap-6
 `;
 
-const AppName = tw(Text)`
+const AppName = tiwi(Text)`
   text-6xl
   font-semibold
 `;
 
-const Form = tw.form`
+const Form = tiwi.form`
   flex
   flex-row
   min-w-0
   gap-2
 `;
 
-export const LoginLogo = tw.img`
+export const LoginLogo = tiwi.img`
   w-[184px]
   h-[184px]
   select-none
 `;
 
-const RegisterBox = tw(Column)`
+const RegisterBox = tiwi(Column)`
   sm:flex-row
 
   items-center
@@ -63,13 +64,13 @@ const RegisterBox = tw(Column)`
   rounded-2xl
 `;
 
-const RegisterText = tw(Text)`
+const RegisterText = tiwi(Text)`
   text-lg
   text-neutral-700
   dark:text-neutral-200
 `;
 
-const ArrowIcon = tw.div`
+const ArrowIcon = tiwi.div`
   h-5
   w-5
 
@@ -77,14 +78,14 @@ const ArrowIcon = tw.div`
   dark:text-neutral-200
 `;
 
-const ArrowIconDown = tw(ArrowIcon)`
+const ArrowIconDown = tiwi(ArrowIcon)`
   sm:hidden
 
   mt-2
   mb-3
 `;
 
-const ArrowIconRight = tw(ArrowIcon)`
+const ArrowIconRight = tiwi(ArrowIcon)`
   hidden
   sm:block
 
@@ -92,7 +93,7 @@ const ArrowIconRight = tw(ArrowIcon)`
   mr-3
 `;
 
-const ButtonStrong = tw.strong`
+const ButtonStrong = tiwi.strong`
   font-semibold
 `;
 

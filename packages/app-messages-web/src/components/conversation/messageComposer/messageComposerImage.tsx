@@ -1,8 +1,9 @@
 import {HandlerOf} from "@baqhub/sdk";
 import {useImageUrl} from "@baqhub/sdk-react";
+import {ButtonRow} from "@baqhub/ui/core/style.js";
 import {XMarkIcon} from "@heroicons/react/20/solid";
-import {ButtonRow, tw} from "@baqhub/ui/core/style.js";
 import {FC} from "react";
+import tiwi from "tiwi";
 import {PendingImage} from "../../../state/messageComposerState.js";
 
 //
@@ -18,7 +19,7 @@ interface MessageComposerImageProps {
 // Style.
 //
 
-const Layout = tw.div`
+const Layout = tiwi.div`
   relative
   group
 
@@ -31,7 +32,7 @@ const Layout = tw.div`
   overflow-hidden
 `;
 
-const Image = tw.div`
+const Image = tiwi.div`
   absolute
   top-0
   right-0
@@ -42,7 +43,7 @@ const Image = tw.div`
   bg-cover
 `;
 
-const RemoveButton = tw(ButtonRow)`
+const RemoveButton = tiwi(ButtonRow)`
   absolute
   top-1
   right-1

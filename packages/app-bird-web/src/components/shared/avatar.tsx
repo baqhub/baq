@@ -1,7 +1,7 @@
 import {useAvatarState} from "@baqhub/bird-shared/state/avatarState.js";
-import {tw} from "@baqhub/ui/core/style.js";
 import {NoSymbolIcon} from "@heroicons/react/24/outline";
 import {FC} from "react";
+import tiwi from "tiwi";
 
 //
 // Props.
@@ -18,7 +18,7 @@ interface AvatarProps {
 // Style.
 //
 
-const Layout = tw.div`
+const Layout = tiwi.div`
   shrink-0
   relative
 
@@ -39,7 +39,7 @@ const layoutSizeStyle: Record<AvatarSize, string> = {
   `,
 };
 
-const BlockedPill = tw.div`
+const BlockedPill = tiwi.div`
   absolute
 
   rounded-full

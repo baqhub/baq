@@ -1,8 +1,9 @@
 "use client";
 
-import {ButtonRow, tw} from "@baqhub/ui/core/style.jsx";
+import {ButtonRow} from "@baqhub/ui/core/style.jsx";
 import {Bars3BottomLeftIcon, ChevronRightIcon} from "@heroicons/react/20/solid";
 import {FC, MouseEvent, useCallback, useState} from "react";
+import tiwi from "tiwi";
 import {MdxHeader} from "../../../../helpers/mdxHelpers.js";
 import {DocsSubSectionLight} from "../../../../services/docs.js";
 import {DocsTopNavLeftMenu} from "./docsTopNavLeftMenu.jsx";
@@ -22,7 +23,7 @@ interface DocsTopNavProps {
 // Style.
 //
 
-const Layout = tw.div`
+const Layout = tiwi.div`
   lg:hidden
   sticky
   z-10
@@ -43,7 +44,7 @@ const Layout = tw.div`
   dark:bg-zinc-800
 `;
 
-const NavButton = tw(ButtonRow)`
+const NavButton = tiwi(ButtonRow)`
   py-1.5
   px-2
   gap-2
@@ -65,20 +66,20 @@ const navButtonActive = `
   dark:text-amber-500
 `;
 
-const NavButtonRight = tw(NavButton)`
+const NavButtonRight = tiwi(NavButton)`
   gap-1
 `;
 
-const NavButtonIcon = tw.div`
+const NavButtonIcon = tiwi.div`
   w-5
   h-5
 `;
 
-const NavButtonIconRight = tw(NavButtonIcon)`
+const NavButtonIconRight = tiwi(NavButtonIcon)`
   -mr-1.5
 `;
 
-const Spacer = tw.div`
+const Spacer = tiwi.div`
   grow
 `;
 

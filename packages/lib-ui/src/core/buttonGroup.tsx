@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren} from "react";
-import {tw} from "./style.js";
+import tiwi from "tiwi";
 
 //
 // Props.
@@ -15,20 +15,24 @@ interface ButtonGroupProps extends PropsWithChildren {
 // Style.
 //
 
-const Group = tw.div<{align: GroupAlignment}>`
-  shrink-0
+const Group = tiwi.div<GroupAlignment>`
   flex
-  ${p => (p.align === "start" ? "justify-start" : "justify-end")}
+  shrink-0
+
+  justify-start
+  ${{
+    end: `justify-end`,
+  }}
 `;
 
-const InlineBlock = tw.div`
+const InlineBlock = tiwi.div`
   inline-block
 `;
 
-const Grid = tw.div`
+const Grid = tiwi.div`
   grid
-  grid-flow-col
   auto-cols-fr
+  grid-flow-col
   gap-3
 `;
 
@@ -38,7 +42,7 @@ const Grid = tw.div`
 
 export const ButtonGroup: FC<ButtonGroupProps> = ({align, children}) => {
   return (
-    <Group align={align || "start"}>
+    <Group variants={align}>
       <InlineBlock>
         <Grid>{children}</Grid>
       </InlineBlock>

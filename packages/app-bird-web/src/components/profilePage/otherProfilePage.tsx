@@ -1,10 +1,11 @@
 import {PostVersionHash} from "@baqhub/bird-shared/baq/postRecord.js";
 import {useOtherProfilePageState} from "@baqhub/bird-shared/state/profilePage/otherProfilePageState.js";
 import {Button} from "@baqhub/ui/core/button.js";
-import {Grid, tw} from "@baqhub/ui/core/style.js";
+import {Grid} from "@baqhub/ui/core/style.js";
 import {FaceFrownIcon} from "@heroicons/react/24/outline";
 import {useNavigate} from "@tanstack/react-router";
 import {FC, Suspense} from "react";
+import tiwi from "tiwi";
 import {PostByVersion} from "../shared/post/postByVersion.js";
 import {EmptyPosts} from "../shared/posts/emptyPosts.js";
 import {LoadingPosts} from "../shared/posts/loadingPosts.js";
@@ -23,7 +24,7 @@ interface OtherProfilePageProps {
 // Style.
 //
 
-const ProfileButtons = tw(Grid)`
+const ProfileButtons = tiwi(Grid)`
   grid-flow-col
   auto-cols-fr
   gap-2

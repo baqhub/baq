@@ -1,6 +1,5 @@
 "use client";
 
-import {tw} from "@baqhub/ui/core/style.jsx";
 import {CheckIcon, ClipboardIcon} from "@heroicons/react/24/outline";
 import {
   FC,
@@ -10,24 +9,25 @@ import {
   useRef,
   useState,
 } from "react";
+import tiwi from "tiwi";
 
 //
 // Style.
 //
 
-const Layout = tw.div`
+const Layout = tiwi.div`
   group
   relative
   mt-3
   mb-5
 `;
 
-const Content = tw.div`
+const Content = tiwi.div`
   [&_>_pre]:mt-0
   [&_>_pre]:mb-0
 `;
 
-const CopyLayout = tw.div`
+const CopyLayout = tiwi.div`
   hidden
   sm:block
 
@@ -41,7 +41,7 @@ const CopyLayout = tw.div`
   duration-100
 `;
 
-const CopyButton = tw.button`
+const CopyButton = tiwi.button`
   block
   p-1.5
 
@@ -63,7 +63,7 @@ const CopyButton = tw.button`
   dark:hover:text-zinc-200
 `;
 
-const CopySuccess = tw.div`
+const CopySuccess = tiwi.div`
   p-1.5
 
   rounded-md
@@ -77,7 +77,7 @@ const CopySuccess = tw.div`
   dark:text-green-500
 `;
 
-const CopyIcon = tw.div`
+const CopyIcon = tiwi.div`
   w-5
   h-5
 `;

@@ -1,9 +1,9 @@
 import {Handler} from "@baqhub/sdk";
 import {DataProvider} from "@baqhub/sdk-react";
 import {IconButton} from "@baqhub/ui/core/iconButton.js";
-import {tw} from "@baqhub/ui/core/style.js";
 import {UserIcon} from "@heroicons/react/20/solid";
 import {FC} from "react";
+import tiwi from "tiwi";
 
 //
 // Props.
@@ -18,11 +18,11 @@ interface HeaderUnknownButtonProps {
 // Style.
 //
 
-const Layout = tw.div`
+const Layout = tiwi.div`
   relative
 `;
 
-const Counter = tw.div`
+const Counter = tiwi.div`
   absolute
   -right-1
   -bottom-1

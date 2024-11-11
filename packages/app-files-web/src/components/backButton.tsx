@@ -1,6 +1,6 @@
 import {Handler} from "@baqhub/sdk";
-import {tw} from "@baqhub/ui/core/style.js";
 import {FC} from "react";
+import tiwi from "tiwi";
 
 /*
  * Props.
@@ -14,7 +14,7 @@ interface BackButtonProps {
  * Style.
  */
 
-const StyledItem = tw.div`
+const StyledItem = tiwi.div`
   p-1
 `;
 

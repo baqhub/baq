@@ -2,9 +2,10 @@ import {Handler, HandlerOf} from "@baqhub/sdk";
 import {DataProvider} from "@baqhub/sdk-react";
 import {Button} from "@baqhub/ui/core/button.js";
 import {ButtonGroup} from "@baqhub/ui/core/buttonGroup.js";
-import {Column, tw} from "@baqhub/ui/core/style.js";
+import {Column} from "@baqhub/ui/core/style.js";
 import {Dialog} from "@baqhub/ui/layers/dialog/dialog.js";
 import {FC, Suspense} from "react";
+import tiwi from "tiwi";
 import {FileVersionHash} from "../../baq/fileRecord.js";
 import {
   FilePickHandler,
@@ -27,12 +28,12 @@ interface CloudPickerDialogProps {
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   w-96
   gap-3
 `;
 
-const FileList = tw(Column)`
+const FileList = tiwi(Column)`
   pb-3
   h-60
   gap-1

@@ -1,7 +1,8 @@
 import {HandlerOf} from "@baqhub/sdk";
 import {ChangeEvent, FC, PropsWithChildren, useCallback} from "react";
+import tiwi from "tiwi";
 import Checkmark from "../assets/vector/checkBoxCheckmark.svg?react";
-import {Text, tw} from "./style.js";
+import {Text} from "./style.js";
 
 //
 // Props.
@@ -18,14 +19,14 @@ interface CheckBoxProps extends PropsWithChildren {
 // Style.
 //
 
-const Label = tw.label`
+const Label = tiwi.label`
   relative
   flex
   items-center
   gap-1.5
 `;
 
-const Input = tw.input`
+const Input = tiwi.input`
   absolute
   h-0
   w-0
@@ -35,7 +36,7 @@ const Input = tw.input`
   peer
 `;
 
-const Box = tw.div`
+const Box = tiwi.div`
   h-4
   w-4
 
@@ -61,7 +62,7 @@ const Box = tw.div`
   dark:peer-disabled:text-neutral-400
 `;
 
-const Content = tw(Text)`
+const Content = tiwi(Text)`
   peer-disabled:text-neutral-400
   dark:peer-disabled:text-neutral-500
 `;

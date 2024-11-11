@@ -1,7 +1,8 @@
 import {IconButton} from "@baqhub/ui/core/iconButton.js";
-import {Row, Text, tw} from "@baqhub/ui/core/style.js";
+import {Row, Text} from "@baqhub/ui/core/style.js";
 import {PencilSquareIcon} from "@heroicons/react/20/solid";
 import {FC, Suspense} from "react";
+import tiwi from "tiwi";
 import {useConversationsHeaderState} from "../../../state/conversationsHeaderState.js";
 import {ConversationSelectHandler} from "../../../state/homeState.js";
 import {useUnknownConversationsState} from "../../../state/unknownConversationsState.js";
@@ -21,14 +22,14 @@ interface HeaderProps {
 // Style.
 //
 
-const Layout = tw(Row)`
+const Layout = tiwi(Row)`
   px-6
   pt-6
   items-end
   gap-1
 `;
 
-const Title = tw(Text)`
+const Title = tiwi(Text)`
   grow
   pl-2
   text-2xl

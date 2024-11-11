@@ -1,8 +1,8 @@
 "use client";
 
-import {tw} from "@baqhub/ui/core/style.jsx";
 import {usePathname} from "next/navigation.js";
 import {FC, Fragment} from "react";
+import tiwi from "tiwi";
 import {DocsPageLight, DocsSubSectionLight} from "../../../../services/docs.js";
 import {Text} from "../../../global/style.jsx";
 import {DocsLeftNavMenuItem} from "./docsLeftNavMenuItem.jsx";
@@ -21,14 +21,14 @@ interface DocsLeftNavMenuProps {
 // Style.
 //
 
-const Menu = tw.div`
+const Menu = tiwi.div`
   flex
   flex-col
   px-8
   gap-2
 `;
 
-const SubSection = tw.div`
+const SubSection = tiwi.div`
   flex
   flex-col
   py-5
@@ -40,7 +40,7 @@ const SubSection = tw.div`
   dark:border-zinc-700
 `;
 
-const SubLinks = tw.div`
+const SubLinks = tiwi.div`
   flex
   flex-col
   gap-2.5
@@ -48,7 +48,7 @@ const SubLinks = tw.div`
   pl-2
 `;
 
-const SubSectionTitle = tw(Text)`
+const SubSectionTitle = tiwi(Text)`
   text-sm
   font-semibold
 `;

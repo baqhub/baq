@@ -1,5 +1,6 @@
-import {Column, tw} from "@baqhub/ui/core/style.jsx";
+import {Column} from "@baqhub/ui/core/style.jsx";
 import {FC} from "react";
+import tiwi from "tiwi";
 import {DocsPageFull} from "../../../../services/docs.js";
 import {Link} from "../../../global/link.jsx";
 
@@ -15,17 +16,17 @@ interface SubPagesProps {
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   py-4
   gap-3
 `;
 
-const SubPageLink = tw(Link)`
+const SubPageLink = tiwi(Link)`
   group
   block
 `;
 
-const SubPageLayout = tw(Column)`
+const SubPageLayout = tiwi(Column)`
   py-3
   px-4
   gap-1
@@ -43,14 +44,14 @@ const SubPageLayout = tw(Column)`
   dark:any-hover:group-active:bg-zinc-600
 `;
 
-const Title = tw.div`
+const Title = tiwi.div`
   font-medium
   text-xl
   text-amber-700
   dark:text-amber-500
 `;
 
-const Summary = tw.div`
+const Summary = tiwi.div`
   h-12
   sm:h-auto
   line-clamp-2

@@ -8,7 +8,8 @@ import {
   useEffect,
   useRef,
 } from "react";
-import {classForSize, tw, UISize} from "./style.js";
+import tiwi from "tiwi";
+import {UISize} from "./style.js";
 
 //
 // Props.
@@ -36,11 +37,14 @@ interface TextBoxProps {
 // Style.
 //
 
-const Input = tw.input`
+const Input = tiwi.input<UISize>`
   block
   py-[0.4375rem]
   px-2
-  [&.size-lg]:p-3
+
+  ${{
+    large: `p-3`,
+  }}
 
   bg-neutral-100
   focus:bg-white
@@ -156,6 +160,7 @@ export const TextBox = forwardRef<HTMLInputElement, TextBoxProps>(
     return (
       <Input
         ref={mergedRef}
+        variants={size}
         type="text"
         autoFocus={shouldAutofocus}
         placeholder={placeholder}
@@ -167,7 +172,6 @@ export const TextBox = forwardRef<HTMLInputElement, TextBoxProps>(
         aria-invalid={isInvalid}
         onFocus={onFocus}
         onBlur={onBlur}
-        className={classForSize(size)}
         {...buildVariantProps(variant)}
       />
     );

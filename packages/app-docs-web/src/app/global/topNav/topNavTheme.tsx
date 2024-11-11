@@ -1,14 +1,14 @@
 "use client";
 
-import {tw} from "@baqhub/ui/core/style.jsx";
 import {MoonIcon, SunIcon} from "@heroicons/react/24/solid";
 import {FC} from "react";
+import tiwi from "tiwi";
 
 //
 // Style.
 //
 
-const Layout = tw.button`
+const Layout = tiwi.button`
   shrink-0
   block
   p-0.5
@@ -20,16 +20,16 @@ const Layout = tw.button`
   dark:hover:text-amber-400
 `;
 
-const ThemeIcon = tw.div`
+const ThemeIcon = tiwi.div`
   w-[22px]
   h-[22px]
 `;
 
-const ThemeIconLight = tw(ThemeIcon)`
+const ThemeIconLight = tiwi(ThemeIcon)`
   dark:hidden
 `;
 
-const ThemeIconDark = tw(ThemeIcon)`
+const ThemeIconDark = tiwi(ThemeIcon)`
   hidden
   dark:block
 `;

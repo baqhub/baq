@@ -1,6 +1,7 @@
-import {Column, Row, tw} from "@baqhub/ui/core/style.jsx";
+import {Column, Row} from "@baqhub/ui/core/style.jsx";
 import {Metadata} from "next";
 import {FC} from "react";
+import tiwi from "tiwi";
 import IconRss from "../../docs/assets/iconRss.svg";
 import {blogPosts} from "../../services/blog.js";
 import {Text} from "../global/style.jsx";
@@ -10,7 +11,7 @@ import {BlogPostItem} from "./blogPostItem.jsx";
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   self-center
   w-full
   max-w-screen-md
@@ -20,7 +21,7 @@ const Layout = tw(Column)`
   sm:px-8
 `;
 
-const Header = tw(Row)`
+const Header = tiwi(Row)`
   items-center
   justify-center
   pt-16
@@ -34,13 +35,13 @@ const Header = tw(Row)`
   dark:border-zinc-950
 `;
 
-const HeaderTitle = tw(Text)`
+const HeaderTitle = tiwi(Text)`
   text-5xl
   sm:text-6xl
   font-bold
 `;
 
-const HeaderIconLink = tw.a`
+const HeaderIconLink = tiwi.a`
   block
   w-8
   h-8
@@ -49,7 +50,7 @@ const HeaderIconLink = tw.a`
   translate-y-[1px]
 `;
 
-const Posts = tw(Column)`
+const Posts = tiwi(Column)`
   py-14
   gap-12
 `;

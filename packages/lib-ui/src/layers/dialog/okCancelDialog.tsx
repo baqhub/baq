@@ -1,8 +1,9 @@
 import {Handler} from "@baqhub/sdk";
 import {FC, PropsWithChildren, ReactNode} from "react";
+import tiwi from "tiwi";
 import {Button} from "../../core/button.js";
 import {ButtonGroup} from "../../core/buttonGroup.js";
-import {FormColumn, Text, tw} from "../../core/style.js";
+import {FormColumn, Text} from "../../core/style.js";
 import {Dialog} from "./dialog.js";
 
 //
@@ -20,12 +21,12 @@ interface OkCancelDialogProps extends PropsWithChildren {
 // Style.
 //
 
-const Layout = tw(FormColumn)`
+const Layout = tiwi(FormColumn)`
   w-96
   gap-3
 `;
 
-const Title = tw(Text)`
+const Title = tiwi(Text)`
   text-2xl
   font-semibold
 `;

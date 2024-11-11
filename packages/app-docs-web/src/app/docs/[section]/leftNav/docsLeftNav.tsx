@@ -1,5 +1,6 @@
-import {Row, tw} from "@baqhub/ui/core/style.jsx";
+import {Row} from "@baqhub/ui/core/style.jsx";
 import {FC} from "react";
+import tiwi from "tiwi";
 import LogoSmall from "../../../../docs/assets/logoSmall.svg";
 import {SvgUniqueIds} from "../../../../helpers/svgUniqueIds.jsx";
 import {DocsSubSectionLight} from "../../../../services/docs.js";
@@ -19,7 +20,7 @@ interface DocsLeftNavProps {
 // Style.
 //
 
-const Layout = tw.div`
+const Layout = tiwi.div`
   hidden
   lg:block
 
@@ -29,7 +30,7 @@ const Layout = tw.div`
   w-64
 `;
 
-const Background = tw.div`
+const Background = tiwi.div`
   fixed
   -top-[10000px]
   -bottom-[10000px]
@@ -40,7 +41,7 @@ const Background = tw.div`
   dark:bg-zinc-900
 `;
 
-const Content = tw.div`
+const Content = tiwi.div`
   fixed
   top-0
   bottom-0
@@ -50,7 +51,7 @@ const Content = tw.div`
   w-64
 `;
 
-const Top = tw.div`
+const Top = tiwi.div`
   mx-8
 
   border-b
@@ -58,12 +59,12 @@ const Top = tw.div`
   dark:border-zinc-700
 `;
 
-const TopContent = tw(Row)`
+const TopContent = tiwi(Row)`
   h-16
   items-center
 `;
 
-const TitleLink = tw(Link)`
+const TitleLink = tiwi(Link)`
   py-1
 
   text-zinc-900
@@ -72,11 +73,11 @@ const TitleLink = tw(Link)`
   dark:hover:text-amber-400
 `;
 
-const TitleLogo = tw(LogoSmall)`
+const TitleLogo = tiwi(LogoSmall)`
   h-8
 `;
 
-const Menu = tw.div`
+const Menu = tiwi.div`
   grow
   pb-8
   overflow-y-auto

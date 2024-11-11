@@ -6,7 +6,8 @@ import {
   useEffect,
   useRef,
 } from "react";
-import {Column, tw} from "../../core/style.js";
+import tiwi from "tiwi";
+import {Column} from "../../core/style.js";
 import {useLayerContext} from "../layerContext.js";
 import {useLayerId} from "../layerHelpers.js";
 import {DialogContent} from "./dialogContent.js";
@@ -23,7 +24,7 @@ export interface DialogProps {
 // Style.
 //
 
-const Layout = tw.dialog`
+const Layout = tiwi.dialog`
   p-0
   bg-transparent
 
@@ -38,7 +39,7 @@ const Layout = tw.dialog`
   outline-none
 `;
 
-const ContentLayout = tw(Column)`
+const ContentLayout = tiwi(Column)`
   p-6
   sm:p-10
 `;

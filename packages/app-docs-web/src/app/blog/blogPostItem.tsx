@@ -1,5 +1,6 @@
-import {Column, Row, tw} from "@baqhub/ui/core/style.jsx";
+import {Column, Row} from "@baqhub/ui/core/style.jsx";
 import {FC} from "react";
+import tiwi from "tiwi";
 import {getImageAsync} from "../../helpers/fileHelpers.js";
 import {dateToString} from "../../helpers/stringHelpers.js";
 import {BlogPost} from "../../services/blog.js";
@@ -19,11 +20,11 @@ interface BlogPostItemProps {
 // Style.
 //
 
-const PostLink = tw(Link)`
+const PostLink = tiwi(Link)`
   block
 `;
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   group
   gap-5
   sm:gap-3
@@ -32,7 +33,7 @@ const Layout = tw(Column)`
   sm:items-center
 `;
 
-const PostImage = tw.div`
+const PostImage = tiwi.div`
   relative
   sm:w-60
   md:w-72
@@ -51,7 +52,7 @@ const PostImage = tw.div`
   select-none
 `;
 
-const PostImageBorder = tw.div`
+const PostImageBorder = tiwi.div`
   block
   absolute
   top-0
@@ -66,16 +67,16 @@ const PostImageBorder = tw.div`
   pointer-events-none
 `;
 
-const Details = tw(Column)`
+const Details = tiwi(Column)`
   px-2
 `;
 
-const Attributes = tw(Row)`
+const Attributes = tiwi(Row)`
   items-center
   gap-3
 `;
 
-const Category = tw.div`
+const Category = tiwi.div`
   text-xs
   leading-3
   font-medium
@@ -93,7 +94,7 @@ const Category = tw.div`
   dark:text-amber-400
 `;
 
-const Date = tw(TextSelect)`
+const Date = tiwi(TextSelect)`
   text-xs
   font-medium
   uppercase
@@ -102,7 +103,7 @@ const Date = tw(TextSelect)`
   dark:text-zinc-400
 `;
 
-const Title = tw(TextSelect)`
+const Title = tiwi(TextSelect)`
   mt-2
 
   text-3xl
@@ -115,7 +116,7 @@ const Title = tw(TextSelect)`
   duration-150
 `;
 
-const Subtitle = tw(TextSelect)`
+const Subtitle = tiwi(TextSelect)`
   mt-1
   md:mt-2
 
@@ -126,14 +127,14 @@ const Subtitle = tw(TextSelect)`
   dark:text-zinc-400
 `;
 
-const PostAuthor = tw(Row)`
+const PostAuthor = tiwi(Row)`
   mt-2
   md:mt-3
   items-center
   gap-2
 `;
 
-const AuthorImage = tw.div`
+const AuthorImage = tiwi.div`
   relative
   w-8
   h-8
@@ -145,7 +146,7 @@ const AuthorImage = tw.div`
   dark:bg-zinc-950
 `;
 
-const AuthorImageBorder = tw.div`
+const AuthorImageBorder = tiwi.div`
   block
   absolute
   top-0
@@ -160,7 +161,7 @@ const AuthorImageBorder = tw.div`
   pointer-events-none
 `;
 
-const AuthorName = tw(TextSelect)`
+const AuthorName = tiwi(TextSelect)`
   text-zinc-600
   dark:text-zinc-300
 `;

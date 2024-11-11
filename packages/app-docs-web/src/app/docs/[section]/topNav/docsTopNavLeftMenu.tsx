@@ -1,7 +1,7 @@
 "use client";
 
-import {tw} from "@baqhub/ui/core/style.jsx";
 import {FC, MouseEvent, useEffect} from "react";
+import tiwi from "tiwi";
 import {DocsSubSectionLight} from "../../../../services/docs.js";
 import {DocsLeftNavMenu} from "../leftNav/docsLeftNavMenu.jsx";
 
@@ -19,7 +19,7 @@ interface DocsTopNavLeftMenuProps {
 // Style.
 //
 
-const Layout = tw.div`
+const Layout = tiwi.div`
   fixed
   left-0
   top-0
@@ -30,7 +30,7 @@ const Layout = tw.div`
   dark:bg-black/70
 `;
 
-const Content = tw.div`
+const Content = tiwi.div`
   w-64
   h-full
   pt-3

@@ -1,10 +1,11 @@
 import {IconButton} from "@baqhub/ui/core/iconButton.js";
-import {Column, Grid, Row, tw} from "@baqhub/ui/core/style.js";
+import {Column, Grid, Row} from "@baqhub/ui/core/style.js";
 import {OkCancelDialog} from "@baqhub/ui/layers/dialog/okCancelDialog.js";
 import {DropdownItem} from "@baqhub/ui/layers/dropdown/dropdownItem.js";
 import {useDropdown} from "@baqhub/ui/layers/dropdown/useDropdown.js";
 import {EllipsisHorizontalIcon} from "@heroicons/react/20/solid";
 import {FC, useRef, useState} from "react";
+import tiwi from "tiwi";
 import {MessageRecordKey} from "../../../baq/messageRecord.js";
 import {useMessageState} from "../../../state/messageState.js";
 import {MessageContent} from "./messageContent.js";
@@ -21,7 +22,7 @@ interface ConversationMessageProps {
 // Style.
 //
 
-const LayoutBase = tw(Row)`
+const LayoutBase = tiwi(Row)`
   group
 
   px-3
@@ -31,39 +32,39 @@ const LayoutBase = tw(Row)`
   items-center
 `;
 
-const SelfLayout = tw(LayoutBase)`
+const SelfLayout = tiwi(LayoutBase)`
   peer/self
   adjacent-peer/remote:pt-3
   flex-row-reverse
 `;
 
-const RemoteLayout = tw(LayoutBase)`
+const RemoteLayout = tiwi(LayoutBase)`
   peer/remote
   adjacent-peer/self:pt-3
 `;
 
-const MessageBase = tw(Column)`
+const MessageBase = tiwi(Column)`
   rounded-xl
 `;
 
-const SelfMessage = tw(MessageBase)`
+const SelfMessage = tiwi(MessageBase)`
   peer/self
   bg-amber-300
 `;
 
-const RemoteMessage = tw(MessageBase)`
+const RemoteMessage = tiwi(MessageBase)`
   peer/remote
   bg-white
 `;
 
-const ButtonLayout = tw(Grid)`
+const ButtonLayout = tiwi(Grid)`
   shrink-0
   invisible
   group-hover:visible
   aria-expanded:visible
 `;
 
-const Spacer = tw.div`
+const Spacer = tiwi.div`
   grow
 `;
 
