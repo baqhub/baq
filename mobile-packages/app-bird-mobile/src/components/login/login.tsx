@@ -5,7 +5,7 @@ import {
   UnauthenticatedState,
 } from "@baqhub/sdk-react";
 import {openAuthSessionAsync} from "expo-web-browser";
-import {FC, ReactNode, useCallback, useEffect, useRef, useState} from "react";
+import {FC, useCallback, useEffect, useRef, useState} from "react";
 import {
   Image,
   KeyboardAvoidingView,
@@ -40,25 +40,9 @@ const SafeArea = tiwi(SafeAreaView)`
   dark:bg-neutral-950
 `;
 
-const CenteredProxy: FC<{className?: string; children?: ReactNode}> = ({
-  className,
-  children,
-}) => {
-  console.log("CenteredProxy", className);
-  return <Centered className={className}>{children}</Centered>;
-};
-
-const Layout = tiwi(CenteredProxy)`
+const Layout = tiwi(Centered)`
   gap-16
 `;
-
-const ViewProxy: FC<{className?: string; children?: ReactNode}> = ({
-  className,
-  children,
-}) => {
-  console.log("View", className);
-  return <View className={className}>{children}</View>;
-};
 
 const EntityLayout = tiwi(View)`
   self-stretch
