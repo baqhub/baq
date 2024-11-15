@@ -2,7 +2,8 @@ import {Handler, HandlerOf} from "@baqhub/sdk";
 import {FC, useCallback, useEffect, useRef, useState} from "react";
 import {EnterKeyHintTypeOptions, TextInput} from "react-native";
 import {amber} from "tailwindcss/colors";
-import {Row, tw} from "../../helpers/style";
+import tiwi from "tiwi";
+import {Row} from "../../helpers/style";
 
 //
 // Props.
@@ -24,17 +25,17 @@ interface TextBoxProps {
 // Style.
 //
 
-const Layout = tw(Row)`
+const Layout = tiwi(Row)`
   flex-1
 `;
 
-const HiddenInput = tw(TextInput)`
+const HiddenInput = tiwi(TextInput)`
   w-0
   h-0
   opacity-0
 `;
 
-const Input = tw(TextInput)`
+const Input = tiwi(TextInput)`
   flex-1
   px-4
   pb-[2px]

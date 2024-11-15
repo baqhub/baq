@@ -2,7 +2,8 @@ import {Handler} from "@baqhub/sdk";
 import {DataProvider, Renderer} from "@baqhub/sdk-react";
 import {ReactElement, useCallback, useMemo} from "react";
 import {FlatList, ListRenderItemInfo} from "react-native";
-import {Column, tw} from "../../helpers/style";
+import tiwi from "tiwi";
+import {Column} from "../../helpers/style";
 import {LoadingMore} from "./loadingMore";
 
 //
@@ -24,7 +25,7 @@ interface PostsProps<T> {
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   flex-1
 `;
 

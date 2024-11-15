@@ -1,5 +1,6 @@
-import {Column, Row, Text, tw} from "@baqhub/ui/core/style.js";
+import {Column, Row, Text} from "@baqhub/ui/core/style.js";
 import {FC, PropsWithChildren} from "react";
+import tiwi from "tiwi";
 import {Avatar} from "../shared/avatar.js";
 
 //
@@ -16,34 +17,34 @@ interface ProfileHeaderProps extends PropsWithChildren {
 // Style.
 //
 
-const Profile = tw(Column)`
+const Profile = tiwi(Column)`
   py-10
   px-3
 
   gap-6
 `;
 
-const ProfileTop = tw(Row)`
+const ProfileTop = tiwi(Row)`
   items-center
 `;
 
-const ProfileTopLeft = tw(Column)`
+const ProfileTopLeft = tiwi(Column)`
   grow
 `;
 
-const ProfileName = tw(Text)`
+const ProfileName = tiwi(Text)`
   text-2xl
   font-semibold
 `;
 
-const ProfileEntity = tw(Text)`
+const ProfileEntity = tiwi(Text)`
   text-md
 `;
 
-const ProfileTopAvatar = tw(Column)`
+const ProfileTopAvatar = tiwi(Column)`
 `;
 
-const ProfileBio = tw(Text)`
+const ProfileBio = tiwi(Text)`
   text-md
 `;
 

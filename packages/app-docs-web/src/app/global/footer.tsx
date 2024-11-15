@@ -1,15 +1,16 @@
-import {Column, Row, tw} from "@baqhub/ui/core/style.jsx";
+import {Column, Row} from "@baqhub/ui/core/style.jsx";
 import {DiscordIcon} from "@baqhub/ui/icons/filled/discord.jsx";
 import {GithubIcon} from "@baqhub/ui/icons/filled/github.jsx";
 import {EnvelopeIcon} from "@heroicons/react/24/solid";
 import {FC} from "react";
+import tiwi from "tiwi";
 import {Text} from "./style.jsx";
 
 //
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   py-6
 
   border-t
@@ -17,24 +18,24 @@ const Layout = tw(Column)`
   dark:border-zinc-700
 `;
 
-const Content = tw(Row)`
+const Content = tiwi(Row)`
   gap-3
   items-center
 `;
 
-const Copy = tw(Text)`
+const Copy = tiwi(Text)`
   flex-1
   text-md
   text-zinc-400
   dark:text-zinc-500
 `;
 
-const CopySm = tw.span`
+const CopySm = tiwi.span`
   hidden
   sm:inline
 `;
 
-const SayHi = tw(Text)`
+const SayHi = tiwi(Text)`
   hidden
   sm:block
 
@@ -43,7 +44,7 @@ const SayHi = tw(Text)`
   dark:text-zinc-500
 `;
 
-const ExternalLink = tw.a`
+const ExternalLink = tiwi.a`
   shrink-0
   block
   p-0.5
@@ -54,7 +55,7 @@ const ExternalLink = tw.a`
   dark:hover:text-zinc-300
 `;
 
-const ExternalLinkIcon = tw.div`
+const ExternalLinkIcon = tiwi.div`
   w-5
   h-5
 `;

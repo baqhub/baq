@@ -1,5 +1,6 @@
-import {Column, tw} from "@baqhub/ui/core/style.jsx";
+import {Column} from "@baqhub/ui/core/style.jsx";
 import {FC, PropsWithChildren, ReactNode} from "react";
+import tiwi from "tiwi";
 import {TextSelect} from "../global/style.jsx";
 
 //
@@ -15,7 +16,7 @@ interface HomeCardProps extends PropsWithChildren {
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   p-6
   gap-4
   items-start
@@ -25,30 +26,30 @@ const Layout = tw(Column)`
   dark:bg-zinc-900
 `;
 
-const IconLayout = tw.div`
+const IconLayout = tiwi.div`
   p-1.5
   rounded-lg
   bg-amber-400/40
   dark:bg-amber-950
 `;
 
-const Icon = tw.div`
+const Icon = tiwi.div`
   h-7
   w-7
   text-amber-700
   dark:text-amber-500
 `;
 
-const Content = tw(Column)`
+const Content = tiwi(Column)`
   gap-2
 `;
 
-const Title = tw(TextSelect)`
+const Title = tiwi(TextSelect)`
   text-lg
   font-medium
 `;
 
-const Description = tw(TextSelect)`
+const Description = tiwi(TextSelect)`
   text-zinc-500
   dark:text-zinc-400
 `;

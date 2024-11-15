@@ -1,7 +1,8 @@
 import {Handler} from "@baqhub/sdk";
 import {FC, PropsWithChildren} from "react";
 import {Pressable} from "react-native";
-import {Text, tw} from "../../helpers/style";
+import tiwi from "tiwi";
+import {Text} from "../../helpers/style";
 
 //
 // Props.
@@ -15,7 +16,7 @@ interface TermsBackButtonProps extends PropsWithChildren {
 // Style.
 //
 
-const Layout = tw(Pressable)`
+const Layout = tiwi(Pressable)`
   self-center
   group
   flex
@@ -23,7 +24,7 @@ const Layout = tw(Pressable)`
   p-1
 `;
 
-const ButtonText = tw(Text)`
+const ButtonText = tiwi(Text)`
   font-medium
   text-base
 

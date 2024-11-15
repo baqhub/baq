@@ -1,5 +1,6 @@
-import {Row, Text, tw} from "@baqhub/ui/core/style.js";
+import {Row, Text} from "@baqhub/ui/core/style.js";
 import {FC} from "react";
+import tiwi from "tiwi";
 
 //
 // Props.
@@ -13,14 +14,14 @@ interface ConversationHeaderProps {
 // Style.
 //
 
-const Layout = tw(Row)`
+const Layout = tiwi(Row)`
   sticky
   top-0
 
   bg-neutral-200
 `;
 
-const Title = tw(Text)`
+const Title = tiwi(Text)`
   px-3
   pt-6
   pb-3

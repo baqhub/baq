@@ -1,5 +1,5 @@
-import {tw} from "@baqhub/ui/core/style.jsx";
 import {FC, PropsWithChildren} from "react";
+import tiwi from "tiwi";
 
 //
 // Props.
@@ -13,7 +13,7 @@ interface TopNavLinkProps extends PropsWithChildren {
 // Style.
 //
 
-const Link = tw.a`
+const Link = tiwi.a`
   shrink-0
   block
   p-0.5
@@ -24,7 +24,7 @@ const Link = tw.a`
   dark:hover:text-amber-400
 `;
 
-const LinkIcon = tw.div`
+const LinkIcon = tiwi.div`
   w-5
   h-5
 `;

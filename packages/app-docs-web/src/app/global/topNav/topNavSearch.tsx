@@ -1,16 +1,17 @@
 "use client";
 
-import {ButtonRow, Row, tw} from "@baqhub/ui/core/style.jsx";
+import {ButtonRow, Row} from "@baqhub/ui/core/style.jsx";
 import {DocSearchModal, useDocSearchKeyboardEvents} from "@docsearch/react";
 import {MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 import {FC, useCallback, useEffect, useState} from "react";
 import {createPortal} from "react-dom";
+import tiwi from "tiwi";
 
 //
 // Style.
 //
 
-const Layout = tw(Row)`
+const Layout = tiwi(Row)`
   shrink-0
   grow
 
@@ -18,13 +19,13 @@ const Layout = tw(Row)`
   lg:justify-start
 `;
 
-const SmallSearch = tw(Row)`
+const SmallSearch = tiwi(Row)`
   items-center
   sm:gap-2
   lg:hidden
 `;
 
-const Separator = tw.div`
+const Separator = tiwi.div`
   w-1.5
   h-1.5
   mx-2
@@ -34,7 +35,7 @@ const Separator = tw.div`
   dark:bg-zinc-600
 `;
 
-const SmallSearchButton = tw.button`
+const SmallSearchButton = tiwi.button`
   mx-1.5
   shrink-0
   block
@@ -46,17 +47,17 @@ const SmallSearchButton = tw.button`
   dark:hover:text-amber-400
 `;
 
-const SearchIcon = tw.div`
+const SearchIcon = tiwi.div`
   w-[21px]
   h-[21px]
 `;
 
-const LargeSearch = tw(Row)`
+const LargeSearch = tiwi(Row)`
   hidden
   lg:flex
 `;
 
-const LargeSearchButton = tw(ButtonRow)`
+const LargeSearchButton = tiwi(ButtonRow)`
   px-2
 
   rounded-lg
@@ -77,24 +78,24 @@ const LargeSearchButton = tw(ButtonRow)`
   transition-shadow
 `;
 
-const Placeholder = tw(Row)`
+const Placeholder = tiwi(Row)`
   px-1
   py-2
   gap-1.5
   items-center
 `;
 
-const PlaceholderSearchIcon = tw.div`
+const PlaceholderSearchIcon = tiwi.div`
   w-[18px]
   h-[18px]
 `;
 
-const PlaceholderSearchText = tw.div`
+const PlaceholderSearchText = tiwi.div`
   text-sm
   pr-14
 `;
 
-const SearchKey = tw.div`
+const SearchKey = tiwi.div`
   px-1
   py-0.5
 

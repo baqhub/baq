@@ -1,11 +1,11 @@
-import {tw} from "@baqhub/ui/core/style.jsx";
+import tiwi from "tiwi";
 
-export const Text = tw.div`
+export const Text = tiwi.div`
   text-zinc-900
   dark:text-white
   select-none
 `;
 
-export const TextSelect = tw(Text)`
+export const TextSelect = tiwi(Text)`
   select-text
 `;

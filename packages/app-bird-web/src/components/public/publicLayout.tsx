@@ -1,6 +1,7 @@
-import {Column, Row, tw} from "@baqhub/ui/core/style.js";
+import {Column, Row} from "@baqhub/ui/core/style.js";
 import {Outlet, createLazyRoute} from "@tanstack/react-router";
 import {FC} from "react";
+import tiwi from "tiwi";
 import {LegalMdx} from "./legalMdx.js";
 import {PublicHeader} from "./publicHeader.js";
 
@@ -8,11 +9,11 @@ import {PublicHeader} from "./publicHeader.js";
 // Style.
 //
 
-const Layout = tw(Row)`
+const Layout = tiwi(Row)`
   justify-center
 `;
 
-const Center = tw(Column)`
+const Center = tiwi(Column)`
   flex-1
   max-w-[936px]
 

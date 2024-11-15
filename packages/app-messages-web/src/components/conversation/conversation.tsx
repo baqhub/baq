@@ -1,7 +1,8 @@
 import {Handler} from "@baqhub/sdk";
 import {DataProvider} from "@baqhub/sdk-react";
-import {Grid, Row, tw} from "@baqhub/ui/core/style.js";
+import {Grid, Row} from "@baqhub/ui/core/style.js";
 import {FC, Suspense, useCallback, useDeferredValue, useRef} from "react";
+import tiwi from "tiwi";
 import {ConversationRecordKey} from "../../baq/conversationRecord.js";
 import {MessageRecordKey} from "../../baq/messageRecord.js";
 import {useNonEmptyConversationState} from "../../state/conversationState.js";
@@ -23,7 +24,7 @@ interface ConversationProps {
 // Style.
 //
 
-const Layout = tw(Row)`
+const Layout = tiwi(Row)`
   relative
   min-h-0
   overflow-auto
@@ -33,7 +34,7 @@ const Layout = tw(Row)`
   bg-neutral-200
 `;
 
-const ConversationLayout = tw(Grid)`
+const ConversationLayout = tiwi(Grid)`
   grow
   max-w-lg
   min-h-full

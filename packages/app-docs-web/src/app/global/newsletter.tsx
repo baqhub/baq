@@ -1,8 +1,9 @@
 "use client";
 
-import {Column, Row, tw} from "@baqhub/ui/core/style.jsx";
+import {Column, Row} from "@baqhub/ui/core/style.jsx";
 import {ArrowRightIcon, RssIcon} from "@heroicons/react/20/solid";
 import {FC, FormEvent} from "react";
+import tiwi from "tiwi";
 import {Text} from "./style.jsx";
 
 //
@@ -19,7 +20,7 @@ interface NewsletterProps {
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   p-5
   gap-3
 
@@ -32,33 +33,33 @@ const Layout = tw(Column)`
   rounded-xl
 `;
 
-const Left = tw(Column)``;
+const Left = tiwi(Column)``;
 
-const Title = tw(Row)`
+const Title = tiwi(Row)`
   items-center
   gap-1.5
 `;
 
-const TitleText = tw(Text)`
+const TitleText = tiwi(Text)`
   text-lg
   font-bold
 `;
 
-const TitleIcon = tw.div`
+const TitleIcon = tiwi.div`
   mb-0.5
   h-6
   w-6
   text-amber-500
 `;
 
-const SubTitle = tw(Text)`
+const SubTitle = tiwi(Text)`
   mt-1
   text-sm
   text-zinc-500
   dark:text-zinc-400
 `;
 
-const Form = tw.form`
+const Form = tiwi.form`
   group
 
   sm:data-[variant=wide]:w-52
@@ -76,7 +77,7 @@ const Form = tw.form`
   dark:focus-within:border-amber-500
 `;
 
-const FormInput = tw.input`
+const FormInput = tiwi.input`
   block
   flex-1
   w-0
@@ -96,7 +97,7 @@ const FormInput = tw.input`
   outline-none
 `;
 
-const FormSubmit = tw.button`
+const FormSubmit = tiwi.button`
   shrink-0
   p-0.5
 
@@ -107,7 +108,7 @@ const FormSubmit = tw.button`
   dark:group-focus-within:hover:bg-amber-400
 `;
 
-const FormSubmitIcon = tw(Text)`
+const FormSubmitIcon = tiwi(Text)`
   w-5
   h-5
   text-white

@@ -1,8 +1,9 @@
 import {Handler, HandlerOf} from "@baqhub/sdk";
 import {DataProvider} from "@baqhub/sdk-react";
 import {InfiniteList} from "@baqhub/ui/core/infiniteList.js";
-import {Column, tw} from "@baqhub/ui/core/style.js";
+import {Column} from "@baqhub/ui/core/style.js";
 import {FC, RefObject, useEffect, useRef} from "react";
+import tiwi from "tiwi";
 import {ConversationRecordKey} from "../../baq/conversationRecord.js";
 import {MessageRecordKey} from "../../baq/messageRecord.js";
 import {ConversationLoadingMore} from "./conversationLoadingMore.js";
@@ -25,7 +26,7 @@ interface ConversationMessagesProps {
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   py-3
   justify-end
 `;

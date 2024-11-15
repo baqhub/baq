@@ -1,10 +1,11 @@
 import {Handler, noop} from "@baqhub/sdk";
-import {Column, Row, Text, tw} from "@baqhub/ui/core/style.js";
+import {Column, Row, Text} from "@baqhub/ui/core/style.js";
 import {MixedDateFormatter} from "@baqhub/ui/date/mixedDateFormatter.js";
 import {OkCancelDialog} from "@baqhub/ui/layers/dialog/okCancelDialog.js";
 import {DropdownItem} from "@baqhub/ui/layers/dropdown/dropdownItem.js";
 import {useDropdown} from "@baqhub/ui/layers/dropdown/useDropdown.js";
 import {FC, MouseEvent, useState} from "react";
+import tiwi from "tiwi";
 
 //
 // Props.
@@ -23,7 +24,7 @@ interface ConversationItemBaseProps {
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   peer
   group
   relative
@@ -48,11 +49,11 @@ const Layout = tw(Column)`
   first:after:hidden
 `;
 
-const Header = tw(Row)`
+const Header = tiwi(Row)`
   gap-2
 `;
 
-const Title = tw(Text)`
+const Title = tiwi(Text)`
   grow
   font-bold
   truncate
@@ -60,23 +61,23 @@ const Title = tw(Text)`
   group-aria-selected:text-white
 `;
 
-const SecondaryText = tw(Text)`
+const SecondaryText = tiwi(Text)`
   text-neutral-500
 
   group-aria-selected:text-white
   group-aria-selected:opacity-80
 `;
 
-const Date = tw(SecondaryText)`
+const Date = tiwi(SecondaryText)`
   shrink-0
 `;
 
-const LastMessage = tw(SecondaryText)`
+const LastMessage = tiwi(SecondaryText)`
   h-10
   line-clamp-2
 `;
 
-const LastMessageEmpty = tw(SecondaryText)`
+const LastMessageEmpty = tiwi(SecondaryText)`
   h-10
   italic
   text-neutral-400

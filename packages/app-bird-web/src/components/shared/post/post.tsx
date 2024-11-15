@@ -1,5 +1,5 @@
 import {usePostState} from "@baqhub/bird-shared/state/postState.js";
-import {ButtonRow, Column, Row, TextSelect, tw} from "@baqhub/ui/core/style.js";
+import {ButtonRow, Column, Row, TextSelect} from "@baqhub/ui/core/style.js";
 import {RelativeDateFormatter} from "@baqhub/ui/date/relativeDateFormatter.js";
 import {
   ArrowPathRoundedSquareIcon,
@@ -9,6 +9,7 @@ import {
 } from "@heroicons/react/24/outline";
 import {Link} from "@tanstack/react-router";
 import {FC} from "react";
+import tiwi from "tiwi";
 import {Avatar} from "../avatar.js";
 import {PostText} from "./postText.js";
 
@@ -22,7 +23,7 @@ interface PostProps extends ReturnType<typeof usePostState> {}
 // Style.
 //
 
-const Layout = tw(Row)`
+const Layout = tiwi(Row)`
   mx-3
   py-4
   gap-3
@@ -37,12 +38,12 @@ const avatarLinkStyle = `
   mt-0.5
 `;
 
-const Content = tw(Column)`
+const Content = tiwi(Column)`
   grow
   gap-1
 `;
 
-const InfoRow = tw(Row)``;
+const InfoRow = tiwi(Row)``;
 
 const userLinkStyle = `
   group
@@ -54,25 +55,25 @@ const userLinkStyle = `
   select-auto
 `;
 
-const UserLinkName = tw.span`
+const UserLinkName = tiwi.span`
   font-semibold
   group-hover:underline
   underline-offset-2
 `;
 
-const UserLinkEntity = tw.span`
+const UserLinkEntity = tiwi.span`
   text-sm
   text-neutral-400
   dark:text-neutral-500
 `;
 
-const BodyText = tw(TextSelect)`
+const BodyText = tiwi(TextSelect)`
   text-base
   font-light
   whitespace-pre-wrap
 `;
 
-const DateText = tw(TextSelect)`
+const DateText = tiwi(TextSelect)`
   grow
 
   text-right
@@ -81,11 +82,11 @@ const DateText = tw(TextSelect)`
   dark:text-neutral-500
 `;
 
-const Actions = tw(Row)`
+const Actions = tiwi(Row)`
   -mx-2
 `;
 
-const ActionButton = tw(ButtonRow)`
+const ActionButton = tiwi(ButtonRow)`
   [&_svg]:w-5
   [&_svg]:h-5
 

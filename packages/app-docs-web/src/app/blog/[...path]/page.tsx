@@ -1,4 +1,4 @@
-import {Column, tw} from "@baqhub/ui/core/style.jsx";
+import {Column} from "@baqhub/ui/core/style.jsx";
 import {MDXComponents} from "mdx/types.js";
 import {Metadata} from "next";
 import {OpenGraph} from "next/dist/lib/metadata/types/opengraph-types.js";
@@ -6,6 +6,7 @@ import {Twitter} from "next/dist/lib/metadata/types/twitter-types.js";
 import {ImageProps} from "next/image.js";
 import {FC, ReactNode} from "react";
 import {onlyText} from "react-children-utilities";
+import tiwi from "tiwi";
 import {getImageAsync} from "../../../helpers/fileHelpers.js";
 import {findHeaders} from "../../../helpers/mdxHelpers.jsx";
 import {slugify} from "../../../helpers/stringHelpers.js";
@@ -54,14 +55,14 @@ export async function generateStaticParams(): Promise<BlogPostPageParams[]> {
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   self-center
   w-full
   max-w-screen-sm
   min-w-0
 `;
 
-const PostContent = tw.div`
+const PostContent = tiwi.div`
   min-w-0
   pt-2
   sm:pt-9
@@ -70,7 +71,7 @@ const PostContent = tw.div`
   md:px-0
 `;
 
-const NewsletterLayout = tw(Column)`
+const NewsletterLayout = tiwi(Column)`
   mt-9
   px-6
   sm:px-8
@@ -79,7 +80,7 @@ const NewsletterLayout = tw(Column)`
   sm:items-center
 `;
 
-const FooterLayout = tw(Column)`
+const FooterLayout = tiwi(Column)`
   mt-12
   px-6
   sm:px-8

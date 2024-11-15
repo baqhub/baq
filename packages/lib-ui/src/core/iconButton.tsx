@@ -1,6 +1,7 @@
 import {Handler} from "@baqhub/sdk";
 import {PropsWithChildren, forwardRef} from "react";
-import {ButtonRow, UISize, classForSize, tw} from "./style.js";
+import tiwi from "tiwi";
+import {ButtonRow, UISize} from "./style.js";
 
 //
 // Props.
@@ -20,7 +21,7 @@ interface IconButtonProps extends PropsWithChildren {
 // Style.
 //
 
-const Layout = tw(ButtonRow)`
+const Layout = tiwi(ButtonRow)<IconButtonVariant>`
   shrink-0
   p-1.5
 
@@ -36,19 +37,21 @@ const Layout = tw(ButtonRow)`
   dark:enabled:aria-expanded:bg-white/10
   dark:enabled:any-hover:aria-expanded:bg-white/10
 
-  data-[variant=normal]:rounded-lg
-  data-[variant=circle]:rounded-full
+  rounded-lg
+  ${{
+    circle: `rounded-full`,
+  }}
 
   text-neutral-900
   dark:text-white
   disabled:text-opacity-60
 `;
 
-const Content = tw.div`
-  w-5
-  h-5
-  [&.size-md]:w-6
-  [&.size-md]:h-6
+const Content = tiwi.div<UISize>`
+  size-5
+  ${{
+    medium: `size-6`,
+  }}
 `;
 
 //
@@ -63,12 +66,11 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         ref={ref}
         type="button"
         disabled={isDisabled}
-        data-variant={variant || "normal"}
+        variants={variant}
         aria-expanded={isPressed}
         onClick={onClick}
-        className={classForSize(size)}
       >
-        <Content className={classForSize(size)}>{children}</Content>
+        <Content variants={size}>{children}</Content>
       </Layout>
     );
   }

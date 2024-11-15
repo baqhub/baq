@@ -1,7 +1,7 @@
-import {tw} from "@baqhub/ui/core/style.jsx";
 import isString from "lodash/isString.js";
 import {ImageProps} from "next/image.js";
 import {FC} from "react";
+import tiwi from "tiwi";
 import {
   getImageAsync,
   tryGetImageDarkAsync,
@@ -13,7 +13,7 @@ import {isServerRendering} from "../serverRender.js";
 // Style.
 //
 
-const Layout = tw.span`
+const Layout = tiwi.span`
   relative
   inline-block
   rounded-xl
@@ -21,7 +21,7 @@ const Layout = tw.span`
   [&_>_img]:min-w-full
 `;
 
-const Border = tw.span`
+const Border = tiwi.span`
   block
   absolute
   top-0

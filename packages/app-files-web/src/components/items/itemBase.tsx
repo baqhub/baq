@@ -1,7 +1,8 @@
 import {Handler} from "@baqhub/sdk";
-import {ButtonRow, Row, Text, tw} from "@baqhub/ui/core/style.js";
+import {ButtonRow, Row, Text} from "@baqhub/ui/core/style.js";
 import {useDropdown} from "@baqhub/ui/layers/dropdown/useDropdown.js";
 import {FC, PropsWithChildren, ReactNode} from "react";
+import tiwi from "tiwi";
 import {FileRecordKey} from "../../baq/fileRecord.js";
 import {FolderRecordKey} from "../../baq/folderRecord.js";
 import {ItemActionsButton} from "./itemActionsButton.js";
@@ -22,14 +23,14 @@ interface ItemBaseProps extends PropsWithChildren {
 // Style.
 //
 
-const Layout = tw(Row)`
+const Layout = tiwi(Row)`
   group
   relative
   z-0
   gap-2
 `;
 
-const ItemButton = tw(ButtonRow)`
+const ItemButton = tiwi(ButtonRow)`
   z-10
   peer
   grow
@@ -39,21 +40,21 @@ const ItemButton = tw(ButtonRow)`
   items-center
 `;
 
-const Icon = tw.div`
+const Icon = tiwi.div`
   shrink-0
   w-6
   h-6
   text-neutral-900
 `;
 
-const Label = tw(Text)`
+const Label = tiwi(Text)`
   grow
   text-left
   text-md
   truncate
 `;
 
-const ActionButtons = tw(Row)`
+const ActionButtons = tiwi(Row)`
   z-10
   shrink-0
 
@@ -64,7 +65,7 @@ const ActionButtons = tw(Row)`
   p-1
 `;
 
-const Background = tw.div`
+const Background = tiwi.div`
   absolute
   z-0
   top-0

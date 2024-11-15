@@ -1,8 +1,8 @@
 "use client";
 
-import {tw} from "@baqhub/ui/core/style.jsx";
 import {usePathname} from "next/navigation.js";
 import type {FC, PropsWithChildren} from "react";
+import tiwi from "tiwi";
 import {Link} from "../link.jsx";
 
 //
@@ -17,7 +17,7 @@ interface TopNavItemProps extends PropsWithChildren {
 // Style.
 //
 
-const NavLink = tw(Link)`
+const NavLink = tiwi(Link)`
   px-2.5
   py-1.5
 

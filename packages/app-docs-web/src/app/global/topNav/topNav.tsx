@@ -1,10 +1,11 @@
 "use client";
 
-import {Column, Row, tw} from "@baqhub/ui/core/style.jsx";
+import {Column, Row} from "@baqhub/ui/core/style.jsx";
 import {DiscordIcon} from "@baqhub/ui/icons/filled/discord.jsx";
 import {GithubIcon} from "@baqhub/ui/icons/filled/github.jsx";
 import {usePathname} from "next/navigation.js";
 import type {FC} from "react";
+import tiwi from "tiwi";
 import LogoSmall from "../../../docs/assets/logoSmall.svg";
 import {SvgUniqueIds} from "../../../helpers/svgUniqueIds.jsx";
 import {Link} from "../link.jsx";
@@ -17,13 +18,13 @@ import {TopNavTheme} from "./topNavTheme.jsx";
 // Style.
 //
 
-const Layout = tw.div`
+const Layout = tiwi.div`
   relative
   w-full
   h-[calc(4rem_+_1px)]
 `;
 
-const Content = tw(Column)`
+const Content = tiwi(Column)`
   lg:fixed
   w-full
   z-10
@@ -43,7 +44,7 @@ const Content = tw(Column)`
   dark:bg-zinc-800
 `;
 
-const Center = tw(Row)`
+const Center = tiwi(Row)`
   w-full
   max-w-screen-2xl
   h-16
@@ -55,7 +56,7 @@ const Center = tw(Row)`
   sm:gap-2
 `;
 
-const LeftNavSpacer = tw.div`
+const LeftNavSpacer = tiwi.div`
   hidden
   lg:block
   w-64
@@ -64,7 +65,7 @@ const LeftNavSpacer = tw.div`
   xl:mr-5
 `;
 
-const Title = tw(Row)`
+const Title = tiwi(Row)`
   shrink-0
   py-1
   px-3
@@ -74,7 +75,7 @@ const Title = tw(Row)`
   dark:text-white
 `;
 
-const TitleLink = tw(Link)`
+const TitleLink = tiwi(Link)`
   shrink-0
   py-1
   px-3
@@ -85,24 +86,24 @@ const TitleLink = tw(Link)`
   dark:hover:text-amber-400
 `;
 
-const DocsTitleLink = tw(TitleLink)`
+const DocsTitleLink = tiwi(TitleLink)`
   lg:hidden
 `;
 
-const DefaultTitleLink = tw(TitleLink)`
+const DefaultTitleLink = tiwi(TitleLink)`
   lg:mr-6
 `;
 
-const TitleLogo = tw(LogoSmall)`
+const TitleLogo = tiwi(LogoSmall)`
   h-8
 `;
 
-const Items = tw(Row)`
+const Items = tiwi(Row)`
   px-0.5
   sm:gap-2
 `;
 
-const Links = tw(Row)`
+const Links = tiwi(Row)`
   hidden
   sm:flex
 
@@ -110,7 +111,7 @@ const Links = tw(Row)`
   gap-4
 `;
 
-const Separator = tw.div`
+const Separator = tiwi.div`
   hidden
   sm:block
 

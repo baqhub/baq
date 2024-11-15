@@ -1,8 +1,9 @@
 import {usePostComposerState} from "@baqhub/bird-shared/state/postComposerState.js";
 import {useConstant} from "@baqhub/sdk-react";
 import {Button} from "@baqhub/ui/core/button.js";
-import {Column, Grid, tw} from "@baqhub/ui/core/style.js";
+import {Column, Grid} from "@baqhub/ui/core/style.js";
 import {FC, KeyboardEvent, useEffect, useRef} from "react";
+import tiwi from "tiwi";
 import {Avatar} from "../../shared/avatar.js";
 
 //
@@ -17,7 +18,7 @@ interface PostComposerProps {
 // Style.
 //
 
-const Layout = tw(Grid)`
+const Layout = tiwi(Grid)`
   group
   my-3
   p-3
@@ -34,11 +35,11 @@ const Layout = tw(Grid)`
   dark:focus-within:ring-neutral-500
 `;
 
-const AvatarCell = tw.div`
+const AvatarCell = tiwi.div`
   col-start-1
 `;
 
-const Textarea = tw.textarea`
+const Textarea = tiwi.textarea`
   peer
   col-start-2
   row-start-1
@@ -56,7 +57,7 @@ const Textarea = tw.textarea`
   outline-none
 `;
 
-const Sizer = tw.div`
+const Sizer = tiwi.div`
   col-start-2
   row-start-1
 
@@ -71,7 +72,7 @@ const Sizer = tw.div`
   max-h-[300px]
 `;
 
-const Placeholder = tw.div`
+const Placeholder = tiwi.div`
   col-start-2
   row-start-1
 
@@ -87,7 +88,7 @@ const Placeholder = tw.div`
   peer-placeholder-shown:block
 `;
 
-const ButtonCell = tw(Column)`
+const ButtonCell = tiwi(Column)`
   col-start-3
   justify-end
 `;

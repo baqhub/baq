@@ -4,7 +4,8 @@ import {router} from "expo-router";
 import {FC, useCallback} from "react";
 import {Alert} from "react-native";
 import {FaceFrownIcon} from "react-native-heroicons/outline";
-import {Column, Row, tw} from "../../../helpers/style";
+import tiwi from "tiwi";
+import {Column, Row} from "../../../helpers/style";
 import {Button} from "../../core/button";
 import {Screen} from "../../core/screen";
 import {PostByVersion} from "../../post/postByVersion";
@@ -26,11 +27,11 @@ interface OtherProfileScreenProps {
 // Style.
 //
 
-const ProfileButtons = tw(Row)`
+const ProfileButtons = tiwi(Row)`
   gap-2
 `;
 
-const ProfileButton = tw(Column)`
+const ProfileButton = tiwi(Column)`
   flex-1
 `;
 

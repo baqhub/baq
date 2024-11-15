@@ -1,15 +1,16 @@
-import {Column, tw} from "@baqhub/ui/core/style.js";
+import {Column} from "@baqhub/ui/core/style.js";
 import {MDXProvider} from "@mdx-js/react";
 import {Link} from "@tanstack/react-router";
 import isString from "lodash/isString.js";
 import {MDXComponents} from "mdx/types.js";
 import {FC, PropsWithChildren} from "react";
+import tiwi from "tiwi";
 
 //
 // MDX Style.
 //
 
-const MdxP = tw.p`
+const MdxP = tiwi.p`
   mt-3
   mb-3
 
@@ -19,7 +20,7 @@ const MdxP = tw.p`
   font-normal
 `;
 
-const MdxLink = tw(Link)`
+const MdxLink = tiwi(Link)`
   text-amber-700
   dark:text-amber-500
   underline
@@ -35,7 +36,7 @@ const MdxLink = tw(Link)`
   duration-100
 ` as typeof Link;
 
-const MdxA = tw.a`
+const MdxA = tiwi.a`
   text-amber-700
   dark:text-amber-500
   underline
@@ -51,7 +52,7 @@ const MdxA = tw.a`
   duration-100
 `;
 
-const MdxH1 = tw.h1`
+const MdxH1 = tiwi.h1`
   mb-6
 
   text-4xl
@@ -60,7 +61,7 @@ const MdxH1 = tw.h1`
   dark:text-white
 `;
 
-const MdxH2 = tw.h2`
+const MdxH2 = tiwi.h2`
   mt-8
   mb-5
   pt-6
@@ -76,7 +77,7 @@ const MdxH2 = tw.h2`
   dark:text-white
 `;
 
-const MdxH3 = tw.h3`
+const MdxH3 = tiwi.h3`
   mb-4
   pt-6
   [&_+_*]:mt-0
@@ -87,7 +88,7 @@ const MdxH3 = tw.h3`
   dark:text-white
 `;
 
-export const MdxUl = tw.ul`
+export const MdxUl = tiwi.ul`
   mt-1
   mb-1
   pl-6
@@ -99,7 +100,7 @@ export const MdxUl = tw.ul`
   dark:marker:text-neutral-300
 `;
 
-const MdxOl = tw.ol`
+const MdxOl = tiwi.ol`
   mt-1
   mb-1
   pl-10
@@ -112,7 +113,7 @@ const MdxOl = tw.ol`
   dark:marker:text-neutral-400
 `;
 
-const MdxLi = tw.li`
+const MdxLi = tiwi.li`
   mt-1
   mb-1
   [&_li]:mt-1.5

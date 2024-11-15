@@ -1,5 +1,5 @@
-import {tw} from "@baqhub/ui/core/style.js";
 import {FC, PropsWithChildren} from "react";
+import tiwi from "tiwi";
 
 //
 // Props.
@@ -13,7 +13,7 @@ interface PostLinkProps extends PropsWithChildren {
 // Style.
 //
 
-const Link = tw.a`
+const Link = tiwi.a`
   font-normal
   text-amber-800
   dark:text-amber-500

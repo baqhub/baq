@@ -1,10 +1,11 @@
 import {Handler, HandlerOf, PredicateOf} from "@baqhub/sdk";
 import {Button, SubmitButton} from "@baqhub/ui/core/button.js";
 import {ButtonGroup} from "@baqhub/ui/core/buttonGroup.js";
-import {FormColumn, Text, tw} from "@baqhub/ui/core/style.js";
+import {FormColumn, Text} from "@baqhub/ui/core/style.js";
 import {TextBox} from "@baqhub/ui/core/textBox.js";
 import {Dialog} from "@baqhub/ui/layers/dialog/dialog.js";
 import {FC, FormEvent, useState} from "react";
+import tiwi from "tiwi";
 
 //
 // Props.
@@ -20,12 +21,12 @@ interface NewFolderDialogProps {
 // Style.
 //
 
-const Layout = tw(FormColumn)`
+const Layout = tiwi(FormColumn)`
   w-96
   gap-3
 `;
 
-const Title = tw(Text)`
+const Title = tiwi(Text)`
   text-2xl
   font-semibold
 `;

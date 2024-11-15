@@ -3,7 +3,8 @@ import {abortable} from "@baqhub/sdk-react";
 import {openBrowserAsync, WebBrowserPresentationStyle} from "expo-web-browser";
 import {FC, PropsWithChildren, useCallback, useEffect, useState} from "react";
 import {amber} from "tailwindcss/colors";
-import {Text, tw} from "../../helpers/style";
+import tiwi from "tiwi";
+import {Text} from "../../helpers/style";
 
 //
 // Props.
@@ -17,7 +18,7 @@ interface PostLinkProps extends PropsWithChildren {
 // Style.
 //
 
-const Link = tw(Text)`
+const Link = tiwi(Text)`
   text-amber-700
   dark:text-amber-500
   active:opacity-50

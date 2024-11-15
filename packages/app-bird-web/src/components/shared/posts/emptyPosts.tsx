@@ -1,5 +1,6 @@
-import {Column, Row, Text, tw} from "@baqhub/ui/core/style.js";
+import {Column, Row, Text} from "@baqhub/ui/core/style.js";
 import {FC, ReactNode} from "react";
+import tiwi from "tiwi";
 
 //
 // Props.
@@ -14,23 +15,23 @@ interface EmptyPostsProps {
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   grow
   items-center
   justify-center
 `;
 
-const Content = tw(Row)`
+const Content = tiwi(Row)`
   gap-3
   items-center
 `;
 
-const Icon = tw(Text)`
+const Icon = tiwi(Text)`
   w-6
   h-6
 `;
 
-const Label = tw(Text)`
+const Label = tiwi(Text)`
   text-md
 `;
 

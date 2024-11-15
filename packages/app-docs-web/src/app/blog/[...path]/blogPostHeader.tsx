@@ -1,5 +1,6 @@
-import {Column, Row, tw} from "@baqhub/ui/core/style.jsx";
+import {Column, Row} from "@baqhub/ui/core/style.jsx";
 import {FC} from "react";
+import tiwi from "tiwi";
 import {getImageAsync} from "../../../helpers/fileHelpers.js";
 import {dateToString} from "../../../helpers/stringHelpers.js";
 import {BlogPostAuthor} from "../../../services/blog.js";
@@ -22,23 +23,23 @@ interface BlogPostHeaderProps {
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   pt-8
   sm:pt-12
 `;
 
-const Details = tw(Column)`
+const Details = tiwi(Column)`
   px-6
   sm:px-8
   md:px-0
 `;
 
-const Attributes = tw(Row)`
+const Attributes = tiwi(Row)`
   items-center
   gap-3
 `;
 
-const Category = tw(Text)`
+const Category = tiwi(Text)`
   text-xs
   leading-3
   font-medium
@@ -56,7 +57,7 @@ const Category = tw(Text)`
   dark:text-amber-400
 `;
 
-const Date = tw(TextSelect)`
+const Date = tiwi(TextSelect)`
   text-sm
   uppercase
 
@@ -64,7 +65,7 @@ const Date = tw(TextSelect)`
   dark:text-zinc-400
 `;
 
-const Title = tw(TextSelect)`
+const Title = tiwi(TextSelect)`
   mt-3
   sm:mt-4
   text-3xl
@@ -73,7 +74,7 @@ const Title = tw(TextSelect)`
   sm:font-normal
 `;
 
-const SubTitle = tw(TextSelect)`
+const SubTitle = tiwi(TextSelect)`
   mt-2
   sm:mt-4
   text-lg
@@ -84,14 +85,14 @@ const SubTitle = tw(TextSelect)`
   dark:text-zinc-400
 `;
 
-const Author = tw(Row)`
+const Author = tiwi(Row)`
   mt-[10px]
   sm:mt-[18px]
   items-center
   gap-2
 `;
 
-const AuthorImage = tw.div`
+const AuthorImage = tiwi.div`
   relative
   w-8
   h-8
@@ -103,7 +104,7 @@ const AuthorImage = tw.div`
   dark:bg-zinc-950
 `;
 
-const AuthorImageBorder = tw.div`
+const AuthorImageBorder = tiwi.div`
   block
   absolute
   top-0
@@ -118,12 +119,12 @@ const AuthorImageBorder = tw.div`
   pointer-events-none
 `;
 
-const AuthorName = tw(TextSelect)`
+const AuthorName = tiwi(TextSelect)`
   text-zinc-600
   dark:text-zinc-300
 `;
 
-const PostImage = tw.div`
+const PostImage = tiwi.div`
   mt-8
   sm:mt-12
   sm:mx-8
@@ -145,7 +146,7 @@ const PostImage = tw.div`
   select-none
 `;
 
-const PostImageBorder = tw.div`
+const PostImageBorder = tiwi.div`
   hidden
   sm:block
 

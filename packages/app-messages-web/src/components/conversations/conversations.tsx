@@ -1,7 +1,8 @@
 import {Handler} from "@baqhub/sdk";
 import {InfiniteList} from "@baqhub/ui/core/infiniteList.js";
-import {Column, Grid, tw} from "@baqhub/ui/core/style.js";
+import {Column, Grid} from "@baqhub/ui/core/style.js";
 import {FC, Suspense, useEffect, useRef} from "react";
+import tiwi from "tiwi";
 import {ConversationRecordKey} from "../../baq/conversationRecord.js";
 import {
   GetItemKeys,
@@ -29,25 +30,25 @@ interface ConversationsProps {
 // Style.
 //
 
-const Layout = tw(Grid)`
+const Layout = tiwi(Grid)`
   grid-rows-[auto_1fr]
   grid-flow-row
   gap-3
 `;
 
-const HeaderLayout = tw(Grid)`
+const HeaderLayout = tiwi(Grid)`
   row-start-1
   col-start-1
 `;
 
-const ScrollLayout = tw(Column)`
+const ScrollLayout = tiwi(Column)`
   p-5
   pt-2
   min-h-0
   overflow-auto
 `;
 
-const InfoLayout = tw(Grid)`
+const InfoLayout = tiwi(Grid)`
   row-start-1
   row-span-2
   col-start-1

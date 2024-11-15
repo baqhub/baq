@@ -35,7 +35,7 @@
     "expo-system-ui": "~2.9.4",
     "expo-web-browser": "~12.8.2",
     "lodash": "^4.17.21",
-    "nativewind": "4.0.36",
+    "nativewind": "4.1.21",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-native": "0.73.6",
@@ -49,7 +49,7 @@
     "react-native-screens": "~3.29.0",
     "react-native-svg": "14.1.0",
     "react-native-web": "~0.19.9",
-    "tailwind-merge": "2.3.0"
+    "tiwi": "1.0.14"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

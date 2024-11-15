@@ -1,14 +1,15 @@
+import {Column, Grid, Text} from "@baqhub/ui/core/style.js";
 import {DocumentArrowUpIcon} from "@heroicons/react/24/outline";
-import {Column, Grid, Text, tw} from "@baqhub/ui/core/style.js";
 import find from "lodash/find.js";
 import {DragEventHandler, FC, useEffect, useState} from "react";
+import tiwi from "tiwi";
 import {useFileDropState} from "../state/fileDropState.js";
 
 //
 // Style.
 //
 
-const Layout = tw(Grid)<{$isDragging: boolean}>`
+const Layout = tiwi(Grid)`
   absolute
   top-0
   left-0
@@ -17,10 +18,11 @@ const Layout = tw(Grid)<{$isDragging: boolean}>`
   bg-neutral-900
   bg-opacity-20
 
-  ${p => (p.$isDragging ? "" : "hidden")}
+  hidden
+  ${{isDragging: `grid`}}
 `;
 
-const Content = tw(Column)`
+const Content = tiwi(Column)`
   self-center
   justify-self-center
   pointer-events-none
@@ -32,13 +34,13 @@ const Content = tw(Column)`
   rounded-xl
 `;
 
-const Icon = tw.div`
+const Icon = tiwi.div`
   w-8
   h-8
   text-neutral-900
 `;
 
-const Label = tw(Text)`
+const Label = tiwi(Text)`
   text-xl
 `;
 
@@ -82,7 +84,7 @@ export const FileDrop: FC = () => {
 
   return (
     <Layout
-      $isDragging={isDragging}
+      variants={{isDragging}}
       onDragEnter={allowDrag}
       onDragOver={allowDrag}
       onDragLeave={onDragLeave}

@@ -14,7 +14,8 @@
     "@baqhub/sdk-react": "*",
     "@baqhub/ui": "*",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "18.3.1",
+    "tiwi": "1.0.14"
   },
   "devDependencies": {
     "@baqhub/config-web": "*",

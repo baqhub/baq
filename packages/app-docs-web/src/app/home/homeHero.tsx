@@ -1,5 +1,6 @@
-import {Column, Row, tw} from "@baqhub/ui/core/style.jsx";
+import {Column, Row} from "@baqhub/ui/core/style.jsx";
 import {FC} from "react";
+import tiwi from "tiwi";
 import LogoHeroDark from "../../docs/assets/logoHeroDark.svg";
 import LogoHeroLight from "../../docs/assets/logoHeroLight.svg";
 import LogoHeroText from "../../docs/assets/logoHeroText.svg";
@@ -11,7 +12,7 @@ import {HomeViewOnGithub} from "./homeViewOnGithub.jsx";
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   mdp:flex-row-reverse
 
   pt-12
@@ -23,7 +24,7 @@ const Layout = tw(Column)`
   mdp:items-stretch
 `;
 
-const Content = tw(Column)`
+const Content = tiwi(Column)`
   flex-1
   relative
 
@@ -31,12 +32,12 @@ const Content = tw(Column)`
   mdp:items-start
 `;
 
-const Logo = tw.div`
+const Logo = tiwi.div`
   [&_>_svg]:h-12
   sm:[&_>_svg]:h-14
 `;
 
-const Title = tw(TextSelect)`
+const Title = tiwi(TextSelect)`
   mt-2.5
 
   text-center
@@ -54,7 +55,7 @@ const Title = tw(TextSelect)`
   dark:text-white
 `;
 
-const SubTitle = tw(TextSelect)`
+const SubTitle = tiwi(TextSelect)`
   mt-5
 
   text-center
@@ -69,19 +70,19 @@ const SubTitle = tw(TextSelect)`
   dark:text-zinc-400
 `;
 
-const LineBreak = tw.br`
+const LineBreak = tiwi.br`
 `;
 
-const Buttons = tw(Row)`
+const Buttons = tiwi(Row)`
   mt-10
   gap-4
 `;
 
-const LogoContainer = tw.div`
+const LogoContainer = tiwi.div`
   relative
 `;
 
-const LogoBig = tw.div`
+const LogoBig = tiwi.div`
   -m-16
   h-72
   mdp:-m-0
@@ -97,11 +98,11 @@ const LogoBig = tw.div`
   aspect-square
 `;
 
-const LogoLight = tw(LogoHeroLight)`
+const LogoLight = tiwi(LogoHeroLight)`
   dark:hidden
 `;
 
-const LogoDark = tw(LogoHeroDark)`
+const LogoDark = tiwi(LogoHeroDark)`
   hidden
   dark:block
 `;

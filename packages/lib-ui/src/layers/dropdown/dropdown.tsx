@@ -5,7 +5,8 @@ import {
   PropsWithChildren,
   forwardRef,
 } from "react";
-import {Column, tw} from "../../core/style.js";
+import tiwi from "tiwi";
+import {Column} from "../../core/style.js";
 
 //
 // Props.
@@ -21,7 +22,7 @@ interface DropdownProps extends PropsWithChildren {
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   p-1.5
 
   bg-white

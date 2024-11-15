@@ -1,8 +1,9 @@
 import {Button} from "@baqhub/ui/core/button.js";
 import {ButtonGroup} from "@baqhub/ui/core/buttonGroup.js";
-import {Column, Row, Text, tw} from "@baqhub/ui/core/style.js";
+import {Column, Row, Text} from "@baqhub/ui/core/style.js";
 import {MixedDateFormatter} from "@baqhub/ui/date/mixedDateFormatter.js";
 import {FC} from "react";
+import tiwi from "tiwi";
 import {MessageRecordKey} from "../../../baq/messageRecord.js";
 import {useUnknownConversationItemState} from "../../../state/unknownConversationItemState.js";
 
@@ -18,7 +19,7 @@ interface UnknownConversationItemProps {
 // Style.
 //
 
-const Layout = tw(Row)`
+const Layout = tiwi(Row)`
   relative
   items-center
 
@@ -33,26 +34,26 @@ const Layout = tw(Row)`
   first:after:hidden
 `;
 
-const Details = tw(Column)`
+const Details = tiwi(Column)`
   grow
   py-3
 `;
 
-const Recipient = tw(Text)`
+const Recipient = tiwi(Text)`
   grow
   font-bold
   truncate
 `;
 
-const SecondaryText = tw(Text)`
+const SecondaryText = tiwi(Text)`
   text-neutral-500
 `;
 
-const LastMessage = tw(SecondaryText)`
+const LastMessage = tiwi(SecondaryText)`
   truncate
 `;
 
-const Date = tw(SecondaryText)`
+const Date = tiwi(SecondaryText)`
   shrink-0
 `;
 

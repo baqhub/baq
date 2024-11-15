@@ -1,5 +1,6 @@
-import {Column, tw} from "@baqhub/ui/core/style.jsx";
+import {Column} from "@baqhub/ui/core/style.jsx";
 import {FC, Fragment, MouseEvent, useEffect} from "react";
+import tiwi from "tiwi";
 import {MdxHeader} from "../../../../helpers/mdxHelpers.js";
 
 //
@@ -16,7 +17,7 @@ interface DocsTopNavRightMenuProps {
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   fixed
   left-0
   top-0
@@ -30,11 +31,11 @@ const Layout = tw(Column)`
   dark:bg-black/30
 `;
 
-const Spacer = tw.div`
+const Spacer = tiwi.div`
   shrink-0
 `;
 
-const Menu = tw(Column)`
+const Menu = tiwi(Column)`
   shrink
   max-h-[max(70%,_250px)]
 
@@ -48,19 +49,19 @@ const Menu = tw(Column)`
   drop-shadow-md
 `;
 
-const Content = tw(Column)`
+const Content = tiwi(Column)`
   p-4
   gap-1
   overflow-y-auto
   overscroll-contain
 `;
 
-const SubMenu = tw(Column)`
+const SubMenu = tiwi(Column)`
   pl-2
   gap-1
 `;
 
-const MenuLink = tw.a`
+const MenuLink = tiwi.a`
   p-1
 
   text-sm

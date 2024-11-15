@@ -1,36 +1,37 @@
+import {ButtonRow, Row, Text} from "@baqhub/ui/core/style.js";
 import {ChevronRightIcon} from "@heroicons/react/20/solid";
-import {ButtonRow, Row, Text, tw} from "@baqhub/ui/core/style.js";
 import {FC, useDeferredValue} from "react";
+import tiwi from "tiwi";
 import {useBreadcrumbsState} from "../state/breadcrumbsState.js";
 
 //
 // Style.
 //
 
-const Layout = tw(Row)`
+const Layout = tiwi(Row)`
   p-2
   items-center
 `;
 
-const PreviousItemText = tw(Text)`
+const PreviousItemText = tiwi(Text)`
   p-1
   text-2xl
   font-semibold
   text-neutral-600
 `;
 
-const PreviousItemButtonText = tw(PreviousItemText)`
+const PreviousItemButtonText = tiwi(PreviousItemText)`
   hover:text-amber-600
   active:text-amber-700
 `;
 
-const Separator = tw.div`
+const Separator = tiwi.div`
   w-6
   h-6
   text-neutral-600
 `;
 
-const CurrentItem = tw(Text)`
+const CurrentItem = tiwi(Text)`
   p-1
   text-2xl
   font-semibold

@@ -23,7 +23,7 @@
     "lodash": "4.17.21",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "tailwind-styled-components": "2.2.0"
+    "tiwi": "1.0.14"
   },
   "devDependencies": {
     "@baqhub/config-web": "*",

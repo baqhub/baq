@@ -1,7 +1,7 @@
 import {HandlerOf} from "@baqhub/sdk";
 import {SubmitButton} from "@baqhub/ui/core/button.js";
 import {IconButton} from "@baqhub/ui/core/iconButton.js";
-import {Column, FormGrid, Row, tw} from "@baqhub/ui/core/style.js";
+import {Column, FormGrid, Row} from "@baqhub/ui/core/style.js";
 import {TextBox} from "@baqhub/ui/core/textBox.js";
 import {useFilePicker} from "@baqhub/ui/core/useFilePicker.js";
 import {resizeWithConstraints} from "@baqhub/ui/helpers/image.js";
@@ -10,6 +10,7 @@ import {useDropdown} from "@baqhub/ui/layers/dropdown/useDropdown.js";
 import {useHasLayer} from "@baqhub/ui/layers/layerContext.js";
 import {PlusIcon} from "@heroicons/react/20/solid";
 import {FC, FormEvent, useCallback, useEffect, useRef, useState} from "react";
+import tiwi from "tiwi";
 import {ConversationRecordKey} from "../../../baq/conversationRecord.js";
 import {FilePickHandler} from "../../../state/cloudPicker/cloudPickerDialogState.js";
 import {
@@ -32,7 +33,7 @@ interface MessageComposerProps {
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   sticky
   bottom-0
 
@@ -40,7 +41,7 @@ const Layout = tw(Column)`
   bg-neutral-200
 `;
 
-const Composer = tw(FormGrid)`
+const Composer = tiwi(FormGrid)`
   grid-cols-[auto_1fr_auto]
   grid-rows-[auto_auto]
   items-start
@@ -51,7 +52,7 @@ const Composer = tw(FormGrid)`
   bg-white
 `;
 
-const Images = tw(Row)`
+const Images = tiwi(Row)`
   row-start-1
   col-start-2
   pb-2
@@ -60,17 +61,17 @@ const Images = tw(Row)`
   overflow-x-auto
 `;
 
-const CellFileButton = tw(Column)`
+const CellFileButton = tiwi(Column)`
   row-start-2
   col-start-1
 `;
 
-const CellTextBox = tw(Column)`
+const CellTextBox = tiwi(Column)`
   row-start-2
   col-start-2
 `;
 
-const CellSendButton = tw(Column)`
+const CellSendButton = tiwi(Column)`
   row-start-2
   col-start-3
 `;

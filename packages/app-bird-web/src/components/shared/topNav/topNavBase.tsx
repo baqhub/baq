@@ -1,8 +1,9 @@
 import {Handler} from "@baqhub/sdk";
-import {Column, Row, tw} from "@baqhub/ui/core/style.js";
+import {Column, Row} from "@baqhub/ui/core/style.js";
 import {MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 import {Link, useLocation, useNavigate} from "@tanstack/react-router";
 import {PropsWithChildren, useCallback, type FC} from "react";
+import tiwi from "tiwi";
 import {SearchDialog} from "./searchDialog.js";
 import {TopNavItem} from "./topNavItem.js";
 
@@ -20,7 +21,7 @@ interface TopNavBaseProps extends PropsWithChildren {
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   fixed
   w-full
   h-[calc(4rem_+_1px)]
@@ -31,7 +32,7 @@ const Layout = tw(Column)`
   dark:bg-neutral-900/90
 `;
 
-const Center = tw(Row)`
+const Center = tiwi(Row)`
   w-full
   max-w-screen-sm
   h-16
@@ -42,7 +43,7 @@ const Center = tw(Row)`
   gap-2
 `;
 
-const TitleLink = tw(Link)`
+const TitleLink = tiwi(Link)`
   py-1
   px-3
 
@@ -58,7 +59,7 @@ const TitleLink = tw(Link)`
   dark:active:text-amber-500
 ` as typeof Link;
 
-const TitleText = tw.div`
+const TitleText = tiwi.div`
   py-1
   px-3
 
@@ -70,12 +71,12 @@ const TitleText = tw.div`
   dark:text-white
 `;
 
-const Items = tw(Row)`
+const Items = tiwi(Row)`
   px-0.5
   gap-2
 `;
 
-const Spacer = tw.div`
+const Spacer = tiwi.div`
   grow
 `;
 

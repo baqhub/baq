@@ -1,6 +1,6 @@
-import {tw} from "@baqhub/ui/core/style.js";
 import {Link} from "@tanstack/react-router";
 import {FC, PropsWithChildren} from "react";
+import tiwi from "tiwi";
 
 //
 // Props.
@@ -14,7 +14,7 @@ interface PostMentionProps extends PropsWithChildren {
 // Style.
 //
 
-const MentionLink = tw(Link)`
+const MentionLink = tiwi(Link)`
   font-normal
   text-amber-800
   dark:text-amber-500

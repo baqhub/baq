@@ -1,5 +1,6 @@
-import {Column, tw} from "@baqhub/ui/core/style.js";
+import {Column} from "@baqhub/ui/core/style.js";
 import {FC} from "react";
+import tiwi from "tiwi";
 import {VisualMessageContent} from "../../../state/messageState.js";
 import {MessageImage} from "./messageImage.js";
 import {MessageText} from "./messageText.js";
@@ -16,12 +17,12 @@ interface MessageContentProps {
 // Style.
 //
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   py-1.5
   gap-1
 `;
 
-const Images = tw(Column)`
+const Images = tiwi(Column)`
   py-0.5
   px-2
   gap-2

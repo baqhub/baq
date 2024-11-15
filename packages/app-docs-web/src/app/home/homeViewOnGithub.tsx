@@ -1,6 +1,7 @@
-import {Row, tw} from "@baqhub/ui/core/style.jsx";
+import {Row} from "@baqhub/ui/core/style.jsx";
 import {ArrowUpRightIcon} from "@heroicons/react/20/solid";
 import {FC} from "react";
+import tiwi from "tiwi";
 import {Link} from "../global/link.jsx";
 import {Text} from "../global/style.jsx";
 
@@ -8,7 +9,7 @@ import {Text} from "../global/style.jsx";
 // Style.
 //
 
-const Box = tw(Row)`
+const Box = tiwi(Row)`
   group
   py-1.5
   px-4
@@ -22,14 +23,14 @@ const Box = tw(Row)`
   dark:hover:bg-zinc-600
 `;
 
-const BoxText = tw(Text)`
+const BoxText = tiwi(Text)`
   font-medium
 
   text-zinc-800
   dark:text-zinc-200
 `;
 
-const BoxArrow = tw.div`
+const BoxArrow = tiwi.div`
   h-5
   w-5
   -mr-px

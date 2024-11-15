@@ -7,11 +7,12 @@ import {AbsoluteDateFormatter} from "@baqhub/ui/build/src/date/absoluteDateForma
 import {Link, Stack} from "expo-router";
 import {FC, useCallback} from "react";
 import {Pressable, StyleSheet} from "react-native";
+import tiwi from "tiwi";
 import {Avatar} from "../../components/core/avatar";
 import {Screen} from "../../components/core/screen";
 import {LoadingSecondary} from "../../components/posts/loadingSecondary";
 import {Posts} from "../../components/posts/posts";
-import {Column, Row, Text, tw} from "../../helpers/style";
+import {Column, Row, Text} from "../../helpers/style";
 import {PostByVersion} from "../post/postByVersion";
 import {PostText} from "../post/postText";
 
@@ -28,50 +29,50 @@ interface PostScreenProps {
 // Style.
 //
 
-const Post = tw(Column)`
+const Post = tiwi(Column)`
 `;
 
-const Content = tw(Column)`
+const Content = tiwi(Column)`
   p-5
   gap-5
 `;
 
-const AuthorButton = tw(Pressable)`
+const AuthorButton = tiwi(Pressable)`
   flex-row
   items-center
   gap-3
   active:opacity-70
 `;
 
-const AuthorAvatar = tw(Column)`
+const AuthorAvatar = tiwi(Column)`
 `;
 
-const AuthorIdentity = tw(Column)`
+const AuthorIdentity = tiwi(Column)`
   gap-0.5
 `;
 
-const AuthorName = tw(Text)`
+const AuthorName = tiwi(Text)`
   font-semibold
   text-base
 `;
 
-const AuthorEntity = tw(Text)`
+const AuthorEntity = tiwi(Text)`
   text-neutral-700
   dark:text-neutral-200
 `;
 
-const Body = tw(Text)`
+const Body = tiwi(Text)`
   text-lg
   leading-7
 `;
 
-const Info = tw(Row)`
+const Info = tiwi(Row)`
   p-5
   border-neutral-200
   dark:border-neutral-800
 `;
 
-const FullDate = tw(Text)`
+const FullDate = tiwi(Text)`
   text-base
   text-neutral-400
   dark:text-neutral-600

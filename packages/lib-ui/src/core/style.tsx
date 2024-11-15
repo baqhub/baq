@@ -1,92 +1,76 @@
-import {fixImport} from "@baqhub/sdk";
-import tailwind from "tailwind-styled-components";
+import tiwi from "tiwi";
 
-export const tw = fixImport(tailwind);
-
-export const Column = tw.div`
+export const Column = tiwi.div`
   flex
+  min-w-0
   flex-col
-  min-w-0
 `;
 
-export const FormColumn = tw.form`
+export const FormColumn = tiwi.form`
   flex
+  min-w-0
   flex-col
-  min-w-0
 `;
 
-export const Row = tw.div`
+export const Row = tiwi.div`
   flex
-  flex-row
   min-w-0
+  flex-row
 `;
 
-export const ButtonRow = tw.button`
+export const ButtonRow = tiwi.button`
   flex
-  flex-row
   min-w-0
+  cursor-default
 
   select-none
+  flex-row
   outline-none
-  cursor-default
 `;
 
-export const Grid = tw.div`
+export const Grid = tiwi.div`
   grid
-  min-w-0
   min-h-0
+  min-w-0
   grid-cols-[1fr]
   grid-rows-[1fr]
 `;
 
-export const FormGrid = tw.form`
+export const FormGrid = tiwi.form`
   grid
   min-w-0
   grid-cols-[1fr]
   grid-rows-[1fr]
 `;
 
-export const Text = tw.div`
-  text-sm
-  text-neutral-900
-  dark:text-white
-  select-none
+export const Text = tiwi.div`
   cursor-default
-`;
-
-export const TextSelect = tw(Text)`
-  select-text
-  cursor-text
-`;
-
-export const Link = tw.a`
+  select-none
   text-sm
   text-neutral-900
   dark:text-white
-  select-none
-  hover:underline
-  underline-offset-2
 `;
 
-export const Bold = tw.span`
+export const TextSelect = tiwi(Text)`
+  cursor-text
+  select-text
+`;
+
+export const Link = tiwi.a`
+  select-none
+  text-sm
+  text-neutral-900
+  underline-offset-2
+  hover:underline
+  dark:text-white
+`;
+
+export const Bold = tiwi.span`
   font-bold
 `;
 
-export const SemiBold = tw.span`
+export const SemiBold = tiwi.span`
   font-semibold
 `;
 
 export type UISize = "small" | "medium" | "large";
-
-export function classForSize(size: UISize | undefined) {
-  switch (size) {
-    case "medium":
-      return "size-md";
-
-    case "large":
-      return "size-lg";
-
-    default:
-      return "size-sm";
-  }
-}

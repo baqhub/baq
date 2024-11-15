@@ -1,14 +1,15 @@
 import birdLogoUrl from "@assets/birdLogo.png";
-import {Grid, tw} from "@baqhub/ui/core/style.js";
+import {Grid} from "@baqhub/ui/core/style.js";
 import {ArrowLeftIcon} from "@heroicons/react/24/outline";
 import {Link} from "@tanstack/react-router";
 import {FC} from "react";
+import tiwi from "tiwi";
 
 //
 // Style.
 //
 
-const Layout = tw(Grid)`
+const Layout = tiwi(Grid)`
   grid-cols-[1fr_auto_1fr]
   items-center
 
@@ -16,7 +17,7 @@ const Layout = tw(Grid)`
   py-6
 `;
 
-const BackLink = tw(Link)`
+const BackLink = tiwi(Link)`
   hidden
   md:block
   justify-self-start
@@ -33,7 +34,7 @@ const BackLink = tw(Link)`
   dark:any-hover:active:bg-neutral-700
 ` as typeof Link;
 
-const Icon = tw.div`
+const Icon = tiwi.div`
   h-6
   w-6
 
@@ -41,7 +42,7 @@ const Icon = tw.div`
   dark:text-white
 `;
 
-const Logo = tw.img`
+const Logo = tiwi.img`
   col-start-2
   h-16
   select-none

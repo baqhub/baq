@@ -1,6 +1,5 @@
 "use client";
 
-import {tw} from "@baqhub/ui/core/style.jsx";
 import {
   FC,
   Fragment,
@@ -10,6 +9,7 @@ import {
   useRef,
   useState,
 } from "react";
+import tiwi from "tiwi";
 import {MdxHeader} from "../../../../helpers/mdxHelpers.js";
 import {Newsletter} from "../../../global/newsletter.jsx";
 import {Text} from "../../../global/style.jsx";
@@ -26,7 +26,7 @@ interface DocsRightNavProps {
 // Style.
 //
 
-const Layout = tw.div`
+const Layout = tiwi.div`
   relative
   hidden
   xl:block
@@ -36,7 +36,7 @@ const Layout = tw.div`
   w-80
 `;
 
-const Content = tw.div`
+const Content = tiwi.div`
   fixed
   top-[calc(4rem_+_1px)]
   bottom-0
@@ -52,7 +52,7 @@ const Content = tw.div`
   pointer-events-auto
 `;
 
-const Menu = tw.div`
+const Menu = tiwi.div`
   relative
 
   flex
@@ -67,7 +67,7 @@ const Menu = tw.div`
   dark:border-zinc-700
 `;
 
-const ActiveIndicator = tw.div`
+const ActiveIndicator = tiwi.div`
   absolute
   top-0
   -left-px
@@ -81,19 +81,19 @@ const ActiveIndicator = tw.div`
   transition-transform
 `;
 
-const SubMenu = tw.div`
+const SubMenu = tiwi.div`
   flex
   flex-col
   pl-2
   gap-2.5
 `;
 
-const MenuTitle = tw(Text)`
+const MenuTitle = tiwi(Text)`
   text-sm
   font-semibold
 `;
 
-const MenuLink = tw.a`
+const MenuLink = tiwi.a`
   text-sm
   font-medium
   text-zinc-500
