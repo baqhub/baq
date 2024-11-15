@@ -39,7 +39,7 @@ const Layout = tiwi(ButtonRow)<IconButtonVariant>`
 
   rounded-lg
   ${{
-    normal: `rounded-full`,
+    circle: `rounded-full`,
   }}
 
   text-neutral-900
@@ -48,8 +48,8 @@ const Layout = tiwi(ButtonRow)<IconButtonVariant>`
 `;
 
 const Content = tiwi.div<UISize>`
-  w-5
   h-5
+  w-5
 
   ${{
     medium: `

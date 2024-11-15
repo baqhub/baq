@@ -24,7 +24,7 @@ const Layout = tiwi(Column)`
   py-3
   overflow-auto
 
-  "opacity-100"
+  opacity-100
   ${{
     isLoading: `
       opacity-50
