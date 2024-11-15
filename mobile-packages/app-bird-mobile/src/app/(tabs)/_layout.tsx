@@ -5,14 +5,15 @@ import {useColorScheme} from "react-native";
 import {AtSymbolIcon} from "react-native-heroicons/outline";
 import {HomeIcon, PencilIcon, UserIcon} from "react-native-heroicons/solid";
 import {amber, neutral, white} from "tailwindcss/colors";
-import {Icon, tw} from "../../helpers/style";
+import tiwi from "tiwi";
+import {Icon} from "../../helpers/style";
 import {useTermsModal} from "../termsModal";
 
 //
 // Style.
 //
 
-const TabIcon = tw(Icon)`
+const TabIcon = tiwi(Icon)`
   -mb-[3px]
   w-7
   h-7

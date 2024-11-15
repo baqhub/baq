@@ -15,7 +15,8 @@ import {
   MenuConfig,
   OnPressMenuItemEventObject,
 } from "react-native-ios-context-menu";
-import {Column, Icon, Row, Text, tw} from "../../helpers/style";
+import tiwi from "tiwi";
+import {Column, Icon, Row, Text} from "../../helpers/style";
 import {Avatar} from "../core/avatar";
 import {PostText} from "./postText";
 
@@ -31,7 +32,7 @@ interface PostProps extends ReturnType<typeof usePostState> {
 // Style.
 //
 
-const Layout = tw(Row)`
+const Layout = tiwi(Row)`
   px-5
   pt-4
   pb-3
@@ -41,33 +42,33 @@ const Layout = tw(Row)`
   dark:border-b-neutral-800
 `;
 
-const AvatarButton = tw(Pressable)`
+const AvatarButton = tiwi(Pressable)`
   shrink-0
   active:opacity-70
 `;
 
-const Content = tw(Column)`
+const Content = tiwi(Column)`
   flex-1
   gap-1
 `;
 
-const InfoRow = tw(Row)`
+const InfoRow = tiwi(Row)`
   gap-1
   items-center
 `;
 
-const InfoRowText = tw(Row)`
+const InfoRowText = tiwi(Row)`
   flex-1
   gap-1
   items-baseline
 `;
 
-const AuthorNameButton = tw(Pressable)`
+const AuthorNameButton = tiwi(Pressable)`
   shrink
   group
 `;
 
-const AuthorName = tw(Text)`
+const AuthorName = tiwi(Text)`
   text-[16px]
   font-semibold
   text-neutral-800
@@ -76,13 +77,13 @@ const AuthorName = tw(Text)`
   group-active:dark:text-neutral-300
 `;
 
-const AuthorEntity = tw(Text)`
+const AuthorEntity = tiwi(Text)`
   shrink-[2]
   text-neutral-500
   dark:text-neutral-500
 `;
 
-const DateText = tw(Text)`
+const DateText = tiwi(Text)`
   grow
   shrink-0
 
@@ -91,13 +92,13 @@ const DateText = tw(Text)`
   dark:text-neutral-500
 `;
 
-const MenuButton = tw(Pressable)`
+const MenuButton = tiwi(Pressable)`
   shrink-0
   -my-1.5
   p-0.5
 `;
 
-const MenuButtonIcon = tw(Icon)`
+const MenuButtonIcon = tiwi(Icon)`
   w-[22px]
   h-[22px]
   text-neutral-500
@@ -105,18 +106,18 @@ const MenuButtonIcon = tw(Icon)`
   translate-y-[1px]
 `;
 
-const BodyText = tw(Text)`
+const BodyText = tiwi(Text)`
   text-neutral-800
   text-[16px]
   leading-5
 `;
 
-const Actions = tw(Row)`
+const Actions = tiwi(Row)`
   -mt-0.5
   -mx-2
 `;
 
-const ActionButton = tw(Pressable)`
+const ActionButton = tiwi(Pressable)`
   p-2
 
   active:bg-neutral-900/10
@@ -124,7 +125,7 @@ const ActionButton = tw(Pressable)`
   rounded-full
 `;
 
-const ActionButtonIcon = tw(Icon)`
+const ActionButtonIcon = tiwi(Icon)`
   w-[22px]
   h-[22px]
   border-2

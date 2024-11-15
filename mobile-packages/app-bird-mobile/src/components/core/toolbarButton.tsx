@@ -1,7 +1,8 @@
 import {Handler} from "@baqhub/sdk";
 import {FC, PropsWithChildren} from "react";
 import {Pressable} from "react-native";
-import {Icon, tw} from "../../helpers/style";
+import tiwi from "tiwi";
+import {Icon} from "../../helpers/style";
 
 //
 // Props.
@@ -15,13 +16,13 @@ interface ToolbarButtonProps extends PropsWithChildren {
 // Style.
 //
 
-const Button = tw(Pressable)`
+const Button = tiwi(Pressable)`
   py-1
   px-0.5
   active:opacity-60
 `;
 
-const ButtonIcon = tw(Icon)`
+const ButtonIcon = tiwi(Icon)`
   w-7
   h-7
   text-amber-400

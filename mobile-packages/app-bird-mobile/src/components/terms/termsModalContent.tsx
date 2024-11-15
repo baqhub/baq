@@ -5,7 +5,8 @@ import {
 import {Handler} from "@baqhub/sdk";
 import {FC, useCallback} from "react";
 import {SafeAreaView, View} from "react-native";
-import {Column, Text, tw} from "../../helpers/style";
+import tiwi from "tiwi";
+import {Column, Text} from "../../helpers/style";
 import {Avatar} from "../core/avatar";
 import {Button} from "../core/button";
 import {TermsBackButton} from "./termsBackButton";
@@ -23,20 +24,20 @@ interface TermsModalContentProps {
 // Style.
 //
 
-const SafeArea = tw(SafeAreaView)`
+const SafeArea = tiwi(SafeAreaView)`
   flex-1
 
   bg-white
   dark:bg-neutral-950
 `;
 
-const Layout = tw(Column)`
+const Layout = tiwi(Column)`
   flex-1
   p-6
   justify-between
 `;
 
-const Profile = tw(Column)`
+const Profile = tiwi(Column)`
   items-center
   gap-5
   px-7
@@ -53,19 +54,19 @@ const Profile = tw(Column)`
   shadow-amber-500/50
 `;
 
-const WelcomeText = tw(Text)`
+const WelcomeText = tiwi(Text)`
   text-center
   text-4xl
   font-semibold
 `;
 
-const NameText = tw(Text)`
+const NameText = tiwi(Text)`
   truncate
   text-2xl
   font-semibold
 `;
 
-const InstructionsText = tw(Text)`
+const InstructionsText = tiwi(Text)`
   px-5
   pb-1
   text-center
@@ -75,11 +76,11 @@ const InstructionsText = tw(Text)`
   leading-7
 `;
 
-const Links = tw(Column)`
+const Links = tiwi(Column)`
   gap-3
 `;
 
-const Buttons = tw(Column)`
+const Buttons = tiwi(Column)`
   gap-4
 `;
 

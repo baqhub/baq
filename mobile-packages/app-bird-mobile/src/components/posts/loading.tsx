@@ -1,17 +1,18 @@
 import {FC} from "react";
 import {View} from "react-native";
 import {ArrowPathIcon} from "react-native-heroicons/outline";
-import {Centered, Icon, tw} from "../../helpers/style";
+import tiwi from "tiwi";
+import {Centered, Icon} from "../../helpers/style";
 
 //
 // Style.
 //
 
-const Spinner = tw(View)`
+const Spinner = tiwi(View)`
   animate-spin
 `;
 
-const SpinnerIcon = tw(Icon)`
+const SpinnerIcon = tiwi(Icon)`
   w-7
   h-7
 `;

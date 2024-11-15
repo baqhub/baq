@@ -5,7 +5,7 @@ import {
   UnauthenticatedState,
 } from "@baqhub/sdk-react";
 import {openAuthSessionAsync} from "expo-web-browser";
-import {FC, useCallback, useEffect, useRef, useState} from "react";
+import {FC, ReactNode, useCallback, useEffect, useRef, useState} from "react";
 import {
   Image,
   KeyboardAvoidingView,
@@ -13,8 +13,9 @@ import {
   SafeAreaView,
   View,
 } from "react-native";
+import tiwi from "tiwi";
 import birdLogo from "../../../assets/images/birdMobileLogo.png";
-import {Centered, tw} from "../../helpers/style";
+import {Centered} from "../../helpers/style";
 import {Button} from "../core/button";
 import {TextBox} from "../core/textBox";
 
@@ -33,17 +34,33 @@ interface LoginProps {
 // Style.
 //
 
-const SafeArea = tw(SafeAreaView)`
+const SafeArea = tiwi(SafeAreaView)`
   flex-1
   bg-white
   dark:bg-neutral-950
 `;
 
-const Layout = tw(Centered)`
+const CenteredProxy: FC<{className?: string; children?: ReactNode}> = ({
+  className,
+  children,
+}) => {
+  console.log("CenteredProxy", className);
+  return <Centered className={className}>{children}</Centered>;
+};
+
+const Layout = tiwi(CenteredProxy)`
   gap-16
 `;
 
-const EntityLayout = tw(View)`
+const ViewProxy: FC<{className?: string; children?: ReactNode}> = ({
+  className,
+  children,
+}) => {
+  console.log("View", className);
+  return <View className={className}>{children}</View>;
+};
+
+const EntityLayout = tiwi(View)`
   self-stretch
   items-start
   flex-row

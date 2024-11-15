@@ -2,7 +2,8 @@ import {openBrowserAsync, WebBrowserPresentationStyle} from "expo-web-browser";
 import {FC, PropsWithChildren} from "react";
 import {Pressable} from "react-native";
 import {ArrowTopRightOnSquareIcon} from "react-native-heroicons/outline";
-import {Icon, Text, tw} from "../../helpers/style";
+import tiwi from "tiwi";
+import {Icon, Text} from "../../helpers/style";
 
 //
 // Props.
@@ -16,7 +17,7 @@ interface TermsLinkProps extends PropsWithChildren {
 // Style.
 //
 
-const Layout = tw(Pressable)`
+const Layout = tiwi(Pressable)`
   flex
   flex-row
 
@@ -32,12 +33,12 @@ const Layout = tw(Pressable)`
   dark:active:bg-neutral-900
 `;
 
-const LinkText = tw(Text)`
+const LinkText = tiwi(Text)`
   grow
   text-base
 `;
 
-const GlobeIcon = tw(Icon)`
+const GlobeIcon = tiwi(Icon)`
   w-5
   h-5
 `;

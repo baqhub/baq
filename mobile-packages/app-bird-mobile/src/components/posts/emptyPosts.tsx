@@ -1,5 +1,6 @@
 import {FC, PropsWithChildren, ReactNode} from "react";
-import {Centered, Icon, Text, tw} from "../../helpers/style";
+import tiwi from "tiwi";
+import {Centered, Icon, Text} from "../../helpers/style";
 
 //
 // Props.
@@ -13,17 +14,17 @@ interface EmptyPostsProps extends PropsWithChildren {
 // Style.
 //
 
-const Layout = tw(Centered)`
+const Layout = tiwi(Centered)`
   gap-2
   flex-row
 `;
 
-const EmptyIcon = tw(Icon)`
+const EmptyIcon = tiwi(Icon)`
   text-neutral-400
   dark:text-neutral-600
 `;
 
-const EmptyText = tw(Text)`
+const EmptyText = tiwi(Text)`
   text-center
   text-base
   text-neutral-400

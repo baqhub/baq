@@ -1,6 +1,7 @@
 import {StyleSheet} from "nativewind";
 import {FC, PropsWithChildren} from "react";
-import {Column, Row, Text, tw} from "../../../helpers/style";
+import tiwi from "tiwi";
+import {Column, Row, Text} from "../../../helpers/style";
 import {Avatar} from "../../core/avatar";
 
 //
@@ -18,7 +19,7 @@ interface ProfileScreenHeaderProps extends PropsWithChildren {
 // Style.
 //
 
-const Profile = tw(Column)`
+const Profile = tiwi(Column)`
   p-5
   pt-[11px]
   gap-5
@@ -27,25 +28,25 @@ const Profile = tw(Column)`
   dark:border-neutral-800
 `;
 
-const ProfileTop = tw(Row)`
+const ProfileTop = tiwi(Row)`
   items-center
 `;
 
-const ProfileTopLeft = tw(Column)`
+const ProfileTopLeft = tiwi(Column)`
   flex-1
   gap-1
 `;
 
-const ProfileName = tw(Text)`
+const ProfileName = tiwi(Text)`
   text-2xl
   font-semibold
 `;
 
-const ProfileEntity = tw(Text)`
+const ProfileEntity = tiwi(Text)`
   text-base
 `;
 
-const ProfileBio = tw(Text)`
+const ProfileBio = tiwi(Text)`
   text-base
   leading-6
 `;

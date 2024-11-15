@@ -1,6 +1,7 @@
 import {Link} from "expo-router";
 import {FC, PropsWithChildren} from "react";
-import {Text, tw} from "../../helpers/style";
+import tiwi from "tiwi";
+import {Text} from "../../helpers/style";
 
 //
 // Props.
@@ -15,7 +16,7 @@ interface PostMentionProps extends PropsWithChildren {
 // Style.
 //
 
-const Mention = tw(Text)`
+const Mention = tiwi(Text)`
   text-amber-700
   dark:text-amber-500
   active:opacity-50

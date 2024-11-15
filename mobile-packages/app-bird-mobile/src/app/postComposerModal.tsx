@@ -15,15 +15,16 @@ import {
   useWindowDimensions,
 } from "react-native";
 import {amber, neutral, white} from "tailwindcss/colors";
+import tiwi from "tiwi";
 import {Avatar} from "../components/core/avatar";
 import {Button} from "../components/core/button";
-import {Column, Row, Text, tw} from "../helpers/style";
+import {Column, Row, Text} from "../helpers/style";
 
 //
 // Style.
 //
 
-const SafeArea = tw(SafeAreaView)`
+const SafeArea = tiwi(SafeAreaView)`
   border-t
   border-neutral-100
   dark:border-neutral-900
@@ -33,28 +34,28 @@ const SafeArea = tw(SafeAreaView)`
   dark:bg-neutral-950
 `;
 
-const ComposerScroll = tw(ScrollView)`
+const ComposerScroll = tiwi(ScrollView)`
   flex-1
 `;
 
-const Composer = tw(Row)`
+const Composer = tiwi(Row)`
   min-h-full
   p-5
   gap-3
 `;
 
-const Content = tw(Column)`
+const Content = tiwi(Column)`
   flex-1
   items-stretch
 `;
 
-const InfoRow = tw(Row)`
+const InfoRow = tiwi(Row)`
   gap-1
   items-baseline
   overflow-hidden
 `;
 
-const AuthorName = tw(Text)`
+const AuthorName = tiwi(Text)`
   shrink
   text-[16px]
   font-semibold
@@ -64,13 +65,13 @@ const AuthorName = tw(Text)`
   group-active:dark:text-neutral-300
 `;
 
-const AuthorEntity = tw(Text)`
+const AuthorEntity = tiwi(Text)`
   shrink-[2]
   text-neutral-500
   dark:text-neutral-500
 `;
 
-const BodyInput = tw(TextInput)`
+const BodyInput = tiwi(TextInput)`
   flex-1
   text-[16px]
   leading-5
@@ -78,7 +79,7 @@ const BodyInput = tw(TextInput)`
   dark:text-white
 `;
 
-const ActionsRow = tw(Row)`
+const ActionsRow = tiwi(Row)`
   p-5
   justify-end
 `;

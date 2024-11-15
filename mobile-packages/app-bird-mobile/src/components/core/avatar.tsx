@@ -2,7 +2,8 @@ import {useAvatarState} from "@baqhub/app-bird-shared/build/src/state/avatarStat
 import {FC} from "react";
 import {Image, View} from "react-native";
 import {NoSymbolIcon} from "react-native-heroicons/outline";
-import {Icon, tw} from "../../helpers/style";
+import tiwi from "tiwi";
+import {Icon} from "../../helpers/style";
 
 //
 // Props.
@@ -19,7 +20,7 @@ interface AvatarProps {
 // Style.
 //
 
-const Layout = tw(View)<AvatarSize>`
+const Layout = tiwi(View)<AvatarSize>`
   relative
   shrink-0
   w-9
@@ -41,7 +42,7 @@ const Layout = tw(View)<AvatarSize>`
   }}
 `;
 
-const BlockedPill = tw(View)`
+const BlockedPill = tiwi(View)`
   absolute
 
   rounded-full
@@ -54,7 +55,7 @@ const BlockedPill = tw(View)`
   dark:bg-red-600
 `;
 
-const BlockPillIcon = tw(Icon)<AvatarSize>`
+const BlockPillIcon = tiwi(Icon)<AvatarSize>`
   w-4
   h-4
   text-white
@@ -67,7 +68,7 @@ const BlockPillIcon = tw(Icon)<AvatarSize>`
   }}
 `;
 
-const AvatarImage = tw(Image)`
+const AvatarImage = tiwi(Image)`
   flex-1
   w-full
   rounded-full
@@ -85,7 +86,7 @@ export const Avatar: FC<AvatarProps> = props => {
     <Layout variants={size}>
       <AvatarImage source={{uri: avatarUrl}} resizeMode="cover" />
       {isBlocked && (
-        <BlockedPill variants={size}>
+        <BlockedPill>
           <BlockPillIcon variants={size}>
             <NoSymbolIcon />
           </BlockPillIcon>

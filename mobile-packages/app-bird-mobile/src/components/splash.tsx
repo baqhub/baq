@@ -3,14 +3,14 @@ import {useAbortable} from "@baqhub/sdk-react";
 import {SplashScreen} from "expo-router";
 import {FC, PropsWithChildren, useState} from "react";
 import {Image, View} from "react-native";
+import tiwi from "tiwi";
 import birdSplash from "../../assets/images/birdMobileSplash.png";
-import {tw} from "../helpers/style";
 
 //
 // Style.
 //
 
-const Background = tw(View)`
+const Background = tiwi(View)`
   absolute
   top-0
   left-0
@@ -27,7 +27,7 @@ const Background = tw(View)`
   ease-out
 `;
 
-const LogoLayout = tw(View)`
+const LogoLayout = tiwi(View)`
   absolute
   top-0
   left-0
@@ -40,7 +40,7 @@ const LogoLayout = tw(View)`
   ease-in
 `;
 
-const Logo = tw(Image)`
+const Logo = tiwi(Image)`
   flex-1
   w-full
 `;

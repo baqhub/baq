@@ -1,7 +1,8 @@
 import {Handler} from "@baqhub/sdk";
 import {FC, PropsWithChildren} from "react";
 import {Pressable, View} from "react-native";
-import {Text, tw} from "../../helpers/style";
+import tiwi from "tiwi";
+import {Text} from "../../helpers/style";
 
 //
 // Props.
@@ -20,7 +21,7 @@ interface ButtonProps extends PropsWithChildren {
 // Style.
 //
 
-const ButtonPressable = tw(Pressable)`
+const ButtonPressable = tiwi(Pressable)`
   group
   pb-[3px]
   active:pb-0
@@ -29,9 +30,6 @@ const ButtonPressable = tw(Pressable)`
   opacity-100
   bg-neutral-200
   dark:bg-neutral-700
-
-  shadow-none
-  shadow-amber-500/50
 
   ${{
     isPrimary: `
@@ -43,11 +41,12 @@ const ButtonPressable = tw(Pressable)`
     `,
     isFeatured: `
       shadow-md
+      shadow-amber-500/50
     `,
   }}
 `;
 
-const Content = tw(View)<ButtonVariant>`
+const Content = tiwi(View)<ButtonVariant>`
   px-4
   py-[12.5px]
   group-active:py-[14px]
@@ -64,7 +63,7 @@ const Content = tw(View)<ButtonVariant>`
   }}
 `;
 
-const ButtonText = tw(Text)`
+const ButtonText = tiwi(Text)`
   text-center
   text-base
   font-medium

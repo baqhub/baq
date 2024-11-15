@@ -8,20 +8,21 @@ import {
   SafeAreaView,
   View,
 } from "react-native";
+import tiwi from "tiwi";
 import {Button} from "../components/core/button";
 import {TextBox} from "../components/core/textBox";
-import {Column, Row, Text, tw} from "../helpers/style";
+import {Column, Row, Text} from "../helpers/style";
 
 //
 // Style.
 //
 
-const SafeArea = tw(SafeAreaView)`
+const SafeArea = tiwi(SafeAreaView)`
   flex-1
   justify-end
 `;
 
-const Overlay = tw(Pressable)`
+const Overlay = tiwi(Pressable)`
   absolute
   top-0
   right-0
@@ -32,13 +33,13 @@ const Overlay = tw(Pressable)`
   dark:bg-white/20
 `;
 
-const Card = tw(Column)`
+const Card = tiwi(Column)`
   py-6
   px-8
   gap-3
 `;
 
-const CardBackground = tw(View)`
+const CardBackground = tiwi(View)`
   absolute
   top-0
   right-0
@@ -50,12 +51,12 @@ const CardBackground = tw(View)`
   dark:bg-neutral-950
 `;
 
-const Title = tw(Text)`
+const Title = tiwi(Text)`
   text-lg
   font-semibold
 `;
 
-const Form = tw(Row)`
+const Form = tiwi(Row)`
   gap-2
 `;
 

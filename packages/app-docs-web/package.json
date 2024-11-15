@@ -31,7 +31,7 @@
     "react-dom": "18.3.1",
     "refractor": "4.8.1",
     "slugify": "1.6.6",
-    "tiwi": "1.0.9"
+    "tiwi": "1.0.14"
   },
   "devDependencies": {
     "@mdx-js/loader": "3.0.1",
