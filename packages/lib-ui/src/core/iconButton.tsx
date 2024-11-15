@@ -48,14 +48,9 @@ const Layout = tiwi(ButtonRow)<IconButtonVariant>`
 `;
 
 const Content = tiwi.div<UISize>`
-  h-5
-  w-5
-
+  size-5
   ${{
-    medium: `
-      w-6
-      h-6
-    `,
+    medium: `size-6`,
   }}
 `;
 
