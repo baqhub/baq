@@ -32,11 +32,16 @@
     "cf-typegen": "wrangler types"
   },
   "dependencies": {
-    "tslib": "^2.8.1"
+    "@fedify/fedify": "npm:@jsr/fedify__fedify@1.2.6",
+    "@logtape/logtape": "0.8.0",
+    "temporal-polyfill": "0.2.5",
+    "tslib": "2.8.1"
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "0.5.29",
     "@cloudflare/workers-types": "4.20241112.0",
+    "@vitest/runner": "2.1.5",
+    "@vitest/snapshot": "2.1.5",
     "typescript": "5.5.2",
     "vitest": "2.1.5",
     "wrangler": "3.88.0"

@@ -1,8 +1,13 @@
 #:schema node_modules/wrangler/config-schema.json
-name = "<TBD>"
-main = "src/index.js"
-compatibility_date = "<TBD>"
+name = "worker-bridge-ap"
+main = "src/index.ts"
+compatibility_date = "2024-11-10"
 compatibility_flags = ["nodejs_compat"]
+
+routes = [
+  { pattern = "baq.lol", custom_domain = true },
+  { pattern = "*.baq.lol/*", custom_domain = false }
+]
 
 # Workers Logs
 # Docs: https://developers.cloudflare.com/workers/observability/logs/workers-logs/
