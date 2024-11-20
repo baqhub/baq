@@ -1,0 +1,24 @@
+{
+  "extends": [
+    "../../tsconfig.base"
+  ],
+  "compilerOptions": {
+    "outDir": "./build/esm",
+    "baseUrl": "./src",
+    "declaration": true,
+    "target": "es2021",
+    "lib": [
+      "es2021"
+    ],
+    "module": "es2022",
+    "moduleResolution": "Bundler",
+    "types": [
+      "@cloudflare/workers-types"
+    ],
+    "noEmit": true,
+  },
+  "include": [
+    "src",
+    "worker-configuration.d.ts"
+  ],
+}

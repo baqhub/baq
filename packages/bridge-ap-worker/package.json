@@ -1,0 +1,44 @@
+{
+  "name": "@baqhub/bridge-app-worker",
+  "version": "0.1.0",
+  "license": "MIT",
+  "description": "The official JavaScript SDK for the BAQ federated app platform.",
+  "author": "Baqhub",
+  "homepage": "https://baq.dev/",
+  "bugs": "https://github.com/baqhub/baq/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/baqhub/baq.git",
+    "directory": "packages/lib-sdk"
+  },
+  "keywords": [
+    "baq",
+    "baqhub",
+    "sdk",
+    "federated",
+    "javascript",
+    "typescript"
+  ],
+  "type": "module",
+  "scripts": {
+    "ts": "tsc --build --watch",
+    "build": "tsc --build",
+    "build:clean": "rm -rf ./build",
+    "publish": "yarn npm publish",
+    "test": "vitest",
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev",
+    "cf-typegen": "wrangler types"
+  },
+  "dependencies": {
+    "tslib": "^2.8.1"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "0.5.29",
+    "@cloudflare/workers-types": "4.20241112.0",
+    "typescript": "5.5.2",
+    "vitest": "2.1.5",
+    "wrangler": "3.88.0"
+  }
+}

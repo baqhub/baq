@@ -44,7 +44,7 @@
     "@baqhub/sdk-react": "^0.1.23",
     "@baqhub/sdk-react-native": "^0.1.23",
     "expo-secure-store": "^12.8.1",
-    "tslib": "2.7.0"
+    "tslib": "2.8.1"
   },
   "peerDependencies": {
     "expo": "*",
