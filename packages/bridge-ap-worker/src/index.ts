@@ -1,7 +1,10 @@
 import "temporal-polyfill/global";
 
-import {createFederation, MemoryKvStore, Person} from "@fedify/fedify";
 import {configure, getConsoleSink} from "@logtape/logtape";
+import {Constants} from "./helpers/constants";
+import {lazy} from "./helpers/lazy";
+import {Responses} from "./helpers/responses";
+import {ApServer} from "./servers/ap/apServer";
 
 //
 // Logging.
@@ -13,41 +16,34 @@ await configure({
   loggers: [
     {category: ["logtape", "meta"], sinks: []},
     {category: "fedify", sinks: ["console"], lowestLevel: "info"},
+    {category: "bridge", sinks: ["console"], lowestLevel: "info"},
   ],
 });
 
 //
-// Fedify.
+// Shared resources.
 //
 
-const federation = createFederation<void>({
-  kv: new MemoryKvStore(),
-});
-
-federation.setActorDispatcher(
-  "/users/{identifier}",
-  async (ctx, identifier) => {
-    // Other than "me" is not found.
-    if (identifier !== "me") {
-      return null;
-    }
-
-    return new Person({
-      id: ctx.getActorUri(identifier),
-      name: "Me", // Display name
-      summary: "This is me!", // Bio
-      preferredUsername: identifier, // Bare handle
-      url: new URL("/", ctx.url),
-    });
-  }
-);
+const apServerOfEnv = lazy(ApServer.ofEnv);
 
 //
 // HTTP server.
 //
 
 export default {
-  async fetch(request, env, ctx): Promise<Response> {
-    return federation.fetch(request, {contextData: undefined});
+  async fetch(request, env, _ctx) {
+    const url = new URL(request.url);
+
+    // AP Server.
+    if (
+      url.pathname.startsWith(Constants.apRoutePrefix) ||
+      url.pathname.startsWith("/.well-known")
+    ) {
+      return apServerOfEnv(env).fetch(request);
+    }
+
+    // TODO: BAQ Server.
+
+    return Responses.notFound();
   },
 } satisfies ExportedHandler<Env>;

@@ -15,6 +15,12 @@ routes = [
 [observability]
 enabled = true
 
+# Bind a KV Namespace. Use KV as persistent storage for small key-value pairs.
+# Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#kv-namespaces
+[[kv_namespaces]]
+binding = "KV_WORKER_BRIDGE_AP"
+id = "57fcbb9bc5ae4fc0abe8ce66d954aa66"
+
 # Automatically place your workloads in an optimal location to minimize latency.
 # If you are running back-end logic in a Worker, running it closer to your back-end infrastructure
 # rather than the end user may result in better performance.
