@@ -1,0 +1,12 @@
+{
+  "name": "BridgeAP",
+  "type": "ts",
+  "path": "src/baq",
+  "record_types": {
+    "post": {
+      "entity": "types.baq.dev",
+      "record_id": "d8fe40d469e0455c896b058a043829bf",
+      "version_hash": "9b55d28b043def185af3ba0bcf489d128478e61c34116a408c921eafb4329a77"
+    }
+  }
+}

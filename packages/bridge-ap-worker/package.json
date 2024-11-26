@@ -32,9 +32,11 @@
     "cf-typegen": "wrangler types"
   },
   "dependencies": {
+    "@baqhub/cli": "*",
     "@baqhub/sdk": "*",
     "@fedify/fedify": "npm:@jsr/fedify__fedify@1.2.6",
     "@logtape/logtape": "0.8.0",
+    "linkifyjs": "4.1.4",
     "temporal-polyfill": "0.2.5",
     "tslib": "2.8.1"
   },

@@ -1903,6 +1903,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@baqhub/bridge-app-worker@workspace:packages/bridge-ap-worker"
   dependencies:
+    "@baqhub/cli": "npm:*"
     "@baqhub/sdk": "npm:*"
     "@cloudflare/vitest-pool-workers": "npm:0.5.31"
     "@cloudflare/workers-types": "npm:4.20241112.0"
@@ -1910,6 +1911,7 @@ __metadata:
     "@logtape/logtape": "npm:0.8.0"
     "@vitest/runner": "npm:2.1.5"
     "@vitest/snapshot": "npm:2.1.5"
+    linkifyjs: "npm:4.1.4"
     temporal-polyfill: "npm:0.2.5"
     tslib: "npm:2.8.1"
     typescript: "npm:5.5.2"
@@ -8420,6 +8422,13 @@ __metadata:
   version: 4.1.3
   resolution: "linkifyjs@npm:4.1.3"
   checksum: 10c0/9fb71da06ee710b5587c8b61ff9a0e45303d448f61fab135e44652cff95c09c1abe276158a72384cff6f35a2371d1cec33dfaa7e5280b71dbb142b43d210c75a
+  languageName: node
+  linkType: hard
+
+"linkifyjs@npm:4.1.4":
+  version: 4.1.4
+  resolution: "linkifyjs@npm:4.1.4"
+  checksum: 10c0/ae8dcd9bd35520d6be539039514a7cc19770f5998cff1303e1dbd22f98d6ba0a59f88719d982d5e1407c31cbe59059ac331b63857fb01e7594ed1d2aaf956636
   languageName: node
   linkType: hard
 

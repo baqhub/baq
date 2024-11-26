@@ -3231,6 +3231,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./packages/bridge-ap-worker/",\
         "packageDependencies": [\
           ["@baqhub/bridge-app-worker", "workspace:packages/bridge-ap-worker"],\
+          ["@baqhub/cli", "workspace:packages/lib-cli"],\
           ["@baqhub/sdk", "workspace:packages/lib-sdk"],\
           ["@cloudflare/vitest-pool-workers", "virtual:9ae34f772a93388beaa524904159345d720d5bc7d1c0472abe4c4cc5734beec18b9a86eb4843f40d7a511f8c71ac52da8276bb80535d3caa943d0b3366a7b4e6#npm:0.5.31"],\
           ["@cloudflare/workers-types", "npm:4.20241112.0"],\
@@ -3241,6 +3242,7 @@ const RAW_RUNTIME_STATE =
           ["@logtape/logtape", "npm:0.8.0"],\
           ["@vitest/runner", "npm:2.1.5"],\
           ["@vitest/snapshot", "npm:2.1.5"],\
+          ["linkifyjs", "npm:4.1.4"],\
           ["temporal-polyfill", "npm:0.2.5"],\
           ["tslib", "npm:2.8.1"],\
           ["typescript", "patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"],\
@@ -11099,6 +11101,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../.yarn/berry/cache/linkifyjs-npm-4.1.3-f9dd269a83-10c0.zip/node_modules/linkifyjs/",\
         "packageDependencies": [\
           ["linkifyjs", "npm:4.1.3"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:4.1.4", {\
+        "packageLocation": "../../../.yarn/berry/cache/linkifyjs-npm-4.1.4-52e86152a4-10c0.zip/node_modules/linkifyjs/",\
+        "packageDependencies": [\
+          ["linkifyjs", "npm:4.1.4"]\
         ],\
         "linkType": "HARD"\
       }]\

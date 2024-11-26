@@ -1,15 +1,30 @@
-import {Client, Entity, IO} from "@baqhub/sdk";
 import {
+  Client,
+  Entity,
+  EntityRecord,
+  IO,
+  isDefined,
+  Q,
+  StandingRecord,
+  Str,
+} from "@baqhub/sdk";
+import {
+  Create,
   createFederation,
+  Endpoints,
   exportJwk,
   Follow,
   generateCryptoKeyPair,
   Image,
   importJwk,
   KvKey,
+  Note,
   Person,
+  PUBLIC_COLLECTION,
 } from "@fedify/fedify";
+import {PostRecord} from "../../baq/postRecord";
 import {Constants} from "../../helpers/constants";
+import {postTextToHtml} from "../../helpers/string";
 import {CloudflareKvStore} from "../../services/kvStore/cloudflareKvStore/cloudflareKvStore";
 
 interface KeyPair {
@@ -17,6 +32,8 @@ interface KeyPair {
   privateKey: JsonWebKey;
   publicKey: JsonWebKey;
 }
+
+const KnownRecord = IO.union([EntityRecord, StandingRecord, PostRecord]);
 
 function ofEnv(env: Env) {
   const kv = CloudflareKvStore.ofNamespace(env.KV_WORKER_BRIDGE_AP);
@@ -47,7 +64,11 @@ function ofEnv(env: Env) {
         const {signal} = ctx.request;
         const client = await Client.discover(entity, signal);
         const entityRecord = await client.getEntityRecord(ctx.request.signal);
-        const {author, content, createdAt} = entityRecord;
+        if (entity !== entityRecord.author.entity) {
+          return null;
+        }
+
+        const {author, content, receivedAt} = entityRecord;
         const {website, avatar} = content.profile;
 
         // Build the actor.
@@ -74,8 +95,10 @@ function ofEnv(env: Env) {
           });
         })();
 
-        const keyPairs = await ctx.getActorKeyPairs(identifier);
-        const publicKeys = keyPairs.map(keyPair => keyPair.cryptographicKey);
+        const keyPairs = await ctx.getActorKeyPairs(entity);
+        if (keyPairs.length === 0) {
+          return null;
+        }
 
         return new Person({
           id: ctx.getActorUri(author.entity),
@@ -84,14 +107,22 @@ function ofEnv(env: Env) {
           preferredUsername: author.entity,
           url,
           icon,
-          published: createdAt.toTemporalInstant(),
+          published: receivedAt!.toTemporalInstant(),
           manuallyApprovesFollowers: false,
-          publicKeys,
-          inbox: ctx.getInboxUri(identifier),
+          publicKey: keyPairs[0]!.cryptographicKey,
+          assertionMethods: [keyPairs[1]!.multikey],
+          outbox: ctx.getOutboxUri(entity),
+          inbox: ctx.getInboxUri(entity),
+          endpoints: new Endpoints({sharedInbox: null}),
         });
       }
     )
     .setKeyPairsDispatcher(async (_ctx, identifier) => {
+      const entity = IO.tryDecode(Entity, identifier);
+      if (!entity) {
+        return [];
+      }
+
       async function mapKeyPair(keyPair: KeyPair): Promise<CryptoKeyPair> {
         return {
           privateKey: await importJwk(keyPair.privateKey, "private"),
@@ -107,7 +138,7 @@ function ofEnv(env: Env) {
       // Find existing keys.
       //
 
-      const key: KvKey = ["keypair", identifier];
+      const key: KvKey = ["keypair", entity];
       const existingKeys = await kv.get<KeyPair[]>(key);
       if (existingKeys) {
         return await mapKeyPairs(existingKeys);
@@ -138,14 +169,137 @@ function ofEnv(env: Env) {
     });
 
   //
+  // Object dispatcher.
+  //
+
+  federation.setObjectDispatcher(
+    Note,
+    `${Constants.apRoutePrefix}/users/{identifier}/notes/{id}`,
+    async (ctx, values) => {
+      const {signal} = ctx.request;
+      const entity = IO.tryDecode(Entity, values.identifier);
+      if (!entity) {
+        return null;
+      }
+
+      const client = await Client.discover(entity, signal);
+      const {author} = await client.getEntityRecord(signal);
+      if (entity !== author.entity) {
+        return null;
+      }
+
+      const {record, linkedRecords} = await client.getRecord(
+        KnownRecord,
+        PostRecord,
+        entity,
+        values.id
+      );
+
+      const {content, receivedAt} = record;
+      if (!("text" in content) || !receivedAt) {
+        return null;
+      }
+
+      return new Note({
+        id: ctx.getObjectUri(Note, values),
+        url: ctx.getObjectUri(Note, values),
+        attribution: ctx.getActorUri(entity),
+        to: PUBLIC_COLLECTION,
+        // cc: ctx.getFollowersUri(entity),
+        published: receivedAt.toTemporalInstant(),
+        mediaType: "text/html",
+        content: postTextToHtml(content.text),
+      });
+    }
+  );
+
+  //
+  // Outbox dispatcher.
+  //
+
+  federation
+    .setOutboxDispatcher(
+      `${Constants.apRoutePrefix}/users/{identifier}/outbox`,
+      async (ctx, identifier, cursor) => {
+        //
+        // Fetch post records on BAQ.
+        //
+
+        // Validate the entity.
+        const {signal} = ctx.request;
+        const entity = IO.tryDecode(Entity, identifier);
+        if (!entity) {
+          return null;
+        }
+
+        const client = await Client.discover(entity, signal);
+        const {author} = await client.getEntityRecord(signal);
+        if (entity !== author.entity) {
+          return null;
+        }
+
+        const {records, linkedRecords, nextPage} = await (() => {
+          // Load more query.
+          if (cursor) {
+            const nextPage = Str.fromUrlBase64(cursor);
+            return client.getMoreRecords(KnownRecord, PostRecord, nextPage);
+          }
+
+          // Initial query.
+          return client.getRecords(
+            KnownRecord,
+            PostRecord,
+            {
+              pageSize: Constants.itemsPerPage,
+              filter: Q.and(Q.type(PostRecord), Q.author(author.entity)),
+            },
+            signal
+          );
+        })();
+
+        //
+        // Convert to activities.
+        //
+
+        const items = records
+          .map(post => {
+            const {author, content, receivedAt} = post;
+            if (!("text" in content) || !receivedAt) {
+              return undefined;
+            }
+
+            return new Create({
+              id: new URL(
+                `${Constants.apRoutePrefix}/users/${author.entity}/notes/${post.id}#activity`,
+                ctx.url
+              ),
+              actor: ctx.getActorUri(author.entity),
+              object: new Note({
+                id: ctx.getObjectUri(Note, {
+                  identifier: author.entity,
+                  id: post.id,
+                }),
+                published: receivedAt.toTemporalInstant(),
+                mediaType: "text/html",
+                content: postTextToHtml(content.text),
+              }),
+            });
+          })
+          .filter(isDefined);
+
+        const nextCursor = nextPage ? Str.toUrlBase64(nextPage) : null;
+        return {items, nextCursor};
+      }
+    )
+    .setCounter(() => 99)
+    .setFirstCursor(() => "");
+
+  //
   // Inbox dispatcher.
   //
 
   federation
-    .setInboxListeners(
-      `${Constants.apRoutePrefix}/users/{identifier}/inbox`,
-      `${Constants.apRoutePrefix}/inbox`
-    )
+    .setInboxListeners(`${Constants.apRoutePrefix}/users/{identifier}/inbox`)
     .on(Follow, async (ctx, follow) => {
       // if (
       //   follow.id == null ||

@@ -2,4 +2,5 @@
 
 interface Env {
 	KV_WORKER_BRIDGE_AP: KVNamespace;
+	IS_DEV: string;
 }

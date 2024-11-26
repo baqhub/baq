@@ -1,28 +1,35 @@
 import "temporal-polyfill/global";
 
-import {configure, getConsoleSink} from "@logtape/logtape";
+import {
+  configure,
+  getConsoleSink,
+  LoggerConfig,
+  LogLevel,
+} from "@logtape/logtape";
 import {Constants} from "./helpers/constants";
 import {lazy} from "./helpers/lazy";
 import {Responses} from "./helpers/responses";
 import {ApServer} from "./servers/ap/apServer";
 
 //
-// Logging.
-//
-
-await configure({
-  sinks: {console: getConsoleSink()},
-  filters: {},
-  loggers: [
-    {category: ["logtape", "meta"], sinks: []},
-    {category: "fedify", sinks: ["console"], lowestLevel: "info"},
-    {category: "bridge", sinks: ["console"], lowestLevel: "info"},
-  ],
-});
-
-//
 // Shared resources.
 //
+
+const setupLogging = lazy(async (env: Env) => {
+  const lowestLevel: LogLevel = env.IS_DEV ? "info" : "error";
+
+  const loggers: LoggerConfig<"console", never>[] = [
+    {category: ["logtape", "meta"], sinks: []},
+    {category: "fedify", sinks: ["console"], lowestLevel},
+    {category: "bridge", sinks: ["console"], lowestLevel},
+  ];
+
+  await configure({
+    sinks: {console: getConsoleSink()},
+    filters: {},
+    loggers,
+  });
+});
 
 const apServerOfEnv = lazy(ApServer.ofEnv);
 
@@ -32,6 +39,7 @@ const apServerOfEnv = lazy(ApServer.ofEnv);
 
 export default {
   async fetch(request, env, _ctx) {
+    await setupLogging(env);
     const url = new URL(request.url);
 
     // AP Server.
