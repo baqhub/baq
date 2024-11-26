@@ -5,12 +5,7 @@ const logger = getLogger(["bridge", "cloudflare-kv-store"]);
 
 function ofNamespace(kv: KVNamespace): KvStore {
   function keyToString(key: KvKey) {
-    const suffix = key
-      .slice(1)
-      .map((part: string) => part.replaceAll(":", "_:"))
-      .join("::");
-
-    return `fedify::${suffix}`;
+    return key.map((part: string) => part.replaceAll(":", "_:")).join("::");
   }
 
   return {
