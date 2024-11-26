@@ -67,5 +67,8 @@
     {
       "path": "packages/app-bird-web"
     },
+    {
+      "path": "packages/bridge-ap-worker"
+    },
   ]
 }

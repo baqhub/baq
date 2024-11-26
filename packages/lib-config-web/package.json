@@ -11,7 +11,7 @@
     "./*": "./build/src/*"
   },
   "devDependencies": {
-    "@types/node": "22.7.4",
+    "@types/node": "22.10.0",
     "@vitejs/plugin-react-swc": "3.7.1",
     "sharp": "0.33.5",
     "svgo": "3.3.2",
@@ -19,6 +19,6 @@
     "typescript": "5.5.2",
     "vite": "5.4.11",
     "vite-plugin-image-optimizer": "1.1.8",
-    "vite-plugin-svgr": "4.2.0"
+    "vite-plugin-svgr": "4.3.0"
   }
 }

@@ -17,8 +17,8 @@
     "@baqhub/sdk-react": "*",
     "@baqhub/sdk-react-dom": "*",
     "@baqhub/ui": "*",
-    "@heroicons/react": "2.1.5",
-    "@mdx-js/react": "3.0.1",
+    "@heroicons/react": "2.2.0",
+    "@mdx-js/react": "3.1.0",
     "@tanstack/react-router": "1.58.16",
     "lodash": "4.17.21",
     "react": "18.3.1",
@@ -27,18 +27,18 @@
   },
   "devDependencies": {
     "@baqhub/config-web": "*",
-    "@mdx-js/rollup": "3.0.1",
-    "@types/lodash": "4.17.9",
+    "@mdx-js/rollup": "3.1.0",
+    "@types/lodash": "4.17.13",
     "@types/mdx": "2.0.13",
-    "@types/react": "18.3.11",
-    "@types/react-dom": "18.3.0",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
     "autoprefixer": "10.4.20",
-    "postcss": "8.4.47",
+    "postcss": "8.4.49",
     "remark-smartypants": "3.0.2",
-    "rollup": "4.27.3",
+    "rollup": "4.27.4",
     "tailwindcss": "3.4.15",
     "typescript": "5.5.2",
     "vite": "5.4.11",
-    "wrangler": "3.88.0"
+    "wrangler": "3.90.0"
   }
 }

@@ -47,8 +47,8 @@
   },
   "devDependencies": {
     "@types/find-package-json": "1.2.6",
-    "@types/lodash": "4.17.9",
-    "@types/node": "22.7.4",
+    "@types/lodash": "4.17.13",
+    "@types/node": "22.10.0",
     "@types/prettier": "3.0.0",
     "tsconfig-to-dual-package": "1.2.0",
     "vitest": "2.1.5"
