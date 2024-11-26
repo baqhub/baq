@@ -1,5 +1,5 @@
 import {Client, Entity, IO} from "@baqhub/sdk";
-import {createFederation, Person} from "@fedify/fedify";
+import {createFederation, Image, Person} from "@fedify/fedify";
 import {Constants} from "../../helpers/constants";
 import {CloudflareKvStore} from "../../services/kvStore/cloudflareKvStore/cloudflareKvStore";
 
@@ -18,21 +18,41 @@ function ofEnv(env: Env) {
       }
 
       // Fetch the entity record.
-      const client = await Client.discover(entity, ctx.request.signal);
-      const {author, content} = await client.getEntityRecord(
-        ctx.request.signal
-      );
+      const {signal} = ctx.request;
+      const client = await Client.discover(entity, signal);
+      const entityRecord = await client.getEntityRecord(ctx.request.signal);
+      const {author, content, createdAt} = entityRecord;
+      const {website, avatar} = content.profile;
 
       // Build the actor.
       const name = content.profile.name || author.entity;
       const summary = content.profile.bio;
+
+      const url = website
+        ? new URL(website)
+        : new URL(Constants.birdProfilePrefix + author.entity);
+
+      const icon = await (async () => {
+        if (!avatar) {
+          return undefined;
+        }
+
+        const avatarUrl = await client.getBlobUrl(entityRecord, avatar, signal);
+        return new Image({
+          url: new URL(avatarUrl),
+          mediaType: avatar.type,
+        });
+      })();
 
       return new Person({
         id: ctx.getActorUri(author.entity),
         name,
         summary,
         preferredUsername: author.entity,
-        url: new URL("/", ctx.url),
+        url,
+        icon,
+        published: createdAt.toTemporalInstant(),
+        manuallyApprovesFollowers: false,
       });
     }
   );

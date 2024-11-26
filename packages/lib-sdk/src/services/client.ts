@@ -426,12 +426,12 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     return r;
   }
 
-  async function downloadBlob(
+  async function getBlobUrl(
     record: AnyRecord,
     blob: AnyBlobLink,
     signal?: AbortSignal
   ) {
-    const url = await expandUrlTemplate(
+    return await expandUrlTemplate(
       "recordBlob",
       {
         entity: record.author.entity,
@@ -441,7 +441,14 @@ function buildClientBase(clientOptions: BuildClientOptions) {
       },
       signal
     );
+  }
 
+  async function downloadBlob(
+    record: AnyRecord,
+    blob: AnyBlobLink,
+    signal?: AbortSignal
+  ) {
+    const url = await getBlobUrl(record, blob, signal);
     const isProxyRecord = record.source === "proxy";
     const query = isProxyRecord ? {proxyTo: record.author.entity} : undefined;
 
@@ -527,6 +534,7 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     deleteRecord,
     discover,
     uploadBlob,
+    getBlobUrl,
     downloadBlob,
     blobUrlBuilderFor,
     blobUrlBuilder,
