@@ -7,6 +7,7 @@ import {
   Q,
   StandingRecord,
   Str,
+  Uuid,
 } from "@baqhub/sdk";
 import {
   Create,
@@ -17,7 +18,6 @@ import {
   generateCryptoKeyPair,
   Image,
   importJwk,
-  KvKey,
   Note,
   Person,
   PUBLIC_COLLECTION,
@@ -25,26 +25,87 @@ import {
 import {PostRecord} from "../../baq/postRecord";
 import {Constants} from "../../helpers/constants";
 import {postTextToHtml} from "../../helpers/string";
+import {CloudflareKv} from "../../services/kv/cloudflareKv";
 import {CloudflareKvStore} from "../../services/kvStore/cloudflareKvStore/cloudflareKvStore";
-
-interface KeyPair {
-  type: "rsa" | "ed25519";
-  privateKey: JsonWebKey;
-  publicKey: JsonWebKey;
-}
+import {ActorKeyPair, ActorState, ApKvKeys} from "./apKvKeys";
 
 const KnownRecord = IO.union([EntityRecord, StandingRecord, PostRecord]);
 
 function ofEnv(env: Env) {
-  const kv = CloudflareKvStore.ofNamespace(env.KV_WORKER_BRIDGE_AP);
+  const kv = CloudflareKv.ofNamespace(env.KV_WORKER_BRIDGE_AP);
+  const kvStore = CloudflareKvStore.ofNamespace(env.KV_WORKER_BRIDGE_AP);
+
   const federation = createFederation<void>({
-    kv,
+    kv: kvStore,
     kvPrefixes: {
-      activityIdempotence: ["ap", "fedify", "activityIdempotence"],
-      remoteDocument: ["ap", "fedify", "remoteDocument"],
-      publicKey: ["ap", "fedify", "publicKey"],
+      activityIdempotence: ApKvKeys.fedifyActivityIdempotence,
+      remoteDocument: ApKvKeys.fedifyRemoteDocument,
+      publicKey: ApKvKeys.fedifyPublicKey,
     },
   });
+
+  //
+  // Internal state.
+  //
+
+  async function findActorId(requestedEntity: string) {
+    // Validate the entity.
+    const entity = IO.tryDecode(Entity, requestedEntity);
+    if (!entity) {
+      return null;
+    }
+
+    // Find an existing mapping.
+    const key = ApKvKeys.identifierForEntity(entity);
+    const existingId = await kv.get(key);
+    if (existingId) {
+      return existingId;
+    }
+
+    // Create a new one and store it.
+    // TODO: Revisit concurrent scenario.
+    const newState: ActorState = {
+      id: Uuid.new(),
+      entity,
+      entityRecord: undefined,
+    };
+
+    await kv.set(ApKvKeys.actorForIdentifier(newState.id), newState);
+    await kv.set(key, newState.id);
+
+    return newState.id;
+  }
+
+  async function findActorEntityRecord(
+    identifier: string,
+    signal: AbortSignal
+  ) {
+    const key = ApKvKeys.actorForIdentifier(identifier);
+    const state = await kv.get(key);
+    if (!state) {
+      return undefined;
+    }
+
+    // If we have an entity record, return it.
+    if (state.entityRecord) {
+      return IO.decode(EntityRecord, state.entityRecord.record);
+    }
+
+    // Otherwise, perform discovery.
+    const client = await Client.discover(state.entity, signal);
+    const entityRecord = await client.getEntityRecord(signal);
+
+    const newState: ActorState = {
+      ...state,
+      entityRecord: {
+        fetchedAt: Date.now(),
+        record: IO.encode(EntityRecord, entityRecord),
+      },
+    };
+    await kv.set(key, newState);
+
+    return entityRecord;
+  }
 
   //
   // Actor dispatcher.
@@ -54,17 +115,9 @@ function ofEnv(env: Env) {
     .setActorDispatcher(
       `${Constants.apRoutePrefix}/users/{identifier}`,
       async (ctx, identifier) => {
-        // Validate the entity.
-        const entity = IO.tryDecode(Entity, identifier);
-        if (!entity) {
-          return null;
-        }
-
-        // Fetch the entity record.
         const {signal} = ctx.request;
-        const client = await Client.discover(entity, signal);
-        const entityRecord = await client.getEntityRecord(ctx.request.signal);
-        if (entity !== entityRecord.author.entity) {
+        const entityRecord = await findActorEntityRecord(identifier, signal);
+        if (!entityRecord) {
           return null;
         }
 
@@ -84,6 +137,7 @@ function ofEnv(env: Env) {
             return undefined;
           }
 
+          const client = Client.ofRecord(entityRecord);
           const avatarUrl = await client.getBlobUrl(
             entityRecord,
             avatar,
@@ -95,42 +149,37 @@ function ofEnv(env: Env) {
           });
         })();
 
-        const keyPairs = await ctx.getActorKeyPairs(entity);
+        const keyPairs = await ctx.getActorKeyPairs(identifier);
         if (keyPairs.length === 0) {
           return null;
         }
 
         return new Person({
-          id: ctx.getActorUri(author.entity),
+          id: ctx.getActorUri(identifier),
+          preferredUsername: author.entity,
           name,
           summary,
-          preferredUsername: author.entity,
           url,
           icon,
           published: receivedAt!.toTemporalInstant(),
           manuallyApprovesFollowers: false,
           publicKey: keyPairs[0]!.cryptographicKey,
           assertionMethods: [keyPairs[1]!.multikey],
-          outbox: ctx.getOutboxUri(entity),
-          inbox: ctx.getInboxUri(entity),
+          outbox: ctx.getOutboxUri(identifier),
+          inbox: ctx.getInboxUri(identifier),
           endpoints: new Endpoints({sharedInbox: null}),
         });
       }
     )
     .setKeyPairsDispatcher(async (_ctx, identifier) => {
-      const entity = IO.tryDecode(Entity, identifier);
-      if (!entity) {
-        return [];
-      }
-
-      async function mapKeyPair(keyPair: KeyPair): Promise<CryptoKeyPair> {
+      async function mapKeyPair(keyPair: ActorKeyPair): Promise<CryptoKeyPair> {
         return {
           privateKey: await importJwk(keyPair.privateKey, "private"),
           publicKey: await importJwk(keyPair.publicKey, "public"),
         };
       }
 
-      async function mapKeyPairs(keysPairs: ReadonlyArray<KeyPair>) {
+      async function mapKeyPairs(keysPairs: ReadonlyArray<ActorKeyPair>) {
         return Promise.all(keysPairs.map(mapKeyPair));
       }
 
@@ -138,8 +187,8 @@ function ofEnv(env: Env) {
       // Find existing keys.
       //
 
-      const key: KvKey = ["ap", "keypair", entity];
-      const existingKeys = await kv.get<KeyPair[]>(key);
+      const key = ApKvKeys.keyPairsForIdentifier(identifier);
+      const existingKeys = await kv.get(key);
       if (existingKeys) {
         return await mapKeyPairs(existingKeys);
       }
@@ -151,7 +200,7 @@ function ofEnv(env: Env) {
       const rsaPair = await generateCryptoKeyPair("RSASSA-PKCS1-v1_5");
       const ed25519Pair = await generateCryptoKeyPair("Ed25519");
 
-      const newKeys: ReadonlyArray<KeyPair> = [
+      await kv.set(key, [
         {
           type: "rsa",
           privateKey: await exportJwk(rsaPair.privateKey),
@@ -162,10 +211,12 @@ function ofEnv(env: Env) {
           privateKey: await exportJwk(ed25519Pair.privateKey),
           publicKey: await exportJwk(ed25519Pair.publicKey),
         },
-      ];
+      ]);
 
-      await kv.set(key, newKeys);
       return [rsaPair, ed25519Pair];
+    })
+    .mapHandle((_ctx, username) => {
+      return findActorId(username);
     });
 
   //
@@ -177,21 +228,19 @@ function ofEnv(env: Env) {
     `${Constants.apRoutePrefix}/users/{identifier}/notes/{id}`,
     async (ctx, values) => {
       const {signal} = ctx.request;
-      const entity = IO.tryDecode(Entity, values.identifier);
-      if (!entity) {
+      const entityRecord = await findActorEntityRecord(
+        values.identifier,
+        signal
+      );
+      if (!entityRecord) {
         return null;
       }
 
-      const client = await Client.discover(entity, signal);
-      const {author} = await client.getEntityRecord(signal);
-      if (entity !== author.entity) {
-        return null;
-      }
-
-      const {record, linkedRecords} = await client.getRecord(
+      const client = Client.ofRecord(entityRecord);
+      const {record} = await client.getRecord(
         KnownRecord,
         PostRecord,
-        entity,
+        entityRecord.author.entity,
         values.id
       );
 
@@ -203,7 +252,7 @@ function ofEnv(env: Env) {
       return new Note({
         id: ctx.getObjectUri(Note, values),
         url: ctx.getObjectUri(Note, values),
-        attribution: ctx.getActorUri(entity),
+        attribution: ctx.getActorUri(values.identifier),
         to: PUBLIC_COLLECTION,
         // cc: ctx.getFollowersUri(entity),
         published: receivedAt.toTemporalInstant(),
@@ -227,18 +276,15 @@ function ofEnv(env: Env) {
 
         // Validate the entity.
         const {signal} = ctx.request;
-        const entity = IO.tryDecode(Entity, identifier);
-        if (!entity) {
+        const entityRecord = await findActorEntityRecord(identifier, signal);
+        if (!entityRecord) {
           return null;
         }
 
-        const client = await Client.discover(entity, signal);
-        const {author} = await client.getEntityRecord(signal);
-        if (entity !== author.entity) {
-          return null;
-        }
+        const client = Client.ofRecord(entityRecord);
+        const {author} = entityRecord;
 
-        const {records, linkedRecords, nextPage} = await (() => {
+        const {records, nextPage} = await (() => {
           // Load more query.
           if (cursor) {
             const nextPage = Str.fromUrlBase64(cursor);
@@ -263,22 +309,19 @@ function ofEnv(env: Env) {
 
         const items = records
           .map(post => {
-            const {author, content, receivedAt} = post;
+            const {content, receivedAt} = post;
             if (!("text" in content) || !receivedAt) {
               return undefined;
             }
 
             return new Create({
               id: new URL(
-                `${Constants.apRoutePrefix}/users/${author.entity}/notes/${post.id}#activity`,
+                `${Constants.apRoutePrefix}/users/${identifier}/notes/${post.id}#activity`,
                 ctx.url
               ),
-              actor: ctx.getActorUri(author.entity),
+              actor: ctx.getActorUri(identifier),
               object: new Note({
-                id: ctx.getObjectUri(Note, {
-                  identifier: author.entity,
-                  id: post.id,
-                }),
+                id: ctx.getObjectUri(Note, {identifier, id: post.id}),
                 published: receivedAt.toTemporalInstant(),
                 mediaType: "text/html",
                 content: postTextToHtml(content.text),
