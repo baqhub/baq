@@ -40,9 +40,9 @@ function ofEnv(env: Env) {
   const federation = createFederation<void>({
     kv,
     kvPrefixes: {
-      activityIdempotence: ["fedify", "activityIdempotence"],
-      remoteDocument: ["fedify", "remoteDocument"],
-      publicKey: ["fedify", "publicKey"],
+      activityIdempotence: ["ap", "fedify", "activityIdempotence"],
+      remoteDocument: ["ap", "fedify", "remoteDocument"],
+      publicKey: ["ap", "fedify", "publicKey"],
     },
   });
 
@@ -138,7 +138,7 @@ function ofEnv(env: Env) {
       // Find existing keys.
       //
 
-      const key: KvKey = ["keypair", entity];
+      const key: KvKey = ["ap", "keypair", entity];
       const existingKeys = await kv.get<KeyPair[]>(key);
       if (existingKeys) {
         return await mapKeyPairs(existingKeys);

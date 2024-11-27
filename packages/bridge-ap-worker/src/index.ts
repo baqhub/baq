@@ -16,12 +16,12 @@ import {ApServer} from "./servers/ap/apServer";
 //
 
 const setupLogging = lazy(async (env: Env) => {
-  const lowestLevel: LogLevel = env.IS_DEV ? "info" : "error";
+  const level: LogLevel = env.IS_DEV ? "info" : "error";
 
   const loggers: LoggerConfig<"console", never>[] = [
     {category: ["logtape", "meta"], sinks: []},
-    {category: "fedify", sinks: ["console"], lowestLevel},
-    {category: "bridge", sinks: ["console"], lowestLevel},
+    {category: "fedify", sinks: ["console"], level},
+    {category: "bridge", sinks: ["console"], level},
   ];
 
   await configure({
