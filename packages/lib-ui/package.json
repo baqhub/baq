@@ -19,7 +19,7 @@
     "@baqhub/sdk": "*",
     "@baqhub/sdk-react": "*",
     "@floating-ui/react": "0.26.28",
-    "linkifyjs": "4.1.3",
+    "linkifyjs": "4.1.4",
     "lodash": "4.17.21",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -37,6 +37,6 @@
     "typescript": "5.5.2",
     "vite": "5.4.11",
     "vite-plugin-svgr": "4.3.0",
-    "vitest": "2.1.5"
+    "vitest": "2.1.6"
   }
 }
