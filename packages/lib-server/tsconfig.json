@@ -5,10 +5,14 @@
   "compilerOptions": {
     "outDir": "./build/esm",
     "baseUrl": "./src",
-    "declaration": true
+    "declaration": true,
   },
   "include": [
-    "scripts",
     "src"
   ],
+  "references": [
+    {
+      "path": "../lib-sdk"
+    }
+  ]
 }

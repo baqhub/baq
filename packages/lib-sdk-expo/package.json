@@ -51,7 +51,7 @@
     "react-native": ">=0.60"
   },
   "devDependencies": {
-    "@types/node": "22.10.0",
+    "@types/node": "22.10.7",
     "tsconfig-to-dual-package": "1.2.0",
     "typescript": "5.5.2"
   }

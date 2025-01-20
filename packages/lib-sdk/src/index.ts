@@ -8,6 +8,7 @@ export * from "./helpers/customError.js";
 export * from "./helpers/fileName.js";
 export * from "./helpers/fixImport.js";
 export * from "./helpers/hash.js";
+export * from "./helpers/headers.js";
 export * as IO from "./helpers/io.js";
 export * from "./helpers/schemaIO.js";
 export * from "./helpers/string.js";

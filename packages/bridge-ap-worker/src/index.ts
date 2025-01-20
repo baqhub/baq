@@ -10,6 +10,7 @@ import {Constants} from "./helpers/constants";
 import {lazy} from "./helpers/lazy";
 import {Responses} from "./helpers/responses";
 import {ApServer} from "./servers/ap/apServer";
+import {BaqServer} from "./servers/baq/baqServer";
 
 //
 // Shared resources.
@@ -32,6 +33,7 @@ const setupLogging = lazy(async (env: Env) => {
 });
 
 const apServerOfEnv = lazy(ApServer.ofEnv);
+const baqServerOfEnv = lazy(BaqServer.ofEnv);
 
 //
 // HTTP server.
@@ -50,7 +52,10 @@ export default {
       return apServerOfEnv(env).fetch(request);
     }
 
-    // TODO: BAQ Server.
+    // BAQ Server.
+    if (url.pathname.startsWith(Constants.baqRoutePrefix)) {
+      return baqServerOfEnv(env).fetch(request);
+    }
 
     return Responses.notFound();
   },

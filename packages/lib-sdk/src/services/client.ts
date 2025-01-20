@@ -3,7 +3,7 @@ import compact from "lodash/compact.js";
 import {Constants} from "../constants.js";
 import {AbortedError, Async} from "../helpers/async.js";
 import {ErrorWithData} from "../helpers/customError.js";
-import {findLink} from "../helpers/headers.js";
+import {Headers} from "../helpers/headers.js";
 import * as IO from "../helpers/io.js";
 import {Str} from "../helpers/string.js";
 import {findStableTimestamp} from "../helpers/time.js";
@@ -559,9 +559,9 @@ async function getEntityRecordFromEntityRecordUrl(
 async function getEntityRecordFromEntity(entity: string, signal: AbortSignal) {
   // Perform discovery.
   const headers = await Http.head(fixDiscoverUrl(`https://${entity}/`));
-  const entityRecordLink = findLink(
+  const entityRecordLink = Headers.findLink(
     headers,
-    "https://baq.dev/rels/entity-record"
+    Constants.discoveryLinkRel
   );
 
   if (!entityRecordLink) {

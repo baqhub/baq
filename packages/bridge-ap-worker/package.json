@@ -34,19 +34,21 @@
   "dependencies": {
     "@baqhub/cli": "*",
     "@baqhub/sdk": "*",
+    "@baqhub/server": "*",
     "@fedify/fedify": "npm:@jsr/fedify__fedify@1.2.6",
     "@logtape/logtape": "0.8.0",
-    "linkifyjs": "4.1.4",
+    "linkifyjs": "4.2.0",
+    "masto": "^6.10.3",
     "temporal-polyfill": "0.2.5",
     "tslib": "2.8.1"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "0.5.32",
-    "@cloudflare/workers-types": "4.20241112.0",
-    "@vitest/runner": "2.1.6",
-    "@vitest/snapshot": "2.1.6",
+    "@cloudflare/vitest-pool-workers": "0.6.4",
+    "@cloudflare/workers-types": "4.20250109.0",
+    "@vitest/runner": "2.1.8",
+    "@vitest/snapshot": "2.1.8",
     "typescript": "5.5.2",
-    "vitest": "2.1.6",
-    "wrangler": "3.91.0"
+    "vitest": "2.1.8",
+    "wrangler": "3.103.2"
   }
 }

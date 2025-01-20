@@ -20,6 +20,9 @@
       "path": "packages/lib-cli"
     },
     {
+      "path": "packages/lib-server"
+    },
+    {
       "path": "packages/lib-sdk-react"
     },
     {

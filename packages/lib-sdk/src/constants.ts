@@ -8,4 +8,5 @@ export const Constants = {
   credentialsHeader: "X-Baq-Credentials",
   lastEventIdHeader: "Last-Event-ID",
   defaultPageSize: 20,
+  discoveryLinkRel: "https://baq.dev/rels/entity-record",
 };
