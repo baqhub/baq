@@ -6,8 +6,10 @@ import {
   Uuid,
 } from "@baqhub/sdk";
 import {Hono} from "hono";
+import {CachedRecord} from "./model/cachedRecord.js";
 import {Pod} from "./model/pod.js";
 import {PodMapping} from "./model/podMapping.js";
+import {KvCachedRecords} from "./services/kv/kvCachedRecords.js";
 import {KvPodMappings} from "./services/kv/kvPodMappings.js";
 import {KvPods} from "./services/kv/kvPods.js";
 import {KvStoreAdapter} from "./services/kv/kvStoreAdapter.js";
@@ -60,6 +62,7 @@ function buildServer(config: ServerConfig) {
 
   const kvPodMappings = KvPodMappings.new(kvStoreAdapter);
   const kvPods = KvPods.new(kvStoreAdapter);
+  const kvCachedRecords = KvCachedRecords.new(kvStoreAdapter);
 
   //
   // Pods.
@@ -127,7 +130,17 @@ function buildServer(config: ServerConfig) {
       }
     );
 
+    const newEntityCachedRecord = CachedRecord.ofNewRecord(
+      newPod.id,
+      newPod.id,
+      EntityRecord,
+      newEntityRecord
+    );
+
+    console.log("Storing:", newEntityCachedRecord);
+
     // And store it.
+    await kvCachedRecords.setRecord(EntityRecord, newEntityCachedRecord);
     await kvPods.setPod(newPod);
 
     const mapping1 = PodMapping.ofPod(newPod);

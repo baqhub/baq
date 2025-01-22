@@ -27,7 +27,7 @@ export type CachedRecord<T extends AnyRecord> = IO.TypeOf<
 // API.
 //
 
-function ofRecord<T extends AnyRecord>(
+function ofNewRecord<T extends AnyRecord>(
   ownerId: string,
   authorId: string,
   recordType: CleanRecordType<T>,
@@ -37,7 +37,9 @@ function ofRecord<T extends AnyRecord>(
     ...record,
     source: RecordSource.PROXY,
     version: {
-      ...record.version,
+      author: record.author,
+      createdAt: record.createdAt,
+      receivedAt: undefined,
       hash: RecordVersionHash.ofRecord(recordType, record),
     },
   };
@@ -52,5 +54,5 @@ function ofRecord<T extends AnyRecord>(
 
 export const CachedRecord = {
   io: cachedRecord,
-  ofRecord,
+  ofNewRecord,
 };
