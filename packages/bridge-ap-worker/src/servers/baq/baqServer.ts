@@ -1,28 +1,30 @@
-import {Hash, never, Uuid} from "@baqhub/sdk";
-import {Server} from "@baqhub/server";
-import {createRestAPIClient} from "masto";
+import {Hash, never} from "@baqhub/sdk";
+import {EntityRequestHandler, Server} from "@baqhub/server";
+import {fetchDocumentLoader} from "@fedify/fedify";
+import {isActor, lookupObject} from "@fedify/fedify/vocab";
+import {stripHtml} from "string-strip-html";
 import {Constants} from "../../helpers/constants";
 import {CloudflareKv} from "../../services/kv/cloudflareKv";
-import {CloudflareKvStore} from "../../services/kvStore/cloudflareKvStore/cloudflareKvStore";
-import {AccountPath} from "./accountPath";
-import {AccountState} from "./accountState";
-import {BaqKvKeys} from "./baqKvKeys";
+import {BaqActor} from "./baqActor";
+
+function patchedDocumentLoader(url: string) {
+  return fetchDocumentLoader(url, true);
+}
 
 const mastodonSocialRegexp = /^([a-z0-9\\-]{1,60}).mastodon./;
 const threadsRegexp = /^([a-z0-9\\-]{1,60}).threads./;
 const blueskyRegexp = /^([a-z0-9\\-]{1,60}).bsky./;
 
-function entityToAccountPath(entity: string): AccountPath | undefined {
-  function tryMatch(regex: RegExp, server: string): AccountPath | undefined {
+type ActorPath = [string, string];
+
+function parseEntity(entity: string): ActorPath | undefined {
+  function tryMatch(regex: RegExp, server: string): ActorPath | undefined {
     const match = entity.match(regex);
     if (!match || !match[1]) {
       return undefined;
     }
 
-    return {
-      server,
-      username: match[1],
-    };
+    return [server, match[1]];
   }
 
   return (
@@ -32,16 +34,16 @@ function entityToAccountPath(entity: string): AccountPath | undefined {
   );
 }
 
-function accountPathToEntity(accountPath: AccountPath): string {
-  switch (accountPath.server) {
+function actorToEntity(actor: BaqActor): string {
+  switch (actor.server) {
     case "mastodon.social":
-      return `${accountPath.username}.mastodon.${Constants.domain}`;
+      return `${actor.username}.mastodon.${Constants.domain}`;
 
     case "threads.net":
-      return `${accountPath.username}.threads.${Constants.domain}`;
+      return `${actor.username}.threads.${Constants.domain}`;
 
     case "bsky.brid.gy":
-      return `${accountPath.username}.bsky.${Constants.domain}`;
+      return `${actor.username}.bsky.${Constants.domain}`;
 
     default:
       throw never();
@@ -50,70 +52,55 @@ function accountPathToEntity(accountPath: AccountPath): string {
 
 function ofEnv(env: Env) {
   const kv = CloudflareKv.ofNamespace(env.KV_WORKER_BRIDGE_AP);
-  const kvStore = CloudflareKvStore.ofNamespace(env.KV_WORKER_BRIDGE_AP);
+  const kvStoreAdapter = CloudflareKv.ofNamespace(env.KV_WORKER_BRIDGE_AP, [
+    "baq_server",
+  ]);
 
-  async function onDiscoverRequest(entity: string) {
-    // Parse entity.
-    const accountPath = entityToAccountPath(entity);
-    if (!accountPath) {
+  const onEntityRequest: EntityRequestHandler = async (entity: string) => {
+    const actorPath = parseEntity(entity);
+    if (!actorPath) {
       return undefined;
     }
 
-    // Find existing mapping.
-    const existingIdKey = BaqKvKeys.identifierForAccountPath(accountPath);
-    const existingId = await kv.get(existingIdKey);
+    const [server, handle] = actorPath;
+    const identifier = `${handle}@${server}`;
 
-    if (existingId) {
-      const existingStateKey = BaqKvKeys.accountForIdentifier(existingId);
-      const existingState = await kv.get(existingStateKey);
-
-      return existingState && AccountState.toEntityRecordPath(existingState);
-    }
-
-    // Otherwise, discover the account.
-    const masto = createRestAPIClient({
-      url: `https://${accountPath.server}`,
+    const actor = await lookupObject(identifier, {
+      documentLoader: patchedDocumentLoader,
     });
-
-    const apAccount = await masto.v1.accounts.lookup({
-      acct: accountPath.username,
-    });
-    // TODO: Check what happens when not found.
-    if (!apAccount) {
+    if (!isActor(actor)) {
       return undefined;
     }
 
-    const newPath: AccountPath = {
-      server: accountPath.server,
-      username: apAccount.username,
-    };
-
-    const newState: AccountState = {
-      id: Hash.shortHash(apAccount.id),
-      path: newPath,
-      entity: accountPathToEntity(newPath),
-      entityRecordId: Uuid.new(),
-    };
-
-    const newStateKey = BaqKvKeys.accountForIdentifier(newState.id);
-    await kv.set(newStateKey, newState);
-
-    const newIdKey1 = BaqKvKeys.identifierForAccountPath(newPath);
-    await kv.set(newIdKey1, newState.id);
-
-    if (!AccountPath.equals(newPath, accountPath)) {
-      const newIdKey2 = BaqKvKeys.identifierForAccountPath(accountPath);
-      await kv.set(newIdKey2, newState.id);
+    const {id, preferredUsername} = actor;
+    if (!id || typeof preferredUsername !== "string") {
+      return undefined;
     }
 
-    return AccountState.toEntityRecordPath(newState);
-  }
+    const newActor: BaqActor = {
+      id: id.toString(),
+      server,
+      username: preferredUsername,
+    };
 
-  async function onEntityRecordRequest(serverUrl: string, accountId: string) {}
+    return {
+      podId: Hash.shortHash(newActor.id),
+      entity: actorToEntity(newActor),
+      name: actor.name?.toString() || undefined,
+      bio: stripHtml(actor.summary?.toString() || "").result || undefined,
+      website: actor.url?.toString() || undefined,
+      createdAt: actor.published
+        ? new Date(actor.published.epochMilliseconds)
+        : undefined,
+      context: newActor,
+    };
+  };
 
   const server = Server.new({
+    domain: Constants.domain,
     basePath: Constants.baqRoutePrefix,
-    onDiscoverRequest,
+    onEntityRequest,
+    kvStoreAdapter,
   });
 
   return {

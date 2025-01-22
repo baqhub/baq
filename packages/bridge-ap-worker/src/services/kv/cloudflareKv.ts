@@ -1,19 +1,22 @@
+import {KvKey, KvStoreAdapter} from "@baqhub/server";
 import {getLogger} from "@logtape/logtape";
 
 const logger = getLogger(["bridge", "cloudflare-kv"]);
 
-export type KvKey<T> = ReadonlyArray<string> & {_t?: T};
-
-function ofNamespace(kv: KVNamespace) {
+function ofNamespace(
+  kv: KVNamespace,
+  prefix: ReadonlyArray<string> = []
+): KvStoreAdapter {
   function keyToString(key: KvKey<any>) {
     return key.map((part: string) => part.replaceAll(":", "_:")).join("::");
   }
 
   return {
     async get<T>(key: KvKey<T>) {
-      logger.info(`Getting key: ${key}`);
+      const fullKey = [...prefix, ...key];
+      logger.info(`Getting key: ${fullKey}`);
 
-      const keyString = keyToString(key);
+      const keyString = keyToString(fullKey);
       const result = await kv.get<T>(keyString, "json");
 
       if (result === null) {
@@ -23,17 +26,19 @@ function ofNamespace(kv: KVNamespace) {
       return result;
     },
     async set<T>(key: KvKey<T>, value: T) {
-      logger.info(`Setting key: ${key} ${value}`);
+      const fullKey = [...prefix, ...key];
+      logger.info(`Setting key: ${fullKey} ${value}`);
 
-      const keyString = keyToString(key);
+      const keyString = keyToString(fullKey);
       const json = JSON.stringify(value);
 
       await kv.put(keyString, json);
     },
     async delete(key: KvKey<any>) {
-      logger.info(`Deleting key: ${key}`);
+      const fullKey = [...prefix, ...key];
+      logger.info(`Deleting key: ${fullKey}`);
 
-      const keyString = keyToString(key);
+      const keyString = keyToString(fullKey);
       await kv.delete(keyString);
     },
   };

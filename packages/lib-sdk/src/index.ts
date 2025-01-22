@@ -36,6 +36,7 @@ export * from "./model/records/record.js";
 export * from "./model/records/recordKey.js";
 export * from "./model/records/recordPermissions.js";
 export * from "./model/records/recordType.js";
+export * from "./model/records/recordVersionHash.js";
 export * from "./model/response/blobResponse.js";
 //
 // Types.

@@ -17,7 +17,7 @@ import {BaqServer} from "./servers/baq/baqServer";
 //
 
 const setupLogging = lazy(async (env: Env) => {
-  const level: LogLevel = env.IS_DEV ? "info" : "error";
+  const level: LogLevel = env.IS_DEV ? "debug" : "error";
 
   const loggers: LoggerConfig<"console", never>[] = [
     {category: ["logtape", "meta"], sinks: []},
@@ -27,7 +27,6 @@ const setupLogging = lazy(async (env: Env) => {
 
   await configure({
     sinks: {console: getConsoleSink()},
-    filters: {},
     loggers,
   });
 });
@@ -53,7 +52,10 @@ export default {
     }
 
     // BAQ Server.
-    if (url.pathname.startsWith(Constants.baqRoutePrefix)) {
+    if (
+      url.pathname === "/" ||
+      url.pathname.startsWith(Constants.baqRoutePrefix)
+    ) {
       return baqServerOfEnv(env).fetch(request);
     }
 

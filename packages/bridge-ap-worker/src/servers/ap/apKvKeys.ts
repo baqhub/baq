@@ -1,5 +1,5 @@
+import {KvKey} from "@baqhub/server";
 import {KvKey as FKvKey} from "@fedify/fedify";
-import {KvKey} from "../../services/kv/cloudflareKv";
 
 function identifierForEntity(entity: string): KvKey<string> {
   return ["ap", "identifier", entity];

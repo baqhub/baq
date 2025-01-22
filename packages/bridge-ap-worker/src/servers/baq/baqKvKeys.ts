@@ -1,16 +1,26 @@
-import {KvKey} from "../../services/kv/cloudflareKv";
-import {AccountPath} from "./accountPath";
-import {AccountState} from "./accountState";
+import {KvKey} from "@baqhub/server";
 
-function identifierForAccountPath(account: AccountPath): KvKey<string> {
-  return ["baq", "identifier", account.username, account.server];
+function podIdForEntity(entity: string): KvKey<string> {
+  return ["baq", "pod_id", entity];
 }
 
-function accountForIdentifier(identifier: string): KvKey<AccountState> {
-  return ["baq", "account_state", identifier];
-}
+// function pod(podId: string): KvKey<BaqPod> {
+//   return ["baq", "pod", podId];
+// }
+
+// function record(podId: string, authorId: string, recordId: string) {
+//   return ["baq", "record", podId, authorId, recordId];
+// }
+
+// function recordVersion(
+//   podId: string,
+//   authorId: string,
+//   recordId: string,
+//   versionHash: string
+// ) {
+//   return ["baq", "record_version", podId, authorId, recordId, versionHash];
+// }
 
 export const BaqKvKeys = {
-  identifierForAccountPath,
-  accountForIdentifier,
+  podIdForEntity,
 };

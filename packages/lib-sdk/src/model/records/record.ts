@@ -248,6 +248,7 @@ export type RAnyEventRecord =
 
 export interface NewRecordOptions {
   id?: string;
+  createdAt?: Date;
   permissions?: RecordPermissions;
   mode?: `${RecordMode}`;
 }
@@ -261,14 +262,14 @@ function buildRecord<R extends RAnyRecord>(
   entity: string,
   type: IO.TypeOf<R>["type"],
   content: IO.TypeOf<R>["content"],
-  {id, permissions, mode}: NewRecordOptions = {}
+  {id, createdAt, permissions, mode}: NewRecordOptions = {}
 ) {
   const record: IO.TypeOf<R> = {
     author: {entity},
     id: id || Uuid.new(),
     source: "self",
 
-    createdAt: new Date(),
+    createdAt: createdAt || new Date(),
     receivedAt: undefined,
     version: undefined,
     permissions: permissions || RecordPermissions.private,
