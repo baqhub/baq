@@ -29,6 +29,8 @@ export * from "./model/query/query.js";
 export * from "./model/query/queryDate.js";
 export * from "./model/query/queryFilter.js";
 export * from "./model/query/querySort.js";
+export * from "./model/response/recordResponse.js";
+export * from "./model/response/recordsResponse.js";
 //
 // Record Model.
 //

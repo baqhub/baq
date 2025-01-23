@@ -1,4 +1,4 @@
-import {AnyRecord, CleanRecordType, IO} from "@baqhub/sdk";
+import {AnyRecord, IO, RAnyRecord} from "@baqhub/sdk";
 import {CachedRecord} from "../../model/cachedRecord.js";
 import {KvStoreAdapter} from "./kvStoreAdapter.js";
 
@@ -17,8 +17,8 @@ function recordVersionKey(
 
 function build(kv: KvStoreAdapter) {
   return {
-    async getRecord<T extends AnyRecord>(
-      recordType: CleanRecordType<T>,
+    async getRecord<K extends RAnyRecord>(
+      recordType: K,
       podId: string,
       authorId: string,
       recordId: string
@@ -32,8 +32,8 @@ function build(kv: KvStoreAdapter) {
       return IO.decode(CachedRecord.io(recordType), rawRecord);
     },
 
-    async getRecordVersion<T extends AnyRecord>(
-      recordType: CleanRecordType<T>,
+    async getRecordVersion<K extends RAnyRecord>(
+      recordType: K,
       podId: string,
       authorId: string,
       recordId: string,
@@ -49,7 +49,7 @@ function build(kv: KvStoreAdapter) {
     },
 
     async setRecord<T extends AnyRecord>(
-      recordType: CleanRecordType<T>,
+      recordType: IO.Type<T, unknown, unknown>,
       record: CachedRecord<T>
     ) {
       const rawRecord = IO.encode(CachedRecord.io(recordType), record);

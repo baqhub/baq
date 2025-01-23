@@ -64,6 +64,7 @@ export interface Record<T extends AnyRecordType, C> {
 }
 
 export type AnyRecord = Record<AnyRecordType, any>;
+export type AnyEventRecord = AnyRecord | NoContentRecord;
 export type UnknownRecord = Record<never, never>;
 
 export interface NoContentRecord {

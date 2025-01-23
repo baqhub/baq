@@ -10,7 +10,9 @@ import {
 // Model.
 //
 
-function cachedRecord<T extends AnyRecord>(recordType: CleanRecordType<T>) {
+function cachedRecord<T extends AnyRecord>(
+  recordType: IO.Type<T, unknown, unknown>
+) {
   return IO.object({
     ownerId: IO.string,
     authorId: IO.string,

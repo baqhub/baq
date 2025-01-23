@@ -1,7 +1,10 @@
 import {
+  AnyRecord,
   EntityRecord,
   Headers,
+  IO,
   RecordPermissions,
+  RecordResponse,
   Constants as SDKConstants,
   Uuid,
 } from "@baqhub/sdk";
@@ -50,7 +53,7 @@ function recordUrl(
   authorEntity: string,
   recordId: string
 ) {
-  return `${baseUrl}/pods/${podId}/records/${authorEntity}/${recordId}`;
+  return `${baseUrl}/${podId}/records/${authorEntity}/${recordId}`;
 }
 
 function buildServer(config: ServerConfig) {
@@ -103,17 +106,17 @@ function buildServer(config: ServerConfig) {
             preference: 0,
             endpoints: {
               auth: "",
-              records: `${baseUrl}/pods/${newPod.id}/records`,
-              record: `${baseUrl}/pods/${newPod.id}/records/{entity}/{record_id}`,
-              recordVersions: `${baseUrl}/pods/${newPod.id}/records/{entity}/{record_id}/versions`,
-              recordVersion: `${baseUrl}/pods/${newPod.id}/records/{entity}/{record_id}/versions/{version_hash}`,
+              records: `${baseUrl}/${newPod.id}/records`,
+              record: `${baseUrl}/${newPod.id}/records/{entity}/{record_id}`,
+              recordVersions: `${baseUrl}/${newPod.id}/records/{entity}/{record_id}/versions`,
+              recordVersion: `${baseUrl}/${newPod.id}/records/{entity}/{record_id}/versions/{version_hash}`,
               newRecord: "",
-              recordBlob: `${baseUrl}/pods/${newPod.id}/records/{entity}/{record_id}/blobs/{blob_hash}/{file_name}`,
-              recordVersionBlob: `${baseUrl}/pods/${newPod.id}/records/{entity}/{record_id}/versions/{version_hash}/blobs/{blob_hash}/{file_name}`,
+              recordBlob: `${baseUrl}/${newPod.id}/records/{entity}/{record_id}/blobs/{blob_hash}/{file_name}`,
+              recordVersionBlob: `${baseUrl}/${newPod.id}/records/{entity}/{record_id}/versions/{version_hash}/blobs/{blob_hash}/{file_name}`,
               newBlob: "",
               events: "",
               newNotification: "",
-              serverInfo: `${baseUrl}/server`,
+              serverInfo: `${baseUrl}/${newPod.id}`,
             },
           },
         ],
@@ -137,8 +140,6 @@ function buildServer(config: ServerConfig) {
       newEntityRecord
     );
 
-    console.log("Storing:", newEntityCachedRecord);
-
     // And store it.
     await kvCachedRecords.setRecord(EntityRecord, newEntityCachedRecord);
     await kvPods.setPod(newPod);
@@ -155,19 +156,123 @@ function buildServer(config: ServerConfig) {
   }
 
   //
+  // Records.
+  //
+
+  async function resolveRecord(
+    pod: Pod,
+    authorEntity: string,
+    recordId: string
+  ) {
+    const authorMap = await kvPodMappings.getPodMapping(authorEntity);
+    if (!authorMap) {
+      return undefined;
+    }
+
+    // Find existing record.
+    const existingRecord = await kvCachedRecords.getRecord(
+      AnyRecord,
+      pod.id,
+      authorMap.id,
+      recordId
+    );
+    if (existingRecord) {
+      return existingRecord.record;
+    }
+
+    // Otherwise, resolve.
+    return undefined;
+  }
+
+  async function resolveRecordVersion(
+    pod: Pod,
+    authorEntity: string,
+    recordId: string,
+    versionHash: string
+  ) {
+    const authorMap = await kvPodMappings.getPodMapping(authorEntity);
+    if (!authorMap) {
+      return undefined;
+    }
+
+    const existingRecordVersion = await kvCachedRecords.getRecordVersion(
+      AnyRecord,
+      pod.id,
+      authorMap.id,
+      recordId,
+      versionHash
+    );
+    if (!existingRecordVersion) {
+      return undefined;
+    }
+
+    return existingRecordVersion.record;
+  }
+
+  //
   // Routes.
   //
 
-  const podRoutes = new Hono();
+  type PodRoutesEnv = {
+    Variables: {
+      pod: Pod;
+    };
+  };
 
-  podRoutes.get("/pods/:podId/records/:entity/:recordId", c => {
-    return c.text("hello");
+  const podRoutes = new Hono<PodRoutesEnv>();
+
+  podRoutes.use("/:podId/*", async (c, next) => {
+    const podId = c.req.param("podId");
+    const pod = await kvPods.getPod(podId);
+    if (!pod) {
+      return c.notFound();
+    }
+
+    c.set("pod", pod);
+    return next();
+  });
+
+  podRoutes.get("/:podId/records/:authorEntity/:recordId", async c => {
+    const authorEntity = c.req.param("authorEntity");
+    const recordId = c.req.param("recordId");
+    const record = await resolveRecord(c.var.pod, authorEntity, recordId);
+    if (!record) {
+      return c.notFound();
+    }
+
+    const rawRecord = IO.encode(AnyRecord, record);
+    const response: RecordResponse<any, any> = {
+      record: rawRecord,
+      linkedRecords: [],
+    };
+
+    return c.json(response);
   });
 
   podRoutes.get(
-    "/pods/:podId/records/:entity/:recordId/versions/:versionHash",
-    c => {
-      return c.text("hello");
+    "/:podId/records/:authorEntity/:recordId/versions/:versionHash",
+    async c => {
+      const authorEntity = c.req.param("authorEntity");
+      const recordId = c.req.param("recordId");
+      const versionHash = c.req.param("versionHash");
+
+      const recordVersion = await resolveRecordVersion(
+        c.var.pod,
+        authorEntity,
+        recordId,
+        versionHash
+      );
+      if (!recordVersion) {
+        return c.notFound();
+      }
+
+      const rawRecord = IO.encode(AnyRecord, recordVersion);
+      const response: RecordResponse<any, any> = {
+        record: rawRecord,
+        linkedRecords: [],
+      };
+
+      return c.json(response);
     }
   );
 
