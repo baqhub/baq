@@ -1,8 +1,12 @@
 import {AnyRecord, IO, RAnyRecord} from "@baqhub/sdk";
 import {CachedRecord} from "../../model/cachedRecord.js";
-import {KvStoreAdapter} from "./kvStoreAdapter.js";
+import {KvKey, KvStoreAdapter} from "./kvStoreAdapter.js";
 
-function recordKey(podId: string, authorId: string, recordId: string) {
+function recordKey(
+  podId: string,
+  authorId: string,
+  recordId: string
+): KvKey<object> {
   return ["record", podId, authorId, recordId];
 }
 
@@ -11,7 +15,7 @@ function recordVersionKey(
   authorId: string,
   recordId: string,
   versionHash: string
-) {
+): KvKey<object> {
   return ["record_version", podId, authorId, recordId, versionHash];
 }
 

@@ -72,6 +72,8 @@ function ofEnv(env: Env) {
       return undefined;
     }
 
+    console.log({actor});
+
     const {id, preferredUsername} = actor;
     if (!id || typeof preferredUsername !== "string") {
       return undefined;

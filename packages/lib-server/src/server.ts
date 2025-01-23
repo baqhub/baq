@@ -9,13 +9,23 @@ import {
   Uuid,
 } from "@baqhub/sdk";
 import {Hono} from "hono";
+import {CachedBlob} from "./model/cachedBlob.js";
 import {CachedRecord} from "./model/cachedRecord.js";
 import {Pod} from "./model/pod.js";
 import {PodMapping} from "./model/podMapping.js";
+import {BlobStoreAdapter} from "./services/blob/blobStoreAdapter.js";
+import {KvCachedBlobs} from "./services/kv/kvCachedBlobs.js";
 import {KvCachedRecords} from "./services/kv/kvCachedRecords.js";
 import {KvPodMappings} from "./services/kv/kvPodMappings.js";
 import {KvPods} from "./services/kv/kvPods.js";
 import {KvStoreAdapter} from "./services/kv/kvStoreAdapter.js";
+
+export interface BlobRequest {
+  fileName: string;
+  type: string;
+  stream: ReadableStream;
+  context: unknown;
+}
 
 export interface EntityRequestResult {
   podId: string;
@@ -23,6 +33,7 @@ export interface EntityRequestResult {
   name: string | undefined;
   bio: string | undefined;
   website: string | undefined;
+  avatar: BlobRequest | undefined;
   createdAt: Date | undefined;
   context?: unknown;
 }
@@ -30,8 +41,17 @@ export interface EntityRequestResult {
 export type EntityRequestHandler = (
   entity: string
 ) => Promise<EntityRequestResult | undefined>;
-// export type EntityRequestHandler = (entity: string) => void;
-// export type RecordRequestHandler = (entity: string, recordId: string) => void;
+
+export interface RecordsRequestResult {}
+
+export type RecordsRequestHandler = (pod: Pod) => Promise<RecordsRequestResult>;
+
+export interface DigestStreamResult {
+  output: ReadableStream;
+  getDigest: () => string;
+}
+
+export type DigestStream = (input: ReadableStream) => DigestStreamResult;
 
 export interface ServerConfig {
   domain: string;
@@ -43,8 +63,9 @@ export interface ServerConfig {
   // onRecordRequest?: RecordRequestHandler;
 
   // Adapters.
+  digestStream: DigestStream;
   kvStoreAdapter: KvStoreAdapter;
-  blobStoreAdapter?: undefined;
+  blobStoreAdapter: BlobStoreAdapter;
 }
 
 function recordUrl(
@@ -59,13 +80,54 @@ function recordUrl(
 function buildServer(config: ServerConfig) {
   const {domain, basePath} = config;
   const {onEntityRequest} = config;
-  const {kvStoreAdapter} = config;
+  const {digestStream, kvStoreAdapter, blobStoreAdapter} = config;
 
   const baseUrl = `https://${domain}${basePath}`;
 
   const kvPodMappings = KvPodMappings.new(kvStoreAdapter);
   const kvPods = KvPods.new(kvStoreAdapter);
   const kvCachedRecords = KvCachedRecords.new(kvStoreAdapter);
+  const kvCachedBlobs = KvCachedBlobs.new(kvStoreAdapter);
+
+  //
+  // Blobs.
+  //
+
+  async function resolveBlobFromHash(hash: string) {
+    return await kvCachedBlobs.getBlob(hash);
+  }
+
+  async function resolveBlobFromRequest(request: BlobRequest) {
+    // Upload the stream.
+    const blobId = Uuid.new();
+    const digestedStream = digestStream(request.stream);
+    const blobObject = await blobStoreAdapter.set(
+      blobId,
+      digestedStream.output
+    );
+
+    // If this blob already exists, use it.
+    const hash = digestedStream.getDigest();
+    const existingBlob = await kvCachedBlobs.getBlob(hash);
+    if (existingBlob) {
+      await blobStoreAdapter.delete(blobId);
+      return existingBlob;
+    }
+
+    // Otherwise, create it.
+    const newBlob: CachedBlob = {
+      id: blobId,
+      hash,
+      size: blobObject.size,
+      firstFileName: request.fileName,
+      firstType: request.type,
+      createdAt: new Date(),
+      context: request.context,
+    };
+
+    await kvCachedBlobs.setBlob(newBlob);
+    return newBlob;
+  }
 
   //
   // Pods.
@@ -176,12 +238,8 @@ function buildServer(config: ServerConfig) {
       authorMap.id,
       recordId
     );
-    if (existingRecord) {
-      return existingRecord.record;
-    }
 
-    // Otherwise, resolve.
-    return undefined;
+    return existingRecord?.record;
   }
 
   async function resolveRecordVersion(
@@ -202,11 +260,8 @@ function buildServer(config: ServerConfig) {
       recordId,
       versionHash
     );
-    if (!existingRecordVersion) {
-      return undefined;
-    }
 
-    return existingRecordVersion.record;
+    return existingRecordVersion?.record;
   }
 
   //
@@ -232,6 +287,10 @@ function buildServer(config: ServerConfig) {
     return next();
   });
 
+  // Record query.
+  podRoutes.get("/:podId/records", async c => {});
+
+  // Record.
   podRoutes.get("/:podId/records/:authorEntity/:recordId", async c => {
     const authorEntity = c.req.param("authorEntity");
     const recordId = c.req.param("recordId");
@@ -249,6 +308,7 @@ function buildServer(config: ServerConfig) {
     return c.json(response);
   });
 
+  // Record version.
   podRoutes.get(
     "/:podId/records/:authorEntity/:recordId/versions/:versionHash",
     async c => {
@@ -276,8 +336,21 @@ function buildServer(config: ServerConfig) {
     }
   );
 
+  // Record blob.
+  podRoutes.get(
+    "/:podId/records/:authorEntity/:recordId/blobs/:blobHash/:fileName",
+    async c => {}
+  );
+
+  // Record version blob.
+  podRoutes.get(
+    "/:podId/records/:authorEntity/:recordId/versions/:versionHash/blobs/:blobHash/:fileName",
+    async c => {}
+  );
+
   const allRoutes = new Hono();
 
+  // Discovery.
   allRoutes.get("/", async c => {
     const url = new URL(c.req.url);
     const entity = "arstechnica.mastodon.baq.lol" || url.hostname;

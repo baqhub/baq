@@ -6,7 +6,10 @@ compatibility_flags = ["nodejs_compat"]
 
 routes = [
   { pattern = "baq.lol", custom_domain = true },
-  { pattern = "*.baq.lol/*", custom_domain = false }
+  { pattern = "*.baq.lol/*", custom_domain = false },
+  { pattern = "*.mastodon.baq.lol/*", custom_domain = false },
+  { pattern = "*.threads.baq.lol/*", custom_domain = false },
+  { pattern = "*.bsky.baq.lol/*", custom_domain = false }
 ]
 
 # Workers Logs
@@ -20,6 +23,12 @@ enabled = true
 [[kv_namespaces]]
 binding = "KV_WORKER_BRIDGE_AP"
 id = "57fcbb9bc5ae4fc0abe8ce66d954aa66"
+
+# Bind an R2 Bucket. Use R2 to store arbitrarily large blobs of data, such as files.
+# Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#r2-buckets
+[[r2_buckets]]
+binding = "R2_WORKER_BRIDGE_AP_BAQ"
+bucket_name = "worker-bridge-ap-baq"
 
 # Automatically place your workloads in an optimal location to minimize latency.
 # If you are running back-end logic in a Worker, running it closer to your back-end infrastructure
