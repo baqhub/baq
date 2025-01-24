@@ -6,8 +6,8 @@ const RCachedBlob = IO.object({
   size: IO.number,
   firstFileName: IO.string,
   firstType: IO.string,
-  createdAt: IO.isoDate,
   context: IO.unknown,
+  createdAt: IO.isoDate,
 });
 
 export interface CachedBlob extends IO.TypeOf<typeof RCachedBlob> {}

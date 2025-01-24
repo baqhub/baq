@@ -1,9 +1,15 @@
 import {Hash, never} from "@baqhub/sdk";
-import {EntityRequestHandler, Server} from "@baqhub/server";
+import {
+  BlobRequest,
+  EntityRequestHandler,
+  Server,
+  StreamDigester,
+} from "@baqhub/server";
 import {fetchDocumentLoader} from "@fedify/fedify";
 import {isActor, lookupObject} from "@fedify/fedify/vocab";
 import {stripHtml} from "string-strip-html";
 import {Constants} from "../../helpers/constants";
+import {CloudflareBlob} from "../../services/blob/cloudflareBlob";
 import {CloudflareKv} from "../../services/kv/cloudflareKv";
 import {BaqActor} from "./baqActor";
 
@@ -55,6 +61,26 @@ function ofEnv(env: Env) {
   const kvStoreAdapter = CloudflareKv.ofNamespace(env.KV_WORKER_BRIDGE_AP, [
     "baq_server",
   ]);
+  const blobStoreAdapter = CloudflareBlob.ofBucket(env.R2_WORKER_BRIDGE_AP_BAQ);
+
+  const digestStream: StreamDigester = input => {
+    // Split the stream.
+    // In workers, the implementation is non-standard and follows the slower stream.
+    const [stream1, stream2] = input.tee();
+
+    const digester = new crypto.DigestStream("SHA-256");
+    stream2.pipeTo(digester);
+
+    // Convert the digest result to a string.
+    const hash = digester.digest.then(hashBuffer => {
+      return Hash.bytesToHex(new Uint8Array(hashBuffer));
+    });
+
+    return {
+      output: stream1,
+      hash,
+    };
+  };
 
   const onEntityRequest: EntityRequestHandler = async (entity: string) => {
     const actorPath = parseEntity(entity);
@@ -85,12 +111,51 @@ function ofEnv(env: Env) {
       username: preferredUsername,
     };
 
+    const avatar = await (async (): Promise<BlobRequest | undefined> => {
+      const icon = await actor.getIcon();
+      if (!icon) {
+        return undefined;
+      }
+
+      const {url, mediaType} = icon;
+
+      const fileName = (() => {
+        switch (mediaType) {
+          case "image/jpeg":
+            return "avatar.jpg";
+
+          case "image/png":
+            return "avatar.png";
+
+          default:
+            return undefined;
+        }
+      })();
+
+      if (!(url instanceof URL) || !mediaType || !fileName) {
+        return undefined;
+      }
+
+      const response = await fetch(url);
+      if (response.status !== 200 || !response.body) {
+        return undefined;
+      }
+
+      return {
+        fileName,
+        type: mediaType,
+        stream: response.body,
+        context: {url: url.toString()},
+      };
+    })();
+
     return {
       podId: Hash.shortHash(newActor.id),
       entity: actorToEntity(newActor),
       name: actor.name?.toString() || undefined,
       bio: stripHtml(actor.summary?.toString() || "").result || undefined,
       website: actor.url?.toString() || undefined,
+      avatar,
       createdAt: actor.published
         ? new Date(actor.published.epochMilliseconds)
         : undefined,
@@ -102,7 +167,9 @@ function ofEnv(env: Env) {
     domain: Constants.domain,
     basePath: Constants.baqRoutePrefix,
     onEntityRequest,
+    digestStream,
     kvStoreAdapter,
+    blobStoreAdapter,
   });
 
   return {

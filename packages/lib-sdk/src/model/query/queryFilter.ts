@@ -243,6 +243,10 @@ function queryTag(path: string, tag: string) {
   return QueryFilter.link(QueryLink.pathLink(path, QueryLinkValue.tag(tag)));
 }
 
+function queryBlob(path: string, hash: string) {
+  return QueryFilter.link(QueryLink.pathLink(path, QueryLinkValue.blob(hash)));
+}
+
 function queryEntity(path: string, entity: string) {
   return QueryFilter.link(
     QueryLink.pathLink(path, QueryLinkValue.entity(entity))
@@ -290,6 +294,7 @@ export const QueryFilter = {
   and: queryAnd,
   or: queryOr,
   tag: queryTag,
+  blob: queryBlob,
   entity: queryEntity,
   record: queryRecord,
   version: queryVersion,

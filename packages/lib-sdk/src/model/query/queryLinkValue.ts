@@ -11,12 +11,14 @@ import {AnyRecord, UnknownRecord} from "../records/record.js";
 
 export enum QueryLinkValueType {
   TAG = "tag",
+  BLOB = "blob",
   ENTITY = "entity",
   RECORD = "record",
   VERSION = "version",
 }
 
 type QueryLinkValueTag = [QueryLinkValueType.TAG, string];
+type QueryLinkValueBlob = [QueryLinkValueType.BLOB, string];
 type QueryLinkValueEntity = [QueryLinkValueType.ENTITY, EntityLink];
 type QueryLinkValueRecord<T extends AnyRecord> = [
   QueryLinkValueType.RECORD,
@@ -27,6 +29,7 @@ type QueryLinkValueVersion = [QueryLinkValueType.VERSION, VersionLink];
 
 export type QueryLinkValue<T extends AnyRecord> =
   | QueryLinkValueTag
+  | QueryLinkValueBlob
   | QueryLinkValueEntity
   | QueryLinkValueRecord<T>
   | QueryLinkValueVersion;
@@ -37,6 +40,10 @@ export type QueryLinkValue<T extends AnyRecord> =
 
 function queryValueTag(tag: string): QueryLinkValueTag {
   return [QueryLinkValueType.TAG, tag];
+}
+
+function queryValueBlob(hash: string): QueryLinkValueBlob {
+  return [QueryLinkValueType.BLOB, hash];
 }
 
 function queryValueEntity(entity: string): QueryLinkValueEntity {
@@ -60,6 +67,9 @@ function queryLinkValueToString<T extends AnyRecord>(
     case QueryLinkValueType.TAG:
       return JSON.stringify(queryLinkValue[1]);
 
+    case QueryLinkValueType.BLOB:
+      return queryLinkValue[1];
+
     case QueryLinkValueType.ENTITY:
       return queryLinkValue[1].entity;
 
@@ -80,8 +90,13 @@ function queryLinkValueToString<T extends AnyRecord>(
 
 function queryLinkValueIs(value: QueryLinkValue<AnyRecord>, obj: any) {
   switch (value[0]) {
-    case QueryLinkValueType.TAG:
-      return value[1] === obj;
+    case QueryLinkValueType.TAG: {
+      return obj === value[1];
+    }
+
+    case QueryLinkValueType.BLOB: {
+      return Boolean(obj?.type) && Boolean(obj?.name) && obj?.hash === value[1];
+    }
 
     case QueryLinkValueType.ENTITY: {
       return obj?.entity === value[1].entity;
@@ -114,6 +129,9 @@ function queryLinkValuesMatch(
     case QueryLinkValueType.TAG:
       return value2[0] === QueryLinkValueType.TAG && value1[1] === value2[1];
 
+    case QueryLinkValueType.BLOB:
+      return value2[0] === QueryLinkValueType.BLOB && value1[1] === value2[1];
+
     case QueryLinkValueType.ENTITY:
       return (
         value2[0] === QueryLinkValueType.ENTITY &&
@@ -142,6 +160,7 @@ function queryLinkValuesMatch(
 
 export const QueryLinkValue = {
   tag: queryValueTag,
+  blob: queryValueBlob,
   entity: queryValueEntity,
   record: queryValueRecord,
   version: queryValueVersion,

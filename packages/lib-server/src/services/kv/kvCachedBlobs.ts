@@ -26,7 +26,7 @@ function build(kv: KvStoreAdapter) {
       const rawBlob = IO.encode(CachedBlob.io, blob);
 
       const key = blobKey(blob.id);
-      const hashKey = blobKey(blob.hash);
+      const hashKey = blobForHashKey(blob.hash);
 
       await Promise.all([kv.set(key, rawBlob), kv.set(hashKey, rawBlob)]);
     },

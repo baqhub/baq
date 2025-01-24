@@ -1,4 +1,5 @@
 import {
+  AnyBlobLink,
   AnyRecord,
   EntityRecord,
   Headers,
@@ -9,6 +10,7 @@ import {
   Uuid,
 } from "@baqhub/sdk";
 import {Hono} from "hono";
+import {findBlobLink} from "./helpers/recordHelpers.js";
 import {CachedBlob} from "./model/cachedBlob.js";
 import {CachedRecord} from "./model/cachedRecord.js";
 import {Pod} from "./model/pod.js";
@@ -48,10 +50,10 @@ export type RecordsRequestHandler = (pod: Pod) => Promise<RecordsRequestResult>;
 
 export interface DigestStreamResult {
   output: ReadableStream;
-  getDigest: () => string;
+  hash: Promise<string>;
 }
 
-export type DigestStream = (input: ReadableStream) => DigestStreamResult;
+export type StreamDigester = (input: ReadableStream) => DigestStreamResult;
 
 export interface ServerConfig {
   domain: string;
@@ -63,7 +65,7 @@ export interface ServerConfig {
   // onRecordRequest?: RecordRequestHandler;
 
   // Adapters.
-  digestStream: DigestStream;
+  digestStream: StreamDigester;
   kvStoreAdapter: KvStoreAdapter;
   blobStoreAdapter: BlobStoreAdapter;
 }
@@ -107,7 +109,7 @@ function buildServer(config: ServerConfig) {
     );
 
     // If this blob already exists, use it.
-    const hash = digestedStream.getDigest();
+    const hash = await digestedStream.hash;
     const existingBlob = await kvCachedBlobs.getBlob(hash);
     if (existingBlob) {
       await blobStoreAdapter.delete(blobId);
@@ -121,8 +123,8 @@ function buildServer(config: ServerConfig) {
       size: blobObject.size,
       firstFileName: request.fileName,
       firstType: request.type,
-      createdAt: new Date(),
       context: request.context,
+      createdAt: new Date(),
     };
 
     await kvCachedBlobs.setBlob(newBlob);
@@ -152,11 +154,26 @@ function buildServer(config: ServerConfig) {
     const newPod: Pod = {
       id: entityResult.podId,
       entity: entityResult.entity,
-      entityRecordId: Uuid.new(),
       context: entityResult.context,
       createdAt: date,
       updatedAt: date,
     };
+
+    const {avatar} = entityResult;
+    const avatarBlobLink = await (async (): Promise<
+      AnyBlobLink | undefined
+    > => {
+      if (!avatar) {
+        return undefined;
+      }
+
+      const blob = await resolveBlobFromRequest(avatar);
+      return {
+        hash: blob.hash,
+        type: avatar.type,
+        name: avatar.fileName,
+      };
+    })();
 
     const newEntityRecord = EntityRecord.new(
       newPod.entity,
@@ -186,10 +203,11 @@ function buildServer(config: ServerConfig) {
           name: entityResult.name,
           bio: entityResult.bio,
           website: entityResult.website,
+          avatar: avatarBlobLink,
         },
       },
       {
-        id: newPod.entityRecordId,
+        id: newPod.id,
         createdAt: entityResult.createdAt,
         permissions: RecordPermissions.public,
       }
@@ -239,7 +257,7 @@ function buildServer(config: ServerConfig) {
       recordId
     );
 
-    return existingRecord?.record;
+    return existingRecord;
   }
 
   async function resolveRecordVersion(
@@ -261,7 +279,7 @@ function buildServer(config: ServerConfig) {
       versionHash
     );
 
-    return existingRecordVersion?.record;
+    return existingRecordVersion;
   }
 
   //
@@ -274,32 +292,18 @@ function buildServer(config: ServerConfig) {
     };
   };
 
-  const podRoutes = new Hono<PodRoutesEnv>();
+  type RecordRoutesEnv = PodRoutesEnv & {
+    Variables: {
+      record: CachedRecord<AnyRecord>;
+    };
+  };
 
-  podRoutes.use("/:podId/*", async (c, next) => {
-    const podId = c.req.param("podId");
-    const pod = await kvPods.getPod(podId);
-    if (!pod) {
-      return c.notFound();
-    }
+  // Record + Record version routes.
+  const recordCommonRoutes = new Hono<RecordRoutesEnv>();
 
-    c.set("pod", pod);
-    return next();
-  });
-
-  // Record query.
-  podRoutes.get("/:podId/records", async c => {});
-
-  // Record.
-  podRoutes.get("/:podId/records/:authorEntity/:recordId", async c => {
-    const authorEntity = c.req.param("authorEntity");
-    const recordId = c.req.param("recordId");
-    const record = await resolveRecord(c.var.pod, authorEntity, recordId);
-    if (!record) {
-      return c.notFound();
-    }
-
-    const rawRecord = IO.encode(AnyRecord, record);
+  recordCommonRoutes.get("/", async c => {
+    const {record} = c.var;
+    const rawRecord = IO.encode(AnyRecord, record.record);
     const response: RecordResponse<any, any> = {
       record: rawRecord,
       linkedRecords: [],
@@ -308,14 +312,43 @@ function buildServer(config: ServerConfig) {
     return c.json(response);
   });
 
-  // Record version.
-  podRoutes.get(
-    "/:podId/records/:authorEntity/:recordId/versions/:versionHash",
-    async c => {
-      const authorEntity = c.req.param("authorEntity");
-      const recordId = c.req.param("recordId");
-      const versionHash = c.req.param("versionHash");
+  recordCommonRoutes.get("/blobs/:blobHash/:fileName", async c => {
+    const {record} = c.var;
+    const {blobHash, fileName} = c.req.param();
 
+    // Find a matching blob in the record.
+    const blobLink = findBlobLink(record.record, blobHash, fileName);
+    if (!blobLink) {
+      return c.notFound();
+    }
+    console.log({blobLink});
+
+    // Find the blob.
+    const blob = await resolveBlobFromHash(blobHash);
+    if (!blob) {
+      return c.notFound();
+    }
+
+    // Serve the blob.
+    const blobObject = await blobStoreAdapter.get(blob.id);
+    if (!blobObject) {
+      throw new Error("Blob object not found.");
+    }
+
+    const name = blobLink.name.replaceAll('"', "");
+
+    return c.body(blobObject.body, 200, {
+      "Content-Type": blobLink.type,
+      "Content-Disposition": `attachment; filename="${name}"`,
+      "Content-Length": blobObject.size.toString(),
+    });
+  });
+
+  // Record version.
+  const recordVersionRoutes = new Hono<RecordRoutesEnv>()
+    .basePath("/records/:authorEntity/:recordId/versions/:versionHash")
+    .use("*", async (c, next) => {
+      const {authorEntity, recordId, versionHash} = c.req.param();
       const recordVersion = await resolveRecordVersion(
         c.var.pod,
         authorEntity,
@@ -326,27 +359,45 @@ function buildServer(config: ServerConfig) {
         return c.notFound();
       }
 
-      const rawRecord = IO.encode(AnyRecord, recordVersion);
-      const response: RecordResponse<any, any> = {
-        record: rawRecord,
-        linkedRecords: [],
-      };
+      c.set("record", recordVersion);
+      return next();
+    })
+    .route("/", recordCommonRoutes);
 
-      return c.json(response);
+  // Record.
+  const recordRoutes = new Hono<RecordRoutesEnv>()
+    .basePath("/records/:authorEntity/:recordId")
+    .use("*", async (c, next) => {
+      const {authorEntity, recordId} = c.req.param();
+      const record = await resolveRecord(c.var.pod, authorEntity, recordId);
+      if (!record) {
+        return c.notFound();
+      }
+
+      c.set("record", record);
+      return next();
+    })
+    .route("/", recordCommonRoutes);
+
+  // Pod.
+  const podRoutes = new Hono<PodRoutesEnv>().basePath("/:podId");
+
+  podRoutes.use("*", async (c, next) => {
+    const {podId} = c.req.param();
+    const pod = await kvPods.getPod(podId);
+    if (!pod) {
+      return c.notFound();
     }
-  );
 
-  // Record blob.
-  podRoutes.get(
-    "/:podId/records/:authorEntity/:recordId/blobs/:blobHash/:fileName",
-    async c => {}
-  );
+    c.set("pod", pod);
+    return next();
+  });
 
-  // Record version blob.
-  podRoutes.get(
-    "/:podId/records/:authorEntity/:recordId/versions/:versionHash/blobs/:blobHash/:fileName",
-    async c => {}
-  );
+  // Record query.
+  podRoutes.get("/records", async c => {});
+
+  podRoutes.route("/", recordVersionRoutes);
+  podRoutes.route("/", recordRoutes);
 
   const allRoutes = new Hono();
 
@@ -360,7 +411,7 @@ function buildServer(config: ServerConfig) {
     }
 
     const linkHeader = Headers.buildLink(
-      recordUrl(baseUrl, pod.id, pod.entity, pod.entityRecordId),
+      recordUrl(baseUrl, pod.id, pod.entity, pod.id),
       SDKConstants.discoveryLinkRel
     );
     console.log({linkHeader});
