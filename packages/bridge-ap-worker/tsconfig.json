@@ -6,9 +6,9 @@
     "outDir": "./build/esm",
     "baseUrl": "./src",
     "declaration": true,
-    "target": "es2021",
+    "target": "ESNext",
     "lib": [
-      "es2021"
+      "ESNext"
     ],
     "module": "es2022",
     "moduleResolution": "Bundler",

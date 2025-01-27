@@ -1,14 +1,24 @@
-import {Hash, never} from "@baqhub/sdk";
+import {Hash, isDefined, never} from "@baqhub/sdk";
 import {
   BlobRequest,
   EntityRequestHandler,
+  RecordBuilder,
+  RecordsRequestHandler,
   Server,
   StreamDigester,
 } from "@baqhub/server";
 import {fetchDocumentLoader} from "@fedify/fedify";
-import {isActor, lookupObject} from "@fedify/fedify/vocab";
+import {
+  Create,
+  isActor,
+  lookupObject,
+  Note,
+  traverseCollection,
+} from "@fedify/fedify/vocab";
 import {stripHtml} from "string-strip-html";
+import {PostRecord} from "../../baq/postRecord";
 import {Constants} from "../../helpers/constants";
+import {noteToPostRecord} from "../../helpers/convert";
 import {CloudflareBlob} from "../../services/blob/cloudflareBlob";
 import {CloudflareKv} from "../../services/kv/cloudflareKv";
 import {BaqActor} from "./baqActor";
@@ -163,10 +173,66 @@ function ofEnv(env: Env) {
     };
   };
 
+  const onRecordsRequest: RecordsRequestHandler = async pod => {
+    const baqActor = pod.context as BaqActor;
+    const actor = await lookupObject(baqActor.id, {
+      documentLoader: patchedDocumentLoader,
+    });
+
+    if (!isActor(actor)) {
+      return {builders: []};
+    }
+
+    // List notes.
+    const outbox = await actor.getOutbox();
+    if (!outbox) {
+      return {builders: []};
+    }
+
+    const first = await outbox.getFirst();
+    if (!first) {
+      return {builders: []};
+    }
+
+    const items = traverseCollection(first);
+
+    // Build corresponding records.
+    const builders = await Array.fromAsync(
+      items,
+      async (item): Promise<RecordBuilder | undefined> => {
+        if (!(item instanceof Create)) {
+          return undefined;
+        }
+
+        const note = await item.getObject();
+        if (!(note instanceof Note) || !note.id || !note.published) {
+          return undefined;
+        }
+
+        const versionPublished = note.updated || note.published;
+
+        const build = async () => {
+          return noteToPostRecord(pod.entity, note);
+        };
+
+        return {
+          id: Hash.shortHash(note.id.toString()),
+          createdAt: new Date(note.published.epochMilliseconds),
+          versionCreatedAt: new Date(versionPublished.epochMilliseconds),
+          type: PostRecord,
+          build,
+        };
+      }
+    );
+
+    return {builders: builders.filter(isDefined)};
+  };
+
   const server = Server.new({
     domain: Constants.domain,
     basePath: Constants.baqRoutePrefix,
     onEntityRequest,
+    onRecordsRequest,
     digestStream,
     kvStoreAdapter,
     blobStoreAdapter,

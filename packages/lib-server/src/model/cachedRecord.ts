@@ -1,10 +1,4 @@
-import {
-  AnyRecord,
-  CleanRecordType,
-  IO,
-  RecordSource,
-  RecordVersionHash,
-} from "@baqhub/sdk";
+import {AnyRecord, IO, RecordSource, RecordVersionHash} from "@baqhub/sdk";
 
 //
 // Model.
@@ -32,7 +26,7 @@ export type CachedRecord<T extends AnyRecord> = IO.TypeOf<
 function ofNewRecord<T extends AnyRecord>(
   ownerId: string,
   authorId: string,
-  recordType: CleanRecordType<T>,
+  recordType: IO.Type<T, unknown, unknown>,
   record: T
 ): CachedRecord<T> {
   const patchedRecord: T = {

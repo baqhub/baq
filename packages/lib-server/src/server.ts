@@ -4,6 +4,8 @@ import {
   EntityRecord,
   Headers,
   IO,
+  isDefined,
+  RAnyRecord,
   RecordPermissions,
   RecordResponse,
   Constants as SDKConstants,
@@ -44,7 +46,17 @@ export type EntityRequestHandler = (
   entity: string
 ) => Promise<EntityRequestResult | undefined>;
 
-export interface RecordsRequestResult {}
+export interface RecordBuilder {
+  id: string;
+  createdAt: Date;
+  versionCreatedAt: Date;
+  type: RAnyRecord;
+  build: () => Promise<AnyRecord | undefined>;
+}
+
+export interface RecordsRequestResult {
+  builders: ReadonlyArray<RecordBuilder>;
+}
 
 export type RecordsRequestHandler = (pod: Pod) => Promise<RecordsRequestResult>;
 
@@ -61,6 +73,7 @@ export interface ServerConfig {
 
   // Handlers.
   onEntityRequest: EntityRequestHandler;
+  onRecordsRequest: RecordsRequestHandler;
   // onEntityRecordRequest?: EntityRequestHandler;
   // onRecordRequest?: RecordRequestHandler;
 
@@ -81,7 +94,7 @@ function recordUrl(
 
 function buildServer(config: ServerConfig) {
   const {domain, basePath} = config;
-  const {onEntityRequest} = config;
+  const {onEntityRequest, onRecordsRequest} = config;
   const {digestStream, kvStoreAdapter, blobStoreAdapter} = config;
 
   const baseUrl = `https://${domain}${basePath}`;
@@ -282,6 +295,37 @@ function buildServer(config: ServerConfig) {
     return existingRecordVersion;
   }
 
+  async function resolveRecordFromBuilder(pod: Pod, builder: RecordBuilder) {
+    if (builder.createdAt.getTime() !== builder.versionCreatedAt.getTime()) {
+      throw new Error("Note updates not yet supported.");
+    }
+
+    const existingRecord = await kvCachedRecords.getRecord(
+      AnyRecord,
+      pod.id,
+      pod.id,
+      builder.id
+    );
+    if (existingRecord) {
+      return existingRecord;
+    }
+
+    const newRecord = await builder.build();
+    if (!newRecord) {
+      return undefined;
+    }
+
+    const newCachedRecord = CachedRecord.ofNewRecord(
+      pod.id,
+      pod.id,
+      builder.type,
+      newRecord
+    );
+    await kvCachedRecords.setRecord(builder.type, newCachedRecord);
+
+    return newCachedRecord;
+  }
+
   //
   // Routes.
   //
@@ -341,6 +385,7 @@ function buildServer(config: ServerConfig) {
       "Content-Type": blobLink.type,
       "Content-Disposition": `attachment; filename="${name}"`,
       "Content-Length": blobObject.size.toString(),
+      "Cache-Control": "public, max-age=31536000, immutable",
     });
   });
 
@@ -394,7 +439,27 @@ function buildServer(config: ServerConfig) {
   });
 
   // Record query.
-  podRoutes.get("/records", async c => {});
+  podRoutes.get("/records", async c => {
+    const {pod} = c.var;
+    const {builders} = await onRecordsRequest(pod);
+
+    const records = await Promise.all(
+      builders.map(builder => resolveRecordFromBuilder(pod, builder))
+    );
+
+    // TODO: Directly encode the response instead.
+    const rawRecords = records
+      .filter(isDefined)
+      .map(r => IO.encode(AnyRecord, r.record));
+
+    const response = {
+      page_size: 20,
+      record: rawRecords,
+      linked_records: [],
+    };
+
+    return c.json(response);
+  });
 
   podRoutes.route("/", recordVersionRoutes);
   podRoutes.route("/", recordRoutes);
