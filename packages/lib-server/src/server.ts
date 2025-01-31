@@ -24,9 +24,14 @@ import {KvPodMappings} from "./services/kv/kvPodMappings.js";
 import {KvPods} from "./services/kv/kvPods.js";
 import {KvStoreAdapter} from "./services/kv/kvStoreAdapter.js";
 
+//
+// Types.
+//
+
 export interface BlobRequest {
   fileName: string;
   type: string;
+  size: number;
   stream: ReadableStream;
   context: unknown;
 }
@@ -54,11 +59,20 @@ export interface RecordBuilder {
   build: () => Promise<AnyRecord | undefined>;
 }
 
+export type BlobFromRequest = (request: BlobRequest) => Promise<AnyBlobLink>;
+
+export interface RecordsRequestContext {
+  pod: Pod;
+  blobFromRequest: BlobFromRequest;
+}
+
 export interface RecordsRequestResult {
   builders: ReadonlyArray<RecordBuilder>;
 }
 
-export type RecordsRequestHandler = (pod: Pod) => Promise<RecordsRequestResult>;
+export type RecordsRequestHandler = (
+  context: RecordsRequestContext
+) => Promise<RecordsRequestResult>;
 
 export interface DigestStreamResult {
   output: ReadableStream;
@@ -83,6 +97,10 @@ export interface ServerConfig {
   blobStoreAdapter: BlobStoreAdapter;
 }
 
+//
+// Helpers.
+//
+
 function recordUrl(
   baseUrl: string,
   podId: string,
@@ -91,6 +109,10 @@ function recordUrl(
 ) {
   return `${baseUrl}/${podId}/records/${authorEntity}/${recordId}`;
 }
+
+//
+// API.
+//
 
 function buildServer(config: ServerConfig) {
   const {domain, basePath} = config;
@@ -441,7 +463,24 @@ function buildServer(config: ServerConfig) {
   // Record query.
   podRoutes.get("/records", async c => {
     const {pod} = c.var;
-    const {builders} = await onRecordsRequest(pod);
+
+    const blobFromRequest = async (
+      request: BlobRequest
+    ): Promise<AnyBlobLink> => {
+      const cachedBlob = await resolveBlobFromRequest(request);
+      return {
+        hash: cachedBlob.hash,
+        type: request.type,
+        name: request.fileName,
+      };
+    };
+
+    const context: RecordsRequestContext = {
+      pod,
+      blobFromRequest,
+    };
+
+    const {builders} = await onRecordsRequest(context);
 
     const records = await Promise.all(
       builders.map(builder => resolveRecordFromBuilder(pod, builder))

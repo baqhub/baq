@@ -215,7 +215,7 @@ function cleanRecord<T extends AnyRecord>(RRecord: CleanRecordType<T>) {
   return RRecord;
 }
 
-export const AnyRecord = new RecordClassBase(IO.any, IO.any);
+export const AnyRecord = new RecordClassBase(RAnyRecordType, IO.any);
 export type RAnyRecord = IO.Type<AnyRecord, unknown, unknown>;
 
 const RNoContentRecordAction = IO.weakEnumeration(NoContentRecordAction);

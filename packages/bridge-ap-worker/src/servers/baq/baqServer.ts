@@ -20,6 +20,7 @@ import {PostRecord} from "../../baq/postRecord";
 import {Constants} from "../../helpers/constants";
 import {noteToPostRecord} from "../../helpers/convert";
 import {CloudflareBlob} from "../../services/blob/cloudflareBlob";
+import {avatarToBlobRequest} from "../../services/blobFetcher";
 import {CloudflareKv} from "../../services/kv/cloudflareKv";
 import {BaqActor} from "./baqActor";
 
@@ -127,36 +128,7 @@ function ofEnv(env: Env) {
         return undefined;
       }
 
-      const {url, mediaType} = icon;
-
-      const fileName = (() => {
-        switch (mediaType) {
-          case "image/jpeg":
-            return "avatar.jpg";
-
-          case "image/png":
-            return "avatar.png";
-
-          default:
-            return undefined;
-        }
-      })();
-
-      if (!(url instanceof URL) || !mediaType || !fileName) {
-        return undefined;
-      }
-
-      const response = await fetch(url);
-      if (response.status !== 200 || !response.body) {
-        return undefined;
-      }
-
-      return {
-        fileName,
-        type: mediaType,
-        stream: response.body,
-        context: {url: url.toString()},
-      };
+      return await avatarToBlobRequest(icon);
     })();
 
     return {
@@ -173,7 +145,8 @@ function ofEnv(env: Env) {
     };
   };
 
-  const onRecordsRequest: RecordsRequestHandler = async pod => {
+  const onRecordsRequest: RecordsRequestHandler = async c => {
+    const {pod, blobFromRequest} = c;
     const baqActor = pod.context as BaqActor;
     const actor = await lookupObject(baqActor.id, {
       documentLoader: patchedDocumentLoader,
@@ -209,10 +182,12 @@ function ofEnv(env: Env) {
           return undefined;
         }
 
+        console.log({note});
+
         const versionPublished = note.updated || note.published;
 
         const build = async () => {
-          return noteToPostRecord(pod.entity, note);
+          return noteToPostRecord(blobFromRequest, pod.entity, note);
         };
 
         return {
