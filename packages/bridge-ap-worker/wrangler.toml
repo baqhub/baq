@@ -6,10 +6,7 @@ compatibility_flags = ["nodejs_compat"]
 
 routes = [
   { pattern = "baq.lol", custom_domain = true },
-  { pattern = "*.baq.lol/*", custom_domain = false },
-  { pattern = "*.mastodon.baq.lol/*", custom_domain = false },
-  { pattern = "*.threads.baq.lol/*", custom_domain = false },
-  { pattern = "*.bsky.baq.lol/*", custom_domain = false }
+  { pattern = "*.baq.lol/*", custom_domain = false }
 ]
 
 # Workers Logs

@@ -28,9 +28,9 @@ function patchedDocumentLoader(url: string) {
   return fetchDocumentLoader(url, true);
 }
 
-const mastodonSocialRegexp = /^([a-z0-9\\-]{1,60}).mastodon./;
-const threadsRegexp = /^([a-z0-9\\-]{1,60}).threads./;
-const blueskyRegexp = /^([a-z0-9\\-]{1,60}).bsky./;
+const mastodonSocialRegexp = /^([a-z0-9\\-]{1,60})-mastodon-social./;
+const threadsRegexp = /^([a-z0-9\\-]{1,60})-threads-net./;
+const blueskyRegexp = /^([a-z0-9\\-]{1,60})-bsky./;
 
 type ActorPath = [string, string];
 
@@ -54,13 +54,13 @@ function parseEntity(entity: string): ActorPath | undefined {
 function actorToEntity(actor: BaqActor): string {
   switch (actor.server) {
     case "mastodon.social":
-      return `${actor.username}.mastodon.${Constants.domain}`;
+      return `${actor.username}-mastodon-social.${Constants.domain}`;
 
     case "threads.net":
-      return `${actor.username}.threads.${Constants.domain}`;
+      return `${actor.username}-threads-net.${Constants.domain}`;
 
     case "bsky.brid.gy":
-      return `${actor.username}.bsky.${Constants.domain}`;
+      return `${actor.username}-bsky.${Constants.domain}`;
 
     default:
       throw never();
@@ -68,7 +68,6 @@ function actorToEntity(actor: BaqActor): string {
 }
 
 function ofEnv(env: Env) {
-  const kv = CloudflareKv.ofNamespace(env.KV_WORKER_BRIDGE_AP);
   const kvStoreAdapter = CloudflareKv.ofNamespace(env.KV_WORKER_BRIDGE_AP, [
     "baq_server",
   ]);

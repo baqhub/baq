@@ -39,6 +39,6 @@
     "tailwindcss": "3.4.17",
     "typescript": "5.5.2",
     "vite": "5.4.12",
-    "wrangler": "3.103.2"
+    "wrangler": "3.107.2"
   }
 }
