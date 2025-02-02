@@ -206,8 +206,6 @@ function ofEnv(env: Env) {
           return undefined;
         }
 
-        console.log({note});
-
         const versionPublished = note.updated || note.published;
 
         const build = async () => {

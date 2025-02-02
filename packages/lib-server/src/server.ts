@@ -508,8 +508,7 @@ function buildServer(config: ServerConfig) {
   // Discovery.
   allRoutes.get("/", async c => {
     const url = new URL(c.req.url);
-    const entity = "e18e-dev-bsky.baq.lol" || url.hostname;
-    const pod = await resolvePod(entity);
+    const pod = await resolvePod(url.hostname);
     if (!pod) {
       return c.notFound();
     }
