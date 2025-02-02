@@ -1,4 +1,4 @@
-import {Hash, isDefined, never} from "@baqhub/sdk";
+import {Hash, isDefined} from "@baqhub/sdk";
 import {
   BlobRequest,
   EntityRequestHandler,
@@ -30,41 +30,64 @@ function patchedDocumentLoader(url: string) {
 
 const mastodonSocialRegexp = /^([a-z0-9\\-]{1,60})-mastodon-social./;
 const threadsRegexp = /^([a-z0-9\\-]{1,60})-threads-net./;
-const blueskyRegexp = /^([a-z0-9\\-]{1,60})-bsky./;
+const blueskyRegexp = /^([a-z0-9\\-]{1,60})-bsky-social./;
+const blueskyCustomRegexp = /^([a-z0-9\\-]{1,60})-bsky./;
 
-type ActorPath = [string, string];
+interface ActorIdentity {
+  server: string;
+  handle: string;
+  entity: string;
+}
 
-function parseEntity(entity: string): ActorPath | undefined {
-  function tryMatch(regex: RegExp, server: string): ActorPath | undefined {
+function normalizeHandle(handle: string) {
+  return handle.replace(/--|-/g, m => (m === "--" ? "-" : "."));
+}
+
+function parseEntity(entity: string): ActorIdentity | undefined {
+  function tryMatch(
+    regex: RegExp,
+    server: string,
+    handleSuffix: string,
+    entitySuffix: string
+  ): ActorIdentity | undefined {
     const match = entity.match(regex);
     if (!match || !match[1]) {
       return undefined;
     }
 
-    return [server, match[1]];
+    return {
+      server,
+      handle: normalizeHandle(match[1]) + handleSuffix,
+      entity: match[1] + entitySuffix,
+    };
   }
 
   return (
-    tryMatch(mastodonSocialRegexp, "mastodon.social") ||
-    tryMatch(threadsRegexp, "threads.net") ||
-    tryMatch(blueskyRegexp, "bsky.brid.gy")
+    tryMatch(
+      mastodonSocialRegexp,
+      "mastodon.social",
+      "",
+      `-mastodon-social.${Constants.domain}`
+    ) ||
+    tryMatch(
+      threadsRegexp,
+      "threads.net",
+      "",
+      `-threads-net.${Constants.domain}`
+    ) ||
+    tryMatch(
+      blueskyRegexp,
+      "bsky.brid.gy",
+      ".bsky.social",
+      `-bsky-social.${Constants.domain}`
+    ) ||
+    tryMatch(
+      blueskyCustomRegexp,
+      "bsky.brid.gy",
+      "",
+      `-bsky.${Constants.domain}`
+    )
   );
-}
-
-function actorToEntity(actor: BaqActor): string {
-  switch (actor.server) {
-    case "mastodon.social":
-      return `${actor.username}-mastodon-social.${Constants.domain}`;
-
-    case "threads.net":
-      return `${actor.username}-threads-net.${Constants.domain}`;
-
-    case "bsky.brid.gy":
-      return `${actor.username}-bsky.${Constants.domain}`;
-
-    default:
-      throw never();
-  }
 }
 
 function ofEnv(env: Env) {
@@ -92,13 +115,15 @@ function ofEnv(env: Env) {
     };
   };
 
-  const onEntityRequest: EntityRequestHandler = async (entity: string) => {
-    const actorPath = parseEntity(entity);
-    if (!actorPath) {
+  const onEntityRequest: EntityRequestHandler = async (
+    requestEntity: string
+  ) => {
+    const actorIdentity = parseEntity(requestEntity);
+    if (!actorIdentity) {
       return undefined;
     }
 
-    const [server, handle] = actorPath;
+    const {server, handle, entity} = actorIdentity;
     const identifier = `${handle}@${server}`;
 
     const actor = await lookupObject(identifier, {
@@ -132,7 +157,7 @@ function ofEnv(env: Env) {
 
     return {
       podId: Hash.shortHash(newActor.id),
-      entity: actorToEntity(newActor),
+      entity,
       name: actor.name?.toString() || undefined,
       bio: stripHtml(actor.summary?.toString() || "").result || undefined,
       website: actor.url?.toString() || undefined,
