@@ -26,32 +26,62 @@ function typeToFormat(type: string): RequestInitCfPropertiesImage["format"] {
   }
 }
 
-async function fetchImage(request: ImageRequest) {
-  interface ImageRequestAttempt {
-    width: number | undefined;
-    height: number | undefined;
-    format: RequestInitCfPropertiesImage["format"] | undefined;
-    count: number;
+interface ImageRequestAttempt {
+  width: number | undefined;
+  height: number | undefined;
+  format: RequestInitCfPropertiesImage["format"] | undefined;
+  count: number;
+}
+
+function fetchResizeImage(
+  env: Env,
+  url: URL,
+  attempt: ImageRequestAttempt | undefined
+) {
+  if (!attempt) {
+    return fetch(url);
   }
 
-  async function fetchAttempt(attempt?: ImageRequestAttempt) {
-    const response = await fetch(request.url, {
-      cf: {
-        image: attempt && {
-          fit: "scale-down",
-          width: attempt.width,
-          height: attempt.height,
-          format: attempt.format,
-        },
+  if (env.IS_DEV) {
+    return fetch("https://images.dev.baq.lol", {
+      body: JSON.stringify({
+        auth_key: env.DEV_IMAGES_AUTH_KEY,
+        image_url: url.toString(),
+        fit: "scale-down",
+        format: attempt.format,
+        width: attempt.width,
+        height: attempt.height,
+      }),
+      method: "POST",
+      headers: {
+        "content-type": "application/json; charset=UTF-8",
       },
     });
+  }
 
+  return fetch(url, {
+    cf: {
+      image: attempt && {
+        fit: "scale-down",
+        width: attempt.width,
+        height: attempt.height,
+        format: attempt.format,
+      },
+    },
+  });
+}
+
+async function fetchImage(env: Env, request: ImageRequest) {
+  async function fetchAttempt(attempt?: ImageRequestAttempt) {
+    const response = await fetchResizeImage(env, request.url, attempt);
     if (response.status !== 200 || !response.body) {
+      console.log("Bad response:", response.status);
       return undefined;
     }
 
     const sizeHeader = Number(response.headers.get("Content-Length"));
     if (!Number.isSafeInteger(sizeHeader)) {
+      console.log("Bad content length:", sizeHeader);
       return undefined;
     }
 
@@ -60,6 +90,7 @@ async function fetchImage(request: ImageRequest) {
     }
 
     if (attempt && attempt.count >= imageMaxAttempts) {
+      console.log("Too many attempts:", sizeHeader, attempt);
       return undefined;
     }
 
@@ -82,8 +113,8 @@ async function fetchImage(request: ImageRequest) {
     }
 
     return {
-      width: undefined,
-      height: undefined,
+      width: request.startWidth,
+      height: request.startHeight,
       format: typeToFormat(firstType),
       count: 0,
     };
@@ -93,6 +124,7 @@ async function fetchImage(request: ImageRequest) {
 }
 
 export async function avatarToBlobRequest(
+  env: Env,
   icon: Image
 ): Promise<BlobRequest | undefined> {
   const {url, mediaType} = icon;
@@ -114,7 +146,7 @@ export async function avatarToBlobRequest(
     return undefined;
   }
 
-  const result = await fetchImage({
+  const result = await fetchImage(env, {
     url,
     type: mediaType,
     maxBytes: avatarMaxSize,
@@ -135,7 +167,11 @@ export async function avatarToBlobRequest(
   };
 }
 
-export function postImageToBlobRequests(attachment: Document, index: number) {
+export function postImageToBlobRequests(
+  env: Env,
+  attachment: Document,
+  index: number
+) {
   const {url, mediaType} = attachment;
 
   if (!(url instanceof URL) || !mediaType) {
@@ -148,7 +184,7 @@ export function postImageToBlobRequests(attachment: Document, index: number) {
     startHeight: number,
     suffix: string
   ): Promise<BlobRequest> => {
-    const result = await fetchImage({
+    const result = await fetchImage(env, {
       url,
       type: mediaType,
       maxBytes,

@@ -128,7 +128,7 @@ function ofEnv(env: Env) {
         return undefined;
       }
 
-      return await avatarToBlobRequest(icon);
+      return await avatarToBlobRequest(env, icon);
     })();
 
     return {
@@ -187,7 +187,7 @@ function ofEnv(env: Env) {
         const versionPublished = note.updated || note.published;
 
         const build = async () => {
-          return noteToPostRecord(blobFromRequest, pod.entity, note);
+          return noteToPostRecord(env, blobFromRequest, pod.entity, note);
         };
 
         return {

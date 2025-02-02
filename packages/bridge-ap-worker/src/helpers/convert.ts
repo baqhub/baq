@@ -9,6 +9,7 @@ import {postImageToBlobRequests} from "../services/blobFetcher";
 const imageMediaTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
 export async function noteToPostRecord(
+  env: Env,
   blobFromRequest: BlobFromRequest,
   entity: string,
   note: Note
@@ -42,7 +43,7 @@ export async function noteToPostRecord(
         return undefined;
       }
 
-      const blobRequests = postImageToBlobRequests(doc, index);
+      const blobRequests = postImageToBlobRequests(env, doc, index);
       if (!blobRequests) {
         return undefined;
       }

@@ -2,12 +2,12 @@ import {
   Client,
   Entity,
   EntityRecord,
+  Hash,
   IO,
   isDefined,
   Q,
   StandingRecord,
   Str,
-  Uuid,
 } from "@baqhub/sdk";
 import {
   Create,
@@ -65,7 +65,7 @@ function ofEnv(env: Env) {
     // Create a new one and store it.
     // TODO: Revisit concurrent scenario.
     const newState: ActorState = {
-      id: Uuid.new(),
+      id: Hash.shortHash(entity),
       entity,
       entityRecord: undefined,
     };
