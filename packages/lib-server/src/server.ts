@@ -7,7 +7,6 @@ import {
   isDefined,
   RAnyRecord,
   RecordPermissions,
-  RecordResponse,
   Constants as SDKConstants,
   Uuid,
 } from "@baqhub/sdk";
@@ -370,9 +369,9 @@ function buildServer(config: ServerConfig) {
   recordCommonRoutes.get("/", async c => {
     const {record} = c.var;
     const rawRecord = IO.encode(AnyRecord, record.record);
-    const response: RecordResponse<any, any> = {
+    const response = {
       record: rawRecord,
-      linkedRecords: [],
+      linked_records: [],
     };
 
     return c.json(response);
