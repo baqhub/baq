@@ -29,6 +29,16 @@ function ofNewRecord<T extends AnyRecord>(
   recordType: IO.Type<T, unknown, unknown>,
   record: T
 ): CachedRecord<T> {
+  const versionHash = RecordVersionHash.ofRecord(recordType, {
+    ...record,
+    version: {
+      author: record.author,
+      createdAt: record.createdAt,
+      receivedAt: undefined,
+      hash: undefined,
+    },
+  });
+
   const patchedRecord: T = {
     ...record,
     source: RecordSource.PROXY,
@@ -36,7 +46,7 @@ function ofNewRecord<T extends AnyRecord>(
       author: record.author,
       createdAt: record.createdAt,
       receivedAt: undefined,
-      hash: RecordVersionHash.ofRecord(recordType, record),
+      hash: versionHash,
     },
   };
 
