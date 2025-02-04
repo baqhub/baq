@@ -1,5 +1,5 @@
 import {Hash, isDefined, RecordPermissions} from "@baqhub/sdk";
-import {BlobFromRequest, BlobRequest} from "@baqhub/server";
+import {BlobFromRequest} from "@baqhub/server";
 import {Note} from "@fedify/fedify";
 import {Document} from "@fedify/fedify/vocab";
 import {stripHtml} from "string-strip-html";
@@ -48,26 +48,22 @@ export async function noteToPostRecord(
         return undefined;
       }
 
-      const blobRequestToLink = async (
-        requestPromise: Promise<BlobRequest>
-      ) => {
-        const request = await requestPromise;
-        return await blobFromRequest(request);
-      };
-
       const [small, medium, large] = await Promise.all([
-        blobRequestToLink(blobRequests.small),
-        blobRequestToLink(blobRequests.medium),
-        blobRequestToLink(blobRequests.large),
+        blobFromRequest(blobRequests.small),
+        blobFromRequest(blobRequests.medium),
+        blobFromRequest(blobRequests.large),
       ]);
+      if (!small || !medium || !large) {
+        return undefined;
+      }
 
       return {
-        small,
-        medium,
-        large,
+        small: small.link,
+        medium: medium.link,
+        large: large.link,
         width,
         height,
-        size: (await blobRequests.large).size,
+        size: large.size,
       };
     }
   );

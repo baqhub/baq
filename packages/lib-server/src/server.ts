@@ -28,12 +28,15 @@ import {KvStoreAdapter} from "./services/kv/kvStoreAdapter.js";
 // Types.
 //
 
+interface BlobRequestBlob {
+  type: string;
+  stream: ReadableStream;
+}
+
 export interface BlobRequest {
   fileName: string;
-  type: string;
-  size: number;
-  stream: ReadableStream;
   context: unknown;
+  getBlob: () => Promise<BlobRequestBlob | undefined>;
 }
 
 export interface EntityRequestResult {
@@ -59,7 +62,15 @@ export interface RecordBuilder {
   build: () => Promise<AnyRecord | undefined>;
 }
 
-export type BlobFromRequest = (request: BlobRequest) => Promise<AnyBlobLink>;
+export interface BlobFromRequestResult {
+  type: string;
+  size: number;
+  link: AnyBlobLink;
+}
+
+export type BlobFromRequest = (
+  request: BlobRequest
+) => Promise<BlobFromRequestResult | undefined>;
 
 export interface RecordsRequestContext {
   pod: Pod;
@@ -135,12 +146,21 @@ function buildServer(config: ServerConfig) {
     return await kvCachedBlobs.get(hash);
   }
 
-  async function resolveBlobFromRequest(request: BlobRequest) {
+  async function resolveBlobFromRequest(
+    request: BlobRequest
+  ): Promise<BlobFromRequestResult | undefined> {
     // Upload the stream.
     const blobUpload = BlobUpload.new();
     await kvBlobUploads.set(blobUpload);
 
-    const digestedStream = digestStream(request.stream);
+    // We want to start the request after setting the BlobUpload
+    // otherwise we might deadlock requests in envs with request limits.
+    const requestBlob = await request.getBlob();
+    if (!requestBlob) {
+      return undefined;
+    }
+
+    const digestedStream = digestStream(requestBlob.stream);
     const blobObject = await blobStoreAdapter.set(
       blobUpload.id,
       digestedStream.output
@@ -154,7 +174,16 @@ function buildServer(config: ServerConfig) {
         await blobStoreAdapter.delete(blobUpload.id);
         await kvBlobUploads.delete(blobUpload.id);
       })();
-      return existingBlob;
+
+      return {
+        type: requestBlob.type,
+        size: existingBlob.size,
+        link: {
+          hash: existingBlob.hash,
+          type: requestBlob.type,
+          name: request.fileName,
+        },
+      };
     }
 
     // Otherwise, create it.
@@ -163,7 +192,7 @@ function buildServer(config: ServerConfig) {
       hash,
       size: blobObject.size,
       firstFileName: request.fileName,
-      firstType: request.type,
+      firstType: requestBlob.type,
       context: request.context,
       createdAt: new Date(),
     };
@@ -171,7 +200,15 @@ function buildServer(config: ServerConfig) {
     await kvCachedBlobs.set(newBlob);
     await kvBlobUploads.delete(blobUpload.id);
 
-    return newBlob;
+    return {
+      type: requestBlob.type,
+      size: newBlob.size,
+      link: {
+        hash: newBlob.hash,
+        type: requestBlob.type,
+        name: request.fileName,
+      },
+    };
   }
 
   //
@@ -203,19 +240,17 @@ function buildServer(config: ServerConfig) {
     };
 
     const {avatar} = entityResult;
-    const avatarBlobLink = await (async (): Promise<
-      AnyBlobLink | undefined
-    > => {
+    const avatarBlobLink = await (async () => {
       if (!avatar) {
         return undefined;
       }
 
-      const blob = await resolveBlobFromRequest(avatar);
-      return {
-        hash: blob.hash,
-        type: avatar.type,
-        name: avatar.fileName,
-      };
+      const result = await resolveBlobFromRequest(avatar);
+      if (!result) {
+        return undefined;
+      }
+
+      return result.link;
     })();
 
     const newEntityRecord = EntityRecord.new(
@@ -472,20 +507,9 @@ function buildServer(config: ServerConfig) {
   podRoutes.get("/records", async c => {
     const {pod} = c.var;
 
-    const blobFromRequest = async (
-      request: BlobRequest
-    ): Promise<AnyBlobLink> => {
-      const cachedBlob = await resolveBlobFromRequest(request);
-      return {
-        hash: cachedBlob.hash,
-        type: request.type,
-        name: request.fileName,
-      };
-    };
-
     const context: RecordsRequestContext = {
       pod,
-      blobFromRequest,
+      blobFromRequest: resolveBlobFromRequest,
     };
 
     const {builders} = await onRecordsRequest(context);

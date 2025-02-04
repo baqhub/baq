@@ -152,7 +152,7 @@ function ofEnv(env: Env) {
         return undefined;
       }
 
-      return await avatarToBlobRequest(env, icon);
+      return avatarToBlobRequest(env, icon);
     })();
 
     return {

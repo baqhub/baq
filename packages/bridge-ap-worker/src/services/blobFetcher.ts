@@ -74,23 +74,28 @@ function fetchResizeImage(
 async function fetchImage(env: Env, request: ImageRequest) {
   async function fetchAttempt(attempt?: ImageRequestAttempt) {
     const response = await fetchResizeImage(env, request.url, attempt);
-    if (response.status !== 200 || !response.body) {
-      console.log("Bad response:", response.status);
+    if (!response.body) {
+      return undefined;
+    }
+
+    if (response.status !== 200) {
+      response.body.cancel();
       return undefined;
     }
 
     const sizeHeader = Number(response.headers.get("Content-Length"));
     if (!Number.isSafeInteger(sizeHeader)) {
-      console.log("Bad content length:", sizeHeader);
+      response.body.cancel();
       return undefined;
     }
 
     if (sizeHeader <= request.maxBytes) {
-      return [sizeHeader, response.body] as const;
+      return response.body;
     }
 
+    response.body.cancel();
+
     if (attempt && attempt.count >= imageMaxAttempts) {
-      console.log("Too many attempts:", sizeHeader, attempt);
       return undefined;
     }
 
@@ -123,10 +128,10 @@ async function fetchImage(env: Env, request: ImageRequest) {
   return fetchAttempt(initialAttempt);
 }
 
-export async function avatarToBlobRequest(
+export function avatarToBlobRequest(
   env: Env,
   icon: Image
-): Promise<BlobRequest | undefined> {
+): BlobRequest | undefined {
   const {url, mediaType} = icon;
 
   const fileName = (() => {
@@ -146,24 +151,29 @@ export async function avatarToBlobRequest(
     return undefined;
   }
 
-  const result = await fetchImage(env, {
-    url,
-    type: mediaType,
-    maxBytes: avatarMaxSize,
-    startWidth: 400,
-    startHeight: 400,
-    allowedTypes: ["image/jpeg", "image/png"],
-  });
-  if (!result) {
-    return undefined;
-  }
+  const getBlob = async () => {
+    const stream = await fetchImage(env, {
+      url,
+      type: mediaType,
+      maxBytes: avatarMaxSize,
+      startWidth: 400,
+      startHeight: 400,
+      allowedTypes: ["image/jpeg", "image/png"],
+    });
+    if (!stream) {
+      return undefined;
+    }
+
+    return {
+      type: mediaType,
+      stream,
+    };
+  };
 
   return {
     fileName,
-    type: mediaType,
-    size: result[0],
-    stream: result[1],
     context: {url: url.toString()},
+    getBlob,
   };
 }
 
@@ -178,30 +188,35 @@ export function postImageToBlobRequests(
     return undefined;
   }
 
-  const imageToBlobRequest = async (
+  const imageToBlobRequest = (
     maxBytes: number,
     startWidth: number,
     startHeight: number,
     suffix: string
-  ): Promise<BlobRequest> => {
-    const result = await fetchImage(env, {
-      url,
-      type: mediaType,
-      maxBytes,
-      startWidth,
-      startHeight,
-      allowedTypes: ["image/jpeg"],
-    });
-    if (!result) {
-      throw new Error(`Image not found: ${suffix} ${url}`);
-    }
+  ): BlobRequest => {
+    const getBlob = async () => {
+      const stream = await fetchImage(env, {
+        url,
+        type: mediaType,
+        maxBytes,
+        startWidth,
+        startHeight,
+        allowedTypes: ["image/jpeg"],
+      });
+      if (!stream) {
+        throw new Error(`Image not found: ${suffix} ${url}`);
+      }
+
+      return {
+        type: mediaType,
+        stream,
+      };
+    };
 
     return {
       fileName: `image${index}_${suffix}.jpg`,
-      type: "image/jpeg",
-      size: result[0],
-      stream: result[1],
       context: {url: url.toString()},
+      getBlob,
     };
   };
 
