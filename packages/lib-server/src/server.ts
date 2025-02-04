@@ -168,10 +168,8 @@ function buildServer(config: ServerConfig) {
       createdAt: new Date(),
     };
 
-    await Promise.all([
-      kvBlobUploads.set(BlobUpload.withHash(blobUpload, hash)),
-      kvCachedBlobs.set(newBlob),
-    ]);
+    await kvCachedBlobs.set(newBlob);
+    await kvBlobUploads.delete(blobUpload.id);
 
     return newBlob;
   }
