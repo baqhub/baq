@@ -8,7 +8,7 @@ function podMappingForEntityKey(entity: string): KvKey<object> {
 
 function build(kv: KvStoreAdapter) {
   return {
-    async getPodMapping(entity: string) {
+    async get(entity: string) {
       const rawMapping = await kv.get(podMappingForEntityKey(entity));
       if (!rawMapping) {
         return undefined;
@@ -17,7 +17,7 @@ function build(kv: KvStoreAdapter) {
       return IO.decode(PodMapping.io, rawMapping);
     },
 
-    async setPodMapping(mapping: PodMapping) {
+    async set(mapping: PodMapping) {
       const rawMapping = IO.encode(PodMapping.io, mapping);
       await kv.set(podMappingForEntityKey(mapping.entity), rawMapping);
     },

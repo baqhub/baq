@@ -12,7 +12,7 @@ function blobForHashKey(hash: string): KvKey<object> {
 
 function build(kv: KvStoreAdapter) {
   return {
-    async getBlob(hash: string) {
+    async get(hash: string) {
       const key = blobForHashKey(hash);
       const rawBlob = await kv.get(key);
       if (!rawBlob) {
@@ -22,7 +22,7 @@ function build(kv: KvStoreAdapter) {
       return IO.decode(CachedBlob.io, rawBlob);
     },
 
-    async setBlob(blob: CachedBlob) {
+    async set(blob: CachedBlob) {
       const rawBlob = IO.encode(CachedBlob.io, blob);
 
       const key = blobKey(blob.id);

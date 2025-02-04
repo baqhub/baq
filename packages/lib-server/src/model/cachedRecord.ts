@@ -42,10 +42,11 @@ function ofNewRecord<T extends AnyRecord>(
   const patchedRecord: T = {
     ...record,
     source: RecordSource.PROXY,
+    receivedAt: record.createdAt,
     version: {
       author: record.author,
       createdAt: record.createdAt,
-      receivedAt: undefined,
+      receivedAt: record.createdAt,
       hash: versionHash,
     },
   };

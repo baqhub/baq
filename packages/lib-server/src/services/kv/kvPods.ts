@@ -8,7 +8,7 @@ function podForPodIdKey(podId: string): KvKey<object> {
 
 function build(kv: KvStoreAdapter) {
   return {
-    async getPod(podId: string) {
+    async get(podId: string) {
       const rawPod = await kv.get(podForPodIdKey(podId));
       if (!rawPod) {
         return undefined;
@@ -17,7 +17,7 @@ function build(kv: KvStoreAdapter) {
       return IO.decode(Pod, rawPod);
     },
 
-    async setPod(pod: Pod) {
+    async set(pod: Pod) {
       const rawPod = IO.encode(Pod, pod);
       await kv.set(podForPodIdKey(pod.id), rawPod);
     },

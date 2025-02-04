@@ -8,15 +8,16 @@ import {
   RAnyRecord,
   RecordPermissions,
   Constants as SDKConstants,
-  Uuid,
 } from "@baqhub/sdk";
 import {Hono} from "hono";
 import {findBlobLink} from "./helpers/recordHelpers.js";
+import {BlobUpload} from "./model/blobUpload.js";
 import {CachedBlob} from "./model/cachedBlob.js";
 import {CachedRecord} from "./model/cachedRecord.js";
 import {Pod} from "./model/pod.js";
 import {PodMapping} from "./model/podMapping.js";
 import {BlobStoreAdapter} from "./services/blob/blobStoreAdapter.js";
+import {KvBlobUploads} from "./services/kv/kvBlobUploads.js";
 import {KvCachedBlobs} from "./services/kv/kvCachedBlobs.js";
 import {KvCachedRecords} from "./services/kv/kvCachedRecords.js";
 import {KvPodMappings} from "./services/kv/kvPodMappings.js";
@@ -122,6 +123,7 @@ function buildServer(config: ServerConfig) {
 
   const kvPodMappings = KvPodMappings.new(kvStoreAdapter);
   const kvPods = KvPods.new(kvStoreAdapter);
+  const kvBlobUploads = KvBlobUploads.new(kvStoreAdapter);
   const kvCachedRecords = KvCachedRecords.new(kvStoreAdapter);
   const kvCachedBlobs = KvCachedBlobs.new(kvStoreAdapter);
 
@@ -130,29 +132,34 @@ function buildServer(config: ServerConfig) {
   //
 
   async function resolveBlobFromHash(hash: string) {
-    return await kvCachedBlobs.getBlob(hash);
+    return await kvCachedBlobs.get(hash);
   }
 
   async function resolveBlobFromRequest(request: BlobRequest) {
     // Upload the stream.
-    const blobId = Uuid.new();
+    const blobUpload = BlobUpload.new();
+    await kvBlobUploads.set(blobUpload);
+
     const digestedStream = digestStream(request.stream);
     const blobObject = await blobStoreAdapter.set(
-      blobId,
+      blobUpload.id,
       digestedStream.output
     );
 
     // If this blob already exists, use it.
     const hash = await digestedStream.hash;
-    const existingBlob = await kvCachedBlobs.getBlob(hash);
+    const existingBlob = await kvCachedBlobs.get(hash);
     if (existingBlob) {
-      await blobStoreAdapter.delete(blobId);
+      (async () => {
+        await blobStoreAdapter.delete(blobUpload.id);
+        await kvBlobUploads.delete(blobUpload.id);
+      })();
       return existingBlob;
     }
 
     // Otherwise, create it.
     const newBlob: CachedBlob = {
-      id: blobId,
+      id: blobUpload.id,
       hash,
       size: blobObject.size,
       firstFileName: request.fileName,
@@ -161,7 +168,11 @@ function buildServer(config: ServerConfig) {
       createdAt: new Date(),
     };
 
-    await kvCachedBlobs.setBlob(newBlob);
+    await Promise.all([
+      kvBlobUploads.set(BlobUpload.withHash(blobUpload, hash)),
+      kvCachedBlobs.set(newBlob),
+    ]);
+
     return newBlob;
   }
 
@@ -171,8 +182,8 @@ function buildServer(config: ServerConfig) {
 
   async function resolvePod(entity: string) {
     // Find existing pod.
-    const existingMap = await kvPodMappings.getPodMapping(entity);
-    const existingPod = existingMap && (await kvPods.getPod(existingMap.id));
+    const existingMap = await kvPodMappings.get(entity);
+    const existingPod = existingMap && (await kvPods.get(existingMap.id));
     if (existingPod) {
       return existingPod;
     }
@@ -255,15 +266,15 @@ function buildServer(config: ServerConfig) {
     );
 
     // And store it.
-    await kvCachedRecords.setRecord(EntityRecord, newEntityCachedRecord);
-    await kvPods.setPod(newPod);
+    await kvCachedRecords.set(EntityRecord, newEntityCachedRecord);
+    await kvPods.set(newPod);
 
     const mapping1 = PodMapping.ofPod(newPod);
-    await kvPodMappings.setPodMapping(mapping1);
+    await kvPodMappings.set(mapping1);
 
     if (entity !== mapping1.entity) {
       const mapping2 = PodMapping.withEntity(mapping1, entity);
-      await kvPodMappings.setPodMapping(mapping2);
+      await kvPodMappings.set(mapping2);
     }
 
     return newPod;
@@ -278,13 +289,13 @@ function buildServer(config: ServerConfig) {
     authorEntity: string,
     recordId: string
   ) {
-    const authorMap = await kvPodMappings.getPodMapping(authorEntity);
+    const authorMap = await kvPodMappings.get(authorEntity);
     if (!authorMap) {
       return undefined;
     }
 
     // Find existing record.
-    const existingRecord = await kvCachedRecords.getRecord(
+    const existingRecord = await kvCachedRecords.get(
       AnyRecord,
       pod.id,
       authorMap.id,
@@ -300,12 +311,12 @@ function buildServer(config: ServerConfig) {
     recordId: string,
     versionHash: string
   ) {
-    const authorMap = await kvPodMappings.getPodMapping(authorEntity);
+    const authorMap = await kvPodMappings.get(authorEntity);
     if (!authorMap) {
       return undefined;
     }
 
-    const existingRecordVersion = await kvCachedRecords.getRecordVersion(
+    const existingRecordVersion = await kvCachedRecords.getVersion(
       AnyRecord,
       pod.id,
       authorMap.id,
@@ -321,7 +332,7 @@ function buildServer(config: ServerConfig) {
       throw new Error("Note updates not yet supported.");
     }
 
-    const existingRecord = await kvCachedRecords.getRecord(
+    const existingRecord = await kvCachedRecords.get(
       AnyRecord,
       pod.id,
       pod.id,
@@ -342,7 +353,7 @@ function buildServer(config: ServerConfig) {
       builder.type,
       newRecord
     );
-    await kvCachedRecords.setRecord(builder.type, newCachedRecord);
+    await kvCachedRecords.set(builder.type, newCachedRecord);
 
     return newCachedRecord;
   }
@@ -450,7 +461,7 @@ function buildServer(config: ServerConfig) {
 
   podRoutes.use("*", async (c, next) => {
     const {podId} = c.req.param();
-    const pod = await kvPods.getPod(podId);
+    const pod = await kvPods.get(podId);
     if (!pod) {
       return c.notFound();
     }

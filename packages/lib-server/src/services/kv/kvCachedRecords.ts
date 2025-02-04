@@ -21,7 +21,7 @@ function recordVersionKey(
 
 function build(kv: KvStoreAdapter) {
   return {
-    async getRecord<K extends RAnyRecord>(
+    async get<K extends RAnyRecord>(
       recordType: K,
       podId: string,
       authorId: string,
@@ -36,7 +36,7 @@ function build(kv: KvStoreAdapter) {
       return IO.decode(CachedRecord.io(recordType), rawRecord);
     },
 
-    async getRecordVersion<K extends RAnyRecord>(
+    async getVersion<K extends RAnyRecord>(
       recordType: K,
       podId: string,
       authorId: string,
@@ -52,7 +52,7 @@ function build(kv: KvStoreAdapter) {
       return IO.decode(CachedRecord.io(recordType), rawRecord);
     },
 
-    async setRecord<T extends AnyRecord>(
+    async set<T extends AnyRecord>(
       recordType: IO.Type<T, unknown, unknown>,
       record: CachedRecord<T>
     ) {
