@@ -8,26 +8,12 @@ import {
   HomeModernIcon,
   PhotoIcon,
 } from "@heroicons/react/24/outline";
-import {MdxH2} from "../../../app/global/mdx/mdx";
-import {slugify} from "../../../helpers/stringHelpers";
-import {onlyText} from "react-children-utilities";
+import {ImageHeader} from "../../../app/global/mdx/mdxImageHeader";
 
 export const metadata = {
   id: "7d6db6f5",
   title: "App ideas",
 };
-
-export const ImageHeader = ({icon, children}) => (
-  <MdxH2 $as="div" className="flex flex-row items-center gap-2.5">
-    <div className="w-8 text-amber-500">{icon}</div>
-    <h2
-      id={slugify(onlyText(children))}
-      className="scroll-mt-24 lg:scroll-mt-28"
-    >
-      {children}
-    </h2>
-  </MdxH2>
-);
 
 # App ideas
 
