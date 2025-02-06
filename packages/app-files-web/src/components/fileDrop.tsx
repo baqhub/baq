@@ -3,7 +3,7 @@ import {DocumentArrowUpIcon} from "@heroicons/react/24/outline";
 import find from "lodash/find.js";
 import {DragEventHandler, FC, useEffect, useState} from "react";
 import tiwi from "tiwi";
-import {useNewFileState} from "../state/fileDropState.js";
+import {useNewFileState} from "../state/newFileState.js";
 
 //
 // Style.
