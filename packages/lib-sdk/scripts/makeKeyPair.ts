@@ -1,7 +1,7 @@
 import * as IO from "../src/helpers/io.js";
-import {buildKey} from "../src/helpers/signature.js";
+import {Signature} from "../src/helpers/signature.js";
 
-const [publicKey, privateKey] = buildKey();
+const [publicKey, privateKey] = Signature.buildKey();
 
 console.log({
   publicKey: IO.base64Bytes.encode(publicKey),

@@ -2,12 +2,15 @@ import {
   AnyBlobLink,
   AnyRecord,
   EntityRecord,
+  EntityRecordSigningKey,
   Headers,
   IO,
   isDefined,
   RAnyRecord,
   RecordPermissions,
   Constants as SDKConstants,
+  SignAlgorithm,
+  Signature,
 } from "@baqhub/sdk";
 import {Hono} from "hono";
 import {findBlobLink} from "./helpers/recordHelpers.js";
@@ -106,6 +109,8 @@ export interface ServerConfig {
   digestStream: StreamDigester;
   kvStoreAdapter: KvStoreAdapter;
   blobStoreAdapter: BlobStoreAdapter;
+
+  isDev?: boolean;
 }
 
 //
@@ -126,7 +131,7 @@ function recordUrl(
 //
 
 function buildServer(config: ServerConfig) {
-  const {domain, basePath} = config;
+  const {domain, basePath, isDev} = config;
   const {onEntityRequest, onRecordsRequest} = config;
   const {digestStream, kvStoreAdapter, blobStoreAdapter} = config;
 
@@ -231,9 +236,20 @@ function buildServer(config: ServerConfig) {
 
     // Create the new pod and entity record.
     const date = new Date();
+    const [publicKey, privateKey] = Signature.buildKey();
+
+    const keyPairs = [
+      {
+        algorithm: SignAlgorithm.ED25519,
+        publicKey,
+        privateKey,
+      },
+    ];
+
     const newPod: Pod = {
       id: entityResult.podId,
       entity: entityResult.entity,
+      keyPairs,
       context: entityResult.context,
       createdAt: date,
       updatedAt: date,
@@ -257,6 +273,12 @@ function buildServer(config: ServerConfig) {
       newPod.entity,
       {
         previousEntities: [],
+        signingKeys: keyPairs.map(
+          (kp): EntityRecordSigningKey => ({
+            algorithm: kp.algorithm,
+            publicKey: kp.publicKey,
+          })
+        ),
         servers: [
           {
             version: "1.0.0",
@@ -272,7 +294,7 @@ function buildServer(config: ServerConfig) {
               recordVersionBlob: `${baseUrl}/${newPod.id}/records/{entity}/{record_id}/versions/{version_hash}/blobs/{blob_hash}/{file_name}`,
               newBlob: "",
               events: "",
-              newNotification: "",
+              newNotification: `${baseUrl}/${newPod.id}/notifications`,
               serverInfo: `${baseUrl}/${newPod.id}`,
             },
           },
@@ -540,7 +562,8 @@ function buildServer(config: ServerConfig) {
   // Discovery.
   allRoutes.get("/", async c => {
     const url = new URL(c.req.url);
-    const pod = await resolvePod(url.hostname);
+    const entity = isDev ? "arstechnica-mastodon-social.baq.lol" : url.hostname;
+    const pod = await resolvePod(entity);
     if (!pod) {
       return c.notFound();
     }

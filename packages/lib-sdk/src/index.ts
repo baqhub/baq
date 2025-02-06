@@ -11,6 +11,7 @@ export * from "./helpers/hash.js";
 export * from "./helpers/headers.js";
 export * as IO from "./helpers/io.js";
 export * from "./helpers/schemaIO.js";
+export * from "./helpers/signature.js";
 export * from "./helpers/string.js";
 export * from "./helpers/type.js";
 export * from "./helpers/uuid.js";

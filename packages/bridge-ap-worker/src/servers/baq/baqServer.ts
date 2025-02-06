@@ -233,6 +233,7 @@ function ofEnv(env: Env) {
     digestStream,
     kvStoreAdapter,
     blobStoreAdapter,
+    isDev: Boolean(env.IS_DEV),
   });
 
   return {
