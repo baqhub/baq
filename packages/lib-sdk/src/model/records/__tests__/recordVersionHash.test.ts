@@ -6,31 +6,43 @@ import {RecordVersionHash} from "../recordVersionHash.js";
 describe("record version hash", () => {
   test("types entity record", () => {
     // Prepare.
+    const publicKeyBase64 = "aw4ujJEnJBFAoDVfHq+7O0Ingq989W+h6cB0oSMe7U0=";
+    const publicKey = Uint8Array.from(atob(publicKeyBase64), c =>
+      c.charCodeAt(0)
+    );
+
     const record: EntityRecord = {
       author: {entity: "types.baq.dev"},
       content: {
         previousEntities: [],
-        signingKeys: [],
+        signingKeys: [
+          {
+            algorithm: "ed25519",
+            publicKey,
+          },
+        ],
         profile: {name: "Protocol Types"},
         servers: [
           {
             endpoints: {
-              auth: "https://baq.run/types/auth/{record_id}",
-              events: "https://baq.run/api/types/events",
-              newBlob: "https://baq.run/api/types/blobs",
-              newNotification: "https://baq.run/api/types/notifications",
-              newRecord: "https://baq.run/api/types/records",
-              record: "https://baq.run/api/types/records/{entity}/{record_id}",
-              recordBlob:
-                "https://baq.run/api/types/records/{entity}/{record_id}/blobs/{blob_hash}/{file_name}",
-              recordVersion:
-                "https://baq.run/api/types/records/{entity}/{record_id}/versions/{version_hash}",
-              recordVersionBlob:
-                "https://baq.run/api/types/records/{entity}/{record_id}/versions/{version_hash}/blobs/{blob_hash}/{file_name}",
+              auth: "https://baq.run/types.baq.dev/auth/{record_id}",
+              records: "https://baq.run/api/types.baq.dev/records",
+              record:
+                "https://baq.run/api/types.baq.dev/records/{entity}/{record_id}",
               recordVersions:
-                "https://baq.run/api/types/records/{entity}/{record_id}/versions",
-              records: "https://baq.run/api/types/records",
-              serverInfo: "https://baq.run/api/types/server",
+                "https://baq.run/api/types.baq.dev/records/{entity}/{record_id}/versions",
+              recordVersion:
+                "https://baq.run/api/types.baq.dev/records/{entity}/{record_id}/versions/{version_hash}",
+              newRecord: "https://baq.run/api/types.baq.dev/records",
+              recordBlob:
+                "https://baq.run/api/types.baq.dev/records/{entity}/{record_id}/blobs/{blob_hash}/{file_name}",
+              recordVersionBlob:
+                "https://baq.run/api/types.baq.dev/records/{entity}/{record_id}/versions/{version_hash}/blobs/{blob_hash}/{file_name}",
+              newBlob: "https://baq.run/api/types.baq.dev/blobs",
+              events: "https://baq.run/api/types.baq.dev/events",
+              newNotification:
+                "https://baq.run/api/types.baq.dev/notifications",
+              serverInfo: "https://baq.run/api/types.baq.dev/server",
             },
             preference: 0,
             version: "1.0.0",
@@ -45,14 +57,14 @@ describe("record version hash", () => {
         entity: "types.baq.dev",
         recordId: "80be958368dd414fabb9420647daa1ec",
         versionHash:
-          "5869ed5eb6b565b92990ecfda31b4eb7e837489cb4799a534c00e3fd6ca756e9",
+          "83cbc777e35a17293808ff07d2064c6614fc5616f5a0f912184c45f00178b447",
       },
       version: {
         author: {entity: "types.baq.dev"},
-        createdAt: new Date("2024-04-01T00:00:00.000Z"),
-        hash: "63900d671c7332c6d28f51478e1836d8c09f0128e971f40125632b1197e82155",
+        createdAt: new Date("2024-12-01T00:00:00.000Z"),
+        hash: "3d9ad75026efae4b696a320be2d591a934582bcecd65cd902d1eb9ae6bbb7706",
         parentHash:
-          "5e90fff90d27c538c50099b94fb4349b3f949a2d70cd890be90e61030ff7b280",
+          "9e3a404fcbd46bf321015dd70a95f8f466f21f7c7d7511830e6b2c7e643c7772",
         receivedAt: undefined,
       },
       source: "self",
