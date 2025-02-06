@@ -3,7 +3,7 @@ import {DocumentArrowUpIcon} from "@heroicons/react/24/outline";
 import find from "lodash/find.js";
 import {DragEventHandler, FC, useEffect, useState} from "react";
 import tiwi from "tiwi";
-import {useFileDropState} from "../state/fileDropState.js";
+import {useNewFileState} from "../state/fileDropState.js";
 
 //
 // Style.
@@ -35,8 +35,8 @@ const Content = tiwi(Column)`
 `;
 
 const Icon = tiwi.div`
-  w-8
   h-8
+  w-8
   text-neutral-900
 `;
 
@@ -49,7 +49,7 @@ const Label = tiwi(Text)`
  */
 
 export const FileDrop: FC = () => {
-  const {onFileDrop} = useFileDropState();
+  const {onNewFile} = useNewFileState();
   const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
@@ -79,7 +79,7 @@ export const FileDrop: FC = () => {
       return;
     }
 
-    onFileDrop(firstFile);
+    onNewFile(firstFile);
   };
 
   return (

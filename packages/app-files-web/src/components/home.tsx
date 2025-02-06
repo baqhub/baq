@@ -6,6 +6,7 @@ import {Breadcrumbs} from "./breadcrumbs.js";
 import {FileDrop} from "./fileDrop.js";
 import {ItemList} from "./itemList.js";
 import {NewFolderButton} from "./toolbar/newFolderButton.js";
+import {UploadFileButton} from "./toolbar/uploadFileButton.js";
 
 //
 // Style.
@@ -28,7 +29,7 @@ const Page = tiwi(Column)`
 const Toolbar = tiwi(Row)`
   shrink-0
   py-3
-  gap-3
+  gap-2
 `;
 
 const Separator = tiwi.div`
@@ -60,6 +61,7 @@ export const Home: FC = () => {
         <Content>
           <Toolbar>
             <NewFolderButton />
+            <UploadFileButton />
           </Toolbar>
           <Separator />
           <ItemList isLoading={isLoading} getItemKeys={getItemKeys} />
