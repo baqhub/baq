@@ -19,7 +19,7 @@ enabled = true
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#kv-namespaces
 [[kv_namespaces]]
 binding = "KV_WORKER_BRIDGE_AP"
-id = "defab3dc583e4d2cb89046b353432053"
+id = "8247c2a314a8465dab9ee223e8a07569"
 
 # Bind an R2 Bucket. Use R2 to store arbitrarily large blobs of data, such as files.
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#r2-buckets
