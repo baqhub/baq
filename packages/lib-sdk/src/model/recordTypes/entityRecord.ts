@@ -1,5 +1,6 @@
 import {Constants} from "../../constants.js";
 import * as IO from "../../helpers/io.js";
+import {RCredentialsAlgorithm} from "../core/credentialsAlgorithm.js";
 import {AnyBlobLink} from "../links/blobLink.js";
 import {RecordLink} from "../links/recordLink.js";
 import {Record, VersionHash} from "../records/record.js";
@@ -39,8 +40,14 @@ const REntityRecordProfile = IO.partialObject({
   location: IO.string,
 });
 
+const REntityRecordKey = IO.object({
+  algorithm: RCredentialsAlgorithm,
+  publicKey: IO.base64Bytes,
+});
+
 const EntityRecordContent = IO.object({
   previousEntities: IO.readonlyArray(IO.string),
+  signingKeys: IO.readonlyArray(REntityRecordKey),
   profile: REntityRecordProfile,
   servers: IO.readonlyArray(REntityRecordServer),
 });

@@ -1,6 +1,6 @@
 {
   "name": "@baqhub/sdk-react",
-  "version": "0.1.23",
+  "version": "0.1.25",
   "license": "MIT",
   "description": "The official React SDK for the BAQ federated app platform.",
   "author": "Baqhub",
@@ -39,7 +39,7 @@
     }
   },
   "dependencies": {
-    "@baqhub/sdk": "^0.1.23",
+    "@baqhub/sdk": "^0.1.25",
     "lodash": "^4.17.21",
     "react": "^18.3.1",
     "tslib": "^2.7.0",

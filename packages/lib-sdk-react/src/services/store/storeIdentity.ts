@@ -105,6 +105,7 @@ function buildUnauthenticatedIdentity(): StoreIdentity {
       },
       content: {
         previousEntities: [],
+        signingKeys: [],
         profile: {},
         servers: [],
       },

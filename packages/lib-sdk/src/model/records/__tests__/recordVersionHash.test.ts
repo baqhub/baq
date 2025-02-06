@@ -10,6 +10,7 @@ describe("record version hash", () => {
       author: {entity: "types.baq.dev"},
       content: {
         previousEntities: [],
+        signingKeys: [],
         profile: {name: "Protocol Types"},
         servers: [
           {

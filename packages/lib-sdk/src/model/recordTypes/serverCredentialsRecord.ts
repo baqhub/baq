@@ -10,15 +10,15 @@ import {AppRecord} from "./appRecord.js";
 // Model.
 //
 
-export enum CredentialsAlgorithm {
+export enum SignAlgorithm {
   ED25519 = "ed25519",
 }
 
-const RCredentialsAlgorithm = IO.weakEnumeration(CredentialsAlgorithm);
+const RSignAlgorithm = IO.weakEnumeration(SignAlgorithm);
 
 const ServerCredentialsRecordContent = IO.object({
   app: RecordLink.io(AppRecord),
-  algorithm: RCredentialsAlgorithm,
+  algorithm: RSignAlgorithm,
   serverPublicKey: IO.union([IO.undefined, IO.string]),
   publicKey: IO.base64Bytes,
   privateKey: IO.base64Bytes,
@@ -52,7 +52,7 @@ export function buildServerCredentialsRecord(app: AppRecord) {
   const [publicKey, privateKey] = buildKey();
   return ServerCredentialsRecord.new(app.author.entity, {
     app: Record.toLink(app),
-    algorithm: CredentialsAlgorithm.ED25519,
+    algorithm: SignAlgorithm.ED25519,
     serverPublicKey: undefined,
     publicKey: publicKey,
     privateKey: privateKey,
