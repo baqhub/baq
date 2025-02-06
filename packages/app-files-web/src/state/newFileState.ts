@@ -58,5 +58,8 @@ export function useNewFileState() {
     ]
   );
 
-  return {onNewFile};
+  return {
+    isDisabled: isLoading,
+    onNewFile,
+  };
 }
