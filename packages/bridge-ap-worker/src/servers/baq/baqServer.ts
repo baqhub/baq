@@ -170,7 +170,7 @@ function ofEnv(env: Env) {
   };
 
   const onRecordsRequest: RecordsRequestHandler = async c => {
-    const {pod, blobFromRequest} = c;
+    const {pod, query, blobFromRequest} = c;
     const baqActor = pod.context as BaqActor;
     const actor = await lookupObject(baqActor.id, {
       documentLoader: patchedDocumentLoader,
@@ -186,25 +186,29 @@ function ofEnv(env: Env) {
       return {builders: []};
     }
 
-    const first = await outbox.getFirst();
-    if (!first) {
-      return {builders: []};
-    }
+    const pageSize = query.pageSize || Constants.itemsPerPage;
 
-    const items = traverseCollection(first);
+    const buildersIterable = async function* (): AsyncIterable<RecordBuilder> {
+      let itemCount = 0;
+      let resultCount = 0;
 
-    // Build corresponding records.
-    const builders = await Array.fromAsync(
-      items,
-      async (item): Promise<RecordBuilder | undefined> => {
+      for await (const item of traverseCollection(outbox)) {
+        if (resultCount === pageSize || itemCount === 100) {
+          break;
+        }
+
+        itemCount++;
+
         if (!(item instanceof Create)) {
-          return undefined;
+          continue;
         }
 
         const note = await item.getObject();
         if (!(note instanceof Note) || !note.id || !note.published) {
-          return undefined;
+          continue;
         }
+
+        resultCount++;
 
         const versionPublished = note.updated || note.published;
 
@@ -212,7 +216,7 @@ function ofEnv(env: Env) {
           return noteToPostRecord(env, blobFromRequest, pod.entity, note);
         };
 
-        return {
+        yield {
           id: Hash.shortHash(note.id.toString()),
           createdAt: new Date(note.published.epochMilliseconds),
           versionCreatedAt: new Date(versionPublished.epochMilliseconds),
@@ -220,7 +224,10 @@ function ofEnv(env: Env) {
           build,
         };
       }
-    );
+    };
+
+    // Build corresponding records.
+    const builders = await Array.fromAsync(buildersIterable());
 
     return {builders: builders.filter(isDefined)};
   };

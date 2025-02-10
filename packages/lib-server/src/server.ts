@@ -6,6 +6,7 @@ import {
   Headers,
   IO,
   isDefined,
+  Query,
   RAnyRecord,
   RecordPermissions,
   Constants as SDKConstants,
@@ -77,6 +78,7 @@ export type BlobFromRequest = (
 
 export interface RecordsRequestContext {
   pod: Pod;
+  query: Query<AnyRecord>;
   blobFromRequest: BlobFromRequest;
 }
 
@@ -531,6 +533,7 @@ function buildServer(config: ServerConfig) {
 
     const context: RecordsRequestContext = {
       pod,
+      query: {},
       blobFromRequest: resolveBlobFromRequest,
     };
 

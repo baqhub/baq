@@ -22,4 +22,12 @@
     "worker-configuration.d.ts",
     "vitest.config.ts"
   ],
+  "references": [
+    {
+      "path": "../lib-sdk"
+    },
+    {
+      "path": "../lib-server"
+    }
+  ]
 }
