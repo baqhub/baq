@@ -1,5 +1,6 @@
 import {JSONPath} from "jsonpath-plus";
 import compact from "lodash/compact.js";
+import {never} from "../../helpers/customError.js";
 import {unreachable} from "../../helpers/type.js";
 import {AnyRecord, UnknownRecord} from "../records/record.js";
 import {normalizePath} from "./pathHelpers.js";
@@ -50,6 +51,32 @@ function buildPathLink<T extends AnyRecord = UnknownRecord>(
 
 function buildEmptyPathLink(path: string): QueryLinkEmptyPathLink {
   return [QueryLinkType.EMPTY_PATH_LINK, path];
+}
+
+const linkRegexp = /^(?:(\$[^=]+)=)?(.*)$/;
+
+export function queryLinkOfString(linkString: string) {
+  const linkMatch = linkString.match(linkRegexp);
+  if (!linkMatch || typeof linkMatch[2] !== "string") {
+    return never();
+  }
+
+  const path = linkMatch[1];
+  const valueString = linkMatch[2];
+
+  // Empty path link.
+  if (path && valueString === "") {
+    return buildEmptyPathLink(path);
+  }
+
+  // Path link.
+  const value = QueryLinkValue.ofString(valueString);
+  if (path) {
+    return buildPathLink(path, value);
+  }
+
+  // Link.
+  return buildLink(value);
 }
 
 function queryLinkToString<T extends AnyRecord>(queryLink: QueryLink<T>) {
@@ -141,7 +168,8 @@ export const QueryLink = {
   link: buildLink,
   pathLink: buildPathLink,
   emptyPathLink: buildEmptyPathLink,
-  isInRecord: linkIsInRecord,
+  ofString: queryLinkOfString,
   toString: queryLinkToString,
+  isInRecord: linkIsInRecord,
   isSuperset: queryLinkIsSuperset,
 };

@@ -9,4 +9,7 @@ export const Constants = {
   lastEventIdHeader: "Last-Event-ID",
   defaultPageSize: 20,
   discoveryLinkRel: "https://baq.dev/rels/entity-record",
+  hashLength: 64,
+  shortHashLength: 32,
+  recordIdLength: 32,
 };

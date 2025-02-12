@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import {Constants} from "../../constants.js";
 import {unreachable} from "../../helpers/type.js";
 import {EntityLink} from "../links/entityLink.js";
 import {AnyRecordLink} from "../links/recordLink.js";
@@ -58,6 +59,54 @@ function queryValueRecord<T extends AnyRecord = UnknownRecord>(
 
 function queryValueVersion(versionLink: VersionLink): QueryLinkValueVersion {
   return [QueryLinkValueType.VERSION, versionLink];
+}
+
+const queryLinkValueRegexp = (() => {
+  const v = `(?:[\\s+]([a-z0-9]{${Constants.hashLength}}))`;
+  const r = `(?:[\\s+]([a-z0-9]{${Constants.recordIdLength}})${v}?)`;
+  return new RegExp(`^(?:("[^"]*")|([^\\s+]*))${r}?$`);
+})();
+
+function queryLinkValueOfString(valueString: string) {
+  const valueMatch = valueString.match(queryLinkValueRegexp);
+  if (!valueMatch) {
+    throw new Error(`Bad query value: ${valueString}`);
+  }
+
+  const tagString = valueMatch[1];
+  const entity = valueMatch[2];
+  const recordId = valueMatch[3];
+  const versionHash = valueMatch[4];
+
+  // Version link.
+  if (entity && recordId && versionHash) {
+    return queryValueVersion({
+      entity,
+      recordId,
+      versionHash,
+    });
+  }
+
+  // Record link.
+  if (entity && recordId) {
+    return queryValueRecord({
+      entity,
+      recordId,
+    });
+  }
+
+  // Entity link.
+  if (entity) {
+    return queryValueEntity(entity);
+  }
+
+  // Tag link.
+  const tag = tagString && JSON.parse(tagString);
+  if (typeof tag === "string") {
+    return queryValueTag(tag);
+  }
+
+  throw new Error(`Bad query value: ${valueString}`);
 }
 
 function queryLinkValueToString<T extends AnyRecord>(
@@ -164,7 +213,8 @@ export const QueryLinkValue = {
   entity: queryValueEntity,
   record: queryValueRecord,
   version: queryValueVersion,
+  ofString: queryLinkValueOfString,
+  toString: queryLinkValueToString,
   is: queryLinkValueIs,
   match: queryLinkValuesMatch,
-  toString: queryLinkValueToString,
 };

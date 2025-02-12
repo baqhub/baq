@@ -102,6 +102,60 @@ function queryOfKey<T extends AnyRecord>(
   } as Query<T>;
 }
 
+type Params = {[T: string]: string[]};
+type Parser<T> = (value: string) => T | undefined;
+
+function readSingle<T>(
+  params: Params,
+  key: string,
+  parser: Parser<T>
+): T | undefined {
+  const values = params[key];
+  if (!values) {
+    return undefined;
+  }
+
+  const first = values[0];
+  if (typeof first === "undefined") {
+    return undefined;
+  }
+
+  return parser(first);
+}
+
+function readInt(params: Params, key: string) {
+  const parser = (value: string) => {
+    const num = Number(value);
+    return Number.isSafeInteger(num) ? num : undefined;
+  };
+
+  return readSingle(params, key, parser);
+}
+
+function readBoolean(params: Params, key: string) {
+  const parser = (value: string) => {
+    return value.toLowerCase() === "true";
+  };
+
+  return readSingle(params, key, parser);
+}
+
+export function queryOfQueryString(queryString: string): Query<AnyRecord> {
+  const params = Str.parseQuery(queryString).reduce((state, [key, value]) => {
+    const values = state[key] || (state[key] = []);
+    values.push(value);
+    return state;
+  }, {} as Params);
+
+  const filterStrings = params["filter"];
+
+  return {
+    pageSize: readInt(params, "page_size"),
+    includeDeleted: readBoolean(params, "include_deleted"),
+    filter: filterStrings && QueryFilter.ofStrings(filterStrings),
+  };
+}
+
 function querySingleToQueryString(query: SingleQuery | undefined) {
   if (!query) {
     return "";
@@ -411,6 +465,7 @@ function queryIsSyncSuperset(
 export const Query = {
   new: queryNew,
   ofKey: queryOfKey,
+  ofQueryString: queryOfQueryString,
   singleToQueryString: querySingleToQueryString,
   toQueryString: queryToQueryString,
   toSync: queryToSync,
