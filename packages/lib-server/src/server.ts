@@ -6,6 +6,7 @@ import {
   Headers,
   IO,
   isDefined,
+  Q,
   Query,
   RAnyRecord,
   RecordPermissions,
@@ -531,9 +532,27 @@ function buildServer(config: ServerConfig) {
   podRoutes.get("/records", async c => {
     const {pod} = c.var;
 
+    const query = Query.ofQueryParams(c.req.queries());
+
+    const entityRecordQuery = Query.new({
+      pageSize: 2,
+      filter: Q.and(Q.type(EntityRecord), Q.author(pod.entity)),
+    });
+
+    if (Query.isSuperset(entityRecordQuery, query)) {
+      const record = await resolveRecord(pod, pod.entity, pod.id);
+      const response = {
+        page_size: 2,
+        records: record ? [record] : [],
+        linked_records: [],
+      };
+
+      return c.json(response);
+    }
+
     const context: RecordsRequestContext = {
       pod,
-      query: {},
+      query,
       blobFromRequest: resolveBlobFromRequest,
     };
 
@@ -549,8 +568,8 @@ function buildServer(config: ServerConfig) {
       .map(r => IO.encode(AnyRecord, r.record));
 
     const response = {
-      page_size: 20,
-      record: rawRecords,
+      page_size: rawRecords.length,
+      records: rawRecords,
       linked_records: [],
     };
 

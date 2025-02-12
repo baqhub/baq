@@ -67,7 +67,9 @@ const queryLinkValueRegexp = (() => {
   return new RegExp(`^(?:("[^"]*")|([^\\s+]*))${r}?$`);
 })();
 
-function queryLinkValueOfString(valueString: string) {
+function queryLinkValueOfString(
+  valueString: string
+): QueryLinkValue<UnknownRecord> {
   const valueMatch = valueString.match(queryLinkValueRegexp);
   if (!valueMatch) {
     throw new Error(`Bad query value: ${valueString}`);

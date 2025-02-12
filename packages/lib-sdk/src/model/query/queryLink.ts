@@ -55,9 +55,7 @@ function buildEmptyPathLink(path: string): QueryLinkEmptyPathLink {
 
 const linkRegexp = /^(?:(\$[^=]+)=)?(.*)$/;
 
-export function queryLinkOfString(
-  linkString: string
-): QueryLink<UnknownRecord> {
+function queryLinkOfString(linkString: string): QueryLink<UnknownRecord> {
   const linkMatch = linkString.match(linkRegexp);
   if (!linkMatch || typeof linkMatch[2] !== "string") {
     return never();

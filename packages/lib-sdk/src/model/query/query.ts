@@ -13,6 +13,7 @@ import {
   NoContentRecord,
   RecordMode,
   RecordSource,
+  UnknownRecord,
 } from "../records/record.js";
 import {RecordKey} from "../records/recordKey.js";
 import {normalizePath} from "./pathHelpers.js";
@@ -102,7 +103,7 @@ function queryOfKey<T extends AnyRecord>(
   } as Query<T>;
 }
 
-type Params = {[T: string]: string[]};
+type Params = Record<string, string[]>;
 type Parser<T> = (value: string) => T | undefined;
 
 function readSingle<T>(
@@ -140,20 +141,24 @@ function readBoolean(params: Params, key: string) {
   return readSingle(params, key, parser);
 }
 
-export function queryOfQueryString(queryString: string): Query<AnyRecord> {
+function queryOfQueryParams(queryParams: Params): Query<UnknownRecord> {
+  const filterStrings = queryParams["filter"];
+
+  return {
+    pageSize: readInt(queryParams, "page_size"),
+    includeDeleted: readBoolean(queryParams, "include_deleted"),
+    filter: filterStrings && QueryFilter.ofStrings(filterStrings),
+  };
+}
+
+function queryOfQueryString(queryString: string): Query<UnknownRecord> {
   const params = Str.parseQuery(queryString).reduce((state, [key, value]) => {
     const values = state[key] || (state[key] = []);
     values.push(value);
     return state;
   }, {} as Params);
 
-  const filterStrings = params["filter"];
-
-  return {
-    pageSize: readInt(params, "page_size"),
-    includeDeleted: readBoolean(params, "include_deleted"),
-    filter: filterStrings && QueryFilter.ofStrings(filterStrings),
-  };
+  return queryOfQueryParams(params);
 }
 
 function querySingleToQueryString(query: SingleQuery | undefined) {
@@ -427,14 +432,6 @@ function queryIsMatch(query1: Query<AnyRecord>, query2: Query<AnyRecord>) {
   return !filter1 && !filter2;
 }
 
-function queryIsSuperset(query1: Query<AnyRecord>, query2: Query<AnyRecord>) {
-  if (query1.distinct !== query2.distinct) {
-    return false;
-  }
-
-  return queryIsSyncSuperset(query1, query2);
-}
-
 function queryIsSyncSuperset(
   query1: Query<AnyRecord>,
   query2: Query<AnyRecord>
@@ -462,9 +459,18 @@ function queryIsSyncSuperset(
   return !query1.filter && !query2.filter;
 }
 
+function queryIsSuperset(query1: Query<AnyRecord>, query2: Query<AnyRecord>) {
+  if (query1.distinct !== query2.distinct) {
+    return false;
+  }
+
+  return queryIsSyncSuperset(query1, query2);
+}
+
 export const Query = {
   new: queryNew,
   ofKey: queryOfKey,
+  ofQueryParams: queryOfQueryParams,
   ofQueryString: queryOfQueryString,
   singleToQueryString: querySingleToQueryString,
   toQueryString: queryToQueryString,

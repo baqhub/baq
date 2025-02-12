@@ -56,9 +56,9 @@ function queryOr<T extends ReadonlyArray<QueryFilter<AnyRecord>>>(
 }
 
 const nextTokenRegexp = /^((?:\()|(?:\))|(?:[^,()]*)),{0,1}(.*)/;
-type IntermediateResult = [ReadonlyArray<QueryFilter<AnyRecord>>, string];
+type IntermediateResult = [ReadonlyArray<QueryFilter<UnknownRecord>>, string];
 
-function queryFilterOfString(filterString: string): QueryFilter<AnyRecord> {
+function queryFilterOfString(filterString: string): QueryFilter<UnknownRecord> {
   function parseQueryFilters(
     fragment: string,
     depth: number
@@ -128,9 +128,9 @@ function queryFilterOfString(filterString: string): QueryFilter<AnyRecord> {
   return queryAnd(...filters);
 }
 
-export function queryFilterOfStrings(
+function queryFilterOfStrings(
   filterStrings: ReadonlyArray<string>
-): QueryFilter<AnyRecord> {
+): QueryFilter<UnknownRecord> {
   const orFilters = filterStrings.map(queryFilterOfString);
 
   // Single filter: unwrap.
