@@ -46,16 +46,18 @@ function buildPathLink<T extends AnyRecord = UnknownRecord>(
   path: string,
   value: QueryLinkValue<T>
 ): QueryLinkPathLink<T> {
-  return [QueryLinkType.PATH_LINK, path, value];
+  return [QueryLinkType.PATH_LINK, normalizePath(path), value];
 }
 
 function buildEmptyPathLink(path: string): QueryLinkEmptyPathLink {
-  return [QueryLinkType.EMPTY_PATH_LINK, path];
+  return [QueryLinkType.EMPTY_PATH_LINK, normalizePath(path)];
 }
 
 const linkRegexp = /^(?:(\$[^=]+)=)?(.*)$/;
 
-export function queryLinkOfString(linkString: string) {
+export function queryLinkOfString(
+  linkString: string
+): QueryLink<UnknownRecord> {
   const linkMatch = linkString.match(linkRegexp);
   if (!linkMatch || typeof linkMatch[2] !== "string") {
     return never();
@@ -66,17 +68,17 @@ export function queryLinkOfString(linkString: string) {
 
   // Empty path link.
   if (path && valueString === "") {
-    return buildEmptyPathLink(path);
+    return [QueryLinkType.EMPTY_PATH_LINK, path];
   }
 
   // Path link.
   const value = QueryLinkValue.ofString(valueString);
   if (path) {
-    return buildPathLink(path, value);
+    return [QueryLinkType.PATH_LINK, path, value];
   }
 
   // Link.
-  return buildLink(value);
+  return [QueryLinkType.LINK, value];
 }
 
 function queryLinkToString<T extends AnyRecord>(queryLink: QueryLink<T>) {
@@ -85,10 +87,10 @@ function queryLinkToString<T extends AnyRecord>(queryLink: QueryLink<T>) {
       return QueryLinkValue.toString(queryLink[1]);
 
     case QueryLinkType.PATH_LINK: {
-      const normalizedPath = normalizePath(queryLink[1]);
+      const path = queryLink[1];
       const valueString = QueryLinkValue.toString(queryLink[2]);
 
-      return `${normalizedPath}=${valueString}`;
+      return `${path}=${valueString}`;
     }
 
     case QueryLinkType.EMPTY_PATH_LINK:
