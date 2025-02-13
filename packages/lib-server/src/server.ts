@@ -539,15 +539,27 @@ function buildServer(config: ServerConfig) {
       filter: Q.and(Q.type(EntityRecord), Q.author(pod.entity)),
     });
 
-    if (Query.isSuperset(entityRecordQuery, query)) {
+    const entityRecordResponse = await (async () => {
+      if (!Query.isSuperset(entityRecordQuery, query)) {
+        return undefined;
+      }
+
       const record = await resolveRecord(pod, pod.entity, pod.id);
+      if (!record) {
+        return undefined;
+      }
+
       const response = {
         page_size: 2,
-        records: record ? [record] : [],
+        records: [IO.encode(AnyRecord, record.record)],
         linked_records: [],
       };
 
       return c.json(response);
+    })();
+
+    if (entityRecordResponse) {
+      return entityRecordResponse;
     }
 
     const context: RecordsRequestContext = {
