@@ -142,10 +142,13 @@ function readBoolean(params: Params, key: string) {
 }
 
 function queryOfQueryParams(queryParams: Params): Query<UnknownRecord> {
+  const pageSize = readInt(queryParams, "page_size");
   const filterStrings = queryParams["filter"];
 
   return {
-    pageSize: readInt(queryParams, "page_size"),
+    pageSize: Number.isSafeInteger(pageSize)
+      ? pageSize
+      : Constants.defaultPageSize,
     includeDeleted: readBoolean(queryParams, "include_deleted"),
     filter: filterStrings && QueryFilter.ofStrings(filterStrings),
   };
@@ -414,24 +417,6 @@ function queryFilter<R extends AnyRecord, T extends R>(
   return flow(sort(), distinct(), filter(), pageSize())(records);
 }
 
-function queryIsMatch(query1: Query<AnyRecord>, query2: Query<AnyRecord>) {
-  const {["filter"]: filter1, ...q1} = query1;
-  const {["filter"]: filter2, ...q2} = query2;
-
-  if (!isEqual(q1, q2)) {
-    return false;
-  }
-
-  if (filter1 && filter2) {
-    return (
-      QueryFilter.isSuperset(filter1, filter2) &&
-      QueryFilter.isSuperset(filter2, filter1)
-    );
-  }
-
-  return !filter1 && !filter2;
-}
-
 function queryIsSyncSuperset(
   query1: Query<AnyRecord>,
   query2: Query<AnyRecord>
@@ -456,7 +441,7 @@ function queryIsSyncSuperset(
     return QueryFilter.isSuperset(query1.filter, query2.filter);
   }
 
-  return !query1.filter && !query2.filter;
+  return !query1.filter;
 }
 
 function queryIsSuperset(query1: Query<AnyRecord>, query2: Query<AnyRecord>) {
@@ -465,6 +450,24 @@ function queryIsSuperset(query1: Query<AnyRecord>, query2: Query<AnyRecord>) {
   }
 
   return queryIsSyncSuperset(query1, query2);
+}
+
+function queryIsMatch(query1: Query<AnyRecord>, query2: Query<AnyRecord>) {
+  const {["filter"]: filter1, ...q1} = query1;
+  const {["filter"]: filter2, ...q2} = query2;
+
+  if (!isEqual(q1, q2)) {
+    return false;
+  }
+
+  if (filter1 && filter2) {
+    return (
+      QueryFilter.isSuperset(filter1, filter2) &&
+      QueryFilter.isSuperset(filter2, filter1)
+    );
+  }
+
+  return !filter1 && !filter2;
 }
 
 export const Query = {
@@ -477,9 +480,9 @@ export const Query = {
   toSync: queryToSync,
   findBoundary: queryFindBoundary,
   filter: queryFilter,
-  isMatch: queryIsMatch,
-  isSuperset: queryIsSuperset,
   isSyncSuperset: queryIsSyncSuperset,
+  isSuperset: queryIsSuperset,
+  isMatch: queryIsMatch,
   defaultIncludeLinks,
   defaultSources,
 };

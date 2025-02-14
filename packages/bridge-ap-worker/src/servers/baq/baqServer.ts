@@ -1,4 +1,4 @@
-import {Hash, isDefined} from "@baqhub/sdk";
+import {Hash, isDefined, Q, Query} from "@baqhub/sdk";
 import {
   BlobRequest,
   EntityRequestHandler,
@@ -171,6 +171,16 @@ function ofEnv(env: Env) {
 
   const onRecordsRequest: RecordsRequestHandler = async c => {
     const {pod, query, blobFromRequest} = c;
+
+    // Only serve post record queries.
+    const postRecordQuery = Query.new({
+      filter: Q.and(Q.type(PostRecord), Q.author(pod.entity)),
+    });
+
+    if (!Query.isSuperset(query, postRecordQuery)) {
+      return {builders: []};
+    }
+
     const baqActor = pod.context as BaqActor;
     const actor = await lookupObject(baqActor.id, {
       documentLoader: patchedDocumentLoader,
@@ -186,7 +196,7 @@ function ofEnv(env: Env) {
       return {builders: []};
     }
 
-    const pageSize = query.pageSize || Constants.itemsPerPage;
+    const pageSize = query.pageSize || 0;
 
     const buildersIterable = async function* (): AsyncIterable<RecordBuilder> {
       let itemCount = 0;

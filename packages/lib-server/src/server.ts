@@ -8,6 +8,7 @@ import {
   isDefined,
   Q,
   Query,
+  QueryFilter,
   RAnyRecord,
   RecordPermissions,
   Constants as SDKConstants,
@@ -531,16 +532,20 @@ function buildServer(config: ServerConfig) {
   // Record query.
   podRoutes.get("/records", async c => {
     const {pod} = c.var;
-
     const query = Query.ofQueryParams(c.req.queries());
 
-    const entityRecordQuery = Query.new({
-      pageSize: 2,
-      filter: Q.and(Q.type(EntityRecord), Q.author(pod.entity)),
-    });
+    // Serve entity record queries directly.
+    const entityRecordFilter = Q.and(
+      Q.type(EntityRecord),
+      Q.author(pod.entity)
+    );
 
     const entityRecordResponse = await (async () => {
-      if (!Query.isSuperset(entityRecordQuery, query)) {
+      if (
+        !query.filter ||
+        !QueryFilter.isSuperset(query.filter, entityRecordFilter) ||
+        !QueryFilter.isSuperset(entityRecordFilter, query.filter)
+      ) {
         return undefined;
       }
 
@@ -550,7 +555,7 @@ function buildServer(config: ServerConfig) {
       }
 
       const response = {
-        page_size: 2,
+        page_size: query.pageSize,
         records: [IO.encode(AnyRecord, record.record)],
         linked_records: [],
       };
@@ -562,6 +567,7 @@ function buildServer(config: ServerConfig) {
       return entityRecordResponse;
     }
 
+    // Otherwise, delegate to the calling code.
     const context: RecordsRequestContext = {
       pod,
       query,
@@ -569,7 +575,6 @@ function buildServer(config: ServerConfig) {
     };
 
     const {builders} = await onRecordsRequest(context);
-
     const records = await Promise.all(
       builders.map(builder => resolveRecordFromBuilder(pod, builder))
     );
@@ -580,7 +585,7 @@ function buildServer(config: ServerConfig) {
       .map(r => IO.encode(AnyRecord, r.record));
 
     const response = {
-      page_size: rawRecords.length,
+      page_size: query.pageSize,
       records: rawRecords,
       linked_records: [],
     };
