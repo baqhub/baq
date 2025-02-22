@@ -98,7 +98,7 @@ function buildUnauthenticatedIdentity(): StoreIdentity {
         hash: "0000000000000000000000000000000000000000000000000000000000000000",
       },
       type: {
-        entity: Constants.typesEntity,
+        entity: Constants.systemEntity,
         recordId: "80be958368dd414fabb9420647daa1ec",
         versionHash:
           "5869ed5eb6b565b92990ecfda31b4eb7e837489cb4799a534c00e3fd6ca756e9",

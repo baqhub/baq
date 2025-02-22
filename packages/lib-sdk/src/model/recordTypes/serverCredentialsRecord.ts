@@ -26,7 +26,7 @@ const ServerCredentialsRecordContent = IO.object({
 
 const [serverCredentialsRecordType, RServerCredentialsRecordType] =
   RecordType.full(
-    Constants.typesEntity,
+    Constants.systemEntity,
     "2ba40fd9668f403da00b4a8070eb4a90",
     "67dd73c06877de2a810c2be7a55cc8ef579b9e3aa066d009489c57145c9eff2e",
     ServerCredentialsRecordContent

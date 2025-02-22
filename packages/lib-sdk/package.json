@@ -1,6 +1,6 @@
 {
   "name": "@baqhub/sdk",
-  "version": "0.1.25",
+  "version": "0.1.26",
   "license": "MIT",
   "description": "The official JavaScript SDK for the BAQ federated app platform.",
   "author": "Baqhub",

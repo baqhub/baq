@@ -18,9 +18,9 @@ const AppAuthorizationRecordContent = IO.object({
 
 const [appAuthorizationRecordType, RAppAuthorizationRecordType] =
   RecordType.full(
-    Constants.typesEntity,
+    Constants.systemEntity,
     "378dae797f404dcc9b7446d6d4212d36",
-    "33cdd523b78b4fde6021104ab2b4466a99f8d112871347da45339f5200635a97",
+    "f0dd112bebccb55f72c9feb0fd834e6c53ec29c23577f294ac87bdce06d389c3",
     AppAuthorizationRecordContent
   );
 

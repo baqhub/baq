@@ -24,9 +24,9 @@ export const RSubscriptionRecordContent = IO.object({
 
 export const [subscriptionRecordType, RSubscriptionRecordType] =
   RecordType.full(
-    Constants.typesEntity,
+    Constants.systemEntity,
     "138304ac29db432f838ad7b178f3cede",
-    "c571b35373c72f0c156028e1315d9c22901734744771676874b7c873e9c60540",
+    "3cfad57ce9ff81db1d6895ade87cf8c48b73f2fbd1a75a0230ecd67a78269d45",
     RSubscriptionRecordContent
   );
 
