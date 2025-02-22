@@ -4962,7 +4962,7 @@ __metadata:
     react-native-get-random-values: "npm:~1.8.0"
     react-native-heroicons: "npm:^3.2.0"
     react-native-ios-context-menu: "npm:^2.5.1"
-    react-native-ios-utilities: "npm:^4.4.5"
+    react-native-ios-utilities: "npm:^4.5.3"
     react-native-reanimated: "npm:~3.6.2"
     react-native-safe-area-context: "npm:4.8.2"
     react-native-screens: "npm:~3.29.0"
@@ -12466,14 +12466,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-ios-utilities@npm:^4.4.5":
-  version: 4.4.5
-  resolution: "react-native-ios-utilities@npm:4.4.5"
+"react-native-ios-utilities@npm:^4.5.3":
+  version: 4.5.3
+  resolution: "react-native-ios-utilities@npm:4.5.3"
   peerDependencies:
     expo: "*"
     react: "*"
     react-native: "*"
-  checksum: 10c0/acaf0295653f9dbc13e9f5de5ee56e5cec3d9758287cdffd1ab114748d3d8a391423afde594278ce8c65f4510179cc0f2dc2fbdd23870d4bb30c5704d25df872
+  checksum: 10c0/aeaf5eb03ee20889affba3b1e80c17e196f0d21572b426d377e12536ccccaa72d8bfe5a219a38560b75f5a4c5e129cfa0da69a9cd4da5d956522c1d521d70745
   languageName: node
   linkType: hard
 

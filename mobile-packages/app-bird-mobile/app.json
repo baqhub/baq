@@ -2,7 +2,7 @@
   "expo": {
     "name": "Bird",
     "slug": "app-mobile-bird",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/images/birdMobileIcon.png",
     "scheme": "bird",
