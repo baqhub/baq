@@ -1,5 +1,5 @@
 import {base64Bytes, decode, utf8Bytes} from "../../helpers/io.js";
-import {sign} from "../../helpers/signature.js";
+import {Signature} from "../../helpers/signature.js";
 import {Str} from "../../helpers/string.js";
 import {
   CredentialsAlgorithm,
@@ -57,7 +57,10 @@ export function signatureForRequest(
     "",
   ].join("\n");
 
-  const signatureBytes = sign(privateKey, decode(utf8Bytes, signatureString));
+  const signatureBytes = Signature.sign(
+    privateKey,
+    decode(utf8Bytes, signatureString)
+  );
 
   return {
     id: appRecordId,

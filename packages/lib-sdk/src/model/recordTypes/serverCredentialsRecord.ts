@@ -1,6 +1,6 @@
 import {Constants} from "../../constants.js";
 import * as IO from "../../helpers/io.js";
-import {buildKey} from "../../helpers/signature.js";
+import {Signature} from "../../helpers/signature.js";
 import {RecordLink} from "../links/recordLink.js";
 import {Record} from "../records/record.js";
 import {RecordType} from "../records/recordType.js";
@@ -14,7 +14,7 @@ export enum SignAlgorithm {
   ED25519 = "ed25519",
 }
 
-const RSignAlgorithm = IO.weakEnumeration(SignAlgorithm);
+export const RSignAlgorithm = IO.weakEnumeration(SignAlgorithm);
 
 const ServerCredentialsRecordContent = IO.object({
   app: RecordLink.io(AppRecord),
@@ -49,7 +49,7 @@ export const ServerCredentialsRecord = Record.ioClean<ServerCredentialsRecord>(
 //
 
 export function buildServerCredentialsRecord(app: AppRecord) {
-  const [publicKey, privateKey] = buildKey();
+  const [publicKey, privateKey] = Signature.buildKey();
   return ServerCredentialsRecord.new(app.author.entity, {
     app: Record.toLink(app),
     algorithm: SignAlgorithm.ED25519,
