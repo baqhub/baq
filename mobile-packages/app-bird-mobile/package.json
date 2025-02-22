@@ -60,7 +60,7 @@
     "@babel/plugin-transform-template-literals": "^7.23.3",
     "@types/lodash": "^4.17.0",
     "@types/react": "~18.2.79",
-    "eas-cli": "12.5.1",
+    "eas-cli": "15.0.12",
     "jest": "^29.7.0",
     "jest-expo": "~50.0.4",
     "metro": "~0.80.4",
