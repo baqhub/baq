@@ -53,9 +53,9 @@ const EntityRecordContent = IO.object({
 });
 
 const [entityRecordType, REntityRecordType] = RecordType.full(
-  Constants.typesEntity,
+  Constants.systemEntity,
   "80be958368dd414fabb9420647daa1ec",
-  "5869ed5eb6b565b92990ecfda31b4eb7e837489cb4799a534c00e3fd6ca756e9",
+  "1b8f41d7ed60ba7322ac854b3189922bb3fa1c441fb782c0db140604203177b5",
   EntityRecordContent
 );
 

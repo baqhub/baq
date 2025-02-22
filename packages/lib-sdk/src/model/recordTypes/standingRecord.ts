@@ -24,9 +24,9 @@ export const RStandingRecordContent = IO.object({
 });
 
 export const [standingRecordType, RStandingRecordType] = RecordType.full(
-  Constants.typesEntity,
+  Constants.systemEntity,
   "0a629cece93044d88414e9039874b297",
-  "6888ab038b51719c6ca1cd27696e6ba6ee7139dc489e61dc5899d2dab63d85f5",
+  "c2a2ace364b599e175562077f68196df8171a0e4d05bd47949e04bbf00241c09",
   RStandingRecordContent
 );
 
