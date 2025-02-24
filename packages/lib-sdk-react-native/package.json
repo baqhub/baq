@@ -48,15 +48,15 @@
     "react-native-polyfill-globals": "^3.1.0",
     "react-native-url-polyfill": "^2.0.0",
     "text-encoding": "^0.7.0",
-    "tslib": "^2.7.0",
+    "tslib": "^2.8.1",
     "web-streams-polyfill": "^3.3.3"
   },
   "peerDependencies": {
     "react-native": ">=0.60"
   },
   "devDependencies": {
-    "@types/node": "22.7.4",
+    "@types/node": "22.13.5",
     "tsconfig-to-dual-package": "1.2.0",
-    "typescript": "5.5.2"
+    "typescript": "5.7.3"
   }
 }

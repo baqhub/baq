@@ -42,10 +42,10 @@
   },
   "dependencies": {
     "@baqhub/sdk-react": "^0.1.23",
-    "tslib": "^2.7.0"
+    "tslib": "^2.8.1"
   },
   "devDependencies": {
     "tsconfig-to-dual-package": "1.2.0",
-    "typescript": "5.5.2"
+    "typescript": "5.7.3"
   }
 }

@@ -34,23 +34,23 @@
   },
   "dependencies": {
     "@baqhub/sdk": "^0.1.23",
-    "@commander-js/extra-typings": "12.1.0",
-    "@inquirer/prompts": "6.0.1",
-    "commander": "12.1.0",
+    "@commander-js/extra-typings": "13.1.0",
+    "@inquirer/prompts": "7.3.2",
+    "commander": "13.1.0",
     "find-package-json": "1.2.0",
     "lodash": "4.17.21",
     "open": "10.1.0",
-    "prettier": "3.3.2",
-    "prettier-plugin-organize-imports": "3.2.4",
-    "tslib": "2.7.0",
-    "typescript": "5.5.2"
+    "prettier": "3.5.2",
+    "prettier-plugin-organize-imports": "4.1.0",
+    "tslib": "2.8.1",
+    "typescript": "5.7.3"
   },
   "devDependencies": {
     "@types/find-package-json": "1.2.6",
-    "@types/lodash": "4.17.9",
-    "@types/node": "22.7.4",
+    "@types/lodash": "4.17.15",
+    "@types/node": "22.13.5",
     "@types/prettier": "3.0.0",
     "tsconfig-to-dual-package": "1.2.0",
-    "vitest": "2.1.2"
+    "vitest": "3.0.6"
   }
 }
