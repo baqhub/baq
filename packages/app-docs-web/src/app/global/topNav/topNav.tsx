@@ -46,7 +46,7 @@ const Content = tiwi(Column)`
 
 const Center = tiwi(Row)`
   w-full
-  max-w-screen-2xl
+  max-w-(--breakpoint-2xl)
   h-16
 
   px-3

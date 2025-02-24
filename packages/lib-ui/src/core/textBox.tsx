@@ -87,7 +87,7 @@ const Input = tiwi.input<UISize>`
   dark:placeholder:text-neutral-400
   dark:aria-invalid:placeholder:text-red-300
 
-  outline-none
+  outline-hidden
   disabled:cursor-not-allowed
 `;
 

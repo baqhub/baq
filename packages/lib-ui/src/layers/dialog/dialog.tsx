@@ -31,7 +31,7 @@ const Layout = tiwi.dialog`
   bg-transparent
   p-0
 
-  outline-none
+  outline-hidden
   backdrop:bg-neutral-900
   backdrop:opacity-20
   dark:backdrop:bg-neutral-100

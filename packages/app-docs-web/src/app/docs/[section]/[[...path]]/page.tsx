@@ -71,46 +71,46 @@ export async function generateStaticParams(): Promise<DocsPageParams[]> {
 //
 
 const Docs = tiwi.div`
-  self-center
+  max-w-(--breakpoint-2xl)
+  flex
   w-full
-  max-w-screen-2xl
   min-w-0
 
-  flex
   flex-row
+  self-center
 `;
 
 const DocsCenter = tiwi.div`
-  grow
-  shrink
-  min-w-0
   relative
-
   flex
+  min-w-0
+  shrink
+
+  grow
   flex-row
   justify-center
 `;
 
 const DocsContent = tiwi.div`
-  grow
-  shrink
   min-w-0
-  lg:max-w-3xl
+  shrink
+  grow
+  px-6
 
   pt-4
-  sm:pt-8
-  px-6
   sm:px-8
+  sm:pt-8
+  lg:max-w-3xl
   xl:px-12
 `;
 
 const DocsContentSection = tiwi.div`
-  sm:hidden
   mb-3
-
   text-sm
+
   font-semibold
   text-amber-700
+  sm:hidden
   dark:text-amber-500
 `;
 

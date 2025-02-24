@@ -46,7 +46,7 @@ export const MdxH3 = tiwi.h3`
 
   [h2_+_&]:pt-0
   [h2_+_&]:border-t-0
-  [h2_+_&]:lg:scroll-mt-20
+  lg:[h2+&]:scroll-mt-20
 
   text-2xl
   font-semibold
@@ -98,8 +98,8 @@ export const MdxUl = tiwi.ul`
   mt-5
   mb-5
   pl-6
-  [ul_&]:mt-2
-  [ul_&]:mb-2
+  in-[ul]:mt-2
+  in-[ul]:mb-2
 
   list-disc
   marker:text-zinc-600
@@ -110,8 +110,8 @@ export const MdxOl = tiwi.ol`
   mt-5
   mb-5
   pl-6
-  [ol_&]:mt-3
-  [ol_&]:mb-3
+  in-[ol]:mt-3
+  in-[ol]:mb-3
 
   list-decimal
   marker:italic
@@ -208,16 +208,16 @@ export const MdxCode = tiwi.code`
   text-inherit
   ligatures-none
 
-  [h3_&]:bg-transparent
-  dark:[h3_&]:bg-transparent
-  [h3_&]:px-0
-  [h3_&]:py-0
-  [h3_&]:text-2xl
+  in-[h3]:bg-transparent
+  dark:in-[h3]:bg-transparent
+  in-[h3]:px-0
+  in-[h3]:py-0
+  in-[h3]:text-2xl
 
-  [pre_&]:p-0
-  [pre_&]:rounded-none
-  [pre_&]:bg-transparent
-  dark:[pre_&]:bg-transparent
-  [pre_&]:text-zinc-200
-  dark:[pre_&]:text-zinc-200
+  in-[pre]:p-0
+  in-[pre]:rounded-none
+  in-[pre]:bg-transparent
+  dark:in-[pre]:bg-transparent
+  in-[pre]:text-zinc-200
+  dark:in-[pre]:text-zinc-200
 `;

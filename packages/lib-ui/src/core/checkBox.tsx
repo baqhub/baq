@@ -47,14 +47,14 @@ const Box = tiwi.div`
   peer-focus-visible:border-amber-400
   peer-checked:bg-amber-400
   peer-checked:border-amber-400
-  peer-checked:peer-focus-visible:border-amber-600
+  peer-focus-visible:peer-checked:border-amber-600
   peer-disabled:border-neutral-300
-  peer-disabled:peer-checked:bg-neutral-300
+  peer-checked:peer-disabled:bg-neutral-300
 
   dark:peer-focus-visible:border-amber-600
   dark:peer-checked:bg-amber-600
   dark:peer-checked:border-amber-600
-  dark:peer-checked:peer-focus-visible:border-amber-400
+  dark:peer-focus-visible:peer-checked:border-amber-400
   dark:peer-disabled:border-neutral-600
   dark:peer-disabled:bg-neutral-600
 

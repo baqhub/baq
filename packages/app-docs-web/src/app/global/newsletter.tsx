@@ -94,7 +94,7 @@ const FormInput = tiwi.input`
   placeholder:text-zinc-400
 
   bg-transparent
-  outline-none
+  outline-hidden
 `;
 
 const FormSubmit = tiwi.button`
@@ -104,8 +104,8 @@ const FormSubmit = tiwi.button`
   rounded-lg
   bg-amber-500/50
   group-focus-within:bg-amber-500
-  group-focus-within:hover:bg-amber-600
-  dark:group-focus-within:hover:bg-amber-400
+  hover:group-focus-within:bg-amber-600
+  dark:hover:group-focus-within:bg-amber-400
 `;
 
 const FormSubmitIcon = tiwi(Text)`

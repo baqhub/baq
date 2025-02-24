@@ -1,28 +1,27 @@
-@import "code";
-@import "docsearch";
+@import "./code.css" layer(base);
+@import "./docsearch.css" layer(base);
+@import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@config '../../../tailwind.config.ts';
 
-html {
-  /* Set the background color for iOS Safari UI. */
-  @apply h-full bg-white dark:bg-zinc-800;
-  overflow-y: scroll;
-}
-
-html.dark {
-  color-scheme: dark;
-}
-
-body {
-  /* Set the background color for iOS Safari UI. */
-  @apply h-full bg-white dark:bg-zinc-800;
-  min-width: 320px;
+@utility ligatures-none {
+  font-variant-ligatures: none;
 }
 
 @layer utilities {
-  .ligatures-none {
-    font-variant-ligatures: none;
+  html {
+    /* Set the background color for iOS Safari UI. */
+    @apply h-full bg-white dark:bg-zinc-800;
+    overflow-y: scroll;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    /* Set the background color for iOS Safari UI. */
+    @apply h-full bg-white dark:bg-zinc-800;
+    min-width: 320px;
   }
 }

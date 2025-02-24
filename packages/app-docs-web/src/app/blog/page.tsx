@@ -14,7 +14,7 @@ import {BlogPostItem} from "./blogPostItem.jsx";
 const Layout = tiwi(Column)`
   self-center
   w-full
-  max-w-screen-md
+  max-w-(--breakpoint-md)
   min-w-0
 
   px-6
