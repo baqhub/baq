@@ -26,9 +26,9 @@ const SmallSearch = tiwi(Row)`
 `;
 
 const Separator = tiwi.div`
-  w-1.5
-  h-1.5
   mx-2
+  h-1.5
+  w-1.5
 
   rounded-full
   bg-zinc-300
@@ -37,19 +37,19 @@ const Separator = tiwi.div`
 
 const SmallSearchButton = tiwi.button`
   mx-1.5
-  shrink-0
   block
+  shrink-0
   p-0.5
 
   text-zinc-700
-  dark:text-zinc-200
   hover:text-amber-800
+  dark:text-zinc-200
   dark:hover:text-amber-400
 `;
 
 const SearchIcon = tiwi.div`
-  w-[21px]
   h-[21px]
+  w-[21px]
 `;
 
 const LargeSearch = tiwi(Row)`
@@ -86,27 +86,27 @@ const Placeholder = tiwi(Row)`
 `;
 
 const PlaceholderSearchIcon = tiwi.div`
-  w-[18px]
   h-[18px]
+  w-[18px]
 `;
 
 const PlaceholderSearchText = tiwi.div`
-  text-sm
   pr-14
+  text-sm
 `;
 
 const SearchKey = tiwi.div`
-  px-1
-  py-0.5
-
-  text-[11px]
-
   rounded
   border
-  text-zinc-500
+
   border-zinc-300
-  dark:text-zinc-500
+
+  px-1
+  py-0.5
+  text-[11px]
+  text-zinc-500
   dark:border-zinc-700
+  dark:text-zinc-500
 `;
 
 //
@@ -157,6 +157,7 @@ export const TopNavSearch: FC = () => {
     isOpen,
     onOpen: onOpenClick,
     onClose: onCloseClick,
+    searchButtonRef: {current: null},
   });
 
   //

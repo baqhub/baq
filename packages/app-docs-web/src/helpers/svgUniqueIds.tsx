@@ -1,6 +1,12 @@
 "use client";
 
-import {cloneElement, memo, PropsWithChildren, useId} from "react";
+import {
+  cloneElement,
+  isValidElement,
+  memo,
+  PropsWithChildren,
+  useId,
+} from "react";
 import {deepMap} from "react-children-utilities";
 
 // Adapted from:
@@ -49,7 +55,7 @@ export const SvgUniqueIds = memo<PropsWithChildren>(({children}) => {
   };
 
   return deepMap(children, child => {
-    if (!child || typeof child !== "object" || !("props" in child)) {
+    if (!isValidElement<Record<string, any>>(child)) {
       return child;
     }
 
