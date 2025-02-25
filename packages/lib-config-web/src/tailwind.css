@@ -1,0 +1,11 @@
+@source "../../lib-ui";
+
+@custom-variant dark (&:where(html.dark, html.dark *));
+@custom-variant any-hover (any-hover: hover);
+@custom-variant aria-invalid (&[aria-invalid="true"]);
+
+@theme inline {
+  --font-sans:
+    "Inter var", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
