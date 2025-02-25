@@ -9,7 +9,8 @@
   "include": [
     "src",
     "vite.config.ts",
-    "tailwind.config.ts"
+    "tailwind.config.ts",
+    "tailwind.d.ts"
   ],
   "references": [
     {
