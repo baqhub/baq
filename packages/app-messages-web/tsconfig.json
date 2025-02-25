@@ -8,9 +8,7 @@
   },
   "include": [
     "src",
-    "vite.config.ts",
-    "tailwind.config.ts",
-    "tailwind.d.ts"
+    "vite.config.ts"
   ],
   "references": [
     {

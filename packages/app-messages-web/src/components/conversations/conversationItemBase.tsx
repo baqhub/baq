@@ -35,7 +35,7 @@ const Layout = tiwi(Column)`
 
   rounded-xl
 
-  aria-selected:bg-amber-500
+  data-selected:bg-amber-500
 
   after:absolute
   after:left-3
@@ -44,8 +44,8 @@ const Layout = tiwi(Column)`
   after:h-px
   after:bg-neutral-200
 
-  aria-selected:after:hidden
-  adjacent-peer-aria-selected:after:hidden
+  data-selected:after:hidden
+  [.peer[data-selected]_+_&]:after:hidden
   first:after:hidden
 `;
 
@@ -58,14 +58,14 @@ const Title = tiwi(Text)`
   font-bold
   truncate
 
-  group-aria-selected:text-white
+  group-data-selected:text-white
 `;
 
 const SecondaryText = tiwi(Text)`
   text-neutral-500
 
-  group-aria-selected:text-white
-  group-aria-selected:opacity-80
+  group-data-selected:text-white
+  group-data-selected:opacity-80
 `;
 
 const Date = tiwi(SecondaryText)`
@@ -133,7 +133,7 @@ export const ConversationItemBase: FC<ConversationItemBaseProps> = props => {
 
   return (
     <Layout
-      aria-selected={isSelected}
+      data-selected={isSelected || undefined}
       onMouseDown={onMouseDown}
       onClick={onClick}
       onContextMenu={onContextMenu}
