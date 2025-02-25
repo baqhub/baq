@@ -45,18 +45,18 @@ const SubPageLayout = tiwi(Column)`
 `;
 
 const Title = tiwi.div`
-  font-medium
   text-xl
+  font-medium
   text-amber-700
   dark:text-amber-500
 `;
 
 const Summary = tiwi.div`
-  h-12
-  sm:h-auto
   line-clamp-2
-  sm:line-clamp-1
+  h-12
   text-zinc-900
+  sm:line-clamp-1
+  sm:h-auto
   dark:text-white
 `;
 
