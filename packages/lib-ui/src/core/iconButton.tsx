@@ -26,16 +26,12 @@ const Layout = tiwi(ButtonRow)<IconButtonVariant>`
   p-1.5
 
   disabled:opacity-90
-  any-hover:enabled:hover:bg-neutral-900/5
+  enabled:hover:bg-neutral-900/5
   enabled:active:bg-neutral-900/10
-  any-hover:enabled:active:bg-neutral-900/10
   enabled:aria-expanded:bg-neutral-900/10
-  any-hover:enabled:aria-expanded:bg-neutral-900/10
-  dark:any-hover:enabled:hover:bg-white/5
+  dark:enabled:hover:bg-white/5
   dark:enabled:active:bg-white/10
-  dark:any-hover:enabled:active:bg-white/10
   dark:enabled:aria-expanded:bg-white/10
-  dark:any-hover:enabled:aria-expanded:bg-white/10
 
   rounded-lg
   ${{

@@ -36,12 +36,10 @@ const SubPageLayout = tiwi(Column)`
   border-zinc-200
   dark:border-zinc-700
 
-  any-hover:group-hover:bg-zinc-50
+  group-hover:bg-zinc-50
   group-active:bg-zinc-100
-  any-hover:group-active:bg-zinc-100
-  dark:any-hover:group-hover:bg-zinc-700
+  dark:group-hover:bg-zinc-700
   dark:group-active:bg-zinc-600
-  dark:any-hover:group-active:bg-zinc-600
 `;
 
 const Title = tiwi.div`

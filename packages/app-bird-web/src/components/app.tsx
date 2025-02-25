@@ -64,9 +64,9 @@ const PrivacyLink = tiwi(Link)`
 
   select-none
   text-neutral-400
-  any-hover:hover:text-neutral-500
+  hover:text-neutral-500
   dark:text-neutral-500
-  dark:any-hover:hover:text-neutral-400
+  dark:hover:text-neutral-400
 ` as typeof Link;
 
 //

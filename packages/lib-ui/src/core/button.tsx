@@ -40,23 +40,21 @@ const StyledButton = tiwi(ButtonRow)<UISize | ButtonVariant>`
 
   disabled:opacity-90
   bg-neutral-100
-  any-hover:enabled:hover:bg-neutral-200
+  enabled:hover:bg-neutral-200
   dark:bg-neutral-800
-  dark:any-hover:enabled:hover:bg-neutral-700
+  dark:enabled:hover:bg-neutral-700
 
   rounded-lg
   border-b-2
   enabled:active:border-b
   enabled:active:border-t
   enabled:active:border-transparent
-  any-hover:enabled:active:border-transparent
   dark:enabled:active:border-transparent
-  dark:any-hover:enabled:active:border-transparent
   border-neutral-200
-  any-hover:enabled:hover:border-neutral-300
+  enabled:hover:border-neutral-300
   focus-visible:border-neutral-300
   dark:border-neutral-700
-  dark:any-hover:enabled:hover:border-neutral-600
+  dark:enabled:hover:border-neutral-600
   dark:focus-visible:border-neutral-600
 
   text-sm
@@ -70,13 +68,13 @@ const StyledButton = tiwi(ButtonRow)<UISize | ButtonVariant>`
       disabled:opacity-80
       bg-amber-300
       border-amber-400
-      any-hover:enabled:hover:bg-amber-400
-      any-hover:enabled:hover:border-amber-500
+      enabled:hover:bg-amber-400
+      enabled:hover:border-amber-500
       focus-visible:border-amber-500
       dark:bg-amber-600
       dark:border-amber-500
-      dark:any-hover:enabled:hover:bg-amber-500
-      dark:any-hover:enabled:hover:border-amber-400
+      dark:enabled:hover:bg-amber-500
+      dark:enabled:hover:border-amber-400
       dark:focus-visible:border-amber-400
     `,
   }}

@@ -1,8 +1,22 @@
-@source "../../lib-ui";
+@import "./fonts.css" layer(base);
+@source "../../../lib-ui";
 
 @custom-variant dark (&:where(html.dark, html.dark *));
-@custom-variant any-hover (any-hover: hover);
 @custom-variant aria-invalid (&[aria-invalid="true"]);
+@custom-variant hover {
+  @media (any-hover: hover) {
+    &:hover {
+      @slot;
+    }
+  }
+}
+@custom-variant group-hover {
+  &:is(:where(.group):hover *) {
+    @media (any-hover: hover) {
+      @slot;
+    }
+  }
+}
 
 @theme inline {
   --font-sans:
