@@ -1,10 +1,10 @@
 @import "tailwindcss" source("../..");
 @import "./code.css" layer(components);
-@import "./docsearch.css" layer(components);
+@import "./docsearch.css";
 
 @source "../../../../lib-ui";
 
-@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where(html.dark, html.dark *));
 @custom-variant any-hover (any-hover: hover);
 
 @theme inline {
