@@ -36,9 +36,10 @@ const Separator = tiwi.div`
 `;
 
 const SmallSearchButton = tiwi.button`
-  mx-1.5
   block
   shrink-0
+
+  mx-1.5
   p-0.5
 
   text-zinc-700
@@ -96,17 +97,16 @@ const PlaceholderSearchText = tiwi.div`
 `;
 
 const SearchKey = tiwi.div`
+  px-1
+  py-0.5
   rounded
 
   border
   border-zinc-300
+  dark:border-zinc-700
 
-  px-1
-  py-0.5
   text-[11px]
   text-zinc-500
-
-  dark:border-zinc-700
   dark:text-zinc-500
 `;
 

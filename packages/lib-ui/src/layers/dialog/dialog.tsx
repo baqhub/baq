@@ -25,26 +25,28 @@ export interface DialogProps {
 //
 
 const Layout = tiwi.dialog`
-  outline-hidden
-  flex
   h-full
-  max-h-full
   w-full
+  max-h-full
   max-w-full
 
+  flex
   flex-col
   items-center
   justify-center
 
+  outline-hidden
+
   bg-transparent
   backdrop:bg-neutral-900
-  backdrop:opacity-20
   dark:backdrop:bg-neutral-100
+  backdrop:opacity-20
   dark:backdrop:opacity-10
 `;
 
 const ContentLayout = tiwi(Column)`
   min-h-0
+
   p-6
   sm:p-10
 `;

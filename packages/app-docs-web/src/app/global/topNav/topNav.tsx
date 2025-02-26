@@ -111,15 +111,16 @@ const Links = tiwi(Row)`
 `;
 
 const Separator = tiwi.div`
-  mx-2
   hidden
+  sm:block
 
   h-1.5
   w-1.5
+  mx-2
+
   rounded-full
 
   bg-zinc-300
-  sm:block
   dark:bg-zinc-600
 `;
 

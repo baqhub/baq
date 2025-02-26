@@ -50,11 +50,13 @@ const Title = tiwi.div`
 `;
 
 const Summary = tiwi.div`
-  line-clamp-2
   h-12
-  text-zinc-900
-  sm:line-clamp-1
   sm:h-auto
+
+  line-clamp-2
+  sm:line-clamp-1
+
+  text-zinc-900
   dark:text-white
 `;
 
