@@ -45,7 +45,7 @@ const PostImage = tiwi.div`
   [&_>_img]:w-full
   sm:group-hover:[&_>_img]:scale-105
   sm:group-hover:[&_>_img]:opacity-100
-  sm:[&_>_img]:transition-[transform,opacity]
+  sm:[&_>_img]:transition-[scale,opacity]
   sm:[&_>_img]:duration-150
   sm:[&_>_img]:opacity-90
   dark:sm:[&_>_img]:opacity-80

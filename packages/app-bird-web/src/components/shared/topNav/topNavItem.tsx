@@ -39,6 +39,8 @@ const Button = tiwi.button`
   group-data-[status=active]:dark:bg-amber-900
   group-data-[status=active]:dark:text-amber-200
   group-data-[status=active]:dark:hover:text-amber-200
+
+  cursor-pointer
 `;
 
 const Icon = tiwi.div`
