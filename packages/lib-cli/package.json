@@ -51,6 +51,6 @@
     "@types/node": "22.13.5",
     "@types/prettier": "3.0.0",
     "tsconfig-to-dual-package": "1.2.0",
-    "vitest": "3.0.6"
+    "vitest": "3.0.7"
   }
 }

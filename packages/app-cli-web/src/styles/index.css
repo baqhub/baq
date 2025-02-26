@@ -1,22 +1,28 @@
-@import "fonts";
+@import "./fonts.css" layer(base);
+@import "tailwindcss" source("..");
+@import "../../../lib-config-web/src/tailwind/base.css";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-html,
-body {
-  @apply h-full w-full bg-neutral-200 dark:bg-neutral-900;
+@theme {
+  --font-mono:
+    "Fira Code VF", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+@layer base {
+  html,
+  body {
+    @apply h-full w-full bg-neutral-200 dark:bg-neutral-900;
+  }
 
-body {
-  overflow: hidden;
-}
+  html {
+    @apply scroll-smooth;
+  }
 
-#root {
-  @apply grid h-full min-w-0;
+  body {
+    @apply overflow-hidden;
+  }
+
+  #root {
+    @apply grid h-full min-w-0;
+  }
 }

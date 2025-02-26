@@ -4,18 +4,16 @@
 @layer base {
   html {
     /* Set the background color for iOS Safari UI. */
-    @apply h-full bg-white dark:bg-neutral-900;
-    overflow-y: scroll;
+    @apply h-full overflow-y-scroll bg-white dark:bg-neutral-900;
 
     @variant dark {
-      color-scheme: dark;
+      @apply scheme-dark;
     }
   }
 
   body {
     /* Set the background color for iOS Safari UI. */
-    @apply h-full bg-white dark:bg-neutral-900;
-    min-width: 320px;
+    @apply h-full min-w-80 bg-white dark:bg-neutral-900;
   }
 
   #background {
