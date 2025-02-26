@@ -1,17 +1,61 @@
-import {baseConfig} from "@baqhub/config-web/tailwind.config.base.js";
+// export default {
+//   ...baseConfig,
+//   theme: {
+//     ...baseConfig.theme,
+//     extend: {
+//       ...baseConfig.theme.extend,
+//       fontFamily: {
+//         ...baseConfig.theme.extend.fontFamily,
+//         mono: ["Fira Code VF", ...defaultTheme.fontFamily.mono],
+//       },
+//     },
+//   },
+// } satisfies Config;
+
 import type {Config} from "tailwindcss";
 import defaultTheme from "tailwindcss/defaultTheme.js";
+import plugin from "tailwindcss/plugin.js";
+import {normalize} from "tailwindcss/src/util/dataTypes";
+import {default as escapeClassName} from "tailwindcss/src/util/escapeClassName";
 
-export default {
-  ...baseConfig,
+export const baseConfig = {
+  darkMode: "class",
+  content: [
+    "../lib-ui/**/*.{js,ts,jsx,tsx}",
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "./index.html",
+  ],
   theme: {
-    ...baseConfig.theme,
     extend: {
-      ...baseConfig.theme.extend,
+      aria: {
+        invalid: 'invalid="true"',
+      },
+      screens: {
+        "any-hover": {raw: "(any-hover: hover)"},
+      },
       fontFamily: {
-        ...baseConfig.theme.extend.fontFamily,
-        mono: ["Fira Code VF", ...defaultTheme.fontFamily.mono],
+        sans: ["Inter var", ...defaultTheme.fontFamily.sans],
       },
     },
   },
+  plugins: [
+    plugin(function ({matchVariant, theme}) {
+      matchVariant(
+        "adjacent-peer-aria",
+        (value, {modifier}) =>
+          modifier
+            ? `:merge(.peer\\/${modifier})[aria-${normalize(value)}] + &`
+            : `:merge(.peer)[aria-${normalize(value)}] + &`,
+        {values: theme("aria") ?? {}}
+      );
+      matchVariant(
+        "adjacent",
+        (_, {modifier}) =>
+          modifier
+            ? `:merge(.peer\\/${escapeClassName(modifier)}) + &`
+            : `:merge(.peer) + &`,
+        {values: {peer: "peer", group: "group"}}
+      );
+    }),
+  ],
 } satisfies Config;
