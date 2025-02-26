@@ -152,12 +152,13 @@ export const MdxA = tiwi.a`
   [&_>_strong]:text-amber-700
   dark:text-amber-500
   dark:[&_>_strong]:text-amber-500
+
   underline
   underline-offset-2
 
-  decoration-amber-700/0
+  decoration-amber-700/1
   hover:decoration-amber-700
-  dark:decoration-amber-500/0
+  dark:decoration-amber-500/1
   dark:hover:decoration-amber-500
 
   cursor-pointer

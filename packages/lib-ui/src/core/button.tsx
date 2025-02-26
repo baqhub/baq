@@ -25,11 +25,11 @@ interface ButtonProps extends ButtonBaseProps {
 //
 
 const StyledButton = tiwi(ButtonRow)<UISize | ButtonVariant>`
-  items-center
-  justify-center
   px-3
   pt-2
   pb-1.5
+  items-center
+  justify-center
 
   ${{
     large: `
