@@ -1,4 +1,5 @@
-import {FC, PropsWithChildren} from "react";
+import {FC} from "@baqhub/sdk-react";
+import {PropsWithChildren} from "react";
 import tiwi from "tiwi";
 
 //
