@@ -1,13 +1,13 @@
 "use client";
 
 import {Column, Row} from "@baqhub/ui/core/style.jsx";
-import {DiscordIcon} from "@baqhub/ui/icons/filled/discord.jsx";
-import {GithubIcon} from "@baqhub/ui/icons/filled/github.jsx";
 import {usePathname} from "next/navigation.js";
 import type {FC} from "react";
 import tiwi from "tiwi";
 import LogoSmall from "../../../docs/assets/logoSmall.svg";
 import {SvgUniqueIds} from "../../../helpers/svgUniqueIds.jsx";
+import {DiscordIcon} from "../icons/discord.jsx";
+import {GithubIcon} from "../icons/github.jsx";
 import {Link} from "../link.jsx";
 import {TopNavItem} from "./topNavItem.jsx";
 import {TopNavLink} from "./topNavLink.jsx";
@@ -20,8 +20,8 @@ import {TopNavTheme} from "./topNavTheme.jsx";
 
 const Layout = tiwi.div`
   relative
-  w-full
   h-[calc(4rem_+_1px)]
+  w-full
 `;
 
 const Content = tiwi(Column)`
@@ -57,11 +57,10 @@ const Center = tiwi(Row)`
 `;
 
 const LeftNavSpacer = tiwi.div`
-  hidden
-  lg:block
-  w-64
-
   mr-1
+  hidden
+  w-64
+  lg:block
   xl:mr-5
 `;
 
@@ -112,15 +111,15 @@ const Links = tiwi(Row)`
 `;
 
 const Separator = tiwi.div`
-  hidden
-  sm:block
-
-  w-1.5
-  h-1.5
   mx-2
+  hidden
 
+  h-1.5
+  w-1.5
   rounded-full
+
   bg-zinc-300
+  sm:block
   dark:bg-zinc-600
 `;
 
