@@ -88,8 +88,8 @@ const RAW_RUNTIME_STATE =
     ["@baqhub/messages-web", ["workspace:packages/app-messages-web"]],\
     ["@baqhub/sdk", ["workspace:packages/lib-sdk"]],\
     ["@baqhub/sdk-expo", ["workspace:packages/lib-sdk-expo"]],\
-    ["@baqhub/sdk-react", ["workspace:packages/lib-sdk-react"]],\
-    ["@baqhub/sdk-react-dom", ["workspace:packages/lib-sdk-react-dom"]],\
+    ["@baqhub/sdk-react", ["virtual:ef3e24271cc6014b88f53fb7e525003396e8aa0b4e2ebc2ce63dc4fe03f303799f82239cf206c964d610544e7f50d1a672fdbaf2eb9a1f4ec5a6b2e571e53c1f#workspace:packages/lib-sdk-react", "workspace:packages/lib-sdk-react"]],\
+    ["@baqhub/sdk-react-dom", ["virtual:5be33ab443a62cc100331133ea47d04da61badd611591deb3517bea5da396f2a2537969e19b053cbc2c5947813dc4fcf2f2b276a94819d68d89d2d8d40aa38b1#workspace:packages/lib-sdk-react-dom", "workspace:packages/lib-sdk-react-dom"]],\
     ["@baqhub/sdk-react-native", ["virtual:e8bac5d1de97eae36ff83a2f855e33674cdadba602345bd8827fce44eb8d8b45dc630f1798b7e3a3016aed290b2d9564468ad1654ce2168f4c3eda3c2c5f1a37#workspace:packages/lib-sdk-react-native", "workspace:packages/lib-sdk-react-native"]],\
     ["@baqhub/types", ["workspace:packages/lib-types"]],\
     ["@baqhub/ui", ["workspace:packages/lib-ui"]],\
@@ -3189,7 +3189,7 @@ const RAW_RUNTIME_STATE =
           ["@baqhub/bird-shared", "workspace:packages/app-bird-shared"],\
           ["@baqhub/cli", "workspace:packages/lib-cli"],\
           ["@baqhub/sdk", "workspace:packages/lib-sdk"],\
-          ["@baqhub/sdk-react", "workspace:packages/lib-sdk-react"],\
+          ["@baqhub/sdk-react", "virtual:ef3e24271cc6014b88f53fb7e525003396e8aa0b4e2ebc2ce63dc4fe03f303799f82239cf206c964d610544e7f50d1a672fdbaf2eb9a1f4ec5a6b2e571e53c1f#workspace:packages/lib-sdk-react"],\
           ["@types/lodash", "npm:4.17.15"],\
           ["@types/react", "npm:19.0.10"],\
           ["lodash", "npm:4.17.21"],\
@@ -3208,8 +3208,8 @@ const RAW_RUNTIME_STATE =
           ["@baqhub/cli", "workspace:packages/lib-cli"],\
           ["@baqhub/config-web", "workspace:packages/lib-config-web"],\
           ["@baqhub/sdk", "workspace:packages/lib-sdk"],\
-          ["@baqhub/sdk-react", "workspace:packages/lib-sdk-react"],\
-          ["@baqhub/sdk-react-dom", "workspace:packages/lib-sdk-react-dom"],\
+          ["@baqhub/sdk-react", "virtual:ef3e24271cc6014b88f53fb7e525003396e8aa0b4e2ebc2ce63dc4fe03f303799f82239cf206c964d610544e7f50d1a672fdbaf2eb9a1f4ec5a6b2e571e53c1f#workspace:packages/lib-sdk-react"],\
+          ["@baqhub/sdk-react-dom", "virtual:5be33ab443a62cc100331133ea47d04da61badd611591deb3517bea5da396f2a2537969e19b053cbc2c5947813dc4fcf2f2b276a94819d68d89d2d8d40aa38b1#workspace:packages/lib-sdk-react-dom"],\
           ["@baqhub/ui", "workspace:packages/lib-ui"],\
           ["@heroicons/react", "virtual:5be33ab443a62cc100331133ea47d04da61badd611591deb3517bea5da396f2a2537969e19b053cbc2c5947813dc4fcf2f2b276a94819d68d89d2d8d40aa38b1#npm:2.2.0"],\
           ["@mdx-js/react", "virtual:5be33ab443a62cc100331133ea47d04da61badd611591deb3517bea5da396f2a2537969e19b053cbc2c5947813dc4fcf2f2b276a94819d68d89d2d8d40aa38b1#npm:3.0.1"],\
@@ -3267,7 +3267,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@baqhub/cli-web", "workspace:packages/app-cli-web"],\
           ["@baqhub/config-web", "workspace:packages/lib-config-web"],\
-          ["@baqhub/sdk-react", "workspace:packages/lib-sdk-react"],\
+          ["@baqhub/sdk-react", "virtual:ef3e24271cc6014b88f53fb7e525003396e8aa0b4e2ebc2ce63dc4fe03f303799f82239cf206c964d610544e7f50d1a672fdbaf2eb9a1f4ec5a6b2e571e53c1f#workspace:packages/lib-sdk-react"],\
           ["@baqhub/ui", "workspace:packages/lib-ui"],\
           ["@tailwindcss/postcss", "npm:4.0.9"],\
           ["@types/react", "npm:19.0.10"],\
@@ -3321,7 +3321,7 @@ const RAW_RUNTIME_STATE =
           ["@types/lodash", "npm:4.17.15"],\
           ["@types/mdx", "npm:2.0.13"],\
           ["@types/node", "npm:22.13.5"],\
-          ["@types/react", "npm:19.0.10"],\
+          ["@types/react", "npm:18.3.18"],\
           ["@types/react-dom", "virtual:5d672a90405c6f5d47887489ef531ab2fd03fac749388ff320a003f2abe51f8657c1c807618f7a35c5e421f938e6110552511db9f7a513f65dfd6f0ca4011fe6#npm:18.3.5"],\
           ["@types/ws", "npm:8.5.14"],\
           ["autoprefixer", "virtual:5d672a90405c6f5d47887489ef531ab2fd03fac749388ff320a003f2abe51f8657c1c807618f7a35c5e421f938e6110552511db9f7a513f65dfd6f0ca4011fe6#npm:10.4.20"],\
@@ -3361,8 +3361,8 @@ const RAW_RUNTIME_STATE =
           ["@baqhub/cli", "workspace:packages/lib-cli"],\
           ["@baqhub/config-web", "workspace:packages/lib-config-web"],\
           ["@baqhub/sdk", "workspace:packages/lib-sdk"],\
-          ["@baqhub/sdk-react", "workspace:packages/lib-sdk-react"],\
-          ["@baqhub/sdk-react-dom", "workspace:packages/lib-sdk-react-dom"],\
+          ["@baqhub/sdk-react", "virtual:ef3e24271cc6014b88f53fb7e525003396e8aa0b4e2ebc2ce63dc4fe03f303799f82239cf206c964d610544e7f50d1a672fdbaf2eb9a1f4ec5a6b2e571e53c1f#workspace:packages/lib-sdk-react"],\
+          ["@baqhub/sdk-react-dom", "virtual:5be33ab443a62cc100331133ea47d04da61badd611591deb3517bea5da396f2a2537969e19b053cbc2c5947813dc4fcf2f2b276a94819d68d89d2d8d40aa38b1#workspace:packages/lib-sdk-react-dom"],\
           ["@baqhub/ui", "workspace:packages/lib-ui"],\
           ["@heroicons/react", "virtual:5be33ab443a62cc100331133ea47d04da61badd611591deb3517bea5da396f2a2537969e19b053cbc2c5947813dc4fcf2f2b276a94819d68d89d2d8d40aa38b1#npm:2.2.0"],\
           ["@tailwindcss/postcss", "npm:4.0.9"],\
@@ -3390,8 +3390,8 @@ const RAW_RUNTIME_STATE =
           ["@baqhub/cli", "workspace:packages/lib-cli"],\
           ["@baqhub/config-web", "workspace:packages/lib-config-web"],\
           ["@baqhub/sdk", "workspace:packages/lib-sdk"],\
-          ["@baqhub/sdk-react", "workspace:packages/lib-sdk-react"],\
-          ["@baqhub/sdk-react-dom", "workspace:packages/lib-sdk-react-dom"],\
+          ["@baqhub/sdk-react", "virtual:ef3e24271cc6014b88f53fb7e525003396e8aa0b4e2ebc2ce63dc4fe03f303799f82239cf206c964d610544e7f50d1a672fdbaf2eb9a1f4ec5a6b2e571e53c1f#workspace:packages/lib-sdk-react"],\
+          ["@baqhub/sdk-react-dom", "virtual:5be33ab443a62cc100331133ea47d04da61badd611591deb3517bea5da396f2a2537969e19b053cbc2c5947813dc4fcf2f2b276a94819d68d89d2d8d40aa38b1#workspace:packages/lib-sdk-react-dom"],\
           ["@baqhub/ui", "workspace:packages/lib-ui"],\
           ["@heroicons/react", "virtual:5be33ab443a62cc100331133ea47d04da61badd611591deb3517bea5da396f2a2537969e19b053cbc2c5947813dc4fcf2f2b276a94819d68d89d2d8d40aa38b1#npm:2.2.0"],\
           ["@tailwindcss/postcss", "npm:4.0.9"],\
@@ -3442,10 +3442,11 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@baqhub/sdk-expo", "workspace:packages/lib-sdk-expo"],\
           ["@baqhub/sdk", "workspace:packages/lib-sdk"],\
-          ["@baqhub/sdk-react", "workspace:packages/lib-sdk-react"],\
+          ["@baqhub/sdk-react", "virtual:ef3e24271cc6014b88f53fb7e525003396e8aa0b4e2ebc2ce63dc4fe03f303799f82239cf206c964d610544e7f50d1a672fdbaf2eb9a1f4ec5a6b2e571e53c1f#workspace:packages/lib-sdk-react"],\
           ["@baqhub/sdk-react-native", "virtual:e8bac5d1de97eae36ff83a2f855e33674cdadba602345bd8827fce44eb8d8b45dc630f1798b7e3a3016aed290b2d9564468ad1654ce2168f4c3eda3c2c5f1a37#workspace:packages/lib-sdk-react-native"],\
           ["@types/node", "npm:22.13.5"],\
           ["expo-secure-store", "virtual:e8bac5d1de97eae36ff83a2f855e33674cdadba602345bd8827fce44eb8d8b45dc630f1798b7e3a3016aed290b2d9564468ad1654ce2168f4c3eda3c2c5f1a37#npm:12.8.1"],\
+          ["react", "npm:19.0.0"],\
           ["tsconfig-to-dual-package", "virtual:f4f0705b3d062e5f76bbf430101f687a40b2d2ee7237e4f5b0123dd70cef21ff2c9639d3f142d51d1f96b59ca235b03eaf939678c2b68b45776b9f378f289a21#npm:1.2.0"],\
           ["tslib", "npm:2.8.1"],\
           ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"]\
@@ -3454,6 +3455,27 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@baqhub/sdk-react", [\
+      ["virtual:ef3e24271cc6014b88f53fb7e525003396e8aa0b4e2ebc2ce63dc4fe03f303799f82239cf206c964d610544e7f50d1a672fdbaf2eb9a1f4ec5a6b2e571e53c1f#workspace:packages/lib-sdk-react", {\
+        "packageLocation": "./.yarn/__virtual__/@baqhub-sdk-react-virtual-9920800882/1/packages/lib-sdk-react/",\
+        "packageDependencies": [\
+          ["@baqhub/sdk-react", "virtual:ef3e24271cc6014b88f53fb7e525003396e8aa0b4e2ebc2ce63dc4fe03f303799f82239cf206c964d610544e7f50d1a672fdbaf2eb9a1f4ec5a6b2e571e53c1f#workspace:packages/lib-sdk-react"],\
+          ["@baqhub/sdk", "workspace:packages/lib-sdk"],\
+          ["@types/lodash", "npm:4.17.15"],\
+          ["@types/react", "npm:19.0.10"],\
+          ["@types/use-sync-external-store", "npm:0.0.6"],\
+          ["lodash", "npm:4.17.21"],\
+          ["react", "npm:19.0.0"],\
+          ["tsconfig-to-dual-package", "virtual:f4f0705b3d062e5f76bbf430101f687a40b2d2ee7237e4f5b0123dd70cef21ff2c9639d3f142d51d1f96b59ca235b03eaf939678c2b68b45776b9f378f289a21#npm:1.2.0"],\
+          ["tslib", "npm:2.8.1"],\
+          ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"],\
+          ["use-sync-external-store", "virtual:9920800882692ea46f388ce551b7bd48e4b88f89aac75527c24910cbf1a9e1537643462e7f3cac2e4dc54b522b56d32abd39b4b91a2b48313c97dfec42806317#npm:1.4.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/react",\
+          "react"\
+        ],\
+        "linkType": "SOFT"\
+      }],\
       ["workspace:packages/lib-sdk-react", {\
         "packageLocation": "./packages/lib-sdk-react/",\
         "packageDependencies": [\
@@ -3467,17 +3489,35 @@ const RAW_RUNTIME_STATE =
           ["tsconfig-to-dual-package", "virtual:f4f0705b3d062e5f76bbf430101f687a40b2d2ee7237e4f5b0123dd70cef21ff2c9639d3f142d51d1f96b59ca235b03eaf939678c2b68b45776b9f378f289a21#npm:1.2.0"],\
           ["tslib", "npm:2.8.1"],\
           ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"],\
-          ["use-sync-external-store", "virtual:18b6d8f442fb27b52dff0900df96d3577a663851588ff6d3c40c6339f5694d4ca3e538d234653edfc4692a3e97bcc32e1f13d86a24ab5ba62b83369dfaac476e#npm:1.4.0"]\
+          ["use-sync-external-store", "virtual:9920800882692ea46f388ce551b7bd48e4b88f89aac75527c24910cbf1a9e1537643462e7f3cac2e4dc54b522b56d32abd39b4b91a2b48313c97dfec42806317#npm:1.4.0"]\
         ],\
         "linkType": "SOFT"\
       }]\
     ]],\
     ["@baqhub/sdk-react-dom", [\
+      ["virtual:5be33ab443a62cc100331133ea47d04da61badd611591deb3517bea5da396f2a2537969e19b053cbc2c5947813dc4fcf2f2b276a94819d68d89d2d8d40aa38b1#workspace:packages/lib-sdk-react-dom", {\
+        "packageLocation": "./.yarn/__virtual__/@baqhub-sdk-react-dom-virtual-ace1e6e021/1/packages/lib-sdk-react-dom/",\
+        "packageDependencies": [\
+          ["@baqhub/sdk-react-dom", "virtual:5be33ab443a62cc100331133ea47d04da61badd611591deb3517bea5da396f2a2537969e19b053cbc2c5947813dc4fcf2f2b276a94819d68d89d2d8d40aa38b1#workspace:packages/lib-sdk-react-dom"],\
+          ["@baqhub/sdk-react", "virtual:ef3e24271cc6014b88f53fb7e525003396e8aa0b4e2ebc2ce63dc4fe03f303799f82239cf206c964d610544e7f50d1a672fdbaf2eb9a1f4ec5a6b2e571e53c1f#workspace:packages/lib-sdk-react"],\
+          ["@types/react", "npm:19.0.10"],\
+          ["react", "npm:19.0.0"],\
+          ["tsconfig-to-dual-package", "virtual:f4f0705b3d062e5f76bbf430101f687a40b2d2ee7237e4f5b0123dd70cef21ff2c9639d3f142d51d1f96b59ca235b03eaf939678c2b68b45776b9f378f289a21#npm:1.2.0"],\
+          ["tslib", "npm:2.8.1"],\
+          ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"]\
+        ],\
+        "packagePeers": [\
+          "@types/react",\
+          "react"\
+        ],\
+        "linkType": "SOFT"\
+      }],\
       ["workspace:packages/lib-sdk-react-dom", {\
         "packageLocation": "./packages/lib-sdk-react-dom/",\
         "packageDependencies": [\
           ["@baqhub/sdk-react-dom", "workspace:packages/lib-sdk-react-dom"],\
-          ["@baqhub/sdk-react", "workspace:packages/lib-sdk-react"],\
+          ["@baqhub/sdk-react", "virtual:ef3e24271cc6014b88f53fb7e525003396e8aa0b4e2ebc2ce63dc4fe03f303799f82239cf206c964d610544e7f50d1a672fdbaf2eb9a1f4ec5a6b2e571e53c1f#workspace:packages/lib-sdk-react"],\
+          ["react", "npm:19.0.0"],\
           ["tsconfig-to-dual-package", "virtual:f4f0705b3d062e5f76bbf430101f687a40b2d2ee7237e4f5b0123dd70cef21ff2c9639d3f142d51d1f96b59ca235b03eaf939678c2b68b45776b9f378f289a21#npm:1.2.0"],\
           ["tslib", "npm:2.8.1"],\
           ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"]\
@@ -3491,11 +3531,13 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@baqhub/sdk-react-native", "virtual:e8bac5d1de97eae36ff83a2f855e33674cdadba602345bd8827fce44eb8d8b45dc630f1798b7e3a3016aed290b2d9564468ad1654ce2168f4c3eda3c2c5f1a37#workspace:packages/lib-sdk-react-native"],\
           ["@baqhub/sdk", "workspace:packages/lib-sdk"],\
-          ["@baqhub/sdk-react", "workspace:packages/lib-sdk-react"],\
+          ["@baqhub/sdk-react", "virtual:ef3e24271cc6014b88f53fb7e525003396e8aa0b4e2ebc2ce63dc4fe03f303799f82239cf206c964d610544e7f50d1a672fdbaf2eb9a1f4ec5a6b2e571e53c1f#workspace:packages/lib-sdk-react"],\
           ["@react-native-async-storage/async-storage", "virtual:d764e37f311a0dd37ae02e46331fd04e2f0ebeb0bf7a89b4657452f53568d78bbc0439e520bf138fe014cea0a68acbe05c248b3296fad79285d5c0979b140710#npm:1.23.1"],\
           ["@types/node", "npm:22.13.5"],\
+          ["@types/react", null],\
           ["@types/react-native", null],\
           ["base-64", "npm:1.0.0"],\
+          ["react", "npm:19.0.0"],\
           ["react-native", null],\
           ["react-native-fetch-api", "npm:3.0.0"],\
           ["react-native-get-random-values", "virtual:d764e37f311a0dd37ae02e46331fd04e2f0ebeb0bf7a89b4657452f53568d78bbc0439e520bf138fe014cea0a68acbe05c248b3296fad79285d5c0979b140710#npm:1.8.0"],\
@@ -3509,7 +3551,9 @@ const RAW_RUNTIME_STATE =
         ],\
         "packagePeers": [\
           "@types/react-native",\
-          "react-native"\
+          "@types/react",\
+          "react-native",\
+          "react"\
         ],\
         "linkType": "SOFT"\
       }],\
@@ -3518,10 +3562,11 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@baqhub/sdk-react-native", "workspace:packages/lib-sdk-react-native"],\
           ["@baqhub/sdk", "workspace:packages/lib-sdk"],\
-          ["@baqhub/sdk-react", "workspace:packages/lib-sdk-react"],\
+          ["@baqhub/sdk-react", "virtual:ef3e24271cc6014b88f53fb7e525003396e8aa0b4e2ebc2ce63dc4fe03f303799f82239cf206c964d610544e7f50d1a672fdbaf2eb9a1f4ec5a6b2e571e53c1f#workspace:packages/lib-sdk-react"],\
           ["@react-native-async-storage/async-storage", "virtual:d764e37f311a0dd37ae02e46331fd04e2f0ebeb0bf7a89b4657452f53568d78bbc0439e520bf138fe014cea0a68acbe05c248b3296fad79285d5c0979b140710#npm:1.23.1"],\
           ["@types/node", "npm:22.13.5"],\
           ["base-64", "npm:1.0.0"],\
+          ["react", "npm:19.0.0"],\
           ["react-native-fetch-api", "npm:3.0.0"],\
           ["react-native-get-random-values", "virtual:d764e37f311a0dd37ae02e46331fd04e2f0ebeb0bf7a89b4657452f53568d78bbc0439e520bf138fe014cea0a68acbe05c248b3296fad79285d5c0979b140710#npm:1.8.0"],\
           ["react-native-polyfill-globals", "virtual:d764e37f311a0dd37ae02e46331fd04e2f0ebeb0bf7a89b4657452f53568d78bbc0439e520bf138fe014cea0a68acbe05c248b3296fad79285d5c0979b140710#npm:3.1.0"],\
@@ -3553,7 +3598,7 @@ const RAW_RUNTIME_STATE =
           ["@baqhub/ui", "workspace:packages/lib-ui"],\
           ["@baqhub/config-web", "workspace:packages/lib-config-web"],\
           ["@baqhub/sdk", "workspace:packages/lib-sdk"],\
-          ["@baqhub/sdk-react", "workspace:packages/lib-sdk-react"],\
+          ["@baqhub/sdk-react", "virtual:ef3e24271cc6014b88f53fb7e525003396e8aa0b4e2ebc2ce63dc4fe03f303799f82239cf206c964d610544e7f50d1a672fdbaf2eb9a1f4ec5a6b2e571e53c1f#workspace:packages/lib-sdk-react"],\
           ["@floating-ui/react", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:0.27.4"],\
           ["@testing-library/dom", "npm:10.4.0"],\
           ["@testing-library/react", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:16.2.0"],\
@@ -3789,7 +3834,7 @@ const RAW_RUNTIME_STATE =
           ["@algolia/autocomplete-core", "npm:1.17.9"],\
           ["@algolia/autocomplete-preset-algolia", "virtual:028f93b2b8ba716cba79a4e1d4059db741a12dc96178932337ec0e929e15f34ae032fc97bde1cb7b095495b48638d544d732a29a9d0c1d32879b6fd0470d543a#npm:1.17.9"],\
           ["@docsearch/css", "npm:3.9.0"],\
-          ["@types/react", "npm:19.0.10"],\
+          ["@types/react", "npm:18.3.18"],\
           ["@types/react-dom", "virtual:5d672a90405c6f5d47887489ef531ab2fd03fac749388ff320a003f2abe51f8657c1c807618f7a35c5e421f938e6110552511db9f7a513f65dfd6f0ca4011fe6#npm:18.3.5"],\
           ["@types/search-insights", null],\
           ["algoliasearch", "npm:5.20.3"],\
@@ -4632,7 +4677,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/__virtual__/@heroicons-react-virtual-a1a7a9b65f/4/.yarn/berry/cache/@heroicons-react-npm-2.2.0-775299dcc0-10c0.zip/node_modules/@heroicons/react/",\
         "packageDependencies": [\
           ["@heroicons/react", "virtual:5d672a90405c6f5d47887489ef531ab2fd03fac749388ff320a003f2abe51f8657c1c807618f7a35c5e421f938e6110552511db9f7a513f65dfd6f0ca4011fe6#npm:2.2.0"],\
-          ["@types/react", "npm:19.0.10"],\
+          ["@types/react", "npm:18.3.18"],\
           ["react", "npm:18.3.1"]\
         ],\
         "packagePeers": [\
@@ -5456,7 +5501,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@mdx-js/react", "virtual:5d672a90405c6f5d47887489ef531ab2fd03fac749388ff320a003f2abe51f8657c1c807618f7a35c5e421f938e6110552511db9f7a513f65dfd6f0ca4011fe6#npm:3.0.1"],\
           ["@types/mdx", "npm:2.0.6"],\
-          ["@types/react", "npm:19.0.10"],\
+          ["@types/react", "npm:18.3.18"],\
           ["react", "npm:18.3.1"]\
         ],\
         "packagePeers": [\
@@ -6721,7 +6766,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react-dom", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:19.0.4"],\
           ["react", "npm:19.0.0"],\
           ["react-dom", "virtual:ea03402fcb92648016d396fa42564f875fdec4bfba728b4dd5f38c7ea55bf09ad0f15a3ad4b966a3329bcaf0d7d02980c57cd7b5227ce463338d7261e2cfe9a9#npm:19.0.0"],\
-          ["use-sync-external-store", "virtual:18b6d8f442fb27b52dff0900df96d3577a663851588ff6d3c40c6339f5694d4ca3e538d234653edfc4692a3e97bcc32e1f13d86a24ab5ba62b83369dfaac476e#npm:1.4.0"]\
+          ["use-sync-external-store", "virtual:9920800882692ea46f388ce551b7bd48e4b88f89aac75527c24910cbf1a9e1537643462e7f3cac2e4dc54b522b56d32abd39b4b91a2b48313c97dfec42806317#npm:1.4.0"]\
         ],\
         "packagePeers": [\
           "@types/react-dom",\
@@ -7000,7 +7045,25 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/prop-types", [\
+      ["npm:15.7.14", {\
+        "packageLocation": "../../../.yarn/berry/cache/@types-prop-types-npm-15.7.14-4ccaa07795-10c0.zip/node_modules/@types/prop-types/",\
+        "packageDependencies": [\
+          ["@types/prop-types", "npm:15.7.14"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/react", [\
+      ["npm:18.3.18", {\
+        "packageLocation": "../../../.yarn/berry/cache/@types-react-npm-18.3.18-2cfc7440b2-10c0.zip/node_modules/@types/react/",\
+        "packageDependencies": [\
+          ["@types/react", "npm:18.3.18"],\
+          ["@types/prop-types", "npm:15.7.14"],\
+          ["csstype", "npm:3.1.2"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["npm:19.0.10", {\
         "packageLocation": "../../../.yarn/berry/cache/@types-react-npm-19.0.10-ad7744c06a-10c0.zip/node_modules/@types/react/",\
         "packageDependencies": [\
@@ -7029,7 +7092,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/__virtual__/@types-react-dom-virtual-85c0382d7c/4/.yarn/berry/cache/@types-react-dom-npm-18.3.5-b1c4b786e6-10c0.zip/node_modules/@types/react-dom/",\
         "packageDependencies": [\
           ["@types/react-dom", "virtual:5d672a90405c6f5d47887489ef531ab2fd03fac749388ff320a003f2abe51f8657c1c807618f7a35c5e421f938e6110552511db9f7a513f65dfd6f0ca4011fe6#npm:18.3.5"],\
-          ["@types/react", "npm:19.0.10"]\
+          ["@types/react", "npm:18.3.18"]\
         ],\
         "packagePeers": [\
           "@types/react"\
@@ -12702,7 +12765,7 @@ const RAW_RUNTIME_STATE =
           ["@swc/helpers", "npm:0.5.5"],\
           ["@types/opentelemetry__api", null],\
           ["@types/playwright__test", null],\
-          ["@types/react", "npm:19.0.10"],\
+          ["@types/react", "npm:18.3.18"],\
           ["@types/react-dom", "virtual:5d672a90405c6f5d47887489ef531ab2fd03fac749388ff320a003f2abe51f8657c1c807618f7a35c5e421f938e6110552511db9f7a513f65dfd6f0ca4011fe6#npm:18.3.5"],\
           ["@types/sass", null],\
           ["busboy", "npm:1.6.0"],\
@@ -13583,7 +13646,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/__virtual__/react-children-utilities-virtual-8be5dbd7d0/4/.yarn/berry/cache/react-children-utilities-npm-2.10.0-40f4c56c69-10c0.zip/node_modules/react-children-utilities/",\
         "packageDependencies": [\
           ["react-children-utilities", "virtual:5d672a90405c6f5d47887489ef531ab2fd03fac749388ff320a003f2abe51f8657c1c807618f7a35c5e421f938e6110552511db9f7a513f65dfd6f0ca4011fe6#npm:2.10.0"],\
-          ["@types/react", "npm:19.0.10"],\
+          ["@types/react", "npm:18.3.18"],\
           ["react", "npm:18.3.1"]\
         ],\
         "packagePeers": [\
@@ -13634,7 +13697,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/__virtual__/react-dom-virtual-ab270cd058/4/.yarn/berry/cache/react-dom-npm-18.3.1-a805663f38-10c0.zip/node_modules/react-dom/",\
         "packageDependencies": [\
           ["react-dom", "virtual:5d672a90405c6f5d47887489ef531ab2fd03fac749388ff320a003f2abe51f8657c1c807618f7a35c5e421f938e6110552511db9f7a513f65dfd6f0ca4011fe6#npm:18.3.1"],\
-          ["@types/react", "npm:19.0.10"],\
+          ["@types/react", "npm:18.3.18"],\
           ["loose-envify", "npm:1.4.0"],\
           ["react", "npm:18.3.1"],\
           ["scheduler", "npm:0.23.2"]\
@@ -14788,7 +14851,7 @@ const RAW_RUNTIME_STATE =
           ["@babel/core", null],\
           ["@types/babel-plugin-macros", null],\
           ["@types/babel__core", null],\
-          ["@types/react", "npm:19.0.10"],\
+          ["@types/react", "npm:18.3.18"],\
           ["babel-plugin-macros", null],\
           ["client-only", "npm:0.0.1"],\
           ["react", "npm:18.3.1"]\
@@ -15142,7 +15205,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["tiwi", "virtual:5d672a90405c6f5d47887489ef531ab2fd03fac749388ff320a003f2abe51f8657c1c807618f7a35c5e421f938e6110552511db9f7a513f65dfd6f0ca4011fe6#npm:1.0.15"],\
           ["@types/nativewind", null],\
-          ["@types/react", "npm:19.0.10"],\
+          ["@types/react", "npm:18.3.18"],\
           ["nativewind", null],\
           ["react", "npm:18.3.1"],\
           ["tailwind-merge", "npm:3.0.2"]\
@@ -15713,10 +15776,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:18b6d8f442fb27b52dff0900df96d3577a663851588ff6d3c40c6339f5694d4ca3e538d234653edfc4692a3e97bcc32e1f13d86a24ab5ba62b83369dfaac476e#npm:1.4.0", {\
-        "packageLocation": "./.yarn/__virtual__/use-sync-external-store-virtual-97b15b9684/4/.yarn/berry/cache/use-sync-external-store-npm-1.4.0-176448bea1-10c0.zip/node_modules/use-sync-external-store/",\
+      ["virtual:9920800882692ea46f388ce551b7bd48e4b88f89aac75527c24910cbf1a9e1537643462e7f3cac2e4dc54b522b56d32abd39b4b91a2b48313c97dfec42806317#npm:1.4.0", {\
+        "packageLocation": "./.yarn/__virtual__/use-sync-external-store-virtual-06f80c1c51/4/.yarn/berry/cache/use-sync-external-store-npm-1.4.0-176448bea1-10c0.zip/node_modules/use-sync-external-store/",\
         "packageDependencies": [\
-          ["use-sync-external-store", "virtual:18b6d8f442fb27b52dff0900df96d3577a663851588ff6d3c40c6339f5694d4ca3e538d234653edfc4692a3e97bcc32e1f13d86a24ab5ba62b83369dfaac476e#npm:1.4.0"],\
+          ["use-sync-external-store", "virtual:9920800882692ea46f388ce551b7bd48e4b88f89aac75527c24910cbf1a9e1537643462e7f3cac2e4dc54b522b56d32abd39b4b91a2b48313c97dfec42806317#npm:1.4.0"],\
           ["@types/react", "npm:19.0.10"],\
           ["react", "npm:19.0.0"]\
         ],\

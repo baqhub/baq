@@ -48,10 +48,12 @@
   },
   "peerDependencies": {
     "expo": "*",
+    "react": "^17.0.0 || ^18.0.0 || ^19.0.0",
     "react-native": ">=0.60"
   },
   "devDependencies": {
     "@types/node": "22.13.5",
+    "react": "^19.0.0",
     "tsconfig-to-dual-package": "1.2.0",
     "typescript": "5.7.3"
   }

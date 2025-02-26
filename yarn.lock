@@ -2088,11 +2088,13 @@ __metadata:
     "@baqhub/sdk-react-native": "npm:^0.1.23"
     "@types/node": "npm:22.13.5"
     expo-secure-store: "npm:^12.8.1"
+    react: "npm:^19.0.0"
     tsconfig-to-dual-package: "npm:1.2.0"
     tslib: "npm:2.8.1"
     typescript: "npm:5.7.3"
   peerDependencies:
     expo: "*"
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
     react-native: ">=0.60"
   languageName: unknown
   linkType: soft
@@ -2102,9 +2104,12 @@ __metadata:
   resolution: "@baqhub/sdk-react-dom@workspace:packages/lib-sdk-react-dom"
   dependencies:
     "@baqhub/sdk-react": "npm:^0.1.23"
+    react: "npm:^19.0.0"
     tsconfig-to-dual-package: "npm:1.2.0"
     tslib: "npm:^2.8.1"
     typescript: "npm:5.7.3"
+  peerDependencies:
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
   languageName: unknown
   linkType: soft
 
@@ -2117,6 +2122,7 @@ __metadata:
     "@react-native-async-storage/async-storage": "npm:^1.21.0"
     "@types/node": "npm:22.13.5"
     base-64: "npm:^1.0.0"
+    react: "npm:^19.0.0"
     react-native-fetch-api: "npm:^3.0.0"
     react-native-get-random-values: "npm:~1.8.0"
     react-native-polyfill-globals: "npm:^3.1.0"
@@ -2127,6 +2133,7 @@ __metadata:
     typescript: "npm:5.7.3"
     web-streams-polyfill: "npm:^3.3.3"
   peerDependencies:
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
     react-native: ">=0.60"
   languageName: unknown
   linkType: soft
@@ -2145,6 +2152,8 @@ __metadata:
     tslib: "npm:^2.8.1"
     typescript: "npm:5.7.3"
     use-sync-external-store: "npm:^1.4.0"
+  peerDependencies:
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
   languageName: unknown
   linkType: soft
 
@@ -4828,6 +4837,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/prop-types@npm:*":
+  version: 15.7.14
+  resolution: "@types/prop-types@npm:15.7.14"
+  checksum: 10c0/1ec775160bfab90b67a782d735952158c7e702ca4502968aa82565bd8e452c2de8601c8dfe349733073c31179116cf7340710160d3836aa8a1ef76d1532893b1
+  languageName: node
+  linkType: hard
+
 "@types/react-dom@npm:18.3.5":
   version: 18.3.5
   resolution: "@types/react-dom@npm:18.3.5"
@@ -4843,6 +4859,16 @@ __metadata:
   peerDependencies:
     "@types/react": ^19.0.0
   checksum: 10c0/4e71853919b94df9e746a4bd73f8180e9ae13016333ce9c543dcba9f4f4c8fe6e28b038ca6ee61c24e291af8e03ca3bc5ded17c46dee938fcb32d71186fda7a3
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:18.3.18":
+  version: 18.3.18
+  resolution: "@types/react@npm:18.3.18"
+  dependencies:
+    "@types/prop-types": "npm:*"
+    csstype: "npm:^3.0.2"
+  checksum: 10c0/8fb2b00672072135d0858dc9db07873ea107cc238b6228aaa2a9afd1ef7a64a7074078250db38afbeb19064be8ea6af5eac32d404efdd5f45e093cc4829d87f8
   languageName: node
   linkType: hard
 
