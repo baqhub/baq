@@ -57,10 +57,12 @@ const Center = tiwi(Row)`
 `;
 
 const LeftNavSpacer = tiwi.div`
-  mr-1
   hidden
-  w-64
   lg:block
+
+  w-64
+
+  mr-1
   xl:mr-5
 `;
 
