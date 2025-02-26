@@ -11,7 +11,6 @@ import {Login, LoginLogo} from "@baqhub/ui/pages/login.js";
 import {
   Link,
   Outlet,
-  ScrollRestoration,
   createRoute,
   useMatch,
   useNavigate,
@@ -123,7 +122,6 @@ export const App: FC = () => {
             <Outlet />
           </Layout>
           <PublicTopNav />
-          <ScrollRestoration />
         </LayerManager>
       </Store>
     );
@@ -138,7 +136,6 @@ export const App: FC = () => {
           <Outlet />
         </Layout>
         <TopNav />
-        <ScrollRestoration />
       </LayerManager>
     </Store>
   );
