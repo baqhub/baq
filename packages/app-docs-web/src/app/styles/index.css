@@ -14,12 +14,15 @@
   }
 }
 @custom-variant group-hover {
-  &:is(:where(.group):hover *) {
-    @media (any-hover: hover) {
+  @media (any-hover: hover) {
+    &:is(:where(.group):hover *) {
       @slot;
     }
   }
 }
+
+@custom-variant active (&:active);
+@custom-variant group-active (&:is(:where(.group):active *));
 
 @theme inline {
   --font-sans:
