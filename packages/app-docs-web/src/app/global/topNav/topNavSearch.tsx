@@ -97,14 +97,15 @@ const PlaceholderSearchText = tiwi.div`
 
 const SearchKey = tiwi.div`
   rounded
-  border
 
+  border
   border-zinc-300
 
   px-1
   py-0.5
   text-[11px]
   text-zinc-500
+
   dark:border-zinc-700
   dark:text-zinc-500
 `;

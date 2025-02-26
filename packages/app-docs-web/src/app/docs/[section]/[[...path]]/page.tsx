@@ -75,7 +75,6 @@ const Docs = tiwi.div`
   flex
   w-full
   min-w-0
-
   flex-row
   self-center
 `;
@@ -85,7 +84,6 @@ const DocsCenter = tiwi.div`
   flex
   min-w-0
   shrink
-
   grow
   flex-row
   justify-center
@@ -96,7 +94,6 @@ const DocsContent = tiwi.div`
   shrink
   grow
   px-6
-
   pt-4
   sm:px-8
   sm:pt-8
@@ -107,7 +104,6 @@ const DocsContent = tiwi.div`
 const DocsContentSection = tiwi.div`
   mb-3
   text-sm
-
   font-semibold
   text-amber-700
   sm:hidden
