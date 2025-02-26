@@ -1,9 +1,9 @@
 import {Column, Row} from "@baqhub/ui/core/style.jsx";
-import {DiscordIcon} from "@baqhub/ui/icons/filled/discord.jsx";
-import {GithubIcon} from "@baqhub/ui/icons/filled/github.jsx";
 import {EnvelopeIcon} from "@heroicons/react/24/solid";
 import {FC} from "react";
 import tiwi from "tiwi";
+import {DiscordIcon} from "./icons/discord.jsx";
+import {GithubIcon} from "./icons/github.jsx";
 import {Text} from "./style.jsx";
 
 //
@@ -45,8 +45,8 @@ const SayHi = tiwi(Text)`
 `;
 
 const ExternalLink = tiwi.a`
-  shrink-0
   block
+  shrink-0
   p-0.5
 
   text-zinc-400
@@ -56,8 +56,8 @@ const ExternalLink = tiwi.a`
 `;
 
 const ExternalLinkIcon = tiwi.div`
-  w-5
   h-5
+  w-5
 `;
 
 //

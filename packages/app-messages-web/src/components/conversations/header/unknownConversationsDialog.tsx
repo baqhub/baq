@@ -33,7 +33,7 @@ const Title = tiwi(Text)`
   font-semibold
 `;
 
-const Conversations = tiwi(Column)`
+const Conversations = tiwi.div`
   mt-3
   overflow-y-auto
 `;
@@ -96,7 +96,7 @@ const UnknownConversationsContent: FC<
     return <UnknownConversationItem key={itemKey[0]} messageKey={itemKey[0]} />;
   };
 
-  return <>{itemKeys.map(renderItem)}</>;
+  return <Column>{itemKeys.map(renderItem)}</Column>;
 };
 
 const UnknownConversationsLoading: FC = () => {

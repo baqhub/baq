@@ -25,21 +25,28 @@ export interface DialogProps {
 //
 
 const Layout = tiwi.dialog`
-  p-0
-  bg-transparent
-
+  h-full
+  w-full
   max-h-full
   max-w-full
 
-  backdrop:opacity-20
-  backdrop:bg-neutral-900
-  dark:backdrop:opacity-10
-  dark:backdrop:bg-neutral-100
+  flex
+  flex-col
+  items-center
+  justify-center
 
-  outline-none
+  outline-hidden
+
+  bg-transparent
+  backdrop:bg-neutral-900
+  dark:backdrop:bg-neutral-100
+  backdrop:opacity-20
+  dark:backdrop:opacity-10
 `;
 
 const ContentLayout = tiwi(Column)`
+  min-h-0
+
   p-6
   sm:p-10
 `;
@@ -85,8 +92,7 @@ export const Dialog: FC<DialogProps & PropsWithChildren> = props => {
   return (
     <Layout
       ref={dialogRef}
-      inert={isUnderLayer ? "" : undefined}
-      className={isUnderLayer ? "no-scrollbars" : undefined}
+      inert={isUnderLayer}
       onClose={onClose}
       onClick={onRequestClose}
     >

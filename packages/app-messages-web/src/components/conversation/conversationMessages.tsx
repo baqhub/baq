@@ -14,7 +14,7 @@ import {ConversationMessage} from "./message/message.js";
 //
 
 interface ConversationMessagesProps {
-  scrollRoot: RefObject<Element>;
+  scrollRoot: RefObject<Element | null>;
   conversationKey: ConversationRecordKey;
   getMessageKeys: DataProvider<ReadonlyArray<MessageRecordKey>>;
   isLoadingMore: boolean;

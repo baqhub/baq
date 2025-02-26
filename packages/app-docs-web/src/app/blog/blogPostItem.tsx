@@ -43,12 +43,12 @@ const PostImage = tiwi.div`
   rounded-lg
   overflow-hidden
   [&_>_img]:w-full
-  [&_>_img]:sm:group-hover:scale-105
-  [&_>_img]:sm:group-hover:opacity-100
-  [&_>_img]:sm:transition-[transform,opacity]
-  [&_>_img]:sm:duration-150
-  [&_>_img]:sm:opacity-90
-  dark:[&_>_img]:sm:opacity-80
+  sm:group-hover:[&_>_img]:scale-105
+  sm:group-hover:[&_>_img]:opacity-100
+  sm:[&_>_img]:transition-[transform,opacity]
+  sm:[&_>_img]:duration-150
+  sm:[&_>_img]:opacity-90
+  dark:sm:[&_>_img]:opacity-80
   select-none
 `;
 

@@ -1311,7 +1311,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
     const records = useShallowStateSelector(recordsSelector);
 
-    const lastQueryRef = useRef<StoreQuery<T, Q>>();
+    const lastQueryRef = useRef<StoreQuery<T, Q>>(undefined);
     useEffect(() => {
       if (storeQuery.promise) {
         return;
@@ -1366,7 +1366,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
 
     const shouldSync = useShouldSync(storeQuery);
 
-    const getMaxRecordDateRef = useRef<() => Date | undefined>();
+    const getMaxRecordDateRef = useRef<() => Date | undefined>(undefined);
     useEffect(() => {
       getMaxRecordDateRef.current = () => {
         if (!isFetch || !isSync || promise || !shouldSync) {
@@ -1485,7 +1485,7 @@ export function createStore<R extends CleanRecordType<AnyRecord>[]>(
       return recordVersions.map(v => versions[v]! as Q);
     }, [recordVersions, versions]);
 
-    const lastQueryRef = useRef<StoreQuery<T, Q>>();
+    const lastQueryRef = useRef<StoreQuery<T, Q>>(undefined);
     useEffect(() => {
       if (storeQuery.promise) {
         return;

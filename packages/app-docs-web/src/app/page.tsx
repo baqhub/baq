@@ -20,7 +20,7 @@ import {HomeHero} from "./home/homeHero.jsx";
 const Layout = tiwi(Column)`
   self-center
   w-full
-  max-w-screen-xl
+  max-w-(--breakpoint-xl)
   overflow-x-hidden
 
   pt-2

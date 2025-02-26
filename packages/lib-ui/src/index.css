@@ -1,0 +1,2 @@
+@import "tailwindcss" source("./");
+@import "../../lib-config-web/src/tailwind/base.css";

@@ -72,9 +72,10 @@ export async function generateStaticParams(): Promise<DocsPageParams[]> {
 
 const Docs = tiwi.div`
   self-center
+
   w-full
-  max-w-screen-2xl
   min-w-0
+  max-w-(--breakpoint-2xl)
 
   flex
   flex-row
@@ -83,8 +84,9 @@ const Docs = tiwi.div`
 const DocsCenter = tiwi.div`
   grow
   shrink
-  min-w-0
   relative
+
+  min-w-0
 
   flex
   flex-row
@@ -92,15 +94,16 @@ const DocsCenter = tiwi.div`
 `;
 
 const DocsContent = tiwi.div`
-  grow
   shrink
+  grow
   min-w-0
-  lg:max-w-3xl
 
-  pt-4
-  sm:pt-8
   px-6
+  pt-4
+
   sm:px-8
+  sm:pt-8
+  lg:max-w-3xl
   xl:px-12
 `;
 

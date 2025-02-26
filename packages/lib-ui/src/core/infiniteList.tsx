@@ -7,7 +7,7 @@ import {Column} from "./style.js";
 //
 
 interface InfiniteListProps extends PropsWithChildren {
-  root?: RefObject<Element>;
+  root?: RefObject<Element | null>;
   className?: string;
   top?: number;
   bottom?: number;

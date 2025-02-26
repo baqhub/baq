@@ -14,11 +14,11 @@
     "@baqhub/sdk": "*",
     "@baqhub/sdk-react": "*",
     "lodash": "4.17.21",
-    "react": "18.3.1"
+    "react": "19.0.0"
   },
   "devDependencies": {
-    "@types/lodash": "4.17.9",
-    "@types/react": "18.3.11",
-    "typescript": "5.5.2"
+    "@types/lodash": "4.17.15",
+    "@types/react": "19.0.10",
+    "typescript": "5.7.3"
   }
 }

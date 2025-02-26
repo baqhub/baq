@@ -1,0 +1,25 @@
+@import "./fonts.css" layer(base);
+@source "../../../lib-ui";
+
+@custom-variant dark (&:where(html.dark, html.dark *));
+@custom-variant aria-invalid (&[aria-invalid="true"]);
+@custom-variant hover {
+  @media (any-hover: hover) {
+    &:hover {
+      @slot;
+    }
+  }
+}
+@custom-variant group-hover {
+  &:is(:where(.group):hover *) {
+    @media (any-hover: hover) {
+      @slot;
+    }
+  }
+}
+
+@theme inline {
+  --font-sans:
+    "Inter var", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}

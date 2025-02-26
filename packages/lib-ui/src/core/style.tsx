@@ -25,7 +25,7 @@ export const ButtonRow = tiwi.button`
 
   select-none
   flex-row
-  outline-none
+  outline-hidden
 `;
 
 export const Grid = tiwi.div`

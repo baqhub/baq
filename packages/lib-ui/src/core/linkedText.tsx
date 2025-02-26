@@ -60,7 +60,7 @@ function stringToElements(
 
       if (typeof rendered === "string") {
         elements.push(rendered);
-      } else if (isValidElement(rendered)) {
+      } else if (isValidElement<Record<string, any>>(rendered)) {
         const key = findElementKey(params);
         const props = {key, ...rendered.props};
         elements.push(cloneElement(rendered, props));
@@ -77,7 +77,7 @@ function stringToElements(
 }
 
 function linkifyElement(
-  element: ReactElement,
+  element: ReactElement<any>,
   options: Options,
   params: LinkedTextParams
 ) {
