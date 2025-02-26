@@ -1,6 +1,6 @@
 {
   "name": "@baqhub/sdk-expo",
-  "version": "0.1.23",
+  "version": "0.1.27",
   "license": "MIT",
   "description": "The official Expo SDK for the BAQ federated app platform.",
   "author": "Baqhub",
@@ -40,9 +40,9 @@
     }
   },
   "dependencies": {
-    "@baqhub/sdk": "^0.1.23",
-    "@baqhub/sdk-react": "^0.1.23",
-    "@baqhub/sdk-react-native": "^0.1.23",
+    "@baqhub/sdk": "^0.1.27",
+    "@baqhub/sdk-react": "^0.1.27",
+    "@baqhub/sdk-react-native": "^0.1.27",
     "expo-secure-store": "^12.8.1",
     "tslib": "2.8.1"
   },
