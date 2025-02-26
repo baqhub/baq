@@ -1,29 +1,28 @@
-@import "fonts";
+@import "tailwindcss" source("..");
+@import "../../../lib-config-web/src/tailwind/base.css";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@layer base {
+  html {
+    /* Set the background color for iOS Safari UI. */
+    @apply h-full bg-white dark:bg-neutral-900;
+    overflow-y: scroll;
 
-html {
-  /* Set the background color for iOS Safari UI. */
-  @apply h-full bg-white dark:bg-neutral-900;
-  overflow-y: scroll;
-}
+    @variant dark {
+      color-scheme: dark;
+    }
+  }
 
-html.dark {
-  color-scheme: dark;
-}
+  body {
+    /* Set the background color for iOS Safari UI. */
+    @apply h-full bg-white dark:bg-neutral-900;
+    min-width: 320px;
+  }
 
-body {
-  /* Set the background color for iOS Safari UI. */
-  @apply h-full bg-white dark:bg-neutral-900;
-  min-width: 320px;
-}
+  #background {
+    @apply fixed -inset-y-80 w-full bg-white dark:bg-neutral-900;
+  }
 
-#background {
-  @apply fixed -inset-y-80 w-full bg-white dark:bg-neutral-900;
-}
-
-#root {
-  @apply relative h-full grid min-w-0 min-h-0;
+  #root {
+    @apply relative grid h-full min-h-0 min-w-0;
+  }
 }
