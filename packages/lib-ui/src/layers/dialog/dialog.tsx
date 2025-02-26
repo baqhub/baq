@@ -41,6 +41,7 @@ const Layout = tiwi.dialog`
 
 const ContentLayout = tiwi(Column)`
   h-full
+  max-h-full
   p-6
   sm:p-10
   items-center
@@ -89,7 +90,6 @@ export const Dialog: FC<DialogProps & PropsWithChildren> = props => {
     <Layout
       ref={dialogRef}
       inert={isUnderLayer}
-      className={isUnderLayer ? "no-scrollbars" : undefined}
       onClose={onClose}
       onClick={onRequestClose}
     >

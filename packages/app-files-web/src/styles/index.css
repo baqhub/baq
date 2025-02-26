@@ -18,8 +18,4 @@
   #root {
     @apply grid h-full min-w-0;
   }
-
-  .no-scrollbars *::-webkit-scrollbar {
-    display: none;
-  }
 }

@@ -22,10 +22,10 @@ const Layout = tiwi(Row)`
 `;
 
 const Icon = tiwi.div`
-  w-6
   h-6
-  text-neutral-500
+  w-6
   shrink-0
+  text-neutral-500
 `;
 
 const Label = tiwi(Text)`

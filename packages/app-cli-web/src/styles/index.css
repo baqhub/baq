@@ -6,7 +6,7 @@
 
 html,
 body {
-  @apply w-full h-full bg-neutral-200 dark:bg-neutral-900;
+  @apply h-full w-full bg-neutral-200 dark:bg-neutral-900;
 }
 
 html {
@@ -18,9 +18,5 @@ body {
 }
 
 #root {
-  @apply h-full min-w-0 grid;
-}
-
-.no-scrollbars *::-webkit-scrollbar {
-  display: none;
+  @apply grid h-full min-w-0;
 }
