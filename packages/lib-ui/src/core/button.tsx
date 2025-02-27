@@ -59,9 +59,9 @@ const StyledButton = tiwi(ButtonRow)<UISize | ButtonVariant>`
 
   text-sm
   text-neutral-900
-  disabled:text-opacity-60
+  disabled:text-neutral-900/60
   dark:text-white
-  dark:disabled:text-opacity-80
+  dark:disabled:text-white/80
 
   ${{
     primary: `
@@ -100,13 +100,21 @@ export const Button: FC<ButtonProps> = props => {
     });
   }, [shouldAutofocus]);
 
+  const onButtonClick = () => {
+    if (isDisabled) {
+      return;
+    }
+
+    onClick();
+  };
+
   return (
     <StyledButton
       ref={componentRef}
       variants={[size, variant]}
       type="button"
       disabled={isDisabled}
-      onClick={onClick}
+      onClick={onButtonClick}
     >
       {children}
     </StyledButton>

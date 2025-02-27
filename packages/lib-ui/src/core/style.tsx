@@ -16,8 +16,8 @@ export const FormColumn = tiwi.form`
 
 export const Row = tiwi.div`
   flex
-  min-w-0
   flex-row
+  min-w-0
 `;
 
 export const ButtonRow = tiwi.button`
