@@ -26,8 +26,8 @@ const PreviousItemButtonText = tiwi(PreviousItemText)`
 `;
 
 const Separator = tiwi.div`
-  w-6
   h-6
+  w-6
   text-neutral-600
 `;
 

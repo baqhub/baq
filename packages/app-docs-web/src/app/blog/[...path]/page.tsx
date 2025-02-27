@@ -58,16 +58,16 @@ export async function generateStaticParams(): Promise<BlogPostPageParams[]> {
 const Layout = tiwi(Column)`
   self-center
   w-full
-  max-w-screen-sm
+  max-w-(--breakpoint-sm)
   min-w-0
 `;
 
 const PostContent = tiwi.div`
   min-w-0
-  pt-2
-  sm:pt-9
   px-6
+  pt-2
   sm:px-8
+  sm:pt-9
   md:px-0
 `;
 
@@ -152,7 +152,7 @@ const BlogPostPage: FC<BlogPostPageProps> = async ({params}) => {
   const {path} = params;
   const post = findBlogPost(path?.join("/"));
 
-  const headers = findHeaders(<post.Component components={components} />);
+  const headers = await findHeaders(<post.Component components={components} />);
   const toc = <Toc headers={headers} />;
 
   return (

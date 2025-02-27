@@ -26,16 +26,12 @@ const Layout = tiwi(ButtonRow)<IconButtonVariant>`
   p-1.5
 
   disabled:opacity-90
-  enabled:any-hover:hover:bg-neutral-900/5
+  enabled:hover:bg-neutral-900/5
   enabled:active:bg-neutral-900/10
-  enabled:any-hover:active:bg-neutral-900/10
   enabled:aria-expanded:bg-neutral-900/10
-  enabled:any-hover:aria-expanded:bg-neutral-900/10
-  dark:enabled:any-hover:hover:bg-white/5
+  dark:enabled:hover:bg-white/5
   dark:enabled:active:bg-white/10
-  dark:enabled:any-hover:active:bg-white/10
   dark:enabled:aria-expanded:bg-white/10
-  dark:enabled:any-hover:aria-expanded:bg-white/10
 
   rounded-lg
   ${{
@@ -44,7 +40,8 @@ const Layout = tiwi(ButtonRow)<IconButtonVariant>`
 
   text-neutral-900
   dark:text-white
-  disabled:text-opacity-60
+  disabled:text-neutral-900/60
+  dark:disabled:text-white/60
 `;
 
 const Content = tiwi.div<UISize>`
@@ -61,6 +58,15 @@ const Content = tiwi.div<UISize>`
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
   (props, ref) => {
     const {size, variant, isDisabled, isPressed, onClick, children} = props;
+
+    const onButtonClick = () => {
+      if (isDisabled) {
+        return;
+      }
+
+      onClick();
+    };
+
     return (
       <Layout
         ref={ref}
@@ -68,7 +74,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         disabled={isDisabled}
         variants={variant}
         aria-expanded={isPressed}
-        onClick={onClick}
+        onClick={onButtonClick}
       >
         <Content variants={size}>{children}</Content>
       </Layout>

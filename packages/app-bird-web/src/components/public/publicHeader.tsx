@@ -26,12 +26,10 @@ const BackLink = tiwi(Link)`
   p-4
 
   rounded-full
-  any-hover:hover:bg-neutral-300
-  dark:any-hover:hover:bg-neutral-800
+  hover:bg-neutral-300
+  dark:hover:bg-neutral-800
   active:bg-neutral-400
-  any-hover:active:bg-neutral-400
   dark:active:bg-neutral-700
-  dark:any-hover:active:bg-neutral-700
 ` as typeof Link;
 
 const Icon = tiwi.div`

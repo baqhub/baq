@@ -2,6 +2,7 @@ import {AbortedError} from "@baqhub/sdk";
 import isEqual from "lodash/isEqual.js";
 import {
   DependencyList,
+  JSX,
   ReactNode,
   useCallback,
   useEffect,
@@ -10,7 +11,7 @@ import {
 } from "react";
 
 export function useConstant<T>(builder: () => T) {
-  const valueRef = useRef<T>();
+  const valueRef = useRef<T>(undefined);
 
   if (!valueRef.current) {
     valueRef.current = builder();
@@ -42,7 +43,7 @@ export function useDeepMemo<TValue>(
   memoFn: () => TValue,
   key: unknown
 ): TValue {
-  const value = useRef<{key: unknown; value: TValue}>();
+  const value = useRef<{key: unknown; value: TValue}>(undefined);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const result =
@@ -89,7 +90,7 @@ export function useAbortable(
 }
 
 export function useUnmountSignal() {
-  const abortRef = useRef<AbortController>();
+  const abortRef = useRef<AbortController>(undefined);
   const abort = (() => {
     const currentAbort = abortRef.current;
     if (currentAbort && !currentAbort.signal.aborted) {

@@ -1,28 +1,61 @@
-@import "code";
-@import "docsearch";
+@import "tailwindcss" source("../..");
+@import "./code.css" layer(components);
+@import "./docsearch.css";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@source "../../../../lib-ui";
 
-html {
-  /* Set the background color for iOS Safari UI. */
-  @apply h-full bg-white dark:bg-zinc-800;
-  overflow-y: scroll;
+@custom-variant dark (&:where(html.dark, html.dark *));
+@custom-variant aria-invalid (&[aria-invalid="true"]);
+@custom-variant hover {
+  @media (any-hover: hover) {
+    &:hover {
+      @slot;
+    }
+  }
+}
+@custom-variant group-hover {
+  @media (any-hover: hover) {
+    &:is(:where(.group):hover *) {
+      @slot;
+    }
+  }
 }
 
-html.dark {
-  color-scheme: dark;
+@custom-variant active (&:active);
+@custom-variant group-active (&:is(:where(.group):active *));
+
+@theme inline {
+  --font-sans:
+    var(--font-inter), ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono:
+    var(--font-firacode), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-mdp: 58rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 75rem;
+  --breakpoint-2xl: 96rem;
 }
 
-body {
-  /* Set the background color for iOS Safari UI. */
-  @apply h-full bg-white dark:bg-zinc-800;
-  min-width: 320px;
+@utility ligatures-none {
+  font-variant-ligatures: none;
 }
 
-@layer utilities {
-  .ligatures-none {
-    font-variant-ligatures: none;
+@layer base {
+  html {
+    /* Set the background color for iOS Safari UI. */
+    @apply h-full overflow-y-scroll bg-white dark:bg-zinc-800;
+
+    @variant dark {
+      @apply scheme-dark;
+    }
+  }
+
+  body {
+    /* Set the background color for iOS Safari UI. */
+    @apply h-full min-w-80 bg-white dark:bg-zinc-800;
   }
 }

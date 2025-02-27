@@ -36,17 +36,15 @@ const SubPageLayout = tiwi(Column)`
   border-zinc-200
   dark:border-zinc-700
 
-  any-hover:group-hover:bg-zinc-50
+  group-hover:bg-zinc-50
   group-active:bg-zinc-100
-  any-hover:group-active:bg-zinc-100
-  dark:any-hover:group-hover:bg-zinc-700
+  dark:group-hover:bg-zinc-700
   dark:group-active:bg-zinc-600
-  dark:any-hover:group-active:bg-zinc-600
 `;
 
 const Title = tiwi.div`
-  font-medium
   text-xl
+  font-medium
   text-amber-700
   dark:text-amber-500
 `;
@@ -54,8 +52,10 @@ const Title = tiwi.div`
 const Summary = tiwi.div`
   h-12
   sm:h-auto
+
   line-clamp-2
   sm:line-clamp-1
+
   text-zinc-900
   dark:text-white
 `;

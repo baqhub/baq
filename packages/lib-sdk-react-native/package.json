@@ -1,6 +1,6 @@
 {
   "name": "@baqhub/sdk-react-native",
-  "version": "0.1.23",
+  "version": "0.1.27",
   "license": "MIT",
   "description": "The official React Native SDK for the BAQ federated app platform.",
   "author": "Baqhub",
@@ -39,8 +39,8 @@
     }
   },
   "dependencies": {
-    "@baqhub/sdk": "^0.1.23",
-    "@baqhub/sdk-react": "^0.1.23",
+    "@baqhub/sdk": "^0.1.27",
+    "@baqhub/sdk-react": "^0.1.27",
     "@react-native-async-storage/async-storage": "^1.21.0",
     "base-64": "^1.0.0",
     "react-native-fetch-api": "^3.0.0",
@@ -52,11 +52,13 @@
     "web-streams-polyfill": "^3.3.3"
   },
   "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0 || ^19.0.0",
     "react-native": ">=0.60"
   },
   "devDependencies": {
-    "@types/node": "22.10.7",
+    "@types/node": "22.13.5",
+    "react": "^19.0.0",
     "tsconfig-to-dual-package": "1.2.0",
-    "typescript": "5.5.2"
+    "typescript": "5.7.3"
   }
 }

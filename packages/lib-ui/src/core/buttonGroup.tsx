@@ -31,8 +31,8 @@ const InlineBlock = tiwi.div`
 
 const Grid = tiwi.div`
   grid
-  auto-cols-fr
   grid-flow-col
+  auto-cols-fr
   gap-3
 `;
 

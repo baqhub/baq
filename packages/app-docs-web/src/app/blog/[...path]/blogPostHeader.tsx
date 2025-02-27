@@ -137,8 +137,8 @@ const PostImage = tiwi.div`
   sm:rounded-lg
   overflow-hidden
   [&_>_img]:w-full
-  [&_>_img]:group-hover:scale-105
-  [&_>_img]:group-hover:opacity-100
+  group-hover:[&_>_img]:scale-105
+  group-hover:[&_>_img]:opacity-100
   [&_>_img]:transition-[transform,opacity]
   [&_>_img]:duration-150
   [&_>_img]:opacity-90

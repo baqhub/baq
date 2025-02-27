@@ -27,10 +27,7 @@ export const LayerManager: FC<PropsWithChildren> = ({children}) => {
   );
 
   return (
-    <Grid
-      inert={hasLayer ? "" : undefined}
-      className={hasLayer ? "no-scrollbars" : undefined}
-    >
+    <Grid inert={hasLayer}>
       <LayerContextProvider value={context}>{children}</LayerContextProvider>
     </Grid>
   );

@@ -2,36 +2,36 @@ import tiwi from "tiwi";
 
 export const Column = tiwi.div`
   flex
-  min-w-0
   flex-col
+  min-w-0
 `;
 
 export const FormColumn = tiwi.form`
   flex
-  min-w-0
   flex-col
+  min-w-0
 `;
 
 export const Row = tiwi.div`
   flex
-  min-w-0
   flex-row
+  min-w-0
 `;
 
 export const ButtonRow = tiwi.button`
   flex
+  flex-row
   min-w-0
-  cursor-default
 
   select-none
-  flex-row
-  outline-none
+  outline-hidden
+  cursor-default
 `;
 
 export const Grid = tiwi.div`
   grid
-  min-h-0
   min-w-0
+  min-h-0
   grid-cols-[1fr]
   grid-rows-[1fr]
 `;
@@ -44,11 +44,11 @@ export const FormGrid = tiwi.form`
 `;
 
 export const Text = tiwi.div`
-  cursor-default
-  select-none
   text-sm
   text-neutral-900
   dark:text-white
+  cursor-default
+  select-none
 `;
 
 export const TextSelect = tiwi(Text)`
@@ -60,9 +60,10 @@ export const Link = tiwi.a`
   select-none
   text-sm
   text-neutral-900
-  underline-offset-2
-  hover:underline
   dark:text-white
+
+  hover:underline
+  underline-offset-2
 `;
 
 export const Bold = tiwi.span`

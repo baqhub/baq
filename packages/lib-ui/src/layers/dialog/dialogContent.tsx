@@ -7,6 +7,7 @@ import {Column} from "../../core/style.js";
 //
 
 const Layout = tiwi(Column)`
+  min-h-0
   p-6
 
   rounded-xl

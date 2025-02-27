@@ -11,14 +11,13 @@ import {appRoute} from "./components/app.js";
 import {feedRoute} from "./components/feedPage/feedPage.js";
 import {mentionsRoute} from "./components/mentionsPage/mentionsPage.js";
 import {profileRoute} from "./components/profilePage/profilePage.js";
-import {RootLayout} from "./components/rootLayout.js";
 import "./styles/index.css";
 
 //
 // Routing.
 //
 
-export const rootRoute = createRootRoute({component: RootLayout});
+export const rootRoute = createRootRoute();
 
 const publicLayoutRoute = createRoute({
   id: "public",
@@ -66,6 +65,7 @@ const routeTree = rootRoute.addChildren([
 const router = createRouter({
   routeTree,
   defaultPreload: "intent",
+  scrollRestoration: true,
 });
 
 declare module "@tanstack/react-router" {

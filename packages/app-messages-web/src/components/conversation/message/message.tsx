@@ -33,14 +33,14 @@ const LayoutBase = tiwi(Row)`
 `;
 
 const SelfLayout = tiwi(LayoutBase)`
-  peer/self
-  adjacent-peer/remote:pt-3
+  peer-self
+  [.peer-remote_+_&]:pt-3
   flex-row-reverse
 `;
 
 const RemoteLayout = tiwi(LayoutBase)`
-  peer/remote
-  adjacent-peer/self:pt-3
+  peer-remote
+  [.peer-self_+_&]:pt-3
 `;
 
 const MessageBase = tiwi(Column)`
@@ -48,12 +48,10 @@ const MessageBase = tiwi(Column)`
 `;
 
 const SelfMessage = tiwi(MessageBase)`
-  peer/self
   bg-amber-300
 `;
 
 const RemoteMessage = tiwi(MessageBase)`
-  peer/remote
   bg-white
 `;
 
