@@ -40,7 +40,8 @@ const Layout = tiwi(ButtonRow)<IconButtonVariant>`
 
   text-neutral-900
   dark:text-white
-  disabled:text-opacity-60
+  disabled:text-neutral-900/60
+  dark:disabled:text-white/60
 `;
 
 const Content = tiwi.div<UISize>`
@@ -57,6 +58,15 @@ const Content = tiwi.div<UISize>`
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
   (props, ref) => {
     const {size, variant, isDisabled, isPressed, onClick, children} = props;
+
+    const onButtonClick = () => {
+      if (isDisabled) {
+        return;
+      }
+
+      onClick();
+    };
+
     return (
       <Layout
         ref={ref}
@@ -64,7 +74,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         disabled={isDisabled}
         variants={variant}
         aria-expanded={isPressed}
-        onClick={onClick}
+        onClick={onButtonClick}
       >
         <Content variants={size}>{children}</Content>
       </Layout>

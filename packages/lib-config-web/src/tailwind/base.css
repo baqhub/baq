@@ -4,15 +4,15 @@
 @custom-variant dark (&:where(html.dark, html.dark *));
 @custom-variant aria-invalid (&[aria-invalid="true"]);
 @custom-variant hover {
-  @media (any-hover: hover) {
-    &:hover {
+  &:hover {
+    @media (any-hover: hover) {
       @slot;
     }
   }
 }
 @custom-variant group-hover {
-  @media (any-hover: hover) {
-    &:is(:where(.group):hover *) {
+  &:is(:where(.group):hover *) {
+    @media (any-hover: hover) {
       @slot;
     }
   }
