@@ -3,7 +3,7 @@ import compact from "lodash/compact.js";
 import {Constants} from "../constants.js";
 import {AbortedError, Async} from "../helpers/async.js";
 import {ErrorWithData} from "../helpers/customError.js";
-import {findLink} from "../helpers/headers.js";
+import {Headers} from "../helpers/headers.js";
 import * as IO from "../helpers/io.js";
 import {Str} from "../helpers/string.js";
 import {findStableTimestamp} from "../helpers/time.js";
@@ -426,12 +426,12 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     return r;
   }
 
-  async function downloadBlob(
+  async function getBlobUrl(
     record: AnyRecord,
     blob: AnyBlobLink,
     signal?: AbortSignal
   ) {
-    const url = await expandUrlTemplate(
+    return await expandUrlTemplate(
       "recordBlob",
       {
         entity: record.author.entity,
@@ -441,7 +441,14 @@ function buildClientBase(clientOptions: BuildClientOptions) {
       },
       signal
     );
+  }
 
+  async function downloadBlob(
+    record: AnyRecord,
+    blob: AnyBlobLink,
+    signal?: AbortSignal
+  ) {
+    const url = await getBlobUrl(record, blob, signal);
     const isProxyRecord = record.source === "proxy";
     const query = isProxyRecord ? {proxyTo: record.author.entity} : undefined;
 
@@ -527,6 +534,7 @@ function buildClientBase(clientOptions: BuildClientOptions) {
     deleteRecord,
     discover,
     uploadBlob,
+    getBlobUrl,
     downloadBlob,
     blobUrlBuilderFor,
     blobUrlBuilder,
@@ -551,9 +559,9 @@ async function getEntityRecordFromEntityRecordUrl(
 async function getEntityRecordFromEntity(entity: string, signal: AbortSignal) {
   // Perform discovery.
   const headers = await Http.head(fixDiscoverUrl(`https://${entity}/`));
-  const entityRecordLink = findLink(
+  const entityRecordLink = Headers.findLink(
     headers,
-    "https://baq.dev/rels/entity-record"
+    Constants.discoveryLinkRel
   );
 
   if (!entityRecordLink) {
