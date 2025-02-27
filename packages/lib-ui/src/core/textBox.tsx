@@ -15,12 +15,20 @@ import {UISize} from "./style.js";
 // Props.
 //
 
-type TextBoxVariant = "normal" | "email" | "entity" | "handle" | "password";
+export type TextBoxVariant =
+  | "normal"
+  | "email"
+  | "entity"
+  | "phone"
+  | "handle"
+  | "password"
+  | "otc";
 
 interface TextBoxProps {
   size?: UISize;
   variant?: TextBoxVariant;
   shouldAutofocus?: boolean;
+  shouldAutofocusTransition?: boolean;
   placeholder?: string;
   maxLength?: number;
   isReadonly?: boolean;
@@ -103,12 +111,24 @@ function buildVariantProps(
       return {};
 
     case "email":
-      return {};
+      return {
+        type: "email",
+        autoComplete: "email",
+        autoCapitalize: "off",
+      };
 
     case "entity":
       return {
         autoComplete: "off",
         autoCapitalize: "off",
+      };
+
+    case "phone":
+      return {
+        type: "tel",
+        autoComplete: "tel",
+        autoCapitalize: "off",
+        maxLength: 20,
       };
 
     case "handle":
@@ -124,6 +144,29 @@ function buildVariantProps(
         autoCapitalize: "off",
       };
 
+    case "otc": {
+      const props: InputHTMLAttributes<HTMLInputElement> = {
+        inputMode: "numeric",
+        autoComplete: "one-time-code",
+        autoCapitalize: "off",
+        pattern: "[0-9]{6}",
+        className: `
+          slashed-zero
+          tabular-nums
+          w-[74px]
+        `,
+      };
+
+      return {
+        ...props,
+        // Disable password managers for SMS codes.
+        "data-1p-ignore": true, // 1Password.
+        "data-lpignore": true, // LastPass.
+        "data-bwignore": true, // BitWarden.
+        "data-form-type": "other", // Dashlane.
+      } as any;
+    }
+
     default:
       return unreachable(variant);
   }
@@ -131,7 +174,8 @@ function buildVariantProps(
 
 export const TextBox = forwardRef<HTMLInputElement, TextBoxProps>(
   (props, ref) => {
-    const {size, shouldAutofocus, placeholder, maxLength} = props;
+    const {size, placeholder, maxLength} = props;
+    const {shouldAutofocus, shouldAutofocusTransition} = props;
     const {isReadonly, isDisabled, isInvalid, isSelected} = props;
     const {value, onChange, onFocus, onBlur} = props;
     const variant = props.variant || "normal";
@@ -145,6 +189,19 @@ export const TextBox = forwardRef<HTMLInputElement, TextBoxProps>(
       },
       [onChange]
     );
+
+    useEffect(() => {
+      const currentInput = inputRef.current;
+      if (shouldAutofocusTransition === undefined || !currentInput) {
+        return;
+      }
+
+      if (shouldAutofocusTransition) {
+        currentInput.focus({preventScroll: true});
+      } else {
+        currentInput.blur();
+      }
+    }, [shouldAutofocusTransition, isReadonly]);
 
     useEffect(() => {
       const currentInput = inputRef.current;

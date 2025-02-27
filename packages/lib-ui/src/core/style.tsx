@@ -1,15 +1,17 @@
+import {FC} from "@baqhub/sdk-react";
+import {ComponentProps, useLayoutEffect, useRef} from "react";
 import tiwi from "tiwi";
 
 export const Column = tiwi.div`
   flex
-  min-w-0
   flex-col
+  min-w-0
 `;
 
 export const FormColumn = tiwi.form`
   flex
-  min-w-0
   flex-col
+  min-w-0
 `;
 
 export const Row = tiwi.div`
@@ -20,18 +22,18 @@ export const Row = tiwi.div`
 
 export const ButtonRow = tiwi.button`
   flex
+  flex-row
   min-w-0
-  cursor-default
 
   select-none
-  flex-row
   outline-hidden
+  cursor-default
 `;
 
 export const Grid = tiwi.div`
   grid
-  min-h-0
   min-w-0
+  min-h-0
   grid-cols-[1fr]
   grid-rows-[1fr]
 `;
@@ -44,11 +46,11 @@ export const FormGrid = tiwi.form`
 `;
 
 export const Text = tiwi.div`
-  cursor-default
-  select-none
   text-sm
   text-neutral-900
   dark:text-white
+  cursor-default
+  select-none
 `;
 
 export const TextSelect = tiwi(Text)`
@@ -60,9 +62,10 @@ export const Link = tiwi.a`
   select-none
   text-sm
   text-neutral-900
-  underline-offset-2
-  hover:underline
   dark:text-white
+
+  hover:underline
+  underline-offset-2
 `;
 
 export const Bold = tiwi.span`
@@ -74,3 +77,31 @@ export const SemiBold = tiwi.span`
 `;
 
 export type UISize = "small" | "medium" | "large";
+
+export const ShrinkWrapText: FC<ComponentProps<typeof Text>> = props => {
+  const textRef = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const currentText = textRef.current;
+    if (!currentText) {
+      return;
+    }
+
+    const {firstChild, lastChild} = currentText;
+    if (!firstChild || !lastChild) {
+      return;
+    }
+
+    const range = document.createRange();
+    range.setStartBefore(firstChild);
+    range.setEndAfter(lastChild);
+
+    const {width} = range.getBoundingClientRect();
+    currentText.style.width = width + "px";
+
+    return () => {
+      currentText.style.width = "";
+    };
+  }, []);
+
+  return <Text ref={textRef} {...props} />;
+};

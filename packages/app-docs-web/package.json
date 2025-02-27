@@ -48,7 +48,7 @@
     "autoprefixer": "10.4.20",
     "chokidar": "4.0.3",
     "concurrently": "9.1.2",
-    "eslint": "8.57.0",
+    "eslint": "8.57.1",
     "postcss": "8.5.3",
     "rehype-prism-plus": "2.0.0",
     "remark-smartypants": "3.0.2",
