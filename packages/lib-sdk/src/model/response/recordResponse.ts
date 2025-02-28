@@ -25,6 +25,8 @@ export interface RecordResponse<K extends AnyRecord, T extends AnyEventRecord> {
   linkedRecords: ReadonlyArray<K>;
 }
 
+export type AnyRecordResponse = RecordResponse<AnyRecord, AnyRecord>;
+
 export const RecordResponse = {
   io: recordResponse,
 };

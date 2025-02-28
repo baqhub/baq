@@ -1,5 +1,5 @@
 import {Hash, isDefined, RecordPermissions} from "@baqhub/sdk";
-import {BlobFromRequest} from "@baqhub/server";
+import {BlobFromBuilder} from "@baqhub/server";
 import {Note} from "@fedify/fedify";
 import {Document} from "@fedify/fedify/vocab";
 import {stripHtml} from "string-strip-html";
@@ -10,7 +10,7 @@ const imageMediaTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
 export async function noteToPostRecord(
   env: Env,
-  blobFromRequest: BlobFromRequest,
+  blobFromRequest: BlobFromBuilder,
   entity: string,
   note: Note
 ): Promise<PostRecord | undefined> {

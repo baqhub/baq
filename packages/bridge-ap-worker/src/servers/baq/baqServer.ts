@@ -1,6 +1,6 @@
 import {Hash, isDefined, Q, Query} from "@baqhub/sdk";
 import {
-  BlobRequest,
+  BlobBuilder,
   EntityRequestHandler,
   RecordBuilder,
   RecordsRequestHandler,
@@ -146,7 +146,7 @@ function ofEnv(env: Env) {
       username: preferredUsername,
     };
 
-    const avatar = await (async (): Promise<BlobRequest | undefined> => {
+    const avatar = await (async (): Promise<BlobBuilder | undefined> => {
       const icon = await actor.getIcon();
       if (!icon) {
         return undefined;
@@ -170,7 +170,7 @@ function ofEnv(env: Env) {
   };
 
   const onRecordsRequest: RecordsRequestHandler = async c => {
-    const {pod, query, blobFromRequest} = c;
+    const {pod, query, blobFromBuilder} = c;
 
     // Only serve post record queries.
     const postRecordQuery = Query.new({
@@ -223,7 +223,7 @@ function ofEnv(env: Env) {
         const versionPublished = note.updated || note.published;
 
         const build = async () => {
-          return noteToPostRecord(env, blobFromRequest, pod.entity, note);
+          return noteToPostRecord(env, blobFromBuilder, pod.entity, note);
         };
 
         yield {

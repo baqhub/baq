@@ -1,4 +1,4 @@
-import {BlobRequest} from "@baqhub/server";
+import {BlobBuilder} from "@baqhub/server";
 import {Document, Image} from "@fedify/fedify/vocab";
 
 const avatarMaxSize = 262144;
@@ -131,7 +131,7 @@ async function fetchImage(env: Env, request: ImageRequest) {
 export function avatarToBlobRequest(
   env: Env,
   icon: Image
-): BlobRequest | undefined {
+): BlobBuilder | undefined {
   const {url, mediaType} = icon;
 
   const fileName = (() => {
@@ -193,7 +193,7 @@ export function postImageToBlobRequests(
     startWidth: number,
     startHeight: number,
     suffix: string
-  ): BlobRequest => {
+  ): BlobBuilder => {
     const getBlob = async () => {
       const stream = await fetchImage(env, {
         url,

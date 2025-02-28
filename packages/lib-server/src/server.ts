@@ -1,6 +1,7 @@
 import {
   AnyBlobLink,
   AnyRecord,
+  AnyRecordResponse,
   EntityRecord,
   EntityRecordSigningKey,
   Headers,
@@ -39,7 +40,7 @@ interface BlobRequestBlob {
   stream: ReadableStream;
 }
 
-export interface BlobRequest {
+export interface BlobBuilder {
   fileName: string;
   context: unknown;
   getBlob: () => Promise<BlobRequestBlob | undefined>;
@@ -51,7 +52,7 @@ export interface EntityRequestResult {
   name: string | undefined;
   bio: string | undefined;
   website: string | undefined;
-  avatar: BlobRequest | undefined;
+  avatar: BlobBuilder | undefined;
   createdAt: Date | undefined;
   context?: unknown;
 }
@@ -65,23 +66,26 @@ export interface RecordBuilder {
   createdAt: Date;
   versionCreatedAt: Date;
   type: RAnyRecord;
-  build: () => Promise<AnyRecord | undefined>;
+  build: () => Promise<AnyRecordResponse | undefined>;
 }
 
-export interface BlobFromRequestResult {
+export interface BlobFromBuilderResult {
   type: string;
   size: number;
   link: AnyBlobLink;
 }
 
-export type BlobFromRequest = (
-  request: BlobRequest
-) => Promise<BlobFromRequestResult | undefined>;
+export type BlobFromBuilder = (
+  builder: BlobBuilder
+) => Promise<BlobFromBuilderResult | undefined>;
+
+export type RecordFromBuilder = (builder: RecordBuilder) => Promise<AnyRecord>;
 
 export interface RecordsRequestContext {
   pod: Pod;
   query: Query<AnyRecord>;
-  blobFromRequest: BlobFromRequest;
+  blobFromBuilder: BlobFromBuilder;
+  recordFromBuilder: RecordFromBuilder;
 }
 
 export interface RecordsRequestResult {
@@ -156,8 +160,8 @@ function buildServer(config: ServerConfig) {
   }
 
   async function resolveBlobFromRequest(
-    request: BlobRequest
-  ): Promise<BlobFromRequestResult | undefined> {
+    request: BlobBuilder
+  ): Promise<BlobFromBuilderResult | undefined> {
     // Upload the stream.
     const blobUpload = BlobUpload.new();
     await kvBlobUploads.set(blobUpload);
@@ -571,7 +575,7 @@ function buildServer(config: ServerConfig) {
     const context: RecordsRequestContext = {
       pod,
       query,
-      blobFromRequest: resolveBlobFromRequest,
+      blobFromBuilder: resolveBlobFromRequest,
     };
 
     const {builders} = await onRecordsRequest(context);

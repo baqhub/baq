@@ -1,4 +1,4 @@
-import {KvKey, KvStoreAdapter} from "@baqhub/server";
+import {KvKey, KvStoreAdapter, KvTypedStoreAdapter} from "@baqhub/server";
 import {getLogger} from "@logtape/logtape";
 
 const logger = getLogger(["bridge", "cloudflare-kv"]);
@@ -44,6 +44,12 @@ function ofNamespace(
   };
 }
 
+function typedOfNamespace(kv: KVNamespace, prefix: ReadonlyArray<string> = []) {
+  const adapter = ofNamespace(kv, prefix);
+  return KvTypedStoreAdapter.ofStoreAdapter(adapter);
+}
+
 export const CloudflareKv = {
   ofNamespace,
+  typedOfNamespace,
 };
