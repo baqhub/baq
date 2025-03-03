@@ -12,4 +12,5 @@ function shortHashString(value: string) {
 export const Hash = {
   hash: hashString,
   shortHash: shortHashString,
+  bytesToHex,
 };
