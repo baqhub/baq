@@ -6,11 +6,14 @@ import {
   LoggerConfig,
   LogLevel,
 } from "@logtape/logtape";
-import {Constants} from "./helpers/constants";
-import {lazy} from "./helpers/lazy";
-import {Responses} from "./helpers/responses";
-import {ApServer} from "./servers/ap/apServer";
-import {BaqServer} from "./servers/baq/baqServer";
+import {Constants} from "./helpers/constants.js";
+import {lazy} from "./helpers/lazy.js";
+import {Responses} from "./helpers/responses.js";
+import {ApServer} from "./servers/ap/apServer.js";
+import {BaqServer} from "./servers/baq/baqServer.js";
+
+export {BaqPodMappingObject} from "./servers/baq/baqPodMappingObject.js";
+export {BaqPodObject} from "./servers/baq/baqPodObject.js";
 
 //
 // Shared resources.

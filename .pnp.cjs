@@ -3264,6 +3264,7 @@ const RAW_RUNTIME_STATE =
           ]],\
           ["@vitest/runner", "npm:3.0.7"],\
           ["@vitest/snapshot", "npm:3.0.7"],\
+          ["hono", "npm:4.7.2"],\
           ["linkifyjs", "npm:4.2.0"],\
           ["string-strip-html", "npm:13.4.8"],\
           ["temporal-polyfill", "npm:0.2.5"],\

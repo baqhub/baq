@@ -36,12 +36,12 @@ function ofStorage(storage: DurableObjectStorage): KvStoreAdapter {
   };
 }
 
-function typedOfStorage(storage: DurableObjectStorage) {
+function ofStorageTyped(storage: DurableObjectStorage) {
   const adapter = ofStorage(storage);
   return KvTypedStoreAdapter.ofStoreAdapter(adapter);
 }
 
 export const CloudflareDurableKv = {
   ofStorage,
-  typedOfStorage,
+  ofStorageTyped,
 };

@@ -36,6 +36,7 @@
     "@baqhub/server": "*",
     "@fedify/fedify": "npm:@jsr/fedify__fedify@1.2.6",
     "@logtape/logtape": "npm:@jsr/logtape__logtape@0.8.0",
+    "hono": "4.7.2",
     "linkifyjs": "4.2.0",
     "string-strip-html": "13.4.8",
     "temporal-polyfill": "0.2.5",

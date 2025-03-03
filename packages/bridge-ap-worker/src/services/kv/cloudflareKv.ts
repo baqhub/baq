@@ -44,12 +44,12 @@ function ofNamespace(
   };
 }
 
-function typedOfNamespace(kv: KVNamespace, prefix: ReadonlyArray<string> = []) {
+function ofNamespaceTyped(kv: KVNamespace, prefix: ReadonlyArray<string> = []) {
   const adapter = ofNamespace(kv, prefix);
   return KvTypedStoreAdapter.ofStoreAdapter(adapter);
 }
 
 export const CloudflareKv = {
   ofNamespace,
-  typedOfNamespace,
+  ofNamespaceTyped,
 };

@@ -6,7 +6,7 @@ export const PodKeyPair = IO.object({
   privateKey: IO.base64Bytes,
 });
 
-export const Pod = IO.object({
+export const RPod = IO.object({
   id: IO.string,
   entity: IO.string,
   keyPairs: IO.readonlyArray(PodKeyPair),
@@ -15,4 +15,8 @@ export const Pod = IO.object({
   updatedAt: IO.isoDate,
 });
 
-export interface Pod extends IO.TypeOf<typeof Pod> {}
+export interface Pod extends IO.TypeOf<typeof RPod> {}
+
+export const Pod = {
+  io: RPod,
+};

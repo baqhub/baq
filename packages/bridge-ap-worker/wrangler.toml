@@ -19,8 +19,16 @@ enabled = true
 # Durable Objects can live for as long as needed. Use these when you need a long-running "server", such as in realtime apps.
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#durable-objects
 [[durable_objects.bindings]]
+name = "BAQ_POD_MAPPING_OBJECT"
+class_name = "BaqPodMappingObject"
+
+[[durable_objects.bindings]]
 name = "BAQ_POD_OBJECT"
 class_name = "BaqPodObject"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["BaqPodMappingObject", "BaqPodObject"]
 
 # Bind a KV Namespace. Use KV as persistent storage for small key-value pairs.
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#kv-namespaces
