@@ -77,8 +77,8 @@ function buildResolver(config: ResolverConfig) {
   const kvCachedBlobs = KvCachedBlobs.new(globalKvStoreAdapter);
   const kvCachedRecords = KvCachedRecords.new(podKvStoreAdapter);
 
-  async function resolveBlobFromRequest(
-    request: BlobBuilder
+  async function blobFromBuilder(
+    builder: BlobBuilder
   ): Promise<BlobFromBuilderResult | undefined> {
     // Upload the stream.
     const blobUpload = BlobUpload.new();
@@ -86,7 +86,7 @@ function buildResolver(config: ResolverConfig) {
 
     // We want to start the request after setting the BlobUpload
     // otherwise we might deadlock requests in envs with request limits.
-    const requestBlob = await request.getBlob();
+    const requestBlob = await builder.getBlob();
     if (!requestBlob) {
       return undefined;
     }
@@ -112,7 +112,7 @@ function buildResolver(config: ResolverConfig) {
         link: {
           hash: existingBlob.hash,
           type: requestBlob.type,
-          name: request.fileName,
+          name: builder.fileName,
         },
       };
     }
@@ -122,9 +122,9 @@ function buildResolver(config: ResolverConfig) {
       id: blobUpload.id,
       hash,
       size: blobObject.size,
-      firstFileName: request.fileName,
+      firstFileName: builder.fileName,
       firstType: requestBlob.type,
-      context: request.context,
+      context: builder.context,
       createdAt: new Date(),
     };
 
@@ -137,7 +137,7 @@ function buildResolver(config: ResolverConfig) {
       link: {
         hash: newBlob.hash,
         type: requestBlob.type,
-        name: request.fileName,
+        name: builder.fileName,
       },
     };
   }
@@ -149,7 +149,7 @@ function buildResolver(config: ResolverConfig) {
         return undefined;
       }
 
-      const result = await resolveBlobFromRequest(avatar);
+      const result = await blobFromBuilder(avatar);
       if (!result) {
         return undefined;
       }
@@ -213,7 +213,7 @@ function buildResolver(config: ResolverConfig) {
   }
 
   return {
-    resolveBlobFromRequest,
+    blobFromBuilder,
     saveEntityRecord,
   };
 }

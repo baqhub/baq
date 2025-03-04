@@ -1,5 +1,4 @@
 import {
-  AnyBlobLink,
   AnyRecord,
   EntityRecord,
   IO,
@@ -23,32 +22,6 @@ import {PodIdStore} from "./services/kv/podIdStore.js";
 // Types.
 //
 
-interface BlobRequestBlob {
-  type: string;
-  stream: ReadableStream;
-}
-
-export interface BlobBuilder {
-  fileName: string;
-  context: unknown;
-  getBlob: () => Promise<BlobRequestBlob | undefined>;
-}
-
-export interface EntityRequestResult {
-  podId: string;
-  entity: string;
-  name: string | undefined;
-  bio: string | undefined;
-  website: string | undefined;
-  avatar: BlobBuilder | undefined;
-  createdAt: Date | undefined;
-  context?: unknown;
-}
-
-export type EntityRequestHandler = (
-  entity: string
-) => Promise<EntityRequestResult | undefined>;
-
 export interface RecordBuilder {
   id: string;
   createdAt: Date;
@@ -56,16 +29,6 @@ export interface RecordBuilder {
   type: RAnyRecord;
   build: () => Promise<AnyRecord | undefined>;
 }
-
-export interface BlobFromBuilderResult {
-  type: string;
-  size: number;
-  link: AnyBlobLink;
-}
-
-export type BlobFromBuilder = (
-  builder: BlobBuilder
-) => Promise<BlobFromBuilderResult | undefined>;
 
 export type RecordFromBuilder = (builder: RecordBuilder) => Promise<AnyRecord>;
 
@@ -82,13 +45,6 @@ export type RecordsRequestHandler = (
   context: RecordsRequestContext
 ) => Promise<RecordsRequestResult>;
 
-export interface DigestStreamResult {
-  output: ReadableStream;
-  hash: Promise<string>;
-}
-
-export type StreamDigester = (input: ReadableStream) => DigestStreamResult;
-
 export interface ServerConfig {
   basePath?: string;
   pod: Pod;
@@ -100,7 +56,6 @@ export interface ServerConfig {
   // onRecordRequest?: RecordRequestHandler;
 
   // Adapters.
-  // digestStream: StreamDigester;
   podIdStore: PodIdStore;
   blobStoreAdapter: BlobStoreAdapter;
   podKvStoreAdapter: KvStoreAdapter;

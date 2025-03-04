@@ -1,6 +1,9 @@
 import {
   Hash,
   Headers,
+  isDefined,
+  Q,
+  Query,
   Constants as SDKConstants,
   SignAlgorithm,
   Signature,
@@ -10,14 +13,24 @@ import {
   KvKey,
   KvTypedStoreAdapter,
   Pod,
+  PodServer,
+  RecordBuilder,
+  RecordsRequestHandler,
   Resolver,
   StreamDigester,
 } from "@baqhub/server";
-import {isActor, lookupObject} from "@fedify/fedify";
+import {
+  Create,
+  isActor,
+  lookupObject,
+  Note,
+  traverseCollection,
+} from "@fedify/fedify";
 import {DurableObject} from "cloudflare:workers";
 import {stripHtml} from "string-strip-html";
-import {PodServer} from "../../../../lib-server/src/podServer.js";
+import {PostRecord} from "../../baq/postRecord.js";
 import {Constants} from "../../helpers/constants.js";
+import {noteToPostRecord} from "../../helpers/convert.js";
 import {patchedDocumentLoader} from "../../helpers/fedify.js";
 import {ActorIdentity} from "../../model/actorIdentity.js";
 import {CloudflareBlob} from "../../services/blob/cloudflareBlob.js";
@@ -67,9 +80,7 @@ export class BaqPodObject extends DurableObject {
   constructor(ctx: DurableObjectState, env: Env) {
     super(ctx, env);
 
-    this.storage = CloudflareDurableKv.ofStorageTyped(ctx.storage);
-    this.podMappings = PodMappingObjectStore.new(env.BAQ_POD_MAPPING_OBJECT);
-    this.fetchImageEnv = {
+    const fetchImageEnv: FetchImageEnv = {
       IS_DEV: Boolean(env.IS_DEV),
       DEV_IMAGES_AUTH_KEY: env.DEV_IMAGES_AUTH_KEY,
     };
@@ -82,7 +93,7 @@ export class BaqPodObject extends DurableObject {
       ["baq_server"]
     );
 
-    this.resolver = Resolver.new({
+    const resolver = Resolver.new({
       domain: Constants.domain,
       basePath: Constants.baqRoutePrefix,
       digestStream,
@@ -91,12 +102,97 @@ export class BaqPodObject extends DurableObject {
       globalKvStoreAdapter,
     });
 
+    this.fetchImageEnv = fetchImageEnv;
+    this.resolver = resolver;
+    this.storage = CloudflareDurableKv.ofStorageTyped(ctx.storage);
+    this.podMappings = PodMappingObjectStore.new(env.BAQ_POD_MAPPING_OBJECT);
+
     this.setPod = pod => {
       this.pod = pod;
+
+      const onRecordsRequest: RecordsRequestHandler = async c => {
+        const {pod, query} = c;
+
+        // Only serve post record queries.
+        const postRecordQuery = Query.new({
+          filter: Q.and(Q.type(PostRecord), Q.author(pod.entity)),
+        });
+
+        if (!Query.isSuperset(query, postRecordQuery)) {
+          return {builders: []};
+        }
+
+        const baqActor = pod.context as BaqActor;
+        const actor = await lookupObject(baqActor.id, {
+          documentLoader: patchedDocumentLoader,
+        });
+
+        if (!isActor(actor)) {
+          return {builders: []};
+        }
+
+        // List notes.
+        const outbox = await actor.getOutbox();
+        if (!outbox) {
+          return {builders: []};
+        }
+
+        const pageSize = query.pageSize || 0;
+
+        const buildersIterable =
+          async function* (): AsyncIterable<RecordBuilder> {
+            let itemCount = 0;
+            let resultCount = 0;
+
+            for await (const item of traverseCollection(outbox)) {
+              if (resultCount === pageSize || itemCount === 100) {
+                break;
+              }
+
+              itemCount++;
+
+              if (!(item instanceof Create)) {
+                continue;
+              }
+
+              const note = await item.getObject();
+              if (!(note instanceof Note) || !note.id || !note.published) {
+                continue;
+              }
+
+              resultCount++;
+
+              const versionPublished = note.updated || note.published;
+
+              const build = async () => {
+                return noteToPostRecord(
+                  fetchImageEnv,
+                  resolver.blobFromBuilder,
+                  pod.entity,
+                  note
+                );
+              };
+
+              yield {
+                id: Hash.shortHash(note.id.toString()),
+                createdAt: new Date(note.published.epochMilliseconds),
+                versionCreatedAt: new Date(versionPublished.epochMilliseconds),
+                type: PostRecord,
+                build,
+              };
+            }
+          };
+
+        // Build corresponding records.
+        const builders = await Array.fromAsync(buildersIterable());
+
+        return {builders: builders.filter(isDefined)};
+      };
+
       this.server = PodServer.new({
         pod,
         basePath: `${Constants.baqRoutePrefix}/${pod.id}`,
-        onRecordsRequest: () => ({}) as any,
+        onRecordsRequest,
         podIdStore,
         blobStoreAdapter,
         podKvStoreAdapter,
