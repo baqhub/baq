@@ -34,7 +34,6 @@ interface ImageRequestAttempt {
 }
 
 export interface FetchImageEnv {
-  IS_DEV: boolean;
   DEV_IMAGES_AUTH_KEY: string;
 }
 
@@ -47,32 +46,19 @@ function fetchResizeImage(
     return fetch(url);
   }
 
-  if (env.IS_DEV) {
-    console.log("Fetching...", url, env);
-    return fetch("https://images.dev.baq.lol", {
-      body: JSON.stringify({
-        auth_key: env.DEV_IMAGES_AUTH_KEY,
-        image_url: url.toString(),
-        fit: "scale-down",
-        format: attempt.format,
-        width: attempt.width,
-        height: attempt.height,
-      }),
-      method: "POST",
-      headers: {
-        "content-type": "application/json; charset=UTF-8",
-      },
-    });
-  }
-
-  return fetch(url, {
-    cf: {
-      image: attempt && {
-        fit: "scale-down",
-        width: attempt.width,
-        height: attempt.height,
-        format: attempt.format,
-      },
+  // Needed because CF-Images doesn't work in Durable Objects.
+  return fetch("https://images.dev.baq.lol", {
+    body: JSON.stringify({
+      auth_key: env.DEV_IMAGES_AUTH_KEY,
+      image_url: url.toString(),
+      fit: "scale-down",
+      format: attempt.format,
+      width: attempt.width,
+      height: attempt.height,
+    }),
+    method: "POST",
+    headers: {
+      "content-type": "application/json; charset=UTF-8",
     },
   });
 }
@@ -85,12 +71,14 @@ async function fetchImage(env: FetchImageEnv, request: ImageRequest) {
     }
 
     if (response.status !== 200) {
+      console.log("Got bad status:", response.status, request.url);
       response.body.cancel();
       return undefined;
     }
 
     const sizeHeader = Number(response.headers.get("Content-Length"));
     if (!Number.isSafeInteger(sizeHeader)) {
+      console.log("Got bad size:", sizeHeader, request.url);
       response.body.cancel();
       return undefined;
     }
@@ -102,6 +90,15 @@ async function fetchImage(env: FetchImageEnv, request: ImageRequest) {
     response.body.cancel();
 
     if (attempt && attempt.count >= imageMaxAttempts) {
+      console.log(
+        "Too many attempts:",
+        attempt.count,
+        "max:",
+        request.maxBytes,
+        "got:",
+        sizeHeader,
+        request.url
+      );
       return undefined;
     }
 

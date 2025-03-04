@@ -81,7 +81,6 @@ export class BaqPodObject extends DurableObject {
     super(ctx, env);
 
     const fetchImageEnv: FetchImageEnv = {
-      IS_DEV: Boolean(env.IS_DEV),
       DEV_IMAGES_AUTH_KEY: env.DEV_IMAGES_AUTH_KEY,
     };
 
