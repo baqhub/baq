@@ -8,14 +8,17 @@ function ofNamespace(namespace: DurableObjectNamespace<BaqPodMappingObject>) {
 
       return object.getPodId;
     },
-    async setPodId(entity: string, podId: string) {
+    async initialize(entity: string, podId: string) {
       const objectId = namespace.idFromName(entity);
       const object = namespace.get(objectId);
 
-      await object.setPodId(entity, podId);
+      await object.initialize(entity, podId);
     },
   };
 }
+
+export interface DurablePodMappingStore
+  extends ReturnType<typeof ofNamespace> {}
 
 export const DurablePodMappingStore = {
   ofNamespace,

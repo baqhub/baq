@@ -1,74 +1,77 @@
-import {fetchDocumentLoader} from "@fedify/fedify";
+import {Hash} from "@baqhub/sdk";
+import {isActor, lookupObject} from "@fedify/fedify";
 import {Hono} from "hono";
 import {Constants} from "../../helpers/constants.js";
+import {patchedDocumentLoader} from "../../helpers/fedify.js";
+import {ActorIdentity} from "../../model/actorIdentity.js";
 import {DurablePodMappingStore} from "./durablePodMappingStore.js";
 import {DurablePodStore} from "./durablePodStore.js";
 
-function patchedDocumentLoader(url: string) {
-  return fetchDocumentLoader(url, true);
-}
+// function patchedDocumentLoader(url: string) {
+//   return fetchDocumentLoader(url, true);
+// }
 
-const mastodonSocialRegexp = /^([a-z0-9\\-]{1,60})-mastodon-social./;
-const threadsRegexp = /^([a-z0-9\\-]{1,60})-threads-net./;
-const blueskyRegexp = /^([a-z0-9\\-]{1,60})-bsky-social./;
-const blueskyCustomRegexp = /^([a-z0-9\\-]{1,60})-bsky./;
+// const mastodonSocialRegexp = /^([a-z0-9\\-]{1,60})-mastodon-social./;
+// const threadsRegexp = /^([a-z0-9\\-]{1,60})-threads-net./;
+// const blueskyRegexp = /^([a-z0-9\\-]{1,60})-bsky-social./;
+// const blueskyCustomRegexp = /^([a-z0-9\\-]{1,60})-bsky./;
 
-interface ActorIdentity {
-  server: string;
-  handle: string;
-  entity: string;
-}
+// interface ActorIdentity {
+//   server: string;
+//   handle: string;
+//   entity: string;
+// }
 
-function normalizeHandle(handle: string) {
-  return handle.replace(/--|-/g, m => (m === "--" ? "-" : "."));
-}
+// function normalizeHandle(handle: string) {
+//   return handle.replace(/--|-/g, m => (m === "--" ? "-" : "."));
+// }
 
-function parseEntity(entity: string): ActorIdentity | undefined {
-  function tryMatch(
-    regex: RegExp,
-    server: string,
-    handleSuffix: string,
-    entitySuffix: string
-  ): ActorIdentity | undefined {
-    const match = entity.match(regex);
-    if (!match || !match[1]) {
-      return undefined;
-    }
+// function parseEntity(entity: string): ActorIdentity | undefined {
+//   function tryMatch(
+//     regex: RegExp,
+//     server: string,
+//     handleSuffix: string,
+//     entitySuffix: string
+//   ): ActorIdentity | undefined {
+//     const match = entity.match(regex);
+//     if (!match || !match[1]) {
+//       return undefined;
+//     }
 
-    return {
-      server,
-      handle: normalizeHandle(match[1]) + handleSuffix,
-      entity: match[1] + entitySuffix,
-    };
-  }
+//     return {
+//       server,
+//       handle: normalizeHandle(match[1]) + handleSuffix,
+//       entity: match[1] + entitySuffix,
+//     };
+//   }
 
-  return (
-    tryMatch(
-      mastodonSocialRegexp,
-      "mastodon.social",
-      "",
-      `-mastodon-social.${Constants.domain}`
-    ) ||
-    tryMatch(
-      threadsRegexp,
-      "threads.net",
-      "",
-      `-threads-net.${Constants.domain}`
-    ) ||
-    tryMatch(
-      blueskyRegexp,
-      "bsky.brid.gy",
-      ".bsky.social",
-      `-bsky-social.${Constants.domain}`
-    ) ||
-    tryMatch(
-      blueskyCustomRegexp,
-      "bsky.brid.gy",
-      "",
-      `-bsky.${Constants.domain}`
-    )
-  );
-}
+//   return (
+//     tryMatch(
+//       mastodonSocialRegexp,
+//       "mastodon.social",
+//       "",
+//       `-mastodon-social.${Constants.domain}`
+//     ) ||
+//     tryMatch(
+//       threadsRegexp,
+//       "threads.net",
+//       "",
+//       `-threads-net.${Constants.domain}`
+//     ) ||
+//     tryMatch(
+//       blueskyRegexp,
+//       "bsky.brid.gy",
+//       ".bsky.social",
+//       `-bsky-social.${Constants.domain}`
+//     ) ||
+//     tryMatch(
+//       blueskyCustomRegexp,
+//       "bsky.brid.gy",
+//       "",
+//       `-bsky.${Constants.domain}`
+//     )
+//   );
+// }
 
 function ofEnv(env: Env) {
   const routes = new Hono();
@@ -78,11 +81,32 @@ function ofEnv(env: Env) {
   const podStore = DurablePodStore.ofNamespace(env.BAQ_POD_OBJECT);
 
   const resolvePod = async (requestEntity: string) => {
-    const mapping = await podMappingStore.get(requestEntity);
-    const pod = mapping && (await podStore.get(mapping.id));
-    if (pod) {
-      return pod;
+    const podId = await podMappingStore.getPodId(requestEntity);
+    if (podId) {
+      return podId;
     }
+
+    const identity = ActorIdentity.ofEntity(Constants.domain, requestEntity);
+    if (!identity) {
+      return undefined;
+    }
+
+    const identifier = ActorIdentity.toIdentifier(identity);
+    const actor = await lookupObject(identifier, {
+      documentLoader: patchedDocumentLoader,
+    });
+    if (
+      !isActor(actor) ||
+      !actor.id ||
+      actor.preferredUsername !== identity.handle
+    ) {
+      return undefined;
+    }
+
+    const newPodId = Hash.shortHash(actor.id.toString());
+    await podStore.initialize(newPodId, requestEntity);
+
+    return newPodId;
 
     //   const avatar = await (async (): Promise<BlobBuilder | undefined> => {
     //     const icon = await actor.getIcon();

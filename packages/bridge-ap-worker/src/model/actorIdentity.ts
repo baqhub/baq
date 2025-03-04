@@ -3,7 +3,7 @@ export interface ActorIdentity {
   handle: string;
 }
 
-export function entityToIdentity(
+function identityOfEntity(
   domain: string,
   entity: string
 ): ActorIdentity | undefined {
@@ -13,7 +13,6 @@ export function entityToIdentity(
   );
 
   const handleAndServerParts = handleAndServer.split(".");
-
   if (handleAndServerParts.length < 3) {
     return undefined;
   }
@@ -24,4 +23,19 @@ export function entityToIdentity(
   return {handle, server};
 }
 
-export function identityToEntity(identity: ActorIdentity);
+function identityToEntity(domain: string, identity: ActorIdentity) {
+  const handleAndServer = `${identity.handle}.${identity.server}`;
+  const subdomain = handleAndServer.replaceAll("-", "--").replaceAll(".", "-");
+  return `${subdomain}.${domain}`;
+}
+
+function identityToIdentifier(identity: ActorIdentity) {
+  const {handle, server} = identity;
+  return `${handle}@${server}`;
+}
+
+export const ActorIdentity = {
+  ofEntity: identityOfEntity,
+  toEntity: identityToEntity,
+  toIdentifier: identityToIdentifier,
+};

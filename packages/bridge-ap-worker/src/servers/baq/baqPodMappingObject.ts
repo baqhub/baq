@@ -25,11 +25,7 @@ export class BaqPodMappingObject extends DurableObject {
   private storage: KvTypedStoreAdapter;
   private mapping: PodMapping | undefined;
 
-  async getPodId() {
-    return this.mapping?.id;
-  }
-
-  async setPodId(entity: string, podId: string) {
+  async initialize(entity: string, podId: string) {
     return await this.ctx.blockConcurrencyWhile(async () => {
       if (this.mapping) {
         return this.mapping.id;
@@ -46,5 +42,9 @@ export class BaqPodMappingObject extends DurableObject {
 
       return mapping.id;
     });
+  }
+
+  async getPodId() {
+    return this.mapping?.id;
   }
 }
