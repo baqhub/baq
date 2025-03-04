@@ -26,7 +26,7 @@ import {PostRecord} from "../../baq/postRecord";
 import {Constants} from "../../helpers/constants";
 import {postTextToHtml} from "../../helpers/string";
 import {CloudflareKv} from "../../services/kv/cloudflareKv";
-import {CloudflareKvStore} from "../../services/kvStore/cloudflareKvStore/cloudflareKvStore";
+import {CloudflareKvStore} from "../../services/kvStore/cloudflareKvStore";
 import {ActorKeyPair, ActorState, ApKvKeys} from "./apKvKeys";
 
 const KnownRecord = IO.union([EntityRecord, StandingRecord, PostRecord]);

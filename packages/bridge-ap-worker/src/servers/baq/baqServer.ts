@@ -4,8 +4,8 @@ import {Hono} from "hono";
 import {Constants} from "../../helpers/constants.js";
 import {patchedDocumentLoader} from "../../helpers/fedify.js";
 import {ActorIdentity} from "../../model/actorIdentity.js";
-import {DurablePodMappingStore} from "./durablePodMappingStore.js";
-import {DurablePodStore} from "./durablePodStore.js";
+import {PodMappingObjectStore} from "./baqPodMappingObject.js";
+import {PodObjectStore} from "./baqPodObject.js";
 
 // function patchedDocumentLoader(url: string) {
 //   return fetchDocumentLoader(url, true);
@@ -75,13 +75,11 @@ import {DurablePodStore} from "./durablePodStore.js";
 
 function ofEnv(env: Env) {
   const routes = new Hono();
-  const podMappingStore = DurablePodMappingStore.ofNamespace(
-    env.BAQ_POD_MAPPING_OBJECT
-  );
-  const podStore = DurablePodStore.ofNamespace(env.BAQ_POD_OBJECT);
+  const podMappings = PodMappingObjectStore.new(env.BAQ_POD_MAPPING_OBJECT);
+  const pods = PodObjectStore.new(env.BAQ_POD_OBJECT);
 
-  const resolvePod = async (requestEntity: string) => {
-    const podId = await podMappingStore.getPodId(requestEntity);
+  const resolvePodId = async (requestEntity: string) => {
+    const podId = await podMappings.get(requestEntity);
     if (podId) {
       return podId;
     }
@@ -104,7 +102,7 @@ function ofEnv(env: Env) {
     }
 
     const newPodId = Hash.shortHash(actor.id.toString());
-    await podStore.initialize(newPodId, requestEntity);
+    await pods.initialize(newPodId, requestEntity);
 
     return newPodId;
 
@@ -137,11 +135,20 @@ function ofEnv(env: Env) {
       ? "arstechnica-mastodon-social.baq.lol"
       : url.hostname;
 
-    const pod = await resolvePod(entity);
+    console.log("Got request:", entity);
+    const podId = await resolvePodId(entity);
+    if (!podId) {
+      return c.notFound();
+    }
+
+    console.log("Got resolved podId:", podId);
+    return pods.fetch(podId, c.req.raw);
   });
 
-  routes.all("/:podId/*", async c => {
+  routes.all(`${Constants.baqRoutePrefix}/:podId/*`, c => {
     const {podId} = c.req.param();
+    console.log("Got request podId:", podId);
+    return pods.fetch(podId, c.req.raw);
   });
 
   return {

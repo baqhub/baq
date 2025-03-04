@@ -1,10 +1,6 @@
 import {isDefined} from "@baqhub/sdk";
 import {describe, expect, test} from "vitest";
-import {
-  ActorIdentity,
-  entityToIdentity,
-  identityToEntity,
-} from "../../model/actorIdentity";
+import {ActorIdentity} from "../../model/actorIdentity";
 
 const pairs: ReadonlyArray<[string, ActorIdentity | undefined]> = [
   [
@@ -34,7 +30,7 @@ const pairs: ReadonlyArray<[string, ActorIdentity | undefined]> = [
 describe("entityToIdentity()", () => {
   test.each(pairs)("Entity: %s", (entity, expectedIdentity) => {
     // Act.
-    const actualIdentity = entityToIdentity("host.com", entity);
+    const actualIdentity = ActorIdentity.ofEntity("host.com", entity);
 
     // Assert.
     expect(actualIdentity).toStrictEqual(expectedIdentity);
@@ -50,7 +46,7 @@ describe("identityToEntity()", () => {
       .filter(isDefined)
   )("Identity: %s", (_, identity, expectedEntity) => {
     // Act.
-    const actualEntity = identityToEntity("host.com", identity);
+    const actualEntity = ActorIdentity.toEntity("host.com", identity);
 
     // Assert.
     expect(actualEntity).toBe(expectedEntity);

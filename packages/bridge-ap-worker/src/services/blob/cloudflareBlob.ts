@@ -3,7 +3,7 @@ import {getLogger} from "@logtape/logtape";
 
 const logger = getLogger(["bridge", "cloudflare-blob"]);
 
-function ofBucket(bucket: R2Bucket): BlobStoreAdapter {
+function buildCloudflareBlob(bucket: R2Bucket): BlobStoreAdapter {
   return {
     async get(key) {
       logger.info(`Getting blob: ${key}`);
@@ -40,5 +40,5 @@ function ofBucket(bucket: R2Bucket): BlobStoreAdapter {
 }
 
 export const CloudflareBlob = {
-  ofBucket,
+  new: buildCloudflareBlob,
 };

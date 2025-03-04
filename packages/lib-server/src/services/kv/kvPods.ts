@@ -14,11 +14,11 @@ function build(kv: KvStoreAdapter) {
         return undefined;
       }
 
-      return IO.decode(Pod, rawPod);
+      return IO.decode(Pod.io, rawPod);
     },
 
     async set(pod: Pod) {
-      const rawPod = IO.encode(Pod, pod);
+      const rawPod = IO.encode(Pod.io, pod);
       await kv.set(podForPodIdKey(pod.id), rawPod);
     },
   };

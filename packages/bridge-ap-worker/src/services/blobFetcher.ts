@@ -33,8 +33,13 @@ interface ImageRequestAttempt {
   count: number;
 }
 
+export interface FetchImageEnv {
+  IS_DEV: boolean;
+  DEV_IMAGES_AUTH_KEY: string;
+}
+
 function fetchResizeImage(
-  env: Env,
+  env: FetchImageEnv,
   url: URL,
   attempt: ImageRequestAttempt | undefined
 ) {
@@ -43,6 +48,7 @@ function fetchResizeImage(
   }
 
   if (env.IS_DEV) {
+    console.log("Fetching...", url, env);
     return fetch("https://images.dev.baq.lol", {
       body: JSON.stringify({
         auth_key: env.DEV_IMAGES_AUTH_KEY,
@@ -71,7 +77,7 @@ function fetchResizeImage(
   });
 }
 
-async function fetchImage(env: Env, request: ImageRequest) {
+async function fetchImage(env: FetchImageEnv, request: ImageRequest) {
   async function fetchAttempt(attempt?: ImageRequestAttempt) {
     const response = await fetchResizeImage(env, request.url, attempt);
     if (!response.body) {
@@ -129,7 +135,7 @@ async function fetchImage(env: Env, request: ImageRequest) {
 }
 
 export function avatarToBlobRequest(
-  env: Env,
+  env: FetchImageEnv,
   icon: Image
 ): BlobBuilder | undefined {
   const {url, mediaType} = icon;
@@ -178,7 +184,7 @@ export function avatarToBlobRequest(
 }
 
 export function postImageToBlobRequests(
-  env: Env,
+  env: FetchImageEnv,
   attachment: Document,
   index: number
 ) {

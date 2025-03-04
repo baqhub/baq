@@ -1,15 +1,15 @@
 import {KvKey, KvTypedStoreAdapter, PodMapping} from "@baqhub/server";
 import {DurableObject} from "cloudflare:workers";
-import {CloudflareDurableKv} from "../../services/kv/cloudflareDurableKv2.js";
+import {CloudflareDurableKv} from "../../services/kv/cloudflareDurableKv.js";
 
 //
-// State.
+// Helpers.
 //
 
-const stateKey: KvKey<PodMapping> = ["state"];
+const mappingKey: KvKey<PodMapping> = ["mapping"];
 
 //
-// Durable Object.
+// Durable object.
 //
 
 export class BaqPodMappingObject extends DurableObject {
@@ -18,7 +18,7 @@ export class BaqPodMappingObject extends DurableObject {
     this.storage = CloudflareDurableKv.ofStorageTyped(ctx.storage);
 
     ctx.blockConcurrencyWhile(async () => {
-      this.mapping = await this.storage.get(PodMapping.io, stateKey);
+      this.mapping = await this.storage.get(PodMapping.io, mappingKey);
     });
   }
 
@@ -37,7 +37,7 @@ export class BaqPodMappingObject extends DurableObject {
         createdAt: new Date(),
       };
 
-      await this.storage.set(PodMapping.io, stateKey, mapping);
+      await this.storage.set(PodMapping.io, mappingKey, mapping);
       this.mapping = mapping;
 
       return mapping.id;
@@ -48,3 +48,33 @@ export class BaqPodMappingObject extends DurableObject {
     return this.mapping?.id;
   }
 }
+
+//
+// Store.
+//
+
+function buildPodMappingObjectStore(
+  namespace: DurableObjectNamespace<BaqPodMappingObject>
+) {
+  return {
+    async get(entity: string) {
+      const objectId = namespace.idFromName(entity);
+      const object = namespace.get(objectId);
+
+      return object.getPodId();
+    },
+    async initialize(entity: string, podId: string) {
+      const objectId = namespace.idFromName(entity);
+      const object = namespace.get(objectId);
+
+      await object.initialize(entity, podId);
+    },
+  };
+}
+
+export interface PodMappingObjectStore
+  extends ReturnType<typeof buildPodMappingObjectStore> {}
+
+export const PodMappingObjectStore = {
+  new: buildPodMappingObjectStore,
+};

@@ -4,12 +4,15 @@ import {Note} from "@fedify/fedify";
 import {Document} from "@fedify/fedify/vocab";
 import {stripHtml} from "string-strip-html";
 import {PostRecord, PostRecordContent} from "../baq/postRecord.js";
-import {postImageToBlobRequests} from "../services/blobFetcher.js";
+import {
+  FetchImageEnv,
+  postImageToBlobRequests,
+} from "../services/blobFetcher.js";
 
 const imageMediaTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
 export async function noteToPostRecord(
-  env: Env,
+  env: FetchImageEnv,
   blobFromRequest: BlobFromBuilder,
   entity: string,
   note: Note
