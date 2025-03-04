@@ -322,8 +322,6 @@ export class BaqPodObject extends DurableObject {
         SDKConstants.discoveryLinkRel
       );
 
-      console.log({linkHeader});
-
       return new Response(null, {
         status: 200,
         headers: {Link: linkHeader},

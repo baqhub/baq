@@ -135,19 +135,16 @@ function ofEnv(env: Env) {
       ? "arstechnica-mastodon-social.baq.lol"
       : url.hostname;
 
-    console.log("Got request:", entity);
     const podId = await resolvePodId(entity);
     if (!podId) {
       return c.notFound();
     }
 
-    console.log("Got resolved podId:", podId);
     return pods.fetch(podId, c.req.raw);
   });
 
   routes.all(`${Constants.baqRoutePrefix}/:podId/*`, c => {
     const {podId} = c.req.param();
-    console.log("Got request podId:", podId);
     return pods.fetch(podId, c.req.raw);
   });
 

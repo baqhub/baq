@@ -71,14 +71,12 @@ async function fetchImage(env: FetchImageEnv, request: ImageRequest) {
     }
 
     if (response.status !== 200) {
-      console.log("Got bad status:", response.status, request.url);
       response.body.cancel();
       return undefined;
     }
 
     const sizeHeader = Number(response.headers.get("Content-Length"));
     if (!Number.isSafeInteger(sizeHeader)) {
-      console.log("Got bad size:", sizeHeader, request.url);
       response.body.cancel();
       return undefined;
     }
@@ -90,15 +88,6 @@ async function fetchImage(env: FetchImageEnv, request: ImageRequest) {
     response.body.cancel();
 
     if (attempt && attempt.count >= imageMaxAttempts) {
-      console.log(
-        "Too many attempts:",
-        attempt.count,
-        "max:",
-        request.maxBytes,
-        "got:",
-        sizeHeader,
-        request.url
-      );
       return undefined;
     }
 
