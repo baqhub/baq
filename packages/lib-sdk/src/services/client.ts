@@ -628,20 +628,14 @@ function buildAuthenticatedClient(state: AuthenticationState) {
 // Static discovery.
 //
 
-function fixDiscoverUrl(url: string) {
-  switch (url) {
-    case "https://quentez.localhost/":
-      return "http://localhost:5254/api/quentez.localhost";
-
-    case "https://testaccount1.localhost/":
-      return "http://localhost:5254/api/testaccount1.localhost";
-
-    case "https://testaccount2.localhost/":
-      return "http://localhost:5254/api/testaccount2.localhost";
-
-    default:
-      return url;
+function fixDiscoverUrl(urlString: string) {
+  const url = new URL(urlString);
+  const match = url.hostname.match(/^([a-z0-9_-]{1,100}).localhost$/);
+  if (!match) {
+    return urlString;
   }
+
+  return `http://localhost:5254/api/${match[1]}.localhost`;
 }
 
 async function discover(entity: string, signal?: AbortSignal) {
