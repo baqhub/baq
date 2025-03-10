@@ -7,6 +7,14 @@ export function normalizePath(path: string) {
     return transformed || element;
   }
 
-  const pathArray = JSONPath.toPathArray(`$.${path}`).map(mapPathElement);
+  const pathWithStart = (() => {
+    if (path.startsWith("$.") || path.startsWith("$[")) {
+      return path;
+    }
+
+    return `$.${path}`;
+  })();
+
+  const pathArray = JSONPath.toPathArray(pathWithStart).map(mapPathElement);
   return JSONPath.toPathString(pathArray);
 }

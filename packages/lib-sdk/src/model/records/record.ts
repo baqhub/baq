@@ -64,6 +64,7 @@ export interface Record<T extends AnyRecordType, C> {
 }
 
 export type AnyRecord = Record<AnyRecordType, any>;
+export type AnyEventRecord = AnyRecord | NoContentRecord;
 export type UnknownRecord = Record<never, never>;
 
 export interface NoContentRecord {
@@ -214,7 +215,7 @@ function cleanRecord<T extends AnyRecord>(RRecord: CleanRecordType<T>) {
   return RRecord;
 }
 
-export const AnyRecord = new RecordClassBase(IO.any, IO.any);
+export const AnyRecord = new RecordClassBase(RAnyRecordType, IO.any);
 export type RAnyRecord = IO.Type<AnyRecord, unknown, unknown>;
 
 const RNoContentRecordAction = IO.weakEnumeration(NoContentRecordAction);
@@ -248,6 +249,7 @@ export type RAnyEventRecord =
 
 export interface NewRecordOptions {
   id?: string;
+  createdAt?: Date;
   permissions?: RecordPermissions;
   mode?: `${RecordMode}`;
 }
@@ -261,14 +263,14 @@ function buildRecord<R extends RAnyRecord>(
   entity: string,
   type: IO.TypeOf<R>["type"],
   content: IO.TypeOf<R>["content"],
-  {id, permissions, mode}: NewRecordOptions = {}
+  {id, createdAt, permissions, mode}: NewRecordOptions = {}
 ) {
   const record: IO.TypeOf<R> = {
     author: {entity},
     id: id || Uuid.new(),
     source: "self",
 
-    createdAt: new Date(),
+    createdAt: createdAt || new Date(),
     receivedAt: undefined,
     version: undefined,
     permissions: permissions || RecordPermissions.private,

@@ -1,5 +1,6 @@
 import {JSONPath} from "jsonpath-plus";
 import compact from "lodash/compact.js";
+import {never} from "../../helpers/customError.js";
 import {unreachable} from "../../helpers/type.js";
 import {AnyRecord, UnknownRecord} from "../records/record.js";
 import {normalizePath} from "./pathHelpers.js";
@@ -45,11 +46,37 @@ function buildPathLink<T extends AnyRecord = UnknownRecord>(
   path: string,
   value: QueryLinkValue<T>
 ): QueryLinkPathLink<T> {
-  return [QueryLinkType.PATH_LINK, path, value];
+  return [QueryLinkType.PATH_LINK, normalizePath(path), value];
 }
 
 function buildEmptyPathLink(path: string): QueryLinkEmptyPathLink {
-  return [QueryLinkType.EMPTY_PATH_LINK, path];
+  return [QueryLinkType.EMPTY_PATH_LINK, normalizePath(path)];
+}
+
+const linkRegexp = /^(?:(\$[^=]+)=)?(.*)$/;
+
+function queryLinkOfString(linkString: string): QueryLink<UnknownRecord> {
+  const linkMatch = linkString.match(linkRegexp);
+  if (!linkMatch || typeof linkMatch[2] !== "string") {
+    return never();
+  }
+
+  const path = linkMatch[1];
+  const valueString = linkMatch[2];
+
+  // Empty path link.
+  if (path && valueString === "") {
+    return [QueryLinkType.EMPTY_PATH_LINK, path];
+  }
+
+  // Path link.
+  const value = QueryLinkValue.ofString(valueString);
+  if (path) {
+    return [QueryLinkType.PATH_LINK, path, value];
+  }
+
+  // Link.
+  return [QueryLinkType.LINK, value];
 }
 
 function queryLinkToString<T extends AnyRecord>(queryLink: QueryLink<T>) {
@@ -58,10 +85,10 @@ function queryLinkToString<T extends AnyRecord>(queryLink: QueryLink<T>) {
       return QueryLinkValue.toString(queryLink[1]);
 
     case QueryLinkType.PATH_LINK: {
-      const normalizedPath = normalizePath(queryLink[1]);
+      const path = queryLink[1];
       const valueString = QueryLinkValue.toString(queryLink[2]);
 
-      return `${normalizedPath}=${valueString}`;
+      return `${path}=${valueString}`;
     }
 
     case QueryLinkType.EMPTY_PATH_LINK:
@@ -141,7 +168,8 @@ export const QueryLink = {
   link: buildLink,
   pathLink: buildPathLink,
   emptyPathLink: buildEmptyPathLink,
-  isInRecord: linkIsInRecord,
+  ofString: queryLinkOfString,
   toString: queryLinkToString,
+  isInRecord: linkIsInRecord,
   isSuperset: queryLinkIsSuperset,
 };
