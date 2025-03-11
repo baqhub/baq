@@ -1,10 +1,20 @@
+import snakeCase from "lodash/snakeCase.js";
 import * as IO from "../../helpers/io.js";
 import {Uuid} from "../../helpers/uuid.js";
-import {EntityLink} from "../links/entityLink.js";
-import {AnyRecordLink, RecordLink} from "../links/recordLink.js";
+import {RBlobLinkName} from "../links/blobLink.js";
+import {EntityLink, REntityLinkName} from "../links/entityLink.js";
+import {Link, LinkType} from "../links/link.js";
+import {
+  AnyRecordLink,
+  RecordLink,
+  RRecordLinkName,
+} from "../links/recordLink.js";
+import {RTagLinkName} from "../links/tagLink.js";
+import {RVersionLinkName} from "../links/versionLink.js";
 import type {SubscriptionRecord} from "../recordTypes/subscriptionRecord.js";
+import {TypeRecord} from "../recordTypes/typeRecord.js";
 import {RecordKey} from "./recordKey.js";
-import {RRecordPermissions, RecordPermissions} from "./recordPermissions.js";
+import {RecordPermissions, RRecordPermissions} from "./recordPermissions.js";
 import {AnyRecordType, RAnyRecordType} from "./recordType.js";
 
 //
@@ -90,7 +100,7 @@ export interface CleanRecordType<T extends AnyRecord>
   RType: IO.Type<T["type"], any, unknown>;
   RContent: IO.Type<T["content"], any, unknown>;
   type: T["type"];
-  link: RecordLink<T>;
+  link: RecordLink<TypeRecord>;
   new: (entity: string, content: T["content"], options?: NewRecordOptions) => T;
   update: (
     entity: string,
@@ -136,7 +146,7 @@ const RRecordVersion: IO.Type<RecordVersion<any>> = IO.intersection([
   }),
 ]);
 
-class RecordClassBase<
+export class RecordClassBase<
   T extends RAnyRecordType,
   C extends IO.Any,
 > extends IO.Type<Record<IO.TypeOf<T>, IO.TypeOf<C>>, unknown, unknown> {
@@ -159,7 +169,10 @@ class RecordClassBase<
     });
 
     super("Record", model.is, model.validate, model.encode);
+    this.model = model;
   }
+
+  model: IO.Type<Record<IO.TypeOf<T>, IO.TypeOf<C>>, unknown, unknown>;
 }
 
 class RecordClass<
@@ -179,7 +192,7 @@ class RecordClass<
     };
   }
 
-  link: RecordLink<IO.TypeOf<this>>;
+  link: RecordLink<TypeRecord>;
 
   new(entity: string, content: IO.TypeOf<C>, options?: NewRecordOptions) {
     return buildRecord(this, entity, this.type, content, options);
@@ -465,9 +478,158 @@ function noContentRecordToLink(record: NoContentRecord): AnyRecordLink {
   };
 }
 
+function findLinksInRecord<T extends AnyRecord>(
+  type: IO.Type<T, unknown, unknown>,
+  record: T
+) {
+  type CombinedArrayType<T extends IO.Any> =
+    | IO.ArrayType<T>
+    | IO.ReadonlyArrayType<T>;
+
+  type CombinedObjectType<T> = IO.InterfaceType<T> | IO.PartialType<T>;
+
+  function findLinksInUnknown(
+    type: IO.Any,
+    value: unknown,
+    path: string
+  ): ReadonlyArray<Link> {
+    console.log("Find links at path:", path, type);
+
+    function findLinksInArray(
+      type: CombinedArrayType<any>,
+      value: ReadonlyArray<unknown>
+    ) {
+      return value.reduce((result: Array<Link>, v) => {
+        const links = findLinksInUnknown(type.type, v, `${path}[*]`);
+        result.push(...links);
+        return result;
+      }, []);
+    }
+
+    function findLinksInMap(type: IO.DictionaryType<any, any>, value: object) {
+      return Object.entries(value).reduce((result: Array<Link>, [key, v]) => {
+        const links = findLinksInUnknown(
+          type.codomain,
+          v[key],
+          `${path}['${snakeCase(key)}']`
+        );
+
+        result.push(...links);
+        return result;
+      }, []);
+    }
+
+    function findLinksInObject(type: CombinedObjectType<any>, value: object) {
+      return Object.entries(type.props).reduce(
+        (result: Array<Link>, [key, t]) => {
+          const links = findLinksInUnknown(
+            t as IO.Any,
+            (value as any)[key],
+            `${path}['${snakeCase(key)}']`
+          );
+
+          result.push(...links);
+          return result;
+        },
+        []
+      );
+    }
+
+    function findLinksInUnion(type: IO.UnionType<any>) {
+      for (const t of type.types as IO.Any[]) {
+        if (t.is(value)) {
+          return findLinksInUnknown(t, value, path);
+        }
+      }
+
+      return [];
+    }
+
+    function findLinksInIntersection(type: IO.IntersectionType<any>) {
+      return type.types.reduce((result: Array<Link>, t: IO.Any) => {
+        const links = findLinksInUnknown(t, value, path);
+        result.push(...links);
+        return result;
+      }, []);
+    }
+
+    if (type.name === RTagLinkName && type.is(value)) {
+      return [{type: LinkType.TAG, path, value}];
+    }
+
+    if (type.name === RBlobLinkName && type.is(value)) {
+      return [{type: LinkType.BLOB, path, value}];
+    }
+
+    if (type.name === REntityLinkName && type.is(value)) {
+      return [{type: LinkType.ENTITY, path, value}];
+    }
+
+    if (type.name === RRecordLinkName && type.is(value)) {
+      return [{type: LinkType.RECORD, path, value}];
+    }
+
+    if (type.name === RVersionLinkName && type.is(value)) {
+      return [{type: LinkType.VERSION, path, value}];
+    }
+
+    if (
+      type instanceof IO.ReadonlyType ||
+      type instanceof IO.ExactType ||
+      type instanceof IO.RefinementType
+    ) {
+      return findLinksInUnknown(type.type, value, path);
+    }
+
+    if (type instanceof RecordClassBase) {
+      return findLinksInUnknown(type.model, value, path);
+    }
+
+    if (
+      (type instanceof IO.ArrayType || type instanceof IO.ReadonlyArrayType) &&
+      Array.isArray(value)
+    ) {
+      return findLinksInArray(type, value);
+    }
+
+    if (
+      type instanceof IO.DictionaryType &&
+      typeof value === "object" &&
+      value
+    ) {
+      return findLinksInMap(type, value);
+    }
+
+    if (
+      (type instanceof IO.InterfaceType || type instanceof IO.PartialType) &&
+      typeof value === "object" &&
+      value
+    ) {
+      return findLinksInObject(type, value);
+    }
+
+    if (type instanceof IO.UnionType) {
+      return findLinksInUnion(type);
+    }
+
+    if (type instanceof IO.IntersectionType) {
+      return findLinksInIntersection(type);
+    }
+
+    return [];
+  }
+
+  return findLinksInUnknown(type, record, "$");
+}
+
+//
+// Exports.
+//
+
 export const Record = {
   io: record,
   ioClean: cleanRecord,
+  delete: buildNoContentRecord,
   isSame: isSameRecord,
   isPublic: isPublicRecord,
   hasType: recordHasType,
@@ -478,5 +640,5 @@ export const Record = {
   toLink: recordToLink,
   toVersionHash: recordToVersionHash,
   noContentToLink: noContentRecordToLink,
-  delete: buildNoContentRecord,
+  findLinks: findLinksInRecord,
 };
