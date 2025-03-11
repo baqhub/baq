@@ -1,8 +1,10 @@
 import {
   AnyRecord,
   EntityRecord,
+  FoundLinkType,
   IO,
   isDefined,
+  never,
   Q,
   Query,
   QueryFilter,
@@ -11,7 +13,9 @@ import {
 import {Hono} from "hono";
 import {findBlobLink} from "./helpers/recordHelpers.js";
 import {CachedRecord} from "./model/cachedRecord.js";
+import {CachedRecordLink} from "./model/cachedRecordLink.js";
 import {Pod} from "./model/pod.js";
+import {Pointer, PointerType} from "./model/pointer.js";
 import {BlobStoreAdapter} from "./services/blob/blobStoreAdapter.js";
 import {KvCachedBlobs} from "./services/kv/kvCachedBlobs.js";
 import {KvCachedRecords} from "./services/kv/kvCachedRecords.js";
@@ -22,12 +26,22 @@ import {PodIdStore} from "./services/kv/podIdStore.js";
 // Types.
 //
 
+export interface RecordBuilderResultLink extends RecordBuilder {
+  linkType: FoundLinkType.ENTITY | FoundLinkType.RECORD | FoundLinkType.VERSION;
+  path: string;
+}
+
+export interface RecordBuilderResult {
+  record: AnyRecord;
+  links: ReadonlyArray<RecordBuilderResultLink>;
+}
+
 export interface RecordBuilder {
-  id: string;
-  createdAt: Date;
-  versionCreatedAt: Date;
+  podId: string;
+  recordId: string;
+  versionHash?: string;
   type: RAnyRecord;
-  build: () => Promise<AnyRecord | undefined>;
+  build: () => Promise<RecordBuilderResult | undefined>;
 }
 
 export type RecordFromBuilder = (builder: RecordBuilder) => Promise<AnyRecord>;
@@ -50,10 +64,7 @@ export interface ServerConfig {
   pod: Pod;
 
   // Handlers.
-  // onEntityRequest: EntityRequestHandler;
   onRecordsRequest: RecordsRequestHandler;
-  // onEntityRecordRequest?: EntityRequestHandler;
-  // onRecordRequest?: RecordRequestHandler;
 
   // Adapters.
   podIdStore: PodIdStore;
@@ -67,7 +78,6 @@ export interface ServerConfig {
 //
 
 function buildPodServer(config: ServerConfig) {
-  // const {domain, basePath, pod, isDev} = config;
   const {pod, basePath} = config;
   const {onRecordsRequest} = config;
   const {podIdStore, blobStoreAdapter} = config;
@@ -131,31 +141,83 @@ function buildPodServer(config: ServerConfig) {
     return existingRecordVersion;
   }
 
-  async function resolveRecordFromBuilder(pod: Pod, builder: RecordBuilder) {
-    if (builder.createdAt.getTime() !== builder.versionCreatedAt.getTime()) {
-      throw new Error("Note updates not yet supported.");
-    }
+  async function resolveRecordFromBuilder(
+    builder: RecordBuilder
+  ): Promise<CachedRecord<AnyRecord> | undefined> {
+    const existingRecord = await (builder.versionHash
+      ? kvCachedRecords.getVersion(
+          AnyRecord,
+          pod.id,
+          builder.podId,
+          builder.recordId,
+          builder.versionHash
+        )
+      : kvCachedRecords.get(
+          AnyRecord,
+          pod.id,
+          builder.podId,
+          builder.recordId
+        ));
 
-    const existingRecord = await kvCachedRecords.get(
-      AnyRecord,
-      pod.id,
-      pod.id,
-      builder.id
-    );
     if (existingRecord) {
       return existingRecord;
     }
 
-    const newRecord = await builder.build();
-    if (!newRecord) {
+    const result = await builder.build();
+    if (!result) {
       return undefined;
     }
 
+    const linksPromises = result.links.map(
+      async (link): Promise<CachedRecordLink | undefined> => {
+        const record = await resolveRecordFromBuilder(link);
+        if (!record) {
+          return undefined;
+        }
+
+        const pointer: Pointer = (() => {
+          switch (link.linkType) {
+            case FoundLinkType.ENTITY:
+              return {
+                type: PointerType.ENTITY,
+                podId: record.authorId,
+              };
+
+            case FoundLinkType.RECORD:
+              return {
+                type: PointerType.RECORD,
+                podId: record.authorId,
+                recordId: record.record.id,
+              };
+
+            case FoundLinkType.VERSION: {
+              return {
+                type: PointerType.VERSION,
+                podId: record.authorId,
+                recordId: record.recordId,
+                versionHash: record.versionHash,
+              };
+            }
+
+            default:
+              never();
+          }
+        })();
+
+        return {
+          path: link.path,
+          pointer,
+        };
+      }
+    );
+    const links = (await Promise.all(linksPromises)).filter(isDefined);
+
     const newCachedRecord = CachedRecord.ofNewRecord(
       pod.id,
-      pod.id,
+      builder.podId,
       builder.type,
-      newRecord
+      result.record,
+      links
     );
     await kvCachedRecords.set(builder.type, newCachedRecord);
 
@@ -297,9 +359,7 @@ function buildPodServer(config: ServerConfig) {
     // Otherwise, delegate to the calling code.
     const context: RecordsRequestContext = {pod, query};
     const {builders} = await onRecordsRequest(context);
-    const records = await Promise.all(
-      builders.map(builder => resolveRecordFromBuilder(pod, builder))
-    );
+    const records = await Promise.all(builders.map(resolveRecordFromBuilder));
 
     // TODO: Directly encode the response instead.
     const rawRecords = records

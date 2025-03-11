@@ -27,7 +27,7 @@ name = "BAQ_POD_OBJECT"
 class_name = "BaqPodObject"
 
 [[migrations]]
-tag = "v1"
+tag = "v2"
 new_classes = ["BaqPodMappingObject", "BaqPodObject"]
 
 # Bind a KV Namespace. Use KV as persistent storage for small key-value pairs.

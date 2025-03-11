@@ -1,4 +1,5 @@
 import {AnyRecord, IO, RecordSource, RecordVersionHash} from "@baqhub/sdk";
+import {CachedRecordLink} from "./cachedRecordLink.js";
 
 //
 // Model.
@@ -10,14 +11,16 @@ function cachedRecord<T extends AnyRecord>(
   return IO.object({
     ownerId: IO.string,
     authorId: IO.string,
+    recordId: IO.string,
+    versionHash: IO.string,
     record: recordType,
+    links: IO.readonlyArray(CachedRecordLink.io),
     createdAt: IO.isoDate,
   });
 }
 
-export type CachedRecord<T extends AnyRecord> = IO.TypeOf<
-  ReturnType<typeof cachedRecord<T>>
->;
+export interface CachedRecord<T extends AnyRecord>
+  extends IO.TypeOf<ReturnType<typeof cachedRecord<T>>> {}
 
 //
 // API.
@@ -27,7 +30,8 @@ function ofNewRecord<T extends AnyRecord>(
   ownerId: string,
   authorId: string,
   recordType: IO.Type<T, unknown, unknown>,
-  record: T
+  record: T,
+  links: ReadonlyArray<CachedRecordLink>
 ): CachedRecord<T> {
   const versionHash = RecordVersionHash.ofRecord(recordType, {
     ...record,
@@ -38,6 +42,13 @@ function ofNewRecord<T extends AnyRecord>(
       hash: undefined,
     },
   });
+
+  const existingVersionHash = record.version?.hash;
+  if (existingVersionHash && existingVersionHash !== versionHash) {
+    throw new Error(
+      `Version hash mismatch: ${existingVersionHash} ${versionHash}`
+    );
+  }
 
   const patchedRecord: T = {
     ...record,
@@ -54,7 +65,10 @@ function ofNewRecord<T extends AnyRecord>(
   return {
     ownerId,
     authorId,
+    recordId: record.id,
+    versionHash,
     record: patchedRecord,
+    links,
     createdAt: new Date(),
   };
 }

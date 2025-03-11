@@ -1,9 +1,15 @@
 import {
+  AnyRecord,
+  Client,
+  EntityRecord,
+  FoundLinkType,
   Hash,
   Headers,
   isDefined,
+  never,
   Q,
   Query,
+  Record,
   Constants as SDKConstants,
   SignAlgorithm,
   Signature,
@@ -13,8 +19,11 @@ import {
   KvKey,
   KvTypedStoreAdapter,
   Pod,
+  PodIdStore,
   PodServer,
   RecordBuilder,
+  RecordBuilderResult,
+  RecordBuilderResultLink,
   RecordsRequestHandler,
   Resolver,
   StreamDigester,
@@ -84,7 +93,20 @@ export class BaqPodObject extends DurableObject {
       DEV_IMAGES_AUTH_KEY: env.DEV_IMAGES_AUTH_KEY,
     };
 
-    const podIdStore = PodMappingObjectStore.new(env.BAQ_POD_MAPPING_OBJECT);
+    const podIdStoreBase = PodMappingObjectStore.new(
+      env.BAQ_POD_MAPPING_OBJECT
+    );
+    const podIdStore: PodIdStore = {
+      async get(entity) {
+        const podId = await podIdStoreBase.get(entity);
+        if (podId) {
+          return podId;
+        }
+
+        return Hash.shortHash(entity);
+      },
+    };
+
     const blobStoreAdapter = CloudflareBlob.new(env.R2_WORKER_BRIDGE_AP_BAQ);
     const podKvStoreAdapter = CloudflareDurableKv.ofStorage(ctx.storage);
     const globalKvStoreAdapter = CloudflareKv.ofNamespace(
@@ -161,21 +183,100 @@ export class BaqPodObject extends DurableObject {
 
               resultCount++;
 
-              const versionPublished = note.updated || note.published;
-
-              const build = async () => {
-                return noteToPostRecord(
+              const build = async (): Promise<
+                RecordBuilderResult | undefined
+              > => {
+                const record = await noteToPostRecord(
                   fetchImageEnv,
                   resolver.blobFromBuilder,
                   pod.entity,
                   note
                 );
+                if (!record) {
+                  return undefined;
+                }
+
+                const links = Record.findLinks(PostRecord, record)
+                  .map((link): RecordBuilderResultLink | undefined => {
+                    switch (link.type) {
+                      case FoundLinkType.TAG:
+                      case FoundLinkType.BLOB:
+                        return undefined;
+
+                      case FoundLinkType.ENTITY: {
+                        if (link.value.entity !== pod.entity) {
+                          throw new Error(
+                            `Unexpected entity: ${link.value.entity}`
+                          );
+                        }
+
+                        return {
+                          linkType: FoundLinkType.ENTITY,
+                          path: link.path,
+                          podId: pod.id,
+                          recordId: pod.id,
+                          type: EntityRecord,
+                          build: () => never(),
+                        };
+                      }
+
+                      case FoundLinkType.RECORD:
+                        return {
+                          linkType: FoundLinkType.RECORD,
+                          path: link.path,
+                          podId: Hash.shortHash(link.value.entity),
+                          recordId: link.value.recordId,
+                          type: AnyRecord,
+                          build: async () => {
+                            const client = await Client.discover(
+                              link.value.entity
+                            );
+                            const response = await client.getRecord(
+                              AnyRecord,
+                              AnyRecord,
+                              link.value.entity,
+                              link.value.recordId
+                            );
+
+                            return {record: response.record, links: []};
+                          },
+                        };
+
+                      case FoundLinkType.VERSION:
+                        return {
+                          linkType: FoundLinkType.RECORD,
+                          path: link.path,
+                          podId: Hash.shortHash(link.value.entity),
+                          recordId: link.value.recordId,
+                          type: AnyRecord,
+                          build: async () => {
+                            const client = await Client.discover(
+                              link.value.entity
+                            );
+                            const response = await client.getRecordVersion(
+                              AnyRecord,
+                              AnyRecord,
+                              link.value.entity,
+                              link.value.recordId,
+                              link.value.versionHash
+                            );
+
+                            return {record: response.record, links: []};
+                          },
+                        };
+
+                      default:
+                        never();
+                    }
+                  })
+                  .filter(isDefined);
+
+                return {record, links};
               };
 
               yield {
-                id: Hash.shortHash(note.id.toString()),
-                createdAt: new Date(note.published.epochMilliseconds),
-                versionCreatedAt: new Date(versionPublished.epochMilliseconds),
+                podId: pod.id,
+                recordId: Hash.shortHash(note.id.toString()),
                 type: PostRecord,
                 build,
               };

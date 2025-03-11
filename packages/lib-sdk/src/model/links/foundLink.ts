@@ -9,7 +9,7 @@ import {VersionLink} from "./versionLink.js";
 // Model.
 //
 
-export enum LinkType {
+export enum FoundLinkType {
   TAG = "TAG",
   BLOB = "BLOB",
   ENTITY = "ENTITY",
@@ -17,34 +17,39 @@ export enum LinkType {
   VERSION = "VERSION",
 }
 
-interface LinkTag {
-  type: LinkType.TAG;
+interface FoundLinkTag {
+  type: FoundLinkType.TAG;
   path: string;
   value: TagLink<string>;
 }
 
-interface LinkBlob {
-  type: LinkType.BLOB;
+interface FoundLinkBlob {
+  type: FoundLinkType.BLOB;
   path: string;
   value: BlobLink<string>;
 }
 
-interface LinkEntity {
-  type: LinkType.ENTITY;
+interface FoundLinkEntity {
+  type: FoundLinkType.ENTITY;
   path: string;
   value: EntityLink;
 }
 
-interface LinkRecord {
-  type: LinkType.RECORD;
+interface FoundLinkRecord {
+  type: FoundLinkType.RECORD;
   path: string;
   value: RecordLink<AnyRecord>;
 }
 
-interface LinkVersion {
-  type: LinkType.VERSION;
+interface FoundLinkVersion {
+  type: FoundLinkType.VERSION;
   path: string;
   value: VersionLink;
 }
 
-export type Link = LinkTag | LinkBlob | LinkEntity | LinkRecord | LinkVersion;
+export type FoundLink =
+  | FoundLinkTag
+  | FoundLinkBlob
+  | FoundLinkEntity
+  | FoundLinkRecord
+  | FoundLinkVersion;

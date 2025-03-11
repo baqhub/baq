@@ -205,7 +205,8 @@ function buildResolver(config: ResolverConfig) {
       pod.id,
       pod.id,
       EntityRecord,
-      newEntityRecord
+      newEntityRecord,
+      []
     );
 
     // And store it.

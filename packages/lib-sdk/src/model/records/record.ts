@@ -3,7 +3,7 @@ import * as IO from "../../helpers/io.js";
 import {Uuid} from "../../helpers/uuid.js";
 import {RBlobLinkName} from "../links/blobLink.js";
 import {EntityLink, REntityLinkName} from "../links/entityLink.js";
-import {Link, LinkType} from "../links/link.js";
+import {FoundLink, FoundLinkType} from "../links/foundLink.js";
 import {
   AnyRecordLink,
   RecordLink,
@@ -492,14 +492,12 @@ function findLinksInRecord<T extends AnyRecord>(
     type: IO.Any,
     value: unknown,
     path: string
-  ): ReadonlyArray<Link> {
-    console.log("Find links at path:", path, type);
-
+  ): ReadonlyArray<FoundLink> {
     function findLinksInArray(
       type: CombinedArrayType<any>,
       value: ReadonlyArray<unknown>
     ) {
-      return value.reduce((result: Array<Link>, v) => {
+      return value.reduce((result: Array<FoundLink>, v) => {
         const links = findLinksInUnknown(type.type, v, `${path}[*]`);
         result.push(...links);
         return result;
@@ -507,21 +505,24 @@ function findLinksInRecord<T extends AnyRecord>(
     }
 
     function findLinksInMap(type: IO.DictionaryType<any, any>, value: object) {
-      return Object.entries(value).reduce((result: Array<Link>, [key, v]) => {
-        const links = findLinksInUnknown(
-          type.codomain,
-          v[key],
-          `${path}['${snakeCase(key)}']`
-        );
+      return Object.entries(value).reduce(
+        (result: Array<FoundLink>, [key, v]) => {
+          const links = findLinksInUnknown(
+            type.codomain,
+            v[key],
+            `${path}['${snakeCase(key)}']`
+          );
 
-        result.push(...links);
-        return result;
-      }, []);
+          result.push(...links);
+          return result;
+        },
+        []
+      );
     }
 
     function findLinksInObject(type: CombinedObjectType<any>, value: object) {
       return Object.entries(type.props).reduce(
-        (result: Array<Link>, [key, t]) => {
+        (result: Array<FoundLink>, [key, t]) => {
           const links = findLinksInUnknown(
             t as IO.Any,
             (value as any)[key],
@@ -546,7 +547,7 @@ function findLinksInRecord<T extends AnyRecord>(
     }
 
     function findLinksInIntersection(type: IO.IntersectionType<any>) {
-      return type.types.reduce((result: Array<Link>, t: IO.Any) => {
+      return type.types.reduce((result: Array<FoundLink>, t: IO.Any) => {
         const links = findLinksInUnknown(t, value, path);
         result.push(...links);
         return result;
@@ -554,23 +555,23 @@ function findLinksInRecord<T extends AnyRecord>(
     }
 
     if (type.name === RTagLinkName && type.is(value)) {
-      return [{type: LinkType.TAG, path, value}];
+      return [{type: FoundLinkType.TAG, path, value}];
     }
 
     if (type.name === RBlobLinkName && type.is(value)) {
-      return [{type: LinkType.BLOB, path, value}];
+      return [{type: FoundLinkType.BLOB, path, value}];
     }
 
     if (type.name === REntityLinkName && type.is(value)) {
-      return [{type: LinkType.ENTITY, path, value}];
+      return [{type: FoundLinkType.ENTITY, path, value}];
     }
 
     if (type.name === RRecordLinkName && type.is(value)) {
-      return [{type: LinkType.RECORD, path, value}];
+      return [{type: FoundLinkType.RECORD, path, value}];
     }
 
     if (type.name === RVersionLinkName && type.is(value)) {
-      return [{type: LinkType.VERSION, path, value}];
+      return [{type: FoundLinkType.VERSION, path, value}];
     }
 
     if (

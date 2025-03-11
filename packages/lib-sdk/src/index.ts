@@ -23,6 +23,7 @@ export * from "./model/core/httpStatusCode.js";
 export * from "./model/core/schema.js";
 export * from "./model/links/blobLink.js";
 export * from "./model/links/entityLink.js";
+export * from "./model/links/foundLink.js";
 export * from "./model/links/recordLink.js";
 export * from "./model/links/tagLink.js";
 export * from "./model/local/authenticationState.js";

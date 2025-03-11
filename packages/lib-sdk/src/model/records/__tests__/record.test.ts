@@ -6,7 +6,7 @@ import {Record} from "../record.js";
 import {RecordPermissions} from "../recordPermissions.js";
 
 describe("findLinks()", () => {
-  test("Find links in Subscription record", () => {
+  test("find links in Subscription record", () => {
     // Prepare.
     const date = new Date("2025-03-10T01:01:01.000Z");
 
@@ -67,7 +67,7 @@ describe("findLinks()", () => {
     `);
   });
 
-  test("Find links in App record", () => {
+  test("find links in App record", () => {
     // Prepare.
     const date = new Date("2025-03-10T01:01:01.000Z");
 
