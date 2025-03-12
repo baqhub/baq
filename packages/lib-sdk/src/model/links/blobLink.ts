@@ -8,6 +8,7 @@ import {BlobResponse} from "../response/blobResponse.js";
 export interface BlobLink<T extends string> {
   hash: string;
   type: T;
+  size: number;
   name: string;
 }
 
@@ -25,6 +26,7 @@ export class BlobLinkClass<
     const model = IO.object({
       hash: IO.string,
       type: type,
+      size: IO.number,
       name: IO.string,
     });
 
@@ -47,7 +49,12 @@ function buildBlobLink<T extends string>(
   type: T,
   name: string
 ): BlobLink<T> {
-  return {hash: blobResponse.hash, type, name};
+  return {
+    hash: blobResponse.hash,
+    size: blobResponse.size,
+    type,
+    name,
+  };
 }
 
 //
