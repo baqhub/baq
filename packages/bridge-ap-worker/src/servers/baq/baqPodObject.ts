@@ -103,6 +103,7 @@ export class BaqPodObject extends DurableObject {
           return podId;
         }
 
+        // TODO: Find better system for external pods.
         return Hash.shortHash(entity);
       },
     };
