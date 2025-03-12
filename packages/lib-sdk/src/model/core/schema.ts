@@ -7,6 +7,7 @@ import {AnyRecordLink} from "../links/recordLink.js";
 
 type ObjectPropertySchema = Schema & {
   optional?: boolean;
+  deprecated?: boolean;
 };
 
 interface ObjectSchema {
