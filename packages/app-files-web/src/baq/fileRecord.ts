@@ -19,8 +19,13 @@ import {
 //
 
 export type FileRecordContent = {
+  /** Content of the file. */
   blob: AnyBlobLink;
+
+  /** Size of the file in bytes. */
   size: number;
+
+  /** Folder in which this file is located. */
   parent?: RecordLinkOf<"types.baq.dev", "3050fc130d4142a9994af0ef7c89099e">;
 };
 

@@ -115,7 +115,15 @@ export function schemaToTs(schema: Schema, name = "Type") {
                   ? subType
                   : `${toPropNamespaceName(key)}.Type`;
 
-              return `${camelCase(key)}${optionalSign}: ${propType};`;
+              const description = subSchema.description?.trim();
+              if (!description) {
+                return `${camelCase(key)}${optionalSign}: ${propType};`;
+              }
+
+              return `
+                /** ${description} */
+                ${camelCase(key)}${optionalSign}: ${propType};
+              `;
             })
             .join("");
 

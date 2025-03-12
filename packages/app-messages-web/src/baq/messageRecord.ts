@@ -19,10 +19,13 @@ import {
 //
 
 export type MessageRecordContent = {
+  /** Conversation this belongs to. */
   conversation: RecordLinkOf<
     "types.baq.dev",
     "7583995c51cf44ad972fdc123105e1dc"
   >;
+
+  /** Other message this message is replying to. */
   replyingTo?: RecordLinkOf<
     "types.baq.dev",
     "153b3cb3a2f0494e950599de1cc13ef3"

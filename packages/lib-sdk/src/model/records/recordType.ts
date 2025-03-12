@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as IO from "../../helpers/io.js";
+import {RVersionLinkName} from "../links/versionLink.js";
 
 //
 // Model.
@@ -26,11 +27,14 @@ function buildRecordType<E extends string, R extends string>(
   recordId: R,
   versionHash: string
 ) {
-  const RType: RRecordType<any, any, E, R> = IO.object({
-    entity: IO.literal(entity),
-    recordId: IO.literal(recordId),
-    versionHash: IO.string,
-  });
+  const RType: RRecordType<any, any, E, R> = IO.object(
+    {
+      entity: IO.literal(entity),
+      recordId: IO.literal(recordId),
+      versionHash: IO.string,
+    },
+    RVersionLinkName
+  );
 
   function typeCreator<C extends IO.Any>(
     _content: C
@@ -46,11 +50,14 @@ function buildRecordType<E extends string, R extends string>(
 }
 
 export type RAnyRecordType = RRecordType<any, any, any, any>;
-export const RAnyRecordType: RAnyRecordType = IO.object({
-  entity: IO.string,
-  recordId: IO.string,
-  versionHash: IO.string,
-});
+export const RAnyRecordType: RAnyRecordType = IO.object(
+  {
+    entity: IO.string,
+    recordId: IO.string,
+    versionHash: IO.string,
+  },
+  RVersionLinkName
+);
 
 function buildRecordTypeFull<
   E extends string,
@@ -63,18 +70,29 @@ function buildRecordTypeFull<
     versionHash,
   };
 
-  const RType: RRecordType<any, any, E, R> = IO.object({
-    entity: IO.literal(entity),
-    recordId: IO.literal(recordId),
-    versionHash: IO.string,
-  });
+  const RType: RRecordType<any, any, E, R> = IO.object(
+    {
+      entity: IO.literal(entity),
+      recordId: IO.literal(recordId),
+      versionHash: IO.string,
+    },
+    RVersionLinkName
+  );
 
   return [type, RType] as const;
 }
 
+//
+// Helpers.
+//
+
 function typeToKey(type: AnyRecordType) {
   return `${type.entity}+${type.recordId}`;
 }
+
+//
+// Exports.
+//
 
 export const RecordType = {
   new: buildRecordType,

@@ -22,10 +22,26 @@ import {
 
 export type PostRecordContent =
   | {
+      /** Text content of the post. */
       text: string;
       textMentions?: ReadonlyArray<{
+        /** Mentioned entity. */
         mention: EntityLink;
+
+        /** Start position of the mention in Unicode code points. */
         index: number;
+
+        /** Length of the mention in Unicode code points. */
+        length: number;
+      }>;
+      textLinks?: ReadonlyArray<{
+        /** URL of the link. */
+        url: string;
+
+        /** Start position of the link in Unicode code points. */
+        index: number;
+
+        /** Length of the link in Unicode code points. */
         length: number;
       }>;
     }
@@ -45,12 +61,14 @@ export type PostRecordContent =
     }
   | ExclusiveUnion<
       | {
+          /** Other Post record this replies to. */
           replyToPost: RecordLinkOf<
             "types.baq.dev",
             "d8fe40d469e0455c896b058a043829bf"
           >;
         }
       | {
+          /** Other Post record this quotes. */
           quotePost: RecordLinkOf<
             "types.baq.dev",
             "d8fe40d469e0455c896b058a043829bf"
@@ -66,6 +84,13 @@ const RPostRecordContent: IO.RType<PostRecordContent> = IO.union([
         IO.object({
           mention: EntityLink.io(),
           index: SchemaIO.int({min: 0}),
+          length: SchemaIO.int({min: 1}),
+        })
+      ),
+      textLinks: SchemaIO.array(
+        IO.object({
+          url: SchemaIO.string({minLength: 1, maxLength: 2048}),
+          index: SchemaIO.int({min: 1}),
           length: SchemaIO.int({min: 1}),
         })
       ),

@@ -17,6 +17,8 @@ export type AnyBlobLink = BlobLink<any>;
 // Runtime model.
 //
 
+export const RBlobLinkName = "BlobLink";
+
 export class BlobLinkClass<
   V extends string,
   T extends IO.LiteralC<V> | IO.StringC,
@@ -28,7 +30,7 @@ export class BlobLinkClass<
       name: IO.string,
     });
 
-    super("BlobLink", model.is, model.validate, model.encode);
+    super(RBlobLinkName, model.is, model.validate, model.encode);
   }
 }
 

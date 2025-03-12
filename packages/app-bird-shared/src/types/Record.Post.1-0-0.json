@@ -13,7 +13,8 @@
               "text": {
                 "type": "string",
                 "min_length": 1,
-                "max_length": 500
+                "max_length": 500,
+                "description": "Text content of the post."
               },
               "text_mentions": {
                 "type": "array",
@@ -25,7 +26,8 @@
                       "min_permissions": [
                         "read",
                         "notify"
-                      ]
+                      ],
+                      "description": "Mentioned entity."
                     },
                     "index": {
                       "type": "int",
@@ -36,6 +38,31 @@
                       "type": "int",
                       "min": 1,
                       "description": "Length of the mention in Unicode code points."
+                    }
+                  }
+                },
+                "optional": true
+              },
+              "text_links": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "min_length": 1,
+                      "max_length": 2048,
+                      "description": "URL of the link."
+                    },
+                    "index": {
+                      "type": "int",
+                      "min": 1,
+                      "description": "Start position of the link in Unicode code points."
+                    },
+                    "length": {
+                      "type": "int",
+                      "min": 1,
+                      "description": "Length of the link in Unicode code points."
                     }
                   }
                 },
@@ -133,7 +160,8 @@
                         "entity": "{var:entity}",
                         "record_id": "{var:record_id}"
                       }
-                    ]
+                    ],
+                    "description": "Other Post record this replies to."
                   }
                 }
               },
@@ -147,7 +175,8 @@
                         "entity": "{var:entity}",
                         "record_id": "{var:record_id}"
                       }
-                    ]
+                    ],
+                    "description": "Other Post record this quotes."
                   }
                 }
               }

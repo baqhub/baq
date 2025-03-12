@@ -1,6 +1,6 @@
 {
   "name": "@baqhub/cli",
-  "version": "0.1.27",
+  "version": "0.1.28",
   "license": "MIT",
   "description": "The official command line interface for the BAQ federated app platform.",
   "author": "Baqhub",

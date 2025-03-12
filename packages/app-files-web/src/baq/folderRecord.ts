@@ -18,7 +18,10 @@ import {
 //
 
 export type FolderRecordContent = {
+  /** Name of the folder. */
   name: string;
+
+  /** Folder in which this folder is located. */
   parent?: RecordLinkOf<"types.baq.dev", "3050fc130d4142a9994af0ef7c89099e">;
 };
 

@@ -1,7 +1,7 @@
 import {Array, RecordPermissions, Str, isDefined} from "@baqhub/sdk";
 import {useConstant} from "@baqhub/sdk-react";
 import {useCallback, useState} from "react";
-import {PostRecord} from "../baq/postRecord.js";
+import {PostRecord, PostRecordContent} from "../baq/postRecord.js";
 import {useFindEntityRecord, useRecordHelpers} from "../baq/store.js";
 
 //
@@ -32,6 +32,11 @@ interface UsePostComposerStateProps {
 // State hook.
 //
 
+type TextMention = Exclude<
+  Extract<PostRecordContent, {text: string}>["textMentions"],
+  undefined
+>[number];
+
 export function usePostComposerState({mention}: UsePostComposerStateProps) {
   const {entity, updateRecords} = useRecordHelpers();
 
@@ -53,7 +58,7 @@ export function usePostComposerState({mention}: UsePostComposerStateProps) {
       // Find mentions.
       const matches = trimmedText.matchAll(regexMention);
       const textMentions = [...matches]
-        .map(match => {
+        .map((match): TextMention | undefined => {
           const entityText = match[1];
           if (!entityText || !isDefined(match.index)) {
             return undefined;
