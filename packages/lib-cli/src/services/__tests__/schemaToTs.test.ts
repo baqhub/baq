@@ -73,6 +73,46 @@ test("object schema", async () => {
   `);
 });
 
+test("object schema with optional property", async () => {
+  // Prepare.
+  const schema: Schema = {
+    type: "object",
+    properties: {
+      firstName: {type: "string"},
+      lastName: {type: "string", optional: true},
+    },
+  };
+
+  // Act.
+  const schemaString = await formatCode(schemaToTs(schema));
+
+  // Assert.
+  expect(schemaString).toMatchInlineSnapshot(`
+    "export type Type = { firstName: string; lastName?: string };
+    "
+  `);
+});
+
+test("object schema with removed property", async () => {
+  // Prepare.
+  const schema: Schema = {
+    type: "object",
+    properties: {
+      firstName: {type: "string"},
+      lastName: {type: "string", removed: true},
+    },
+  };
+
+  // Act.
+  const schemaString = await formatCode(schemaToTs(schema));
+
+  // Assert.
+  expect(schemaString).toMatchInlineSnapshot(`
+    "export type Type = { firstName: string };
+    "
+  `);
+});
+
 test("nested object schema", async () => {
   // Prepare.
   const schema: Schema = {
