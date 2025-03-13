@@ -1,13 +1,7 @@
-import {EntityLink, Record} from "@baqhub/sdk";
+import {Record} from "@baqhub/sdk";
 import {useCallback} from "react";
 import {PostRecord} from "../baq/postRecord.js";
 import {useFindEntityRecord, useRecordHelpers} from "../baq/store.js";
-
-export interface Mention {
-  mention: EntityLink;
-  index: number;
-  length: number;
-}
 
 export function usePostState(post: PostRecord) {
   const {entity, proxyEntity, updateRecords} = useRecordHelpers();
@@ -22,7 +16,7 @@ export function usePostState(post: PostRecord) {
   }
 
   // Content.
-  const {text, textMentions} = post.content;
+  const {text, textFacets} = post.content;
   const canActOnPost = post.author.entity !== entity && post.source !== "proxy";
 
   // Actions.
@@ -42,7 +36,7 @@ export function usePostState(post: PostRecord) {
     authorName: author.content.profile.name,
     authorEntity: post.author.entity,
     text,
-    textMentions,
+    textFacets,
     date: post.receivedAt || post.createdAt,
     canActOnPost,
     onHidePress,

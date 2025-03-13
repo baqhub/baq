@@ -1,9 +1,7 @@
-import {Mention} from "@baqhub/bird-shared/state/postState.js";
-import {Str} from "@baqhub/sdk";
+import {TextFacet} from "@baqhub/bird-shared/state/constants.js";
 import {LinkedText} from "@baqhub/ui/core/linkedText.js";
-import {FC, ReactNode} from "react";
+import {FC} from "react";
 import {PostLink} from "./postLink.js";
-import {PostMention} from "./postMention.js";
 
 //
 // Props.
@@ -11,7 +9,7 @@ import {PostMention} from "./postMention.js";
 
 interface PostTextProps {
   text: string;
-  textMentions: ReadonlyArray<Mention> | undefined;
+  textFacets: ReadonlyArray<TextFacet> | undefined;
 }
 
 //
@@ -19,50 +17,52 @@ interface PostTextProps {
 //
 
 export const PostText: FC<PostTextProps> = props => {
-  const {text, textMentions} = props;
-  if (!textMentions || textMentions.length === 0) {
+  const {text, textFacets} = props;
+  if (!textFacets || textFacets.length === 0) {
     return <LinkedText renderLink={PostLink}>{text}</LinkedText>;
   }
 
-  return textMentions
-    .toSorted(m => m.index)
-    .reduce((result, mention, index) => {
-      const jsIndex = Str.jsLength(text, mention.index);
+  return <LinkedText renderLink={PostLink}>{text}</LinkedText>;
 
-      // If first, add text before.
-      if (index === 0 && jsIndex > 0) {
-        const beforeText = text.slice(0, jsIndex);
-        result.push(
-          <LinkedText key="before" renderLink={PostLink}>
-            {beforeText}
-          </LinkedText>
-        );
-      }
+  // return textFacets
+  //   .toSorted(m => m.index)
+  //   .reduce((result, mention, index) => {
+  //     const jsIndex = Str.jsLength(text, mention.index);
 
-      const jsLength = Str.jsLength(text.slice(jsIndex), mention.length);
-      const mentionEnd = jsIndex + jsLength;
-      const mentionText = text.slice(jsIndex, mentionEnd);
+  //     // If first, add text before.
+  //     if (index === 0 && jsIndex > 0) {
+  //       const beforeText = text.slice(0, jsIndex);
+  //       result.push(
+  //         <LinkedText key="before" renderLink={PostLink}>
+  //           {beforeText}
+  //         </LinkedText>
+  //       );
+  //     }
 
-      // Add mention.
-      const {entity} = mention.mention;
-      result.push(
-        <PostMention key={"mention-" + index} entity={entity}>
-          {mentionText}
-        </PostMention>
-      );
+  //     const jsLength = Str.jsLength(text.slice(jsIndex), mention.length);
+  //     const mentionEnd = jsIndex + jsLength;
+  //     const mentionText = text.slice(jsIndex, mentionEnd);
 
-      // Add text after.
-      if (text.length > mentionEnd) {
-        const nextMention = textMentions[index + 1];
-        const afterTextEnd = nextMention ? nextMention.index : text.length;
-        const afterText = text.slice(mentionEnd, afterTextEnd);
-        result.push(
-          <LinkedText key={"after-" + index} renderLink={PostLink}>
-            {afterText}
-          </LinkedText>
-        );
-      }
+  //     // Add mention.
+  //     const {entity} = mention.mention;
+  //     result.push(
+  //       <PostMention key={"mention-" + index} entity={entity}>
+  //         {mentionText}
+  //       </PostMention>
+  //     );
 
-      return result;
-    }, [] as ReactNode[]);
+  //     // Add text after.
+  //     if (text.length > mentionEnd) {
+  //       const nextMention = textMentions[index + 1];
+  //       const afterTextEnd = nextMention ? nextMention.index : text.length;
+  //       const afterText = text.slice(mentionEnd, afterTextEnd);
+  //       result.push(
+  //         <LinkedText key={"after-" + index} renderLink={PostLink}>
+  //           {afterText}
+  //         </LinkedText>
+  //       );
+  //     }
+
+  //     return result;
+  //   }, [] as ReactNode[]);
 };

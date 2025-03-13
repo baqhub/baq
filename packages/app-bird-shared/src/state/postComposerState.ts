@@ -1,8 +1,9 @@
 import {Array, RecordPermissions, Str, isDefined} from "@baqhub/sdk";
 import {useConstant} from "@baqhub/sdk-react";
 import {useCallback, useState} from "react";
-import {PostRecord, PostRecordContent} from "../baq/postRecord.js";
+import {PostRecord} from "../baq/postRecord.js";
 import {useFindEntityRecord, useRecordHelpers} from "../baq/store.js";
+import {TextFacet} from "./constants.js";
 
 //
 // Constants.
@@ -32,11 +33,6 @@ interface UsePostComposerStateProps {
 // State hook.
 //
 
-type TextMention = Exclude<
-  Extract<PostRecordContent, {text: string}>["textMentions"],
-  undefined
->[number];
-
 export function usePostComposerState({mention}: UsePostComposerStateProps) {
   const {entity, updateRecords} = useRecordHelpers();
 
@@ -57,8 +53,8 @@ export function usePostComposerState({mention}: UsePostComposerStateProps) {
 
       // Find mentions.
       const matches = trimmedText.matchAll(regexMention);
-      const textMentions = [...matches]
-        .map((match): TextMention | undefined => {
+      const textFacets = [...matches]
+        .map((match): TextFacet | undefined => {
           const entityText = match[1];
           if (!entityText || !isDefined(match.index)) {
             return undefined;
@@ -74,6 +70,7 @@ export function usePostComposerState({mention}: UsePostComposerStateProps) {
             : `${entityText}.baq.run`;
 
           return {
+            type: "mention",
             mention: {entity: mentionedEntity},
             index: unicodeIndex,
             length: unicodeLength,
@@ -82,11 +79,13 @@ export function usePostComposerState({mention}: UsePostComposerStateProps) {
         .filter(isDefined);
 
       // TODO: Verify and remove invalid mentions.
-      const notify = textMentions.map(mention => mention.mention);
+      const notify = textFacets
+        .map(facet => (facet.type === "mention" ? facet.mention : undefined))
+        .filter(isDefined);
 
       const postRecord = PostRecord.new(
         entity,
-        {text: trimmedText, textMentions},
+        {text: trimmedText, textFacets},
         {permissions: {...RecordPermissions.public, notify}}
       );
 

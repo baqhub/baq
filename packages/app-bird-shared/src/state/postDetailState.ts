@@ -41,12 +41,12 @@ export function usePostDetailState(postKey: PostRecordKey) {
     throw new Error("Author entity record not found.");
   }
 
-  const {text, textMentions} = post.content;
+  const {text, textFacets} = post.content;
   return {
     authorName: author.content.profile.name,
     authorEntity: post.author.entity,
     text,
-    textMentions,
+    textFacets,
     date: post.receivedAt || post.createdAt,
     isLoading,
     getReplyVersions,
