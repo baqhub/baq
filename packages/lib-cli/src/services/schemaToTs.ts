@@ -93,7 +93,7 @@ export function schemaToTs(schema: Schema, name = "Type") {
         case "object": {
           const subTypes = Object.entries(schema.properties)
             .map(([key, subSchema]) => {
-              if (subSchema.deprecated) {
+              if (subSchema.removed) {
                 return undefined;
               }
 
@@ -114,7 +114,7 @@ export function schemaToTs(schema: Schema, name = "Type") {
 
           const returnType = subTypes
             .map(([key, subSchema, [mode, subType]]) => {
-              if (subSchema.deprecated) {
+              if (subSchema.removed) {
                 return undefined;
               }
 
