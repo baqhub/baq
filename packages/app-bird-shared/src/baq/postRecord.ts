@@ -25,7 +25,10 @@ export type PostRecordContent =
       text: string;
       textMentions?: ReadonlyArray<{
         mention: EntityLink;
+        /** Start position of the mention in Unicode code points. */
         index: number;
+
+        /** Length of the mention in Unicode code points. */
         length: number;
       }>;
     }

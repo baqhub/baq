@@ -1,4 +1,5 @@
 import {
+  ObjectPropertySchema,
   Schema,
   SchemaArrayOptions,
   SchemaIntOptions,
@@ -63,7 +64,14 @@ export function schemaToIo(schema: Schema) {
     const returnType = ((): string => {
       switch (schema.type) {
         case "object": {
-          const mapProperty = (key: string, subSchema: Schema) => {
+          const mapProperty = (
+            key: string,
+            subSchema: ObjectPropertySchema
+          ) => {
+            if (subSchema.removed) {
+              return undefined;
+            }
+
             const newPath = `${path}${toPropNamespaceName(key)}.`;
             return `${camelCase(key)}: ${schemaToIoInternal(
               newPath,

@@ -73,7 +73,7 @@ test("object schema", async () => {
   `);
 });
 
-test("object schema with optional properties", async () => {
+test("object schema with optional property", async () => {
   // Prepare.
   const schema: Schema = {
     type: "object",
@@ -92,6 +92,26 @@ test("object schema with optional properties", async () => {
       { firstName: SchemaIO.string() },
       { lastName: SchemaIO.string() },
     );
+    "
+  `);
+});
+
+test("object schema with removed property", async () => {
+  // Prepare.
+  const schema: Schema = {
+    type: "object",
+    properties: {
+      firstName: {type: "string"},
+      lastName: {type: "string", removed: true},
+    },
+  };
+
+  // Act.
+  const schemaString = await formatCode(schemaToIo(schema));
+
+  // Assert.
+  expect(schemaString).toMatchInlineSnapshot(`
+    "IO.object({ firstName: SchemaIO.string() });
     "
   `);
 });

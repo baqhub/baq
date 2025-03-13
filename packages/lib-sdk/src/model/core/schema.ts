@@ -5,8 +5,9 @@ import {AnyRecordLink} from "../links/recordLink.js";
 // Model.
 //
 
-type ObjectPropertySchema = Schema & {
+export type ObjectPropertySchema = Schema & {
   optional?: boolean;
+  removed?: boolean;
 };
 
 interface ObjectSchema {
@@ -155,7 +156,13 @@ const RObjectSchema: IO.Type<ObjectSchema> = IO.recursion("ObjectSchema", () =>
       type: IO.literal("object"),
       properties: IO.record(
         IO.string,
-        IO.intersection([IO.partialObject({optional: IO.boolean}), RSchema])
+        IO.intersection([
+          IO.partialObject({
+            optional: IO.boolean,
+            removed: IO.boolean,
+          }),
+          RSchema,
+        ])
       ),
     },
     {strict: IO.boolean}

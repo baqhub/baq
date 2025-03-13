@@ -18,7 +18,10 @@ import {
 //
 
 export type StandingRecordContent = {
+  /** The entity to qualify. */
   publisher: EntityLink;
+
+  /** The current standing of the publisher. */
   decision: TagLink<"allow"> | TagLink<"block">;
 };
 
