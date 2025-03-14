@@ -47,16 +47,16 @@ export function usePostComposerState({mention}: UsePostComposerStateProps) {
       }
 
       // Find mentions and links.
-      const facets = Facets.findAll(trimmedText);
+      const textFacets = Facets.findAll(trimmedText);
 
       // TODO: Verify and remove invalid mentions.
-      const notify = facets
+      const notify = textFacets
         .map(facet => (facet.type === "mention" ? facet.mention : undefined))
         .filter(isDefined);
 
       const postRecord = PostRecord.new(
         entity,
-        {text: trimmedText, textFacets: facets},
+        {text: trimmedText, textFacets},
         {permissions: {...RecordPermissions.public, notify}}
       );
 
