@@ -3,4 +3,5 @@ export const BirdConstants = {
   authenticatedRefreshInterval: 60, // 1 min.
   unauthenticatedRefreshInterval: 2 * 60, // 2 min.
   linkMaxLength: 20,
+  defaultDomain: "baq.run",
 };

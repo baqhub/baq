@@ -2,6 +2,7 @@ import {AbortedError, HandlerOf, unreachable} from "@baqhub/sdk";
 import {InvalidActionError, abortable} from "@baqhub/sdk-react";
 import {useCallback, useEffect, useReducer} from "react";
 import {useRecordHelpers} from "../baq/store.js";
+import {normalizeEntity} from "../helpers/entity.js";
 
 //
 // Model.
@@ -136,11 +137,8 @@ export function useSearchDialogState(onEntityFound: HandlerOf<string>) {
 
     return abortable(async signal => {
       try {
-        const fullEntity = searchEntity.includes(".")
-          ? searchEntity
-          : `${searchEntity}.baq.run`;
-
         // Resolve the recipient.
+        const fullEntity = normalizeEntity(searchEntity);
         const entityRecord = await discover(fullEntity, signal);
 
         // Update the state.

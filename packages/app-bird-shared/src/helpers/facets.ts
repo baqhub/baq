@@ -1,6 +1,7 @@
 import {isDefined, Str} from "@baqhub/sdk";
 import {multi, tokenize} from "linkifyjs";
 import {PostRecordContent} from "../baq/postRecord.js";
+import {normalizeEntity} from "./entity.js";
 
 //
 // Types and constants.
@@ -55,16 +56,11 @@ function findAll(text: string): ReadonlyArray<TextFacet> {
       const unicodeIndex = Str.unicodeIndex(text, index);
       const unicodeLength = Str.unicodeLength("@" + entityText);
 
-      // Default to .baq.run if a partial entity is found.
-      const mentionedEntity = entityText.includes(".")
-        ? entityText
-        : `${entityText}.baq.run`;
-
       return {
         index: unicodeIndex,
         length: unicodeLength,
         type: "mention",
-        mention: {entity: mentionedEntity},
+        mention: {entity: normalizeEntity(entityText)},
       };
     }
   );
