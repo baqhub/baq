@@ -166,7 +166,7 @@ test("ref schema", async () => {
   // Assert.
   expect(schemaString).toMatchInlineSnapshot(`
     "(() => {
-      const RRefName: RType<RefName.Type> = IO.recursion("Name", () =>
+      const RRefName: IO.RType<RefName.Type> = IO.recursion("Name", () =>
         SchemaIO.string(),
       );
 
@@ -203,14 +203,15 @@ test("nested ref schema with shadowing", async () => {
   // Assert.
   expect(schemaString).toMatchInlineSnapshot(`
     "(() => {
-      const RRefName: RType<RefName.Type> = IO.recursion("Name", () =>
+      const RRefName: IO.RType<RefName.Type> = IO.recursion("Name", () =>
         SchemaIO.string(),
       );
 
       return IO.object({
         prop1: (() => {
-          const RRefName: RType<PropProp1.RefName.Type> = IO.recursion("Name", () =>
-            SchemaIO.int(),
+          const RRefName: IO.RType<PropProp1.RefName.Type> = IO.recursion(
+            "Name",
+            () => SchemaIO.int(),
           );
 
           return IO.object({ subProp1: RRefName });

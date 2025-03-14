@@ -1,4 +1,5 @@
-import {Mention} from "@baqhub/bird-shared/state/postState.js";
+import {TextFacet} from "@baqhub/bird-shared/helpers/facets.js";
+import {BirdConstants} from "@baqhub/bird-shared/state/constants.js";
 import {Str} from "@baqhub/sdk";
 import {LinkedText} from "@baqhub/ui/core/linkedText.js";
 import {FC, ReactNode} from "react";
@@ -11,7 +12,7 @@ import {PostMention} from "./postMention.js";
 
 interface PostTextProps {
   text: string;
-  textMentions: ReadonlyArray<Mention> | undefined;
+  textFacets: ReadonlyArray<TextFacet> | undefined;
 }
 
 //
@@ -19,15 +20,15 @@ interface PostTextProps {
 //
 
 export const PostText: FC<PostTextProps> = props => {
-  const {text, textMentions} = props;
-  if (!textMentions || textMentions.length === 0) {
+  const {text, textFacets} = props;
+  if (!textFacets || textFacets.length === 0) {
     return <LinkedText renderLink={PostLink}>{text}</LinkedText>;
   }
 
-  return textMentions
-    .toSorted(m => m.index)
-    .reduce((result, mention, index) => {
-      const jsIndex = Str.jsLength(text, mention.index);
+  return textFacets
+    .toSorted(f => f.index)
+    .reduce((result, facet, index) => {
+      const jsIndex = Str.jsLength(text, facet.index);
 
       // If first, add text before.
       if (index === 0 && jsIndex > 0) {
@@ -39,23 +40,20 @@ export const PostText: FC<PostTextProps> = props => {
         );
       }
 
-      const jsLength = Str.jsLength(text.slice(jsIndex), mention.length);
-      const mentionEnd = jsIndex + jsLength;
-      const mentionText = text.slice(jsIndex, mentionEnd);
+      const jsLength = Str.jsLength(text.slice(jsIndex), facet.length);
+      const facetEnd = jsIndex + jsLength;
+      const facetText = text.slice(jsIndex, facetEnd);
 
-      // Add mention.
-      const {entity} = mention.mention;
+      // Add facet.
       result.push(
-        <PostMention key={"mention-" + index} entity={entity}>
-          {mentionText}
-        </PostMention>
+        <Facet key={"facet-" + index} facet={facet} facetText={facetText} />
       );
 
       // Add text after.
-      if (text.length > mentionEnd) {
-        const nextMention = textMentions[index + 1];
-        const afterTextEnd = nextMention ? nextMention.index : text.length;
-        const afterText = text.slice(mentionEnd, afterTextEnd);
+      if (text.length > facetEnd) {
+        const nextFacet = textFacets[index + 1];
+        const afterTextEnd = nextFacet ? nextFacet.index : text.length;
+        const afterText = text.slice(facetEnd, afterTextEnd);
         result.push(
           <LinkedText key={"after-" + index} renderLink={PostLink}>
             {afterText}
@@ -65,4 +63,31 @@ export const PostText: FC<PostTextProps> = props => {
 
       return result;
     }, [] as ReactNode[]);
+};
+
+interface FacetProps {
+  facet: TextFacet;
+  facetText: string;
+}
+
+const Facet: FC<FacetProps> = ({facet, facetText}) => {
+  switch (facet.type) {
+    case "mention": {
+      const {entity} = facet.mention;
+      return <PostMention entity={entity}>{facetText}</PostMention>;
+    }
+
+    case "web_link": {
+      const linkText =
+        facetText === facet.url &&
+        facetText.length > BirdConstants.linkMaxLength
+          ? facetText.substring(0, BirdConstants.linkMaxLength) + "…"
+          : facetText;
+
+      return <PostLink href={facet.url}>{linkText}</PostLink>;
+    }
+
+    default:
+      return null;
+  }
 };

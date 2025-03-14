@@ -2,7 +2,7 @@ import {Q, Record} from "@baqhub/sdk";
 import {useCallback} from "react";
 import {PostRecord} from "../baq/postRecord.js";
 import {useRecordHelpers, useRecordsQuery} from "../baq/store.js";
-import { BirdConstants } from "./constants.js";
+import {BirdConstants} from "./constants.js";
 
 export function useMentionsPageState() {
   const {entity} = useRecordHelpers();
@@ -10,7 +10,7 @@ export function useMentionsPageState() {
     pageSize: BirdConstants.listPageSize,
     filter: Q.and(
       Q.type(PostRecord),
-      Q.entity("content.textMentions.*.mention", entity)
+      Q.entity("content.textFacets.*.mention", entity)
     ),
   });
 

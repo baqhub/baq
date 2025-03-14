@@ -56,7 +56,7 @@ export function schemaToIo(schema: Schema) {
         const newPath = `${path}${toRefNamespaceName(key)}.`;
         const subSchemaIo = schemaToIoInternal(newPath, subSchema);
 
-        return `const ${typeName}: RType<${newPath}Type> = IO.recursion("${ioName}", () => ${subSchemaIo})`;
+        return `const ${typeName}: IO.RType<${newPath}Type> = IO.recursion("${ioName}", () => ${subSchemaIo})`;
       })
       .join("\n\n");
 

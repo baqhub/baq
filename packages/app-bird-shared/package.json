@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "ts": "tsc --build --watch"
+    "ts": "tsc --build --watch",
+    "test": "vitest"
   },
   "exports": {
     "./*": "./src/*"
@@ -13,12 +14,14 @@
     "@baqhub/cli": "*",
     "@baqhub/sdk": "*",
     "@baqhub/sdk-react": "*",
+    "linkifyjs": "4.2.0",
     "lodash": "4.17.21",
     "react": "19.0.0"
   },
   "devDependencies": {
     "@types/lodash": "4.17.15",
     "@types/react": "19.0.10",
-    "typescript": "5.7.3"
+    "typescript": "5.7.3",
+    "vitest": "3.0.7"
   }
 }

@@ -13,31 +13,73 @@
               "text": {
                 "type": "string",
                 "min_length": 1,
-                "max_length": 500
+                "max_length": 500,
+                "description": "Text content of the post."
               },
-              "text_mentions": {
+              "text_facets": {
                 "type": "array",
+                "description": "Enrich the text content.",
                 "items": {
-                  "type": "object",
-                  "properties": {
-                    "mention": {
-                      "type": "entity_link",
-                      "min_permissions": [
-                        "read",
-                        "notify"
+                  "type": "intersection",
+                  "schemas": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "index": {
+                          "type": "int",
+                          "min": 0,
+                          "description": "Start position of the facet in Unicode code points."
+                        },
+                        "length": {
+                          "type": "int",
+                          "min": 1,
+                          "description": "Length of the facet in Unicode code points."
+                        }
+                      }
+                    },
+                    {
+                      "type": "union",
+                      "strict": true,
+                      "schemas": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "mention"
+                              ]
+                            },
+                            "mention": {
+                              "type": "entity_link",
+                              "min_permissions": [
+                                "read",
+                                "notify"
+                              ],
+                              "description": "Mentioned entity."
+                            }
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "web_link"
+                              ]
+                            },
+                            "url": {
+                              "type": "string",
+                              "min_length": 1,
+                              "max_length": 2048,
+                              "description": "URL of the web link."
+                            }
+                          }
+                        }
                       ]
-                    },
-                    "index": {
-                      "type": "int",
-                      "min": 0,
-                      "description": "Start position of the mention in Unicode code points."
-                    },
-                    "length": {
-                      "type": "int",
-                      "min": 1,
-                      "description": "Length of the mention in Unicode code points."
                     }
-                  }
+                  ]
                 },
                 "optional": true
               }
@@ -81,10 +123,6 @@
                     "height": {
                       "type": "int",
                       "min": 1
-                    },
-                    "size": {
-                      "type": "int",
-                      "min": 0
                     },
                     "mentions": {
                       "type": "array",
@@ -133,7 +171,8 @@
                         "entity": "{var:entity}",
                         "record_id": "{var:record_id}"
                       }
-                    ]
+                    ],
+                    "description": "Other post this replies to."
                   }
                 }
               },
@@ -147,7 +186,8 @@
                         "entity": "{var:entity}",
                         "record_id": "{var:record_id}"
                       }
-                    ]
+                    ],
+                    "description": "Other post this quotes."
                   }
                 }
               }
