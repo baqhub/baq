@@ -38,7 +38,7 @@ function findAll(text: string): ReadonlyArray<TextFacet> {
       index: Str.unicodeIndex(text, token.startIndex()),
       length: Str.unicodeLength(tokenValue),
       type: "web_link",
-      url: token.toHref("https"),
+      url: token.toHref(defaultScheme),
     };
   });
 
