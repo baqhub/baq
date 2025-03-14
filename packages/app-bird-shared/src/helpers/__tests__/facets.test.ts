@@ -92,7 +92,7 @@ describe("findAll()", () => {
     `);
   });
 
-  test("find mention and link", () => {
+  test("find link and mention", () => {
     // Prepare.
     const url = "http://google.com";
     const entity = "user.baq.run";
@@ -106,18 +106,49 @@ describe("findAll()", () => {
     expect(actual).toMatchInlineSnapshot(`
       [
         {
-          "index": 6,
-          "length": 17,
+          "index": ${text.indexOf(url)},
+          "length": ${url.length},
           "type": "web_link",
-          "url": "http://google.com",
+          "url": "${url}",
         },
         {
-          "index": 29,
-          "length": 13,
+          "index": ${text.indexOf(mention)},
+          "length": ${mention.length},
           "mention": {
-            "entity": "user.baq.run",
+            "entity": "${entity}",
           },
           "type": "mention",
+        },
+      ]
+    `);
+  });
+
+  test("find mention and link", () => {
+    // Prepare.
+    const entity = "user.baq.run";
+    const mention = `@${entity}`;
+    const url = "http://google.com";
+    const text = `Go with ${mention} to ${url}`;
+
+    // Act.
+    const actual = Facets.findAll(text);
+
+    // Assert.
+    expect(actual).toMatchInlineSnapshot(`
+      [
+        {
+          "index": ${text.indexOf(mention)},
+          "length": ${mention.length},
+          "mention": {
+            "entity": "${entity}",
+          },
+          "type": "mention",
+        },
+        {
+          "index": ${text.indexOf(url)},
+          "length": ${url.length},
+          "type": "web_link",
+          "url": "${url}",
         },
       ]
     `);

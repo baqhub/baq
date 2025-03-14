@@ -2,6 +2,10 @@ import {isDefined, Str} from "@baqhub/sdk";
 import {multi, tokenize} from "linkifyjs";
 import {PostRecordContent} from "../baq/postRecord.js";
 
+//
+// Types and constants.
+//
+
 export type TextFacet = Exclude<
   Extract<PostRecordContent, {text: string}>["textFacets"],
   undefined
@@ -14,7 +18,12 @@ const regexMention =
 
 const defaultScheme = "https";
 
+//
+// Helpers.
+//
+
 function findAll(text: string): ReadonlyArray<TextFacet> {
+  // Links.
   const linkFacets = tokenize(text).map((token): TextFacet | undefined => {
     const tokenValue = token.v;
 
@@ -33,6 +42,7 @@ function findAll(text: string): ReadonlyArray<TextFacet> {
     };
   });
 
+  // Mentions.
   const mentionMatches = text.matchAll(regexMention);
   const mentionFacets = [...mentionMatches].map(
     (match): TextFacet | undefined => {
