@@ -1,4 +1,4 @@
-import {TextFacet} from "@baqhub/bird-shared/state/constants.js";
+import {TextFacet} from "@baqhub/bird-shared/helpers/facets.js";
 import {LinkedText} from "@baqhub/ui/core/linkedText.js";
 import {FC} from "react";
 import {PostLink} from "./postLink.js";
