@@ -37,6 +37,30 @@ describe("findAll()", () => {
     `);
   });
 
+  test("find single mention after unicode", () => {
+    // Prepare.
+    const entity = "user.baq.run";
+    const mention = `@${entity}`;
+    const text = `𩸽定食 ${mention}`;
+
+    // Act.
+    const actual = Facets.findAll(text);
+
+    // Assert.
+    expect(actual).toMatchInlineSnapshot(`
+      [
+        {
+          "index": 4,
+          "length": ${mention.length},
+          "mention": {
+            "entity": "${entity}",
+          },
+          "type": "mention",
+        },
+      ]
+    `);
+  });
+
   test("find multiple mentions", () => {
     // Prepare.
     const entity1 = "user1.host.com";
@@ -84,6 +108,27 @@ describe("findAll()", () => {
       [
         {
           "index": ${text.indexOf(url)},
+          "length": ${url.length},
+          "type": "web_link",
+          "url": "${url}",
+        },
+      ]
+    `);
+  });
+
+  test("find single link after unicode", () => {
+    // Prepare.
+    const url = "http://google.com";
+    const text = `𩸽定食 ${url}`;
+
+    // Act.
+    const actual = Facets.findAll(text);
+
+    // Assert.
+    expect(actual).toMatchInlineSnapshot(`
+      [
+        {
+          "index": 4,
           "length": ${url.length},
           "type": "web_link",
           "url": "${url}",
