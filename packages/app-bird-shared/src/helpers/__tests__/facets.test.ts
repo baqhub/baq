@@ -61,6 +61,30 @@ describe("findAll()", () => {
     `);
   });
 
+  test("find single mention with uppercase", () => {
+    // Prepare.
+    const entity = "user.baq.run";
+    const mention = `@USER.BAQ.RUN`;
+    const text = `Hi ${mention}`;
+
+    // Act.
+    const actual = Facets.findAll(text);
+
+    // Assert.
+    expect(actual).toMatchInlineSnapshot(`
+      [
+        {
+          "index": ${text.indexOf(mention)},
+          "length": ${mention.length},
+          "mention": {
+            "entity": "${entity}",
+          },
+          "type": "mention",
+        },
+      ]
+    `);
+  });
+
   test("find single mention after unicode", () => {
     // Prepare.
     const entity = "user.baq.run";
