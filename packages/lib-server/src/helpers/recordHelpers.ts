@@ -14,14 +14,17 @@ export function findBlobLink(
       "hash" in value &&
       "type" in value &&
       "name" in value &&
+      "size" in value &&
       value.hash === hash &&
       typeof value.type === "string" &&
       value.type &&
+      typeof value.size === "number" &&
       value.name === fileName
     ) {
       return {
         hash: value.hash,
         type: value.type,
+        size: value.size,
         name: value.name,
       };
     }

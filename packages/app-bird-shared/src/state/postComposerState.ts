@@ -1,7 +1,7 @@
 import {Array, RecordPermissions, isDefined} from "@baqhub/sdk";
 import {useConstant} from "@baqhub/sdk-react";
 import {useCallback, useState} from "react";
-import {PostRecord, PostRecordContent} from "../baq/postRecord.js";
+import {PostRecord} from "../baq/postRecord.js";
 import {useFindEntityRecord, useRecordHelpers} from "../baq/store.js";
 import {Facets} from "../helpers/facets.js";
 
@@ -27,11 +27,6 @@ interface UsePostComposerStateProps {
 //
 // State hook.
 //
-
-type TextMention = Exclude<
-  Extract<PostRecordContent, {text: string}>["textMentions"],
-  undefined
->[number];
 
 export function usePostComposerState({mention}: UsePostComposerStateProps) {
   const {entity, updateRecords} = useRecordHelpers();

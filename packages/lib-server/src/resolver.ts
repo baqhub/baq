@@ -42,7 +42,6 @@ export type BlobFromBuilder = (
 
 export interface BlobFromBuilderResult {
   type: string;
-  size: number;
   link: AnyBlobLink;
 }
 
@@ -108,10 +107,10 @@ function buildResolver(config: ResolverConfig) {
 
       return {
         type: requestBlob.type,
-        size: existingBlob.size,
         link: {
           hash: existingBlob.hash,
           type: requestBlob.type,
+          size: existingBlob.size,
           name: builder.fileName,
         },
       };
@@ -133,10 +132,10 @@ function buildResolver(config: ResolverConfig) {
 
     return {
       type: requestBlob.type,
-      size: newBlob.size,
       link: {
         hash: newBlob.hash,
         type: requestBlob.type,
+        size: newBlob.size,
         name: builder.fileName,
       },
     };

@@ -85,6 +85,7 @@ describe("findLinks()", () => {
           hash: "f51380bb4a2742ab8b5034ad471d3403d96264fcd3b744d89b9dc86cb6524bc7",
           name: "icon.png",
           type: "image/png",
+          size: 1234,
         },
         uris: {
           redirect: "https://app.com",

@@ -66,7 +66,6 @@ export async function noteToPostRecord(
         large: large.link,
         width,
         height,
-        size: large.size,
       };
     }
   );
