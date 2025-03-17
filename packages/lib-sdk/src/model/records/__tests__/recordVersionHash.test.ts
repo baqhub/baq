@@ -63,6 +63,8 @@ describe("record version hash", () => {
         author: {entity: "types.baq.dev"},
         createdAt: new Date("2024-12-01T00:00:00.000Z"),
         hash: "3d9ad75026efae4b696a320be2d591a934582bcecd65cd902d1eb9ae6bbb7706",
+        hashSignature:
+          "qfhFbw3brUe7A26zVRHqhBK0pdgNdUo/mgCkT+GOjEB4lXzVTpHjohhOwcLrgGhMRihhEEXOs7N8aXzTZtG/Cg==",
         parentHash:
           "9e3a404fcbd46bf321015dd70a95f8f466f21f7c7d7511830e6b2c7e643c7772",
         receivedAt: undefined,
@@ -124,6 +126,8 @@ describe("record version hash", () => {
         createdAt: new Date("2024-06-22T20:15:02.579Z"),
         receivedAt: undefined,
         hash: "b698f82a8f21c88befa2379cb40ece62f42130854727c99311dbb8c040184784",
+        hashSignature:
+          "qfhFbw3brUe7A26zVRHqhBK0pdgNdUo/mgCkT+GOjEB4lXzVTpHjohhOwcLrgGhMRihhEEXOs7N8aXzTZtG/Cg==",
         parentHash:
           "caf2bfe9efde6b8e8831f3cba26f5044ff32d80030f8c7ee450e5e85f511e3a2",
       },

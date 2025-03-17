@@ -53,6 +53,7 @@ export enum NoContentRecordAction {
 export interface RecordVersion<T extends AnyRecord | NoContentRecord> {
   author: EntityLink;
   hash: VersionHash<T> | undefined;
+  hashSignature: string | undefined;
   createdAt: Date;
   receivedAt: Date | undefined;
   parentHash?: string;
@@ -138,6 +139,7 @@ const RRecordVersion: IO.Type<RecordVersion<any>> = IO.intersection([
   IO.object({
     author: EntityLink.io(),
     hash: IO.union([IO.undefined, IO.string]),
+    hashSignature: IO.union([IO.undefined, IO.string]),
     createdAt: IO.isoDate,
     receivedAt: IO.union([IO.undefined, IO.isoDate]),
   }),
@@ -326,6 +328,7 @@ function buildRecordUpdate<R extends RAnyRecord>(
     version: {
       author: {entity},
       hash: undefined,
+      hashSignature: undefined,
       createdAt: newVersionCreatedAt,
       receivedAt: undefined,
       parentHash: record.version?.hash,
@@ -368,6 +371,7 @@ function buildNoContentRecord(
     version: {
       author: {entity},
       hash: undefined,
+      hashSignature: undefined,
       createdAt: newVersionCreatedAt,
       receivedAt: undefined,
       parentHash: record.version?.hash,
