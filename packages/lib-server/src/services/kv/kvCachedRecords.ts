@@ -19,6 +19,10 @@ function recordVersionKey(
   return ["record_version", podId, authorId, recordId, versionHash];
 }
 
+function entityRecordKey(podId: string, authorId: string) {
+  return recordKey(podId, authorId, "entity");
+}
+
 function build(kv: KvStoreAdapter) {
   return {
     async get(podId: string, authorId: string, recordId: string) {
@@ -57,9 +61,14 @@ function build(kv: KvStoreAdapter) {
         record.versionHash
       );
 
+      const entityPromise = record.isEntityRecord
+        ? kv.set(entityRecordKey(record.ownerId, record.authorId), rawRecord)
+        : undefined;
+
       await Promise.all([
         kv.set(key, rawRecord),
         kv.set(versionKey, rawRecord),
+        entityPromise,
       ]);
     },
   };

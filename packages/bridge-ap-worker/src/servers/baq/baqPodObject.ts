@@ -9,7 +9,6 @@ import {
   never,
   Q,
   Query,
-  Record,
   Constants as SDKConstants,
   SignAlgorithm,
   Signature,
@@ -18,12 +17,11 @@ import {
   BlobBuilder,
   KvKey,
   KvTypedStoreAdapter,
+  LinkRequestHandler,
   Pod,
   PodIdStore,
   PodServer,
   RecordBuilder,
-  RecordBuilderResult,
-  RecordBuilderResultLink,
   RecordsRequestHandler,
   Resolver,
   StreamDigester,
@@ -115,8 +113,76 @@ export class BaqPodObject extends DurableObject {
       ["baq_server"]
     );
 
+    const onLinkRequest: LinkRequestHandler = (pod, link) => {
+      switch (link.type) {
+        case FoundLinkType.TAG:
+        case FoundLinkType.BLOB:
+          return link;
+
+        case FoundLinkType.ENTITY: {
+          if (link.value.entity === pod.entity) {
+            return undefined;
+          }
+
+          return {
+            ...link,
+            authorId: Hash.shortHash(link.value.entity),
+            recordId: "entity",
+            recordType: EntityRecord,
+            build: async () => {
+              const client = await Client.discover(link.value.entity);
+              return await client.getEntityRecord();
+            },
+          };
+        }
+
+        case FoundLinkType.RECORD:
+          return {
+            ...link,
+            authorId: Hash.shortHash(link.value.entity),
+            recordId: link.value.recordId,
+            recordType: AnyRecord,
+            build: async () => {
+              const client = await Client.discover(link.value.entity);
+              const response = await client.getRecord(
+                AnyRecord,
+                AnyRecord,
+                link.value.entity,
+                link.value.recordId
+              );
+
+              return response.record;
+            },
+          };
+
+        case FoundLinkType.VERSION:
+          return {
+            ...link,
+            authorId: Hash.shortHash(link.value.entity),
+            recordId: link.value.recordId,
+            recordType: AnyRecord,
+            build: async () => {
+              const client = await Client.discover(link.value.entity);
+              const response = await client.getRecordVersion(
+                AnyRecord,
+                AnyRecord,
+                link.value.entity,
+                link.value.recordId,
+                link.value.versionHash
+              );
+
+              return response.record;
+            },
+          };
+
+        default:
+          never();
+      }
+    };
+
     const resolver = Resolver.new({
       digestStream,
+      onLinkRequest,
       blobStoreAdapter,
       podKvStoreAdapter,
       globalKvStoreAdapter,
@@ -182,99 +248,17 @@ export class BaqPodObject extends DurableObject {
 
               resultCount++;
 
-              const build = async (): Promise<
-                RecordBuilderResult | undefined
-              > => {
-                const record = await noteToPostRecord(
-                  fetchImageEnv,
-                  resolver.blobFromBuilder,
-                  pod.entity,
-                  note
-                );
-                if (!record) {
-                  return undefined;
-                }
-
-                const links = Record.findLinks(PostRecord, record)
-                  .map((link): RecordBuilderResultLink | undefined => {
-                    switch (link.type) {
-                      case FoundLinkType.TAG:
-                      case FoundLinkType.BLOB:
-                        return link;
-
-                      case FoundLinkType.ENTITY: {
-                        if (link.value.entity !== pod.entity) {
-                          throw new Error(
-                            `Unexpected entity: ${link.value.entity}`
-                          );
-                        }
-
-                        return {
-                          ...link,
-                          podId: pod.id,
-                          recordId: pod.id,
-                          recordType: EntityRecord,
-                          build: () => never(),
-                        };
-                      }
-
-                      case FoundLinkType.RECORD:
-                        return {
-                          ...link,
-                          podId: Hash.shortHash(link.value.entity),
-                          recordId: link.value.recordId,
-                          recordType: AnyRecord,
-                          build: async () => {
-                            const client = await Client.discover(
-                              link.value.entity
-                            );
-                            const response = await client.getRecord(
-                              AnyRecord,
-                              AnyRecord,
-                              link.value.entity,
-                              link.value.recordId
-                            );
-
-                            return {record: response.record, links: []};
-                          },
-                        };
-
-                      case FoundLinkType.VERSION:
-                        return {
-                          ...link,
-                          podId: Hash.shortHash(link.value.entity),
-                          recordId: link.value.recordId,
-                          recordType: AnyRecord,
-                          build: async () => {
-                            const client = await Client.discover(
-                              link.value.entity
-                            );
-                            const response = await client.getRecordVersion(
-                              AnyRecord,
-                              AnyRecord,
-                              link.value.entity,
-                              link.value.recordId,
-                              link.value.versionHash
-                            );
-
-                            return {record: response.record, links: []};
-                          },
-                        };
-
-                      default:
-                        never();
-                    }
-                  })
-                  .filter(isDefined);
-
-                return {record, links};
-              };
-
               yield {
-                podId: pod.id,
+                authorId: pod.id,
                 recordId: Hash.shortHash(note.id.toString()),
                 recordType: PostRecord,
-                build,
+                build: () =>
+                  noteToPostRecord(
+                    fetchImageEnv,
+                    resolver.blobFromBuilder,
+                    pod.entity,
+                    note
+                  ),
               };
             }
           };
@@ -288,10 +272,9 @@ export class BaqPodObject extends DurableObject {
         pod,
         basePath: `${Constants.baqRoutePrefix}/${pod.id}`,
         onRecordsRequest,
+        resolver,
         podIdStore,
         blobStoreAdapter,
-        podKvStoreAdapter,
-        globalKvStoreAdapter,
       });
     };
 
@@ -371,16 +354,21 @@ export class BaqPodObject extends DurableObject {
       return avatarToBlobRequest(this.fetchImageEnv, icon);
     })();
 
-    await this.resolver.saveEntityRecord(
-      {
-        pod: newPod,
-        avatar,
-        name: actor.name?.toString() || undefined,
-        bio: stripHtml(actor.summary?.toString() || "").result || undefined,
-        website: actor.url?.toString() || undefined,
-      },
-      `https://${Constants.domain}${Constants.baqRoutePrefix}/${newPod.id}`
-    );
+    try {
+      await this.resolver.saveEntityRecord(
+        {
+          pod: newPod,
+          avatar,
+          name: actor.name?.toString() || undefined,
+          bio: stripHtml(actor.summary?.toString() || "").result || undefined,
+          website: actor.url?.toString() || undefined,
+        },
+        `https://${Constants.domain}${Constants.baqRoutePrefix}/${newPod.id}`
+      );
+    } catch (err) {
+      console.log("Got err:", err);
+      throw err;
+    }
 
     // Save the pod.
     await this.storage.set(Pod.io, podKey, newPod);

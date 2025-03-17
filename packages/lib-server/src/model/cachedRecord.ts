@@ -1,4 +1,11 @@
-import {AnyRecord, IO, RecordSource, RecordVersionHash} from "@baqhub/sdk";
+import {
+  AnyRecord,
+  EntityRecord,
+  IO,
+  RecordSource,
+  RecordType,
+  RecordVersionHash,
+} from "@baqhub/sdk";
 import {CachedLink} from "./cachedLink.js";
 import {Pod} from "./pod.js";
 
@@ -13,6 +20,7 @@ const RCachedRecord = IO.object({
   versionHash: IO.string,
   record: IO.unknown,
   links: IO.readonlyArray(CachedLink.io),
+  isEntityRecord: IO.boolean,
   createdAt: IO.isoDate,
 });
 
@@ -65,6 +73,8 @@ function ofNewRecord<T extends AnyRecord>(
     versionHash,
     record: IO.encode(recordType, patchedRecord),
     links,
+    isEntityRecord:
+      RecordType.toKey(record.type) === RecordType.toKey(EntityRecord.type),
     createdAt: record.createdAt,
   };
 }
@@ -75,17 +85,8 @@ function ofExistingRecord<T extends AnyRecord>(
   authorId: string,
   record: T,
   links: ReadonlyArray<CachedLink>
-) {
-  const versionHash = RecordVersionHash.ofRecord(recordType, {
-    ...record,
-    version: {
-      author: record.author,
-      createdAt: record.createdAt,
-      receivedAt: undefined,
-      hash: undefined,
-      hashSignature: undefined,
-    },
-  });
+): CachedRecord {
+  const versionHash = RecordVersionHash.ofRecord(recordType, record);
 
   const existingHash = record.version?.hash;
   const existingHashSignature = record.version?.hashSignature;
@@ -119,6 +120,8 @@ function ofExistingRecord<T extends AnyRecord>(
     versionHash,
     record: IO.encode(recordType, patchedRecord),
     links,
+    isEntityRecord:
+      RecordType.toKey(record.type) === RecordType.toKey(EntityRecord.type),
     createdAt: new Date(),
   };
 }

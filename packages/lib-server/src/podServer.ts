@@ -1,62 +1,24 @@
 import {
   AnyBlobLink,
   AnyRecord,
-  BlobFoundLink,
-  EntityFoundLink,
   EntityRecord,
-  FoundLinkType,
   isDefined,
   JSONPointer,
   Q,
   Query,
   QueryFilter,
-  RAnyRecord,
-  RecordFoundLink,
-  TagFoundLink,
-  unreachable,
-  VersionFoundLink,
 } from "@baqhub/sdk";
 import {Hono} from "hono";
-import {CachedLink, CachedLinkType} from "./model/cachedLink.js";
+import {CachedLinkType} from "./model/cachedLink.js";
 import {CachedRecord} from "./model/cachedRecord.js";
 import {Pod} from "./model/pod.js";
+import {RecordBuilder, Resolver} from "./resolver.js";
 import {BlobStoreAdapter} from "./services/blob/blobStoreAdapter.js";
-import {KvCachedBlobs} from "./services/kv/kvCachedBlobs.js";
-import {KvCachedRecords} from "./services/kv/kvCachedRecords.js";
-import {KvStoreAdapter} from "./services/kv/kvStoreAdapter.js";
 import {PodIdStore} from "./services/kv/podIdStore.js";
 
 //
 // Types.
 //
-
-export type RecordBuilderResultBasicLink = TagFoundLink | BlobFoundLink;
-
-export type RecordBuilderResultRecordLink = (
-  | EntityFoundLink
-  | RecordFoundLink
-  | VersionFoundLink
-) &
-  RecordBuilder;
-
-export type RecordBuilderResultLink =
-  | RecordBuilderResultBasicLink
-  | RecordBuilderResultRecordLink;
-
-export interface RecordBuilderResult {
-  record: AnyRecord;
-  links: ReadonlyArray<RecordBuilderResultLink>;
-}
-
-export interface RecordBuilder {
-  podId: string;
-  recordId: string;
-  versionHash?: string;
-  recordType: RAnyRecord;
-  build: () => Promise<RecordBuilderResult | undefined>;
-}
-
-export type RecordFromBuilder = (builder: RecordBuilder) => Promise<AnyRecord>;
 
 export interface RecordsRequestContext {
   pod: Pod;
@@ -79,10 +41,9 @@ export interface ServerConfig {
   onRecordsRequest: RecordsRequestHandler;
 
   // Adapters.
+  resolver: Resolver;
   podIdStore: PodIdStore;
   blobStoreAdapter: BlobStoreAdapter;
-  podKvStoreAdapter: KvStoreAdapter;
-  globalKvStoreAdapter: KvStoreAdapter;
 }
 
 //
@@ -92,11 +53,8 @@ export interface ServerConfig {
 function buildPodServer(config: ServerConfig) {
   const {pod, basePath} = config;
   const {onRecordsRequest} = config;
-  const {podIdStore, blobStoreAdapter} = config;
-  const {podKvStoreAdapter, globalKvStoreAdapter} = config;
-
-  const kvCachedBlobs = KvCachedBlobs.new(globalKvStoreAdapter);
-  const kvCachedRecords = KvCachedRecords.new(podKvStoreAdapter);
+  const {resolver, podIdStore, blobStoreAdapter} = config;
+  const {kvCachedBlobs, kvCachedRecords} = resolver;
 
   //
   // Blobs.
@@ -149,123 +107,6 @@ function buildPodServer(config: ServerConfig) {
     );
 
     return existingRecordVersion;
-  }
-
-  async function resolveRecordFromBuilder(
-    builder: RecordBuilder
-  ): Promise<CachedRecord | undefined> {
-    const existingRecord = await (builder.versionHash
-      ? kvCachedRecords.getVersion(
-          pod.id,
-          builder.podId,
-          builder.recordId,
-          builder.versionHash
-        )
-      : kvCachedRecords.get(pod.id, builder.podId, builder.recordId));
-
-    if (existingRecord) {
-      return existingRecord;
-    }
-
-    const result = await builder.build();
-    if (!result) {
-      return undefined;
-    }
-
-    const linksPromises = result.links.map(
-      async (link): Promise<CachedLink | undefined> => {
-        const linkWithRecordToCachedLink = async (
-          l: RecordBuilderResultRecordLink
-        ): Promise<CachedLink | undefined> => {
-          const record = await resolveRecordFromBuilder(l);
-          if (!record) {
-            return undefined;
-          }
-
-          switch (l.type) {
-            case FoundLinkType.ENTITY:
-              return {
-                type: CachedLinkType.ENTITY,
-                path: l.path,
-                pointer: l.pointer,
-                podId: record.authorId,
-                recordId: record.id,
-              };
-
-            case FoundLinkType.RECORD:
-              return {
-                type: CachedLinkType.RECORD,
-                path: l.path,
-                pointer: l.pointer,
-                podId: record.authorId,
-                recordId: record.id,
-              };
-
-            case FoundLinkType.VERSION:
-              return {
-                type: CachedLinkType.VERSION,
-                path: l.path,
-                pointer: l.pointer,
-                podId: record.authorId,
-                recordId: record.id,
-                versionHash: record.versionHash,
-              };
-
-            default:
-              unreachable(l);
-          }
-        };
-
-        switch (link.type) {
-          case FoundLinkType.TAG:
-            return {
-              type: CachedLinkType.TAG,
-              path: link.path,
-              pointer: link.pointer,
-              tag: link.value,
-            };
-
-          case FoundLinkType.BLOB:
-            return {
-              type: CachedLinkType.BLOB,
-              path: link.path,
-              pointer: link.pointer,
-              blobHash: link.value.hash,
-            };
-
-          default:
-            return linkWithRecordToCachedLink(link);
-        }
-      }
-    );
-    const links = (await Promise.all(linksPromises)).filter(isDefined);
-
-    const newCachedRecord = (() => {
-      const versionHash = result.record.version?.hash;
-      if (versionHash && builder.podId !== pod.id) {
-        return CachedRecord.ofExistingRecord(
-          builder.recordType,
-          pod.id,
-          builder.podId,
-          result.record,
-          links
-        );
-      }
-
-      if (builder.podId === pod.id) {
-        return CachedRecord.ofNewRecord(
-          builder.recordType,
-          pod,
-          result.record,
-          links
-        );
-      }
-
-      throw new Error(`Record is not valid: ${builder}`);
-    })();
-
-    await kvCachedRecords.set(newCachedRecord);
-    return newCachedRecord;
   }
 
   //
@@ -419,7 +260,12 @@ function buildPodServer(config: ServerConfig) {
     // Otherwise, delegate to the calling code.
     const context: RecordsRequestContext = {pod, query};
     const {builders} = await onRecordsRequest(context);
-    const records = await Promise.all(builders.map(resolveRecordFromBuilder));
+    const resolveCache = new Map<string, Promise<CachedRecord | undefined>>();
+    const records = await Promise.all(
+      builders.map(b =>
+        resolver.resolveRecordFromBuilder(pod, b, [], resolveCache)
+      )
+    );
 
     // TODO: Directly encode the response instead.
     const rawRecords = records.filter(isDefined).map(r => r.record);

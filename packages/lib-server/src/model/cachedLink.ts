@@ -31,7 +31,6 @@ const REntityCachedLink = IO.object({
   path: IO.string,
   pointer: IO.string,
   podId: IO.string,
-  recordId: IO.string,
 });
 
 const RRecordCachedLink = IO.object({

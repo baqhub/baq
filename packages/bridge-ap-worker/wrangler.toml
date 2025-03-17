@@ -27,14 +27,14 @@ name = "BAQ_POD_OBJECT"
 class_name = "BaqPodObject"
 
 [[migrations]]
-tag = "v2"
+tag = "v3"
 new_classes = ["BaqPodMappingObject", "BaqPodObject"]
 
 # Bind a KV Namespace. Use KV as persistent storage for small key-value pairs.
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#kv-namespaces
 [[kv_namespaces]]
 binding = "KV_WORKER_BRIDGE_AP"
-id = "ddbdc2934e624c71b3f5a79912c39e38"
+id = "8cf599ba367540f9991ba8bb40c5288c"
 
 # Bind an R2 Bucket. Use R2 to store arbitrarily large blobs of data, such as files.
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#r2-buckets
