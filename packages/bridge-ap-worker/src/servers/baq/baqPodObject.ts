@@ -116,8 +116,6 @@ export class BaqPodObject extends DurableObject {
     );
 
     const resolver = Resolver.new({
-      domain: Constants.domain,
-      basePath: Constants.baqRoutePrefix,
       digestStream,
       blobStoreAdapter,
       podKvStoreAdapter,
@@ -373,13 +371,16 @@ export class BaqPodObject extends DurableObject {
       return avatarToBlobRequest(this.fetchImageEnv, icon);
     })();
 
-    await this.resolver.saveEntityRecord({
-      pod: newPod,
-      avatar,
-      name: actor.name?.toString() || undefined,
-      bio: stripHtml(actor.summary?.toString() || "").result || undefined,
-      website: actor.url?.toString() || undefined,
-    });
+    await this.resolver.saveEntityRecord(
+      {
+        pod: newPod,
+        avatar,
+        name: actor.name?.toString() || undefined,
+        bio: stripHtml(actor.summary?.toString() || "").result || undefined,
+        website: actor.url?.toString() || undefined,
+      },
+      `https://${Constants.domain}${Constants.baqRoutePrefix}/${newPod.id}`
+    );
 
     // Save the pod.
     await this.storage.set(Pod.io, podKey, newPod);

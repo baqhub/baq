@@ -58,8 +58,6 @@ export interface EntityRecordRequest {
 //
 
 export interface ResolverConfig {
-  domain: string;
-  basePath?: string;
   digestStream: StreamDigester;
   blobStoreAdapter: BlobStoreAdapter;
   podKvStoreAdapter: KvStoreAdapter;
@@ -67,10 +65,8 @@ export interface ResolverConfig {
 }
 
 function buildResolver(config: ResolverConfig) {
-  const {domain, basePath} = config;
   const {digestStream, blobStoreAdapter} = config;
   const {podKvStoreAdapter, globalKvStoreAdapter} = config;
-  const baseUrl = `https://${domain}${basePath}`;
 
   const kvBlobUploads = KvBlobUploads.new(globalKvStoreAdapter);
   const kvCachedBlobs = KvCachedBlobs.new(globalKvStoreAdapter);
@@ -141,7 +137,10 @@ function buildResolver(config: ResolverConfig) {
     };
   }
 
-  async function saveEntityRecord(request: EntityRecordRequest) {
+  async function saveEntityRecord(
+    request: EntityRecordRequest,
+    baseUrl: string
+  ) {
     const {pod, avatar} = request;
     const avatarBlobLink = await (async () => {
       if (!avatar) {
@@ -172,17 +171,17 @@ function buildResolver(config: ResolverConfig) {
             preference: 0,
             endpoints: {
               auth: "",
-              records: `${baseUrl}/${pod.id}/records`,
-              record: `${baseUrl}/${pod.id}/records/{entity}/{record_id}`,
-              recordVersions: `${baseUrl}/${pod.id}/records/{entity}/{record_id}/versions`,
-              recordVersion: `${baseUrl}/${pod.id}/records/{entity}/{record_id}/versions/{version_hash}`,
+              records: `${baseUrl}/records`,
+              record: `${baseUrl}/records/{entity}/{record_id}`,
+              recordVersions: `${baseUrl}/records/{entity}/{record_id}/versions`,
+              recordVersion: `${baseUrl}/records/{entity}/{record_id}/versions/{version_hash}`,
               newRecord: "",
-              recordBlob: `${baseUrl}/${pod.id}/records/{entity}/{record_id}/blobs/{blob_hash}/{file_name}`,
-              recordVersionBlob: `${baseUrl}/${pod.id}/records/{entity}/{record_id}/versions/{version_hash}/blobs/{blob_hash}/{file_name}`,
+              recordBlob: `${baseUrl}/records/{entity}/{record_id}/blobs/{blob_hash}/{file_name}`,
+              recordVersionBlob: `${baseUrl}/records/{entity}/{record_id}/versions/{version_hash}/blobs/{blob_hash}/{file_name}`,
               newBlob: "",
               events: "",
-              newNotification: `${baseUrl}/${pod.id}/notifications`,
-              serverInfo: `${baseUrl}/${pod.id}`,
+              newNotification: `${baseUrl}/notifications`,
+              serverInfo: baseUrl,
             },
           },
         ],
