@@ -13,7 +13,7 @@ function tagLink<T extends string>(value: T) {
 
 export type TagLink<T extends string> = T;
 
-const RAnyTagLink = () => {
+const RAnyTagLink = (() => {
   const baseType = SchemaIO.string({
     minLength: 1,
     maxLength: 100,
@@ -27,7 +27,7 @@ const RAnyTagLink = () => {
     baseType,
     () => true
   );
-};
+})();
 
 export type AnyTagLink = string;
 

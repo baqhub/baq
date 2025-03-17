@@ -53,7 +53,7 @@ export enum NoContentRecordAction {
 export interface RecordVersion<T extends AnyRecord | NoContentRecord> {
   author: EntityLink;
   hash: VersionHash<T> | undefined;
-  hashSignature: string | undefined;
+  hashSignature: Uint8Array | undefined;
   createdAt: Date;
   receivedAt: Date | undefined;
   parentHash?: string;
@@ -139,7 +139,7 @@ const RRecordVersion: IO.Type<RecordVersion<any>> = IO.intersection([
   IO.object({
     author: EntityLink.io(),
     hash: IO.union([IO.undefined, IO.string]),
-    hashSignature: IO.union([IO.undefined, IO.string]),
+    hashSignature: IO.union([IO.undefined, IO.base64Bytes]),
     createdAt: IO.isoDate,
     receivedAt: IO.union([IO.undefined, IO.isoDate]),
   }),
@@ -495,14 +495,20 @@ function findLinksInRecord<T extends AnyRecord>(
   function findLinksInUnknown(
     type: IO.Any,
     value: unknown,
-    path: string
+    path: string,
+    pointer: string
   ): ReadonlyArray<FoundLink> {
     function findLinksInArray(
       type: CombinedArrayType<any>,
       value: ReadonlyArray<unknown>
     ) {
-      return value.reduce((result: Array<FoundLink>, v) => {
-        const links = findLinksInUnknown(type.type, v, `${path}[*]`);
+      return value.reduce((result: Array<FoundLink>, v, i) => {
+        const links = findLinksInUnknown(
+          type.type,
+          v,
+          `${path}[*]`,
+          `${pointer}/${i}`
+        );
         result.push(...links);
         return result;
       }, []);
@@ -514,7 +520,8 @@ function findLinksInRecord<T extends AnyRecord>(
           const links = findLinksInUnknown(
             type.codomain,
             v[key],
-            `${path}['${snakeCase(key)}']`
+            `${path}['${snakeCase(key)}']`,
+            `${pointer}/${snakeCase(key)}`
           );
 
           result.push(...links);
@@ -530,7 +537,8 @@ function findLinksInRecord<T extends AnyRecord>(
           const links = findLinksInUnknown(
             t as IO.Any,
             (value as any)[key],
-            `${path}['${snakeCase(key)}']`
+            `${path}['${snakeCase(key)}']`,
+            `${pointer}/${snakeCase(key)}`
           );
 
           result.push(...links);
@@ -543,7 +551,7 @@ function findLinksInRecord<T extends AnyRecord>(
     function findLinksInUnion(type: IO.UnionType<any>) {
       for (const t of type.types as IO.Any[]) {
         if (t.is(value)) {
-          return findLinksInUnknown(t, value, path);
+          return findLinksInUnknown(t, value, path, pointer);
         }
       }
 
@@ -552,30 +560,30 @@ function findLinksInRecord<T extends AnyRecord>(
 
     function findLinksInIntersection(type: IO.IntersectionType<any>) {
       return type.types.reduce((result: Array<FoundLink>, t: IO.Any) => {
-        const links = findLinksInUnknown(t, value, path);
+        const links = findLinksInUnknown(t, value, path, pointer);
         result.push(...links);
         return result;
       }, []);
     }
 
     if (type.name === RTagLinkName && type.is(value)) {
-      return [{type: FoundLinkType.TAG, path, value}];
+      return [{type: FoundLinkType.TAG, path, pointer, value}];
     }
 
     if (type.name === RBlobLinkName && type.is(value)) {
-      return [{type: FoundLinkType.BLOB, path, value}];
+      return [{type: FoundLinkType.BLOB, path, pointer, value}];
     }
 
     if (type.name === REntityLinkName && type.is(value)) {
-      return [{type: FoundLinkType.ENTITY, path, value}];
+      return [{type: FoundLinkType.ENTITY, path, pointer, value}];
     }
 
     if (type.name === RRecordLinkName && type.is(value)) {
-      return [{type: FoundLinkType.RECORD, path, value}];
+      return [{type: FoundLinkType.RECORD, path, pointer, value}];
     }
 
     if (type.name === RVersionLinkName && type.is(value)) {
-      return [{type: FoundLinkType.VERSION, path, value}];
+      return [{type: FoundLinkType.VERSION, path, pointer, value}];
     }
 
     if (
@@ -583,11 +591,11 @@ function findLinksInRecord<T extends AnyRecord>(
       type instanceof IO.ExactType ||
       type instanceof IO.RefinementType
     ) {
-      return findLinksInUnknown(type.type, value, path);
+      return findLinksInUnknown(type.type, value, path, pointer);
     }
 
     if (type instanceof RecordClassBase) {
-      return findLinksInUnknown(type.model, value, path);
+      return findLinksInUnknown(type.model, value, path, pointer);
     }
 
     if (
@@ -624,7 +632,7 @@ function findLinksInRecord<T extends AnyRecord>(
     return [];
   }
 
-  return findLinksInUnknown(type, record, "$");
+  return findLinksInUnknown(type, record, "$", "");
 }
 
 //

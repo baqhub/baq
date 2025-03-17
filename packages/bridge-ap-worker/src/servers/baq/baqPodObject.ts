@@ -202,7 +202,7 @@ export class BaqPodObject extends DurableObject {
                     switch (link.type) {
                       case FoundLinkType.TAG:
                       case FoundLinkType.BLOB:
-                        return undefined;
+                        return link;
 
                       case FoundLinkType.ENTITY: {
                         if (link.value.entity !== pod.entity) {
@@ -212,22 +212,20 @@ export class BaqPodObject extends DurableObject {
                         }
 
                         return {
-                          linkType: FoundLinkType.ENTITY,
-                          path: link.path,
+                          ...link,
                           podId: pod.id,
                           recordId: pod.id,
-                          type: EntityRecord,
+                          recordType: EntityRecord,
                           build: () => never(),
                         };
                       }
 
                       case FoundLinkType.RECORD:
                         return {
-                          linkType: FoundLinkType.RECORD,
-                          path: link.path,
+                          ...link,
                           podId: Hash.shortHash(link.value.entity),
                           recordId: link.value.recordId,
-                          type: AnyRecord,
+                          recordType: AnyRecord,
                           build: async () => {
                             const client = await Client.discover(
                               link.value.entity
@@ -245,11 +243,10 @@ export class BaqPodObject extends DurableObject {
 
                       case FoundLinkType.VERSION:
                         return {
-                          linkType: FoundLinkType.RECORD,
-                          path: link.path,
+                          ...link,
                           podId: Hash.shortHash(link.value.entity),
                           recordId: link.value.recordId,
-                          type: AnyRecord,
+                          recordType: AnyRecord,
                           build: async () => {
                             const client = await Client.discover(
                               link.value.entity
@@ -278,7 +275,7 @@ export class BaqPodObject extends DurableObject {
               yield {
                 podId: pod.id,
                 recordId: Hash.shortHash(note.id.toString()),
-                type: PostRecord,
+                recordType: PostRecord,
                 build,
               };
             }
@@ -286,7 +283,6 @@ export class BaqPodObject extends DurableObject {
 
         // Build corresponding records.
         const builders = await Array.fromAsync(buildersIterable());
-
         return {builders: builders.filter(isDefined)};
       };
 

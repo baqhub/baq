@@ -1,4 +1,8 @@
-import {IO, RSignAlgorithm} from "@baqhub/sdk";
+import {IO, RSignAlgorithm, Signature} from "@baqhub/sdk";
+
+//
+// Model.
+//
 
 export const RPodKeyPair = IO.object({
   algorithm: RSignAlgorithm,
@@ -18,6 +22,25 @@ export const RPod = IO.object({
 export interface PodKeyPair extends IO.TypeOf<typeof RPodKeyPair> {}
 export interface Pod extends IO.TypeOf<typeof RPod> {}
 
+//
+// API.
+//
+
+function signVersionHash(pod: Pod, versionHash: string) {
+  const firstKeyPair = pod.keyPairs[0];
+  if (!firstKeyPair) {
+    throw new Error("No keypair found in pod.");
+  }
+
+  const versionHashBytes = IO.decode(IO.utf8Bytes, versionHash);
+  return Signature.sign(firstKeyPair.privateKey, versionHashBytes);
+}
+
+//
+// Exports.
+//
+
 export const Pod = {
   io: RPod,
+  signVersionHash,
 };

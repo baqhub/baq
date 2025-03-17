@@ -17,39 +17,39 @@ export enum FoundLinkType {
   VERSION = "VERSION",
 }
 
-interface FoundLinkTag {
-  type: FoundLinkType.TAG;
+interface FoundLinkBase {
   path: string;
+  pointer: string;
+}
+
+export interface TagFoundLink extends FoundLinkBase {
+  type: FoundLinkType.TAG;
   value: TagLink<string>;
 }
 
-interface FoundLinkBlob {
+export interface BlobFoundLink extends FoundLinkBase {
   type: FoundLinkType.BLOB;
-  path: string;
   value: BlobLink<string>;
 }
 
-interface FoundLinkEntity {
+export interface EntityFoundLink extends FoundLinkBase {
   type: FoundLinkType.ENTITY;
-  path: string;
   value: EntityLink;
 }
 
-interface FoundLinkRecord {
+export interface RecordFoundLink extends FoundLinkBase {
   type: FoundLinkType.RECORD;
-  path: string;
   value: RecordLink<AnyRecord>;
 }
 
-interface FoundLinkVersion {
+export interface VersionFoundLink extends FoundLinkBase {
   type: FoundLinkType.VERSION;
-  path: string;
   value: VersionLink;
 }
 
 export type FoundLink =
-  | FoundLinkTag
-  | FoundLinkBlob
-  | FoundLinkEntity
-  | FoundLinkRecord
-  | FoundLinkVersion;
+  | TagFoundLink
+  | BlobFoundLink
+  | EntityFoundLink
+  | RecordFoundLink
+  | VersionFoundLink;

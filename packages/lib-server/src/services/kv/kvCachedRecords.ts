@@ -1,4 +1,4 @@
-import {AnyRecord, IO, RAnyRecord} from "@baqhub/sdk";
+import {IO} from "@baqhub/sdk";
 import {CachedRecord} from "../../model/cachedRecord.js";
 import {KvKey, KvStoreAdapter} from "./kvStoreAdapter.js";
 
@@ -21,23 +21,17 @@ function recordVersionKey(
 
 function build(kv: KvStoreAdapter) {
   return {
-    async get<K extends RAnyRecord>(
-      recordType: K,
-      podId: string,
-      authorId: string,
-      recordId: string
-    ) {
+    async get(podId: string, authorId: string, recordId: string) {
       const key = recordKey(podId, authorId, recordId);
       const rawRecord = await kv.get(key);
       if (!rawRecord) {
         return undefined;
       }
 
-      return IO.decode(CachedRecord.io(recordType), rawRecord);
+      return IO.decode(CachedRecord.io, rawRecord);
     },
 
-    async getVersion<K extends RAnyRecord>(
-      recordType: K,
+    async getVersion(
       podId: string,
       authorId: string,
       recordId: string,
@@ -49,21 +43,18 @@ function build(kv: KvStoreAdapter) {
         return undefined;
       }
 
-      return IO.decode(CachedRecord.io(recordType), rawRecord);
+      return IO.decode(CachedRecord.io, rawRecord);
     },
 
-    async set<T extends AnyRecord>(
-      recordType: IO.Type<T, unknown, unknown>,
-      record: CachedRecord<T>
-    ) {
-      const rawRecord = IO.encode(CachedRecord.io(recordType), record);
+    async set(record: CachedRecord) {
+      const rawRecord = IO.encode(CachedRecord.io, record);
 
-      const key = recordKey(record.ownerId, record.authorId, record.record.id);
+      const key = recordKey(record.ownerId, record.authorId, record.id);
       const versionKey = recordVersionKey(
         record.ownerId,
         record.authorId,
-        record.record.id,
-        record.record.version!.hash!
+        record.id,
+        record.versionHash
       );
 
       await Promise.all([

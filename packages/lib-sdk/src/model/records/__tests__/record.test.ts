@@ -34,6 +34,7 @@ describe("findLinks()", () => {
       [
         {
           "path": "$['author']",
+          "pointer": "/author",
           "type": "ENTITY",
           "value": {
             "entity": "author.host.com",
@@ -41,6 +42,7 @@ describe("findLinks()", () => {
         },
         {
           "path": "$['type']",
+          "pointer": "/type",
           "type": "VERSION",
           "value": {
             "entity": "system.baq.dev",
@@ -50,6 +52,7 @@ describe("findLinks()", () => {
         },
         {
           "path": "$['content']['publisher']",
+          "pointer": "/content/publisher",
           "type": "ENTITY",
           "value": {
             "entity": "publisher.host.com",
@@ -57,6 +60,7 @@ describe("findLinks()", () => {
         },
         {
           "path": "$['content']['record_type']",
+          "pointer": "/content/record_type",
           "type": "RECORD",
           "value": {
             "entity": "system.baq.dev",
@@ -115,6 +119,7 @@ describe("findLinks()", () => {
       [
         {
           "path": "$['author']",
+          "pointer": "/author",
           "type": "ENTITY",
           "value": {
             "entity": "author.host.com",
@@ -122,6 +127,7 @@ describe("findLinks()", () => {
         },
         {
           "path": "$['type']",
+          "pointer": "/type",
           "type": "VERSION",
           "value": {
             "entity": "system.baq.dev",
@@ -131,6 +137,7 @@ describe("findLinks()", () => {
         },
         {
           "path": "$['content']['scope_request']['read'][*]",
+          "pointer": "/content/scope_request/read/0",
           "type": "RECORD",
           "value": {
             "entity": "types.baq.dev",
@@ -139,6 +146,7 @@ describe("findLinks()", () => {
         },
         {
           "path": "$['content']['scope_request']['read'][*]",
+          "pointer": "/content/scope_request/read/1",
           "type": "RECORD",
           "value": {
             "entity": "types.baq.dev",
@@ -147,10 +155,12 @@ describe("findLinks()", () => {
         },
         {
           "path": "$['content']['icon']",
+          "pointer": "/content/icon",
           "type": "BLOB",
           "value": {
             "hash": "f51380bb4a2742ab8b5034ad471d3403d96264fcd3b744d89b9dc86cb6524bc7",
             "name": "icon.png",
+            "size": 1234,
             "type": "image/png",
           },
         },

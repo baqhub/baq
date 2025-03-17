@@ -201,15 +201,14 @@ function buildResolver(config: ResolverConfig) {
     );
 
     const newEntityCachedRecord = CachedRecord.ofNewRecord(
-      pod.id,
-      pod.id,
       EntityRecord,
+      pod,
       newEntityRecord,
       []
     );
 
     // And store it.
-    await kvCachedRecords.set(EntityRecord, newEntityCachedRecord);
+    await kvCachedRecords.set(newEntityCachedRecord);
   }
 
   return {
