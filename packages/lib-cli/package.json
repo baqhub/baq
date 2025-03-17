@@ -33,7 +33,7 @@
     "baq": "./build/src/index.js"
   },
   "dependencies": {
-    "@baqhub/sdk": "^0.1.27",
+    "@baqhub/sdk": "^0.1.28",
     "@commander-js/extra-typings": "13.1.0",
     "@inquirer/prompts": "7.3.2",
     "commander": "13.1.0",

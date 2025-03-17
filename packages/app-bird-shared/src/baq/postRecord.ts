@@ -24,26 +24,28 @@ export type PostRecordContent =
   | {
       /** Text content of the post. */
       text: string;
-      textMentions?: ReadonlyArray<{
-        /** Mentioned entity. */
-        mention: EntityLink;
 
-        /** Start position of the mention in Unicode code points. */
-        index: number;
+      /** Enrich the text content. */
+      textFacets?: ReadonlyArray<
+        {
+          /** Start position of the facet in Unicode code points. */
+          index: number;
 
-        /** Length of the mention in Unicode code points. */
-        length: number;
-      }>;
-      textLinks?: ReadonlyArray<{
-        /** URL of the link. */
-        url: string;
-
-        /** Start position of the link in Unicode code points. */
-        index: number;
-
-        /** Length of the link in Unicode code points. */
-        length: number;
-      }>;
+          /** Length of the facet in Unicode code points. */
+          length: number;
+        } & ExclusiveUnion<
+          | {
+              type: "mention";
+              /** Mentioned entity. */
+              mention: EntityLink;
+            }
+          | {
+              type: "web_link";
+              /** URL of the web link. */
+              url: string;
+            }
+        >
+      >;
     }
   | {
       images: ReadonlyArray<{
@@ -52,7 +54,6 @@ export type PostRecordContent =
         large: BlobLink<"image/jpeg">;
         width: number;
         height: number;
-        size: number;
         mentions?: ReadonlyArray<{
           mention: EntityLink;
           position: {x: number; y: number};
@@ -61,17 +62,17 @@ export type PostRecordContent =
     }
   | ExclusiveUnion<
       | {
-          /** Other Post record this replies to. */
+          /** Other post this replies to. */
           replyToPost: RecordLinkOf<
             "types.baq.dev",
-            "d8fe40d469e0455c896b058a043829bf"
+            "6f7faff90a7546e58c8f159353ab2c12"
           >;
         }
       | {
-          /** Other Post record this quotes. */
+          /** Other post this quotes. */
           quotePost: RecordLinkOf<
             "types.baq.dev",
-            "d8fe40d469e0455c896b058a043829bf"
+            "6f7faff90a7546e58c8f159353ab2c12"
           >;
         }
     >;
@@ -80,12 +81,20 @@ const RPostRecordContent: IO.RType<PostRecordContent> = IO.union([
   SchemaIO.object(
     {text: SchemaIO.string({minLength: 1, maxLength: 500})},
     {
-      textMentions: SchemaIO.array(
-        IO.object({
-          mention: EntityLink.io(),
-          index: SchemaIO.int({min: 0}),
-          length: SchemaIO.int({min: 1}),
-        })
+      textFacets: SchemaIO.array(
+        IO.intersection([
+          IO.object({
+            index: SchemaIO.int({min: 0}),
+            length: SchemaIO.int({min: 1}),
+          }),
+          IO.exclusiveUnion([
+            IO.object({type: IO.literal("mention"), mention: EntityLink.io()}),
+            IO.object({
+              type: IO.literal("web_link"),
+              url: SchemaIO.string({minLength: 1, maxLength: 2048}),
+            }),
+          ]),
+        ])
       ),
       textLinks: SchemaIO.array(
         IO.object({
@@ -105,7 +114,6 @@ const RPostRecordContent: IO.RType<PostRecordContent> = IO.union([
           large: BlobLink.io("image/jpeg"),
           width: SchemaIO.int({min: 1}),
           height: SchemaIO.int({min: 1}),
-          size: SchemaIO.int({min: 0}),
         },
         {
           mentions: SchemaIO.array(
@@ -126,13 +134,13 @@ const RPostRecordContent: IO.RType<PostRecordContent> = IO.union([
     IO.object({
       replyToPost: RecordLink.ioOf(
         "types.baq.dev",
-        "d8fe40d469e0455c896b058a043829bf"
+        "6f7faff90a7546e58c8f159353ab2c12"
       ),
     }),
     IO.object({
       quotePost: RecordLink.ioOf(
         "types.baq.dev",
-        "d8fe40d469e0455c896b058a043829bf"
+        "6f7faff90a7546e58c8f159353ab2c12"
       ),
     }),
   ]),
@@ -140,8 +148,8 @@ const RPostRecordContent: IO.RType<PostRecordContent> = IO.union([
 
 const [postRecordType, RPostRecordType] = RecordType.full(
   "types.baq.dev",
-  "d8fe40d469e0455c896b058a043829bf",
-  "9b55d28b043def185af3ba0bcf489d128478e61c34116a408c921eafb4329a77",
+  "6f7faff90a7546e58c8f159353ab2c12",
+  "b6bae8efe72af9e6064df3cfdef0679b2ac572ab39432f7e2cafa0953176bd2f",
   RPostRecordContent
 );
 

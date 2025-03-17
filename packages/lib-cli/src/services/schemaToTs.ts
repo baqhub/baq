@@ -91,10 +91,15 @@ export function schemaToTs(schema: Schema, name = "Type") {
     const [subTypes, returnType] = ((): [ReadonlyArray<string>, string] => {
       switch (schema.type) {
         case "object": {
-          const subTypes = Object.entries(schema.properties).map(
-            ([key, subSchema]) =>
-              [key, subSchema, schemaToTsInternal(subSchema)] as const
-          );
+          const subTypes = Object.entries(schema.properties)
+            .map(([key, subSchema]) => {
+              if (subSchema.removed) {
+                return undefined;
+              }
+
+              return [key, subSchema, schemaToTsInternal(subSchema)] as const;
+            })
+            .filter(isDefined);
 
           const subSchemas = subTypes
             .map(([key, , [mode, subType]]) => {
@@ -109,6 +114,10 @@ export function schemaToTs(schema: Schema, name = "Type") {
 
           const returnType = subTypes
             .map(([key, subSchema, [mode, subType]]) => {
+              if (subSchema.removed) {
+                return undefined;
+              }
+
               const optionalSign = subSchema.optional ? "?" : "";
               const propType =
                 mode === SchemaResultMode.SIMPLE
@@ -125,6 +134,7 @@ export function schemaToTs(schema: Schema, name = "Type") {
                 ${camelCase(key)}${optionalSign}: ${propType};
               `;
             })
+            .filter(isDefined)
             .join("");
 
           return [subSchemas, `{${returnType}}`];

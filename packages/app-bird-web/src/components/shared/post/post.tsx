@@ -106,7 +106,7 @@ const ActionButton = tiwi(ButtonRow)`
 //
 
 export const Post: FC<PostProps> = props => {
-  const {authorEntity, authorName, text, textMentions, date} = props;
+  const {authorEntity, authorName, text, textFacets, date} = props;
 
   return (
     <Layout>
@@ -132,7 +132,7 @@ export const Post: FC<PostProps> = props => {
           </DateText>
         </InfoRow>
         <BodyText>
-          <PostText text={text} textMentions={textMentions} />
+          <PostText text={text} textFacets={textFacets} />
         </BodyText>
         <Actions>
           <ActionButton>

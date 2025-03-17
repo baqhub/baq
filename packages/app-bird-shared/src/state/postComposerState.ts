@@ -1,8 +1,9 @@
-import {Array, RecordPermissions, Str, isDefined} from "@baqhub/sdk";
+import {Array, RecordPermissions, isDefined} from "@baqhub/sdk";
 import {useConstant} from "@baqhub/sdk-react";
 import {useCallback, useState} from "react";
 import {PostRecord, PostRecordContent} from "../baq/postRecord.js";
 import {useFindEntityRecord, useRecordHelpers} from "../baq/store.js";
+import {Facets} from "../helpers/facets.js";
 
 //
 // Constants.
@@ -14,11 +15,6 @@ const placeholders = [
   "Feeling chatty? What's up?",
   "What's your thought of the day?",
 ];
-
-// Matches mentions in the text.
-// Based on https://github.com/regexhq/mentions-regex.
-const regexMention =
-  /(?:^|[^a-zA-Z0-9_@!@#$%&*])(?:(?:@|@)(?!\/))([a-zA-Z0-9/_.]+)(?:\b(?!@|@)|$)/g;
 
 //
 // Props.
@@ -55,38 +51,17 @@ export function usePostComposerState({mention}: UsePostComposerStateProps) {
         return;
       }
 
-      // Find mentions.
-      const matches = trimmedText.matchAll(regexMention);
-      const textMentions = [...matches]
-        .map((match): TextMention | undefined => {
-          const entityText = match[1];
-          if (!entityText || !isDefined(match.index)) {
-            return undefined;
-          }
-
-          const index = match.index + match[0].indexOf("@");
-          const unicodeIndex = Str.unicodeIndex(trimmedText, index);
-          const unicodeLength = Str.unicodeLength("@" + entityText);
-
-          // Default to .baq.run if a partial entity is found.
-          const mentionedEntity = entityText.includes(".")
-            ? entityText
-            : `${entityText}.baq.run`;
-
-          return {
-            mention: {entity: mentionedEntity},
-            index: unicodeIndex,
-            length: unicodeLength,
-          };
-        })
-        .filter(isDefined);
+      // Find mentions and links.
+      const textFacets = Facets.findAll(trimmedText);
 
       // TODO: Verify and remove invalid mentions.
-      const notify = textMentions.map(mention => mention.mention);
+      const notify = textFacets
+        .map(facet => (facet.type === "mention" ? facet.mention : undefined))
+        .filter(isDefined);
 
       const postRecord = PostRecord.new(
         entity,
-        {text: trimmedText, textMentions},
+        {text: trimmedText, textFacets},
         {permissions: {...RecordPermissions.public, notify}}
       );
 

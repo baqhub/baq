@@ -3201,9 +3201,11 @@ const RAW_RUNTIME_STATE =
           ["@baqhub/sdk-react", "virtual:ef3e24271cc6014b88f53fb7e525003396e8aa0b4e2ebc2ce63dc4fe03f303799f82239cf206c964d610544e7f50d1a672fdbaf2eb9a1f4ec5a6b2e571e53c1f#workspace:packages/lib-sdk-react"],\
           ["@types/lodash", "npm:4.17.15"],\
           ["@types/react", "npm:19.0.10"],\
+          ["linkifyjs", "npm:4.2.0"],\
           ["lodash", "npm:4.17.21"],\
           ["react", "npm:19.0.0"],\
-          ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"]\
+          ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"],\
+          ["vitest", "virtual:28a3b42add2c462f25029e8605467cc8854806df10aedb182d8356898f159d8c6e6526142b40870a19fca1725d5b4e34e41538e35883dd53da2f7fdf4a263e15#npm:3.0.7"]\
         ],\
         "linkType": "SOFT"\
       }]\

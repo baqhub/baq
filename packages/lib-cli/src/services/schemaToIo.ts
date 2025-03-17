@@ -1,4 +1,5 @@
 import {
+  ObjectPropertySchema,
   Schema,
   SchemaArrayOptions,
   SchemaIntOptions,
@@ -55,7 +56,7 @@ export function schemaToIo(schema: Schema) {
         const newPath = `${path}${toRefNamespaceName(key)}.`;
         const subSchemaIo = schemaToIoInternal(newPath, subSchema);
 
-        return `const ${typeName}: RType<${newPath}Type> = IO.recursion("${ioName}", () => ${subSchemaIo})`;
+        return `const ${typeName}: IO.RType<${newPath}Type> = IO.recursion("${ioName}", () => ${subSchemaIo})`;
       })
       .join("\n\n");
 
@@ -63,7 +64,14 @@ export function schemaToIo(schema: Schema) {
     const returnType = ((): string => {
       switch (schema.type) {
         case "object": {
-          const mapProperty = (key: string, subSchema: Schema) => {
+          const mapProperty = (
+            key: string,
+            subSchema: ObjectPropertySchema
+          ) => {
+            if (subSchema.removed) {
+              return undefined;
+            }
+
             const newPath = `${path}${toPropNamespaceName(key)}.`;
             return `${camelCase(key)}: ${schemaToIoInternal(
               newPath,

@@ -41,7 +41,12 @@ export type IsUnion<T, U extends T = T> = (
   ? false
   : true;
 
-type Expand<T> = T extends object ? {[K in keyof T]: Expand<T[K]>} : T;
+type Expand<T> = T extends Date
+  ? T
+  : T extends object
+    ? {[K in keyof T]: Expand<T[K]>}
+    : T;
+
 type AllKeys<T> = T extends unknown ? keyof T : never;
 export type ExclusiveUnion<
   T,

@@ -39,6 +39,8 @@ const ProfileName = tiwi(Text)`
 
 const ProfileEntity = tiwi(Text)`
   text-md
+  text-neutral-500
+  dark:text-neutral-400
 `;
 
 const ProfileTopAvatar = tiwi(Column)`
