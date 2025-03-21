@@ -2,12 +2,12 @@ import {Hash, isDefined, RecordPermissions} from "@baqhub/sdk";
 import {BlobFromBuilder} from "@baqhub/server";
 import {Note} from "@fedify/fedify";
 import {Document} from "@fedify/fedify/vocab";
-import {stripHtml} from "string-strip-html";
 import {PostRecord, PostRecordContent} from "../baq/postRecord.js";
 import {
   FetchImageEnv,
   postImageToBlobRequests,
 } from "../services/blobFetcher.js";
+import {htmlToPostTextAndFacets} from "./string.js";
 
 const imageMediaTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
@@ -72,11 +72,13 @@ export async function noteToPostRecord(
 
   const attachments = await Promise.all(attachmentPromises);
   const images = attachments.filter(isDefined);
+  const {text, textFacets} = htmlToPostTextAndFacets(content.toString());
 
   return PostRecord.new(
     entity,
     {
-      text: stripHtml(content.toString()).result.slice(0, 499),
+      text,
+      textFacets,
       images,
     },
     {
