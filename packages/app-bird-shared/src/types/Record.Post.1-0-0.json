@@ -82,6 +82,31 @@
                   ]
                 },
                 "optional": true
+              },
+              "text_links": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "min_length": 1,
+                      "max_length": 2048,
+                      "description": "URL of the link."
+                    },
+                    "index": {
+                      "type": "int",
+                      "min": 1,
+                      "description": "Start position of the link in Unicode code points."
+                    },
+                    "length": {
+                      "type": "int",
+                      "min": 1,
+                      "description": "Length of the link in Unicode code points."
+                    }
+                  }
+                },
+                "optional": true
               }
             }
           },

@@ -96,6 +96,13 @@ const RPostRecordContent: IO.RType<PostRecordContent> = IO.union([
           ]),
         ])
       ),
+      textLinks: SchemaIO.array(
+        IO.object({
+          url: SchemaIO.string({minLength: 1, maxLength: 2048}),
+          index: SchemaIO.int({min: 1}),
+          length: SchemaIO.int({min: 1}),
+        })
+      ),
     }
   ),
   IO.object({

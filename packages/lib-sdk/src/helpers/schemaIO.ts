@@ -49,7 +49,7 @@ function schemaArray<I extends IO.Mixed>(
     return validateValue(value);
   }
 
-  return new IO.Type(
+  return new IO.RefinementType(
     "SchemaArray",
     isSchemaArray,
     (value: unknown, context) => {
@@ -64,7 +64,9 @@ function schemaArray<I extends IO.Mixed>(
 
       return IO.success(result.right);
     },
-    value => baseType.encode(value)
+    value => baseType.encode(value),
+    baseType,
+    () => true
   );
 }
 
@@ -252,6 +254,10 @@ function schemaNumber(options: SchemaNumberOptions = {}) {
     value => value
   );
 }
+
+//
+// Exports.
+//
 
 export const SchemaIO = {
   object: IO.dualObject,

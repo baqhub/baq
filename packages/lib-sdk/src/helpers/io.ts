@@ -169,9 +169,10 @@ export function partialObject<P extends t.Props>(
 
 export function dualObject<P1 extends t.Props, P2 extends t.Props>(
   props: P1,
-  partialProps: P2
+  partialProps: P2,
+  name?: string
 ) {
-  return t.intersection([object(props), partialObject(partialProps)]);
+  return t.intersection([object(props), partialObject(partialProps)], name);
 }
 
 //

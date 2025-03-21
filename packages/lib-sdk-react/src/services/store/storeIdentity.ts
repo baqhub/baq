@@ -96,6 +96,7 @@ function buildUnauthenticatedIdentity(): StoreIdentity {
         createdAt: date,
         receivedAt: date,
         hash: "0000000000000000000000000000000000000000000000000000000000000000",
+        hashSignature: undefined,
       },
       type: {
         entity: Constants.systemEntity,

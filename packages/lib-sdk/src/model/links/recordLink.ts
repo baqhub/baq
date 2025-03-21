@@ -26,6 +26,8 @@ export type AnyRecordLink = RecordLink<AnyRecord>;
 // Runtime model.
 //
 
+export const RRecordLinkName = "RecordLink";
+
 export class RRecordLinkClass<T extends RAnyRecordType> extends IO.Type<
   RecordLink<Record<IO.TypeOf<T>, any>>,
   unknown,
@@ -43,7 +45,7 @@ export class RRecordLinkClass<T extends RAnyRecordType> extends IO.Type<
       }
     );
 
-    super("RecordLink", model.is, model.validate, model.encode);
+    super(RRecordLinkName, model.is, model.validate, model.encode);
   }
 }
 
