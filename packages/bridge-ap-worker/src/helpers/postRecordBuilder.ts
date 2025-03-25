@@ -11,7 +11,7 @@ import {htmlToPostTextAndFacets} from "./string.js";
 
 const imageMediaTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
-export async function noteToPostRecord(
+async function postRecordOfNote(
   env: FetchImageEnv,
   blobFromRequest: BlobFromBuilder,
   entity: string,
@@ -88,3 +88,7 @@ export async function noteToPostRecord(
     }
   );
 }
+
+export const PostRecordBuilder = {
+  ofNote: postRecordOfNote,
+};

@@ -18,6 +18,7 @@
               },
               "text_facets": {
                 "type": "array",
+                "optional": true,
                 "description": "Enrich the text content.",
                 "items": {
                   "type": "intersection",
@@ -74,39 +75,50 @@
                               "min_length": 1,
                               "max_length": 2048,
                               "description": "URL of the web link."
+                            },
+                            "preview": {
+                              "type": "object",
+                              "optional": true,
+                              "description": "Preview card of the web link.",
+                              "properties": {
+                                "title": {
+                                  "type": "string",
+                                  "min_length": 1,
+                                  "max_length": 70
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "optional": true,
+                                  "min_length": 1,
+                                  "max_length": 200
+                                },
+                                "thumbnail": {
+                                  "type": "object",
+                                  "optional": true,
+                                  "properties": {
+                                    "image": {
+                                      "type": "blob_link",
+                                      "max_size": 81920,
+                                      "content_types": [
+                                        "image/jpeg"
+                                      ]
+                                    },
+                                    "alt": {
+                                      "type": "string",
+                                      "optional": true,
+                                      "min_length": 1,
+                                      "max_length": 125
+                                    }
+                                  }
+                                }
+                              }
                             }
                           }
                         }
                       ]
                     }
                   ]
-                },
-                "optional": true
-              },
-              "text_links": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "url": {
-                      "type": "string",
-                      "min_length": 1,
-                      "max_length": 2048,
-                      "description": "URL of the link."
-                    },
-                    "index": {
-                      "type": "int",
-                      "min": 1,
-                      "description": "Start position of the link in Unicode code points."
-                    },
-                    "length": {
-                      "type": "int",
-                      "min": 1,
-                      "description": "Length of the link in Unicode code points."
-                    }
-                  }
-                },
-                "optional": true
+                }
               }
             }
           },
@@ -149,8 +161,15 @@
                       "type": "int",
                       "min": 1
                     },
+                    "alt": {
+                      "type": "string",
+                      "optional": true,
+                      "min_length": 1,
+                      "max_length": 125
+                    },
                     "mentions": {
                       "type": "array",
+                      "optional": true,
                       "items": {
                         "type": "object",
                         "properties": {
@@ -174,8 +193,7 @@
                             }
                           }
                         }
-                      },
-                      "optional": true
+                      }
                     }
                   }
                 }

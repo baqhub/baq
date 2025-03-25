@@ -37,8 +37,8 @@ import {DurableObject} from "cloudflare:workers";
 import {stripHtml} from "string-strip-html";
 import {PostRecord} from "../../baq/postRecord.js";
 import {Constants} from "../../helpers/constants.js";
-import {noteToPostRecord} from "../../helpers/convert.js";
 import {patchedDocumentLoader} from "../../helpers/fedify.js";
+import {PostRecordBuilder} from "../../helpers/postRecordBuilder.js";
 import {ActorIdentity} from "../../model/actorIdentity.js";
 import {CloudflareBlob} from "../../services/blob/cloudflareBlob.js";
 import {
@@ -88,7 +88,7 @@ export class BaqPodObject extends DurableObject {
     super(ctx, env);
 
     const fetchImageEnv: FetchImageEnv = {
-      DEV_IMAGES_AUTH_KEY: env.DEV_IMAGES_AUTH_KEY,
+      IMAGES_AUTH_KEY: env.IMAGES_AUTH_KEY,
     };
 
     const podIdStoreBase = PodMappingObjectStore.new(
@@ -253,7 +253,7 @@ export class BaqPodObject extends DurableObject {
                 recordId: Hash.shortHash(note.id.toString()),
                 recordType: PostRecord,
                 build: () =>
-                  noteToPostRecord(
+                  PostRecordBuilder.ofNote(
                     fetchImageEnv,
                     resolver.blobFromBuilder,
                     pod.entity,

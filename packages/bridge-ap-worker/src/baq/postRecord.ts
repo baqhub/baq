@@ -43,6 +43,13 @@ export type PostRecordContent =
               type: "web_link";
               /** URL of the web link. */
               url: string;
+
+              /** Preview card of the web link. */
+              preview?: {
+                title: string;
+                description?: string;
+                thumbnail?: {image: BlobLink<"image/jpeg">; alt?: string};
+              };
             }
         >
       >;
@@ -54,6 +61,7 @@ export type PostRecordContent =
         large: BlobLink<"image/jpeg">;
         width: number;
         height: number;
+        alt?: string;
         mentions?: ReadonlyArray<{
           mention: EntityLink;
           position: {x: number; y: number};
@@ -89,10 +97,27 @@ const RPostRecordContent: IO.RType<PostRecordContent> = IO.union([
           }),
           IO.exclusiveUnion([
             IO.object({type: IO.literal("mention"), mention: EntityLink.io()}),
-            IO.object({
-              type: IO.literal("web_link"),
-              url: SchemaIO.string({minLength: 1, maxLength: 2048}),
-            }),
+            SchemaIO.object(
+              {
+                type: IO.literal("web_link"),
+                url: SchemaIO.string({minLength: 1, maxLength: 2048}),
+              },
+              {
+                preview: SchemaIO.object(
+                  {title: SchemaIO.string({minLength: 1, maxLength: 70})},
+                  {
+                    description: SchemaIO.string({
+                      minLength: 1,
+                      maxLength: 200,
+                    }),
+                    thumbnail: SchemaIO.object(
+                      {image: BlobLink.io("image/jpeg")},
+                      {alt: SchemaIO.string({minLength: 1, maxLength: 125})}
+                    ),
+                  }
+                ),
+              }
+            ),
           ]),
         ])
       ),
@@ -109,6 +134,7 @@ const RPostRecordContent: IO.RType<PostRecordContent> = IO.union([
           height: SchemaIO.int({min: 1}),
         },
         {
+          alt: SchemaIO.string({minLength: 1, maxLength: 125}),
           mentions: SchemaIO.array(
             IO.object({
               mention: EntityLink.io(),
@@ -142,7 +168,7 @@ const RPostRecordContent: IO.RType<PostRecordContent> = IO.union([
 const [postRecordType, RPostRecordType] = RecordType.full(
   "types.baq.dev",
   "6f7faff90a7546e58c8f159353ab2c12",
-  "b6bae8efe72af9e6064df3cfdef0679b2ac572ab39432f7e2cafa0953176bd2f",
+  "65dc78a34ca5cbfc7a038d7934552861f1711b20f930ea0366f236b37c8e859a",
   RPostRecordContent
 );
 

@@ -1,5 +1,6 @@
 import {BlobBuilder} from "@baqhub/server";
 import {Document, Image} from "@fedify/fedify/vocab";
+import {Constants} from "../helpers/constants";
 
 const avatarMaxSize = 262144;
 const imageMaxAttempts = 2;
@@ -34,7 +35,7 @@ interface ImageRequestAttempt {
 }
 
 export interface FetchImageEnv {
-  DEV_IMAGES_AUTH_KEY: string;
+  IMAGES_AUTH_KEY: string;
 }
 
 function fetchResizeImage(
@@ -47,9 +48,9 @@ function fetchResizeImage(
   }
 
   // Needed because CF-Images doesn't work in Durable Objects.
-  return fetch("https://images.dev.baq.lol", {
+  return fetch(Constants.imagesServiceUrl, {
     body: JSON.stringify({
-      auth_key: env.DEV_IMAGES_AUTH_KEY,
+      auth_key: env.IMAGES_AUTH_KEY,
       image_url: url.toString(),
       fit: "scale-down",
       format: attempt.format,

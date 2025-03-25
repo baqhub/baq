@@ -11,8 +11,8 @@
     "post": {
       "path": "src/types/Record.Post.1-0-0.json",
       "record_id": "6f7faff90a7546e58c8f159353ab2c12",
-      "version_hash": "b6bae8efe72af9e6064df3cfdef0679b2ac572ab39432f7e2cafa0953176bd2f",
-      "content_hash": "04e87dc34278d2fa61091cd37a778572",
+      "version_hash": "65dc78a34ca5cbfc7a038d7934552861f1711b20f930ea0366f236b37c8e859a",
+      "content_hash": "1986a794d2ac6b0897c107eac11c15e6",
       "scopes": [
         "read",
         "write",
