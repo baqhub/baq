@@ -6,13 +6,21 @@ import {PostRecord, PostRecordContent} from "../baq/postRecord.js";
 import {
   FetchImageEnv,
   postImageToBlobRequests,
-} from "../services/blobFetcher.js";
+} from "../services/imageFetcher.js";
+import {
+  FetchPreviewEnv,
+  postLinkToPreview,
+} from "../services/previewFetcher.js";
 import {htmlToPostTextAndFacets} from "./string.js";
 
 const imageMediaTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
+type PostMedia = Extract<PostRecordContent, {media: any}>["media"];
+type PostWebLink = Extract<PostMedia, {type: "web_link"}>;
+type PostImage = Extract<PostMedia, {type: "images"}>["images"][0];
+
 async function postRecordOfNote(
-  env: FetchImageEnv,
+  env: FetchImageEnv & FetchPreviewEnv,
   blobFromRequest: BlobFromBuilder,
   entity: string,
   note: Note
@@ -26,12 +34,7 @@ async function postRecordOfNote(
 
   const attachmentDocs = await Array.fromAsync(note.getAttachments());
   const attachmentPromises = attachmentDocs.map(
-    async (
-      doc,
-      index
-    ): Promise<
-      undefined | Extract<PostRecordContent, {images: any}>["images"][0]
-    > => {
+    async (doc, index): Promise<PostImage | undefined> => {
       if (!(doc instanceof Document)) {
         return undefined;
       }
@@ -70,16 +73,50 @@ async function postRecordOfNote(
     }
   );
 
-  const attachments = await Promise.all(attachmentPromises);
-  const images = attachments.filter(isDefined);
   const {text, textFacets} = htmlToPostTextAndFacets(content.toString());
+
+  const webLinkPreviewPromise = (async (): Promise<PostWebLink | undefined> => {
+    const firstLink = textFacets
+      .map(l => (l.type === "web_link" ? l : undefined))
+      .find(isDefined);
+    if (!firstLink) {
+      return undefined;
+    }
+
+    const preview = await postLinkToPreview(env, firstLink.url);
+    if (!preview) {
+      return undefined;
+    }
+
+    const thumbnail =
+      preview.imageBlobRequest &&
+      (await blobFromRequest(preview.imageBlobRequest));
+    const thumbnailLink = thumbnail?.link;
+
+    return {
+      type: "web_link",
+      url: firstLink.url,
+      title: preview.title,
+      description: preview.description,
+      thumbnail: thumbnailLink && {image: thumbnailLink},
+    };
+  })();
+
+  const [imagesMaybe, webLinkPreview] = await Promise.all([
+    Promise.all(attachmentPromises),
+    webLinkPreviewPromise,
+  ]);
+
+  const images = imagesMaybe.filter(isDefined);
+  const media: PostMedia | undefined =
+    images.length > 0 ? {type: "images", images} : webLinkPreview;
 
   return PostRecord.new(
     entity,
     {
       text,
       textFacets,
-      images,
+      media,
     },
     {
       id: Hash.shortHash(id.toString()),

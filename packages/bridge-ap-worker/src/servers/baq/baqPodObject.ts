@@ -44,9 +44,10 @@ import {CloudflareBlob} from "../../services/blob/cloudflareBlob.js";
 import {
   avatarToBlobRequest,
   FetchImageEnv,
-} from "../../services/blobFetcher.js";
+} from "../../services/imageFetcher.js";
 import {CloudflareDurableKv} from "../../services/kv/cloudflareDurableKv.js";
 import {CloudflareKv} from "../../services/kv/cloudflareKv.js";
+import {FetchPreviewEnv} from "../../services/previewFetcher.js";
 import {BaqActor} from "./baqActor.js";
 import {PodMappingObjectStore} from "./baqPodMappingObject.js";
 
@@ -87,8 +88,9 @@ export class BaqPodObject extends DurableObject {
   constructor(ctx: DurableObjectState, env: Env) {
     super(ctx, env);
 
-    const fetchImageEnv: FetchImageEnv = {
+    const fetchEnv: FetchImageEnv & FetchPreviewEnv = {
       IMAGES_AUTH_KEY: env.IMAGES_AUTH_KEY,
+      PREVIEWS_AUTH_KEY: env.PREVIEWS_AUTH_KEY,
     };
 
     const podIdStoreBase = PodMappingObjectStore.new(
@@ -188,7 +190,7 @@ export class BaqPodObject extends DurableObject {
       globalKvStoreAdapter,
     });
 
-    this.fetchImageEnv = fetchImageEnv;
+    this.fetchEnv = fetchEnv;
     this.resolver = resolver;
     this.storage = CloudflareDurableKv.ofStorageTyped(ctx.storage);
     this.podMappings = PodMappingObjectStore.new(env.BAQ_POD_MAPPING_OBJECT);
@@ -254,7 +256,7 @@ export class BaqPodObject extends DurableObject {
                 recordType: PostRecord,
                 build: () =>
                   PostRecordBuilder.ofNote(
-                    fetchImageEnv,
+                    fetchEnv,
                     resolver.blobFromBuilder,
                     pod.entity,
                     note
@@ -290,7 +292,7 @@ export class BaqPodObject extends DurableObject {
 
   private storage: KvTypedStoreAdapter;
   private podMappings: PodMappingObjectStore;
-  private fetchImageEnv: FetchImageEnv;
+  private fetchEnv: FetchImageEnv & FetchPreviewEnv;
   private resolver: Resolver;
 
   private setPod: (pod: Pod) => void;
@@ -351,7 +353,7 @@ export class BaqPodObject extends DurableObject {
         return undefined;
       }
 
-      return avatarToBlobRequest(this.fetchImageEnv, icon);
+      return avatarToBlobRequest(this.fetchEnv, icon);
     })();
 
     try {

@@ -64,7 +64,7 @@ function fetchResizeImage(
   });
 }
 
-async function fetchImage(env: FetchImageEnv, request: ImageRequest) {
+export async function fetchImage(env: FetchImageEnv, request: ImageRequest) {
   async function fetchAttempt(attempt?: ImageRequestAttempt) {
     const response = await fetchResizeImage(env, request.url, attempt);
     if (!response.body) {
