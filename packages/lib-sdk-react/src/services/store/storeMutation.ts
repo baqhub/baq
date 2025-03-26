@@ -203,6 +203,7 @@ export async function performMutationRequest<
       const newVersion: RecordVersion<any> = {
         author: {entity},
         hash: undefined,
+        hashSignature: undefined,
         createdAt: newVersionCreatedAt,
         receivedAt: undefined,
         ...record.version,

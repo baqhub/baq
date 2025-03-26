@@ -58,7 +58,7 @@
     "packages/*"
   ],
   "private": true,
-  "packageManager": "yarn@4.6.0",
+  "packageManager": "yarn@4.7.0",
   "resolutions": {
     "react-element-to-jsx-string": "15.0.0",
     "@mdx-js/react": "3.0.1"
