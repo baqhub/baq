@@ -51,7 +51,7 @@ export type PostRecordContent = (
   | {
       media:
         | {
-            type: TagLink<"web_link">;
+            type: TagLink<"web_link_preview">;
             /** URL of the web link. */
             url: string;
             title: string;
@@ -80,14 +80,14 @@ export type PostRecordContent = (
         /** Other post this replies to. */
         replyToPost?: RecordLinkOf<
           "types.baq.dev",
-          "9264d41250904126891629b8bc990f50"
+          "9ff7bc7c66a04f3fb2c2078e7d696a46"
         >;
       }
     | {
         /** Other post this quotes. */
         quotePost?: RecordLinkOf<
           "types.baq.dev",
-          "9264d41250904126891629b8bc990f50"
+          "9ff7bc7c66a04f3fb2c2078e7d696a46"
         >;
       }
   >;
@@ -121,7 +121,7 @@ const RPostRecordContent: IO.RType<PostRecordContent> = IO.intersection([
       media: IO.union([
         SchemaIO.object(
           {
-            type: TagLink.io("web_link"),
+            type: TagLink.io("web_link_preview"),
             url: SchemaIO.string({minLength: 1, maxLength: 2048}),
             title: SchemaIO.string({minLength: 1, maxLength: 70}),
           },
@@ -167,13 +167,13 @@ const RPostRecordContent: IO.RType<PostRecordContent> = IO.intersection([
     IO.partialObject({
       replyToPost: RecordLink.ioOf(
         "types.baq.dev",
-        "9264d41250904126891629b8bc990f50"
+        "9ff7bc7c66a04f3fb2c2078e7d696a46"
       ),
     }),
     IO.partialObject({
       quotePost: RecordLink.ioOf(
         "types.baq.dev",
-        "9264d41250904126891629b8bc990f50"
+        "9ff7bc7c66a04f3fb2c2078e7d696a46"
       ),
     }),
   ]),
@@ -181,8 +181,8 @@ const RPostRecordContent: IO.RType<PostRecordContent> = IO.intersection([
 
 const [postRecordType, RPostRecordType] = RecordType.full(
   "types.baq.dev",
-  "9264d41250904126891629b8bc990f50",
-  "33a0772a3cab53d9febf08cbb2dcfdef24d986fa35033723ea69eeb0585833e4",
+  "9ff7bc7c66a04f3fb2c2078e7d696a46",
+  "2ea82c005797a255e064e0a6f10971b67fa529157e223b1c31f9bf0c6c806258",
   RPostRecordContent
 );
 

@@ -99,7 +99,7 @@
                           "type": {
                             "type": "tag_link",
                             "enum": [
-                              "web_link"
+                              "web_link_preview"
                             ]
                           },
                           "url": {

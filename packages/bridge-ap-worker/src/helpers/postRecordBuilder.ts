@@ -16,7 +16,7 @@ import {htmlToPostTextAndFacets} from "./string.js";
 const imageMediaTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
 type PostMedia = Extract<PostRecordContent, {media: any}>["media"];
-type PostWebLink = Extract<PostMedia, {type: "web_link"}>;
+type PostWebLink = Extract<PostMedia, {type: "web_link_preview"}>;
 type PostImage = Extract<PostMedia, {type: "images"}>["images"][0];
 
 async function postRecordOfNote(
@@ -94,7 +94,7 @@ async function postRecordOfNote(
     const thumbnailLink = thumbnail?.link;
 
     return {
-      type: "web_link",
+      type: "web_link_preview",
       url: firstLink.url,
       title: preview.title,
       description: preview.description,

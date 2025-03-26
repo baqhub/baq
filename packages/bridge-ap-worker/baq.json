@@ -5,8 +5,8 @@
   "record_types": {
     "post": {
       "entity": "types.baq.dev",
-      "record_id": "9264d41250904126891629b8bc990f50",
-      "version_hash": "33a0772a3cab53d9febf08cbb2dcfdef24d986fa35033723ea69eeb0585833e4"
+      "record_id": "9ff7bc7c66a04f3fb2c2078e7d696a46",
+      "version_hash": "2ea82c005797a255e064e0a6f10971b67fa529157e223b1c31f9bf0c6c806258"
     }
   }
 }
