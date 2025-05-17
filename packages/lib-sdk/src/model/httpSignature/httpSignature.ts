@@ -1,6 +1,6 @@
 import {Constants} from "../../constants.js";
 import * as IO from "../../helpers/io.js";
-import {sign} from "../../helpers/signature.js";
+import {Signature} from "../../helpers/signature.js";
 import {Str} from "../../helpers/string.js";
 import {
   HttpSignatureHeader,
@@ -91,7 +91,7 @@ function httpSign(
   };
 
   const signatureString = buildSignatureString(prefix, initialSignature, input);
-  const signatureBytes = sign(
+  const signatureBytes = Signature.sign(
     privateKey,
     IO.decode(IO.utf8Bytes, signatureString)
   );

@@ -55,6 +55,93 @@ function queryOr<T extends ReadonlyArray<QueryFilter<AnyRecord>>>(
   return [QueryFilterType.OR, filters] as any;
 }
 
+const nextTokenRegexp = /^((?:\()|(?:\))|(?:[^,()]*)),{0,1}(.*)/;
+type IntermediateResult = [ReadonlyArray<QueryFilter<UnknownRecord>>, string];
+
+function queryFilterOfString(filterString: string): QueryFilter<UnknownRecord> {
+  function parseQueryFilters(
+    fragment: string,
+    depth: number
+  ): IntermediateResult {
+    const tokenMatch = fragment.match(nextTokenRegexp);
+    if (
+      !tokenMatch ||
+      typeof tokenMatch[1] !== "string" ||
+      typeof tokenMatch[2] !== "string"
+    ) {
+      throw new Error("Bad filter.");
+    }
+
+    const token = tokenMatch[1];
+    const rest = tokenMatch[2];
+
+    function handleGroup(startRest: string): IntermediateResult {
+      const [groupFilters, groupRest] = parseQueryFilters(startRest, depth + 1);
+      const [filters, rest] = parseQueryFilters(groupRest, depth);
+
+      if (depth > 10) {
+        throw new Error(`Filter is too deep: ${filterString}`);
+      } else if (depth % 2) {
+        // Odd depth.
+        return [[queryOr(...groupFilters), ...filters], rest];
+      } else {
+        // Even depth.
+        return [[queryAnd(...groupFilters), ...filters], rest];
+      }
+    }
+
+    function handleLink(
+      linkString: string,
+      linkRest: string
+    ): IntermediateResult {
+      const link = QueryLink.ofString(linkString);
+      const [filters, rest] = parseQueryFilters(linkRest, depth);
+      return [[queryLink(link), ...filters], rest];
+    }
+
+    // End of string.
+    if (token === "" && rest === "") {
+      return [[], ""];
+    }
+
+    // Start of group.
+    if (token === "(") {
+      return handleGroup(rest);
+    }
+
+    // End of group.
+    if (token === ")") {
+      return [[], rest];
+    }
+
+    return handleLink(token, rest);
+  }
+
+  const [filters] = parseQueryFilters(filterString, 1);
+
+  // Single filter: unwrap.
+  if (filters.length === 1 && filters[0]) {
+    return filters[0];
+  }
+
+  // Otherwise, combine with AND.
+  return queryAnd(...filters);
+}
+
+function queryFilterOfStrings(
+  filterStrings: ReadonlyArray<string>
+): QueryFilter<UnknownRecord> {
+  const orFilters = filterStrings.map(queryFilterOfString);
+
+  // Single filter: unwrap.
+  if (orFilters.length === 1 && orFilters[0]) {
+    return orFilters[0];
+  }
+
+  // Otherwise: combine with OR.
+  return queryOr(...orFilters);
+}
+
 function queryFilterToString<T extends AnyRecord>(filter: QueryFilter<T>) {
   function toStringWithDepth(filter: QueryFilter<T>, depth: number): string {
     function filtersToString(filters: ReadonlyArray<QueryFilter<T>>) {
@@ -243,6 +330,10 @@ function queryTag(path: string, tag: string) {
   return QueryFilter.link(QueryLink.pathLink(path, QueryLinkValue.tag(tag)));
 }
 
+function queryBlob(path: string, hash: string) {
+  return QueryFilter.link(QueryLink.pathLink(path, QueryLinkValue.blob(hash)));
+}
+
 function queryEntity(path: string, entity: string) {
   return QueryFilter.link(
     QueryLink.pathLink(path, QueryLinkValue.entity(entity))
@@ -290,6 +381,7 @@ export const QueryFilter = {
   and: queryAnd,
   or: queryOr,
   tag: queryTag,
+  blob: queryBlob,
   entity: queryEntity,
   record: queryRecord,
   version: queryVersion,
@@ -297,6 +389,8 @@ export const QueryFilter = {
   author: queryAuthor,
   type: queryType,
   empty: queryEmpty,
+  ofString: queryFilterOfString,
+  ofStrings: queryFilterOfStrings,
   toString: queryFilterToString,
   toListString: queryFilterToListString,
   isMatch: queryFilterIsMatch,

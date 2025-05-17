@@ -5,157 +5,230 @@
     "type": "object",
     "properties": {
       "content": {
-        "type": "union",
+        "type": "intersection",
         "schemas": [
           {
-            "type": "object",
-            "properties": {
-              "text": {
-                "type": "string",
-                "min_length": 1,
-                "max_length": 500,
-                "description": "Text content of the post."
-              },
-              "text_facets": {
-                "type": "array",
-                "description": "Enrich the text content.",
-                "items": {
-                  "type": "intersection",
-                  "schemas": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "index": {
-                          "type": "int",
-                          "min": 0,
-                          "description": "Start position of the facet in Unicode code points."
-                        },
-                        "length": {
-                          "type": "int",
-                          "min": 1,
-                          "description": "Length of the facet in Unicode code points."
-                        }
-                      }
-                    },
-                    {
-                      "type": "union",
-                      "strict": true,
+            "type": "union",
+            "schemas": [
+              {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "min_length": 1,
+                    "max_length": 500,
+                    "description": "Text content of the post."
+                  },
+                  "text_facets": {
+                    "type": "array",
+                    "optional": true,
+                    "description": "Enrich the text content.",
+                    "items": {
+                      "type": "intersection",
                       "schemas": [
                         {
                           "type": "object",
                           "properties": {
-                            "type": {
-                              "type": "string",
-                              "enum": [
-                                "mention"
-                              ]
+                            "index": {
+                              "type": "int",
+                              "min": 0,
+                              "description": "Start position of the facet in Unicode code points."
                             },
-                            "mention": {
-                              "type": "entity_link",
-                              "min_permissions": [
-                                "read",
-                                "notify"
-                              ],
-                              "description": "Mentioned entity."
+                            "length": {
+                              "type": "int",
+                              "min": 1,
+                              "description": "Length of the facet in Unicode code points."
                             }
                           }
                         },
                         {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string",
-                              "enum": [
-                                "web_link"
-                              ]
+                          "type": "union",
+                          "schemas": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "mention"
+                                  ]
+                                },
+                                "mention": {
+                                  "type": "entity_link",
+                                  "min_permissions": [
+                                    "read",
+                                    "notify"
+                                  ],
+                                  "description": "Mentioned entity."
+                                }
+                              }
                             },
-                            "url": {
-                              "type": "string",
-                              "min_length": 1,
-                              "max_length": 2048,
-                              "description": "URL of the web link."
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "web_link"
+                                  ]
+                                },
+                                "url": {
+                                  "type": "string",
+                                  "min_length": 1,
+                                  "max_length": 2048,
+                                  "description": "URL of the web link."
+                                }
+                              }
                             }
-                          }
+                          ]
                         }
                       ]
                     }
-                  ]
-                },
-                "optional": true
-              }
-            }
-          },
-          {
-            "type": "object",
-            "properties": {
-              "images": {
-                "type": "array",
-                "min_items": 1,
-                "max_items": 4,
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "small": {
-                      "type": "blob_link",
-                      "max_size": 81920,
-                      "content_types": [
-                        "image/jpeg"
-                      ]
-                    },
-                    "medium": {
-                      "type": "blob_link",
-                      "max_size": 614400,
-                      "content_types": [
-                        "image/jpeg"
-                      ]
-                    },
-                    "large": {
-                      "type": "blob_link",
-                      "max_size": 2097152,
-                      "content_types": [
-                        "image/jpeg"
-                      ]
-                    },
-                    "width": {
-                      "type": "int",
-                      "min": 1
-                    },
-                    "height": {
-                      "type": "int",
-                      "min": 1
-                    },
-                    "mentions": {
-                      "type": "array",
-                      "items": {
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "media": {
+                    "type": "union",
+                    "schemas": [
+                      {
                         "type": "object",
                         "properties": {
-                          "mention": {
-                            "type": "entity_link",
-                            "min_permissions": [
-                              "read"
+                          "type": {
+                            "type": "tag_link",
+                            "enum": [
+                              "web_link_preview"
                             ]
                           },
-                          "position": {
+                          "url": {
+                            "type": "string",
+                            "min_length": 1,
+                            "max_length": 2048,
+                            "description": "URL of the web link."
+                          },
+                          "title": {
+                            "type": "string",
+                            "min_length": 1,
+                            "max_length": 70
+                          },
+                          "description": {
+                            "type": "string",
+                            "optional": true,
+                            "min_length": 1,
+                            "max_length": 200
+                          },
+                          "thumbnail": {
                             "type": "object",
+                            "optional": true,
                             "properties": {
-                              "x": {
-                                "type": "int",
-                                "min": 0
+                              "image": {
+                                "type": "blob_link",
+                                "max_size": 81920,
+                                "content_types": [
+                                  "image/jpeg"
+                                ]
                               },
-                              "y": {
-                                "type": "int",
-                                "min": 0
+                              "alt": {
+                                "type": "string",
+                                "optional": true,
+                                "min_length": 1,
+                                "max_length": 125
                               }
                             }
                           }
                         }
                       },
-                      "optional": true
-                    }
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "tag_link",
+                            "enum": [
+                              "images"
+                            ]
+                          },
+                          "images": {
+                            "type": "array",
+                            "min_items": 1,
+                            "max_items": 4,
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "small": {
+                                  "type": "blob_link",
+                                  "max_size": 81920,
+                                  "content_types": [
+                                    "image/jpeg"
+                                  ]
+                                },
+                                "medium": {
+                                  "type": "blob_link",
+                                  "max_size": 614400,
+                                  "content_types": [
+                                    "image/jpeg"
+                                  ]
+                                },
+                                "large": {
+                                  "type": "blob_link",
+                                  "max_size": 2097152,
+                                  "content_types": [
+                                    "image/jpeg"
+                                  ]
+                                },
+                                "width": {
+                                  "type": "int",
+                                  "min": 1
+                                },
+                                "height": {
+                                  "type": "int",
+                                  "min": 1
+                                },
+                                "alt": {
+                                  "type": "string",
+                                  "optional": true,
+                                  "min_length": 1,
+                                  "max_length": 125
+                                },
+                                "mentions": {
+                                  "type": "array",
+                                  "optional": true,
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "mention": {
+                                        "type": "entity_link",
+                                        "min_permissions": [
+                                          "read"
+                                        ]
+                                      },
+                                      "position": {
+                                        "type": "object",
+                                        "properties": {
+                                          "x": {
+                                            "type": "int",
+                                            "min": 0
+                                          },
+                                          "y": {
+                                            "type": "int",
+                                            "min": 0
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
                   }
                 }
               }
-            }
+            ]
           },
           {
             "type": "union",
@@ -190,6 +263,10 @@
                     "description": "Other post this quotes."
                   }
                 }
+              },
+              {
+                "type": "object",
+                "properties": {}
               }
             ]
           }

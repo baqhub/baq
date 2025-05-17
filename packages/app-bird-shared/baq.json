@@ -10,9 +10,9 @@
     },
     "post": {
       "path": "src/types/Record.Post.1-0-0.json",
-      "record_id": "6f7faff90a7546e58c8f159353ab2c12",
-      "version_hash": "b6bae8efe72af9e6064df3cfdef0679b2ac572ab39432f7e2cafa0953176bd2f",
-      "content_hash": "04e87dc34278d2fa61091cd37a778572",
+      "record_id": "875d6b82645e4833a3f0dca3fb79d69d",
+      "version_hash": "9121df704bbc7244985844b23b9fe8f588d4f936292009507f232bbef1b9d856",
+      "content_hash": "df9ba67dd868edb02cfb4961ae9e23a6",
       "scopes": [
         "read",
         "write",

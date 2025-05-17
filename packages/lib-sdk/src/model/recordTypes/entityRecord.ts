@@ -40,14 +40,14 @@ const REntityRecordProfile = IO.partialObject({
   location: IO.string,
 });
 
-const REntityRecordKey = IO.object({
+const REntityRecordSigningKey = IO.object({
   algorithm: RCredentialsAlgorithm,
   publicKey: IO.base64Bytes,
 });
 
 const EntityRecordContent = IO.object({
   previousEntities: IO.readonlyArray(IO.string),
-  signingKeys: IO.readonlyArray(REntityRecordKey),
+  signingKeys: IO.readonlyArray(REntityRecordSigningKey),
   profile: REntityRecordProfile,
   servers: IO.readonlyArray(REntityRecordServer),
 });
@@ -76,6 +76,9 @@ export type EntityVersionHash = VersionHash<EntityRecord>;
 
 export type EntityRecordServerEndpoint =
   keyof EntityRecord["content"]["servers"][number]["endpoints"];
+
+export interface EntityRecordSigningKey
+  extends IO.TypeOf<typeof REntityRecordSigningKey> {}
 
 //
 // I/O.
