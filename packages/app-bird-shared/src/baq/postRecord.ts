@@ -78,18 +78,19 @@ export type PostRecordContent = (
   ExclusiveUnion<
     | {
         /** Other post this replies to. */
-        replyToPost?: RecordLinkOf<
+        replyToPost: RecordLinkOf<
           "types.baq.dev",
-          "9ff7bc7c66a04f3fb2c2078e7d696a46"
+          "875d6b82645e4833a3f0dca3fb79d69d"
         >;
       }
     | {
         /** Other post this quotes. */
-        quotePost?: RecordLinkOf<
+        quotePost: RecordLinkOf<
           "types.baq.dev",
-          "9ff7bc7c66a04f3fb2c2078e7d696a46"
+          "875d6b82645e4833a3f0dca3fb79d69d"
         >;
       }
+    | {}
   >;
 
 const RPostRecordContent: IO.RType<PostRecordContent> = IO.intersection([
@@ -164,25 +165,26 @@ const RPostRecordContent: IO.RType<PostRecordContent> = IO.intersection([
     }),
   ]),
   IO.exclusiveUnion([
-    IO.partialObject({
+    IO.object({
       replyToPost: RecordLink.ioOf(
         "types.baq.dev",
-        "9ff7bc7c66a04f3fb2c2078e7d696a46"
+        "875d6b82645e4833a3f0dca3fb79d69d"
       ),
     }),
-    IO.partialObject({
+    IO.object({
       quotePost: RecordLink.ioOf(
         "types.baq.dev",
-        "9ff7bc7c66a04f3fb2c2078e7d696a46"
+        "875d6b82645e4833a3f0dca3fb79d69d"
       ),
     }),
+    IO.object({}),
   ]),
 ]);
 
 const [postRecordType, RPostRecordType] = RecordType.full(
   "types.baq.dev",
-  "9ff7bc7c66a04f3fb2c2078e7d696a46",
-  "2ea82c005797a255e064e0a6f10971b67fa529157e223b1c31f9bf0c6c806258",
+  "875d6b82645e4833a3f0dca3fb79d69d",
+  "9121df704bbc7244985844b23b9fe8f588d4f936292009507f232bbef1b9d856",
   RPostRecordContent
 );
 

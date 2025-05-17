@@ -239,7 +239,6 @@
                 "properties": {
                   "reply_to_post": {
                     "type": "record_link",
-                    "optional": true,
                     "record_types": [
                       {
                         "entity": "{var:entity}",
@@ -255,7 +254,6 @@
                 "properties": {
                   "quote_post": {
                     "type": "record_link",
-                    "optional": true,
                     "record_types": [
                       {
                         "entity": "{var:entity}",
@@ -265,6 +263,10 @@
                     "description": "Other post this quotes."
                   }
                 }
+              },
+              {
+                "type": "object",
+                "properties": {}
               }
             ]
           }

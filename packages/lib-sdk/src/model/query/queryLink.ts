@@ -3,7 +3,7 @@ import compact from "lodash/compact.js";
 import {never} from "../../helpers/customError.js";
 import {unreachable} from "../../helpers/type.js";
 import {AnyRecord, UnknownRecord} from "../records/record.js";
-import {normalizePath} from "./pathHelpers.js";
+import {normalizePath, normalizeSnakePath} from "./pathHelpers.js";
 import {QueryLinkValue} from "./queryLinkValue.js";
 
 //
@@ -16,16 +16,23 @@ export enum QueryLinkType {
   EMPTY_PATH_LINK = "empty_path_link",
 }
 
-type QueryLinkLink<T extends AnyRecord> = [
-  QueryLinkType.LINK,
-  QueryLinkValue<T>,
-];
-type QueryLinkPathLink<T extends AnyRecord> = [
-  QueryLinkType.PATH_LINK,
-  string,
-  QueryLinkValue<T>,
-];
-type QueryLinkEmptyPathLink = [QueryLinkType.EMPTY_PATH_LINK, string];
+type QueryLinkLink<T extends AnyRecord> = {
+  type: QueryLinkType.LINK;
+  value: QueryLinkValue<T>;
+};
+
+type QueryLinkPathLink<T extends AnyRecord> = {
+  type: QueryLinkType.PATH_LINK;
+  path: string;
+  snakePath: string;
+  value: QueryLinkValue<T>;
+};
+
+type QueryLinkEmptyPathLink = {
+  type: QueryLinkType.EMPTY_PATH_LINK;
+  path: string;
+  snakePath: string;
+};
 
 export type QueryLink<T extends AnyRecord> =
   | QueryLinkLink<T>
@@ -39,18 +46,30 @@ export type QueryLink<T extends AnyRecord> =
 function buildLink<T extends AnyRecord = UnknownRecord>(
   value: QueryLinkValue<T>
 ): QueryLinkLink<T> {
-  return [QueryLinkType.LINK, value];
+  return {
+    type: QueryLinkType.LINK,
+    value,
+  };
 }
 
 function buildPathLink<T extends AnyRecord = UnknownRecord>(
   path: string,
   value: QueryLinkValue<T>
 ): QueryLinkPathLink<T> {
-  return [QueryLinkType.PATH_LINK, normalizePath(path), value];
+  return {
+    type: QueryLinkType.PATH_LINK,
+    path: normalizePath(path),
+    snakePath: normalizeSnakePath(path),
+    value,
+  };
 }
 
 function buildEmptyPathLink(path: string): QueryLinkEmptyPathLink {
-  return [QueryLinkType.EMPTY_PATH_LINK, normalizePath(path)];
+  return {
+    type: QueryLinkType.EMPTY_PATH_LINK,
+    path: normalizePath(path),
+    snakePath: normalizeSnakePath(path),
+  };
 }
 
 const linkRegexp = /^(?:(\$[^=]+)=)?(.*)$/;
@@ -66,33 +85,33 @@ function queryLinkOfString(linkString: string): QueryLink<UnknownRecord> {
 
   // Empty path link.
   if (path && valueString === "") {
-    return [QueryLinkType.EMPTY_PATH_LINK, path];
+    return buildEmptyPathLink(path);
   }
 
   // Path link.
   const value = QueryLinkValue.ofString(valueString);
   if (path) {
-    return [QueryLinkType.PATH_LINK, path, value];
+    return buildPathLink(path, value);
   }
 
   // Link.
-  return [QueryLinkType.LINK, value];
+  return buildLink(value);
 }
 
 function queryLinkToString<T extends AnyRecord>(queryLink: QueryLink<T>) {
-  switch (queryLink[0]) {
+  switch (queryLink.type) {
     case QueryLinkType.LINK:
-      return QueryLinkValue.toString(queryLink[1]);
+      return QueryLinkValue.toString(queryLink.value);
 
     case QueryLinkType.PATH_LINK: {
-      const path = queryLink[1];
-      const valueString = QueryLinkValue.toString(queryLink[2]);
+      const {snakePath} = queryLink;
+      const valueString = QueryLinkValue.toString(queryLink.value);
 
-      return `${path}=${valueString}`;
+      return `${snakePath}=${valueString}`;
     }
 
     case QueryLinkType.EMPTY_PATH_LINK:
-      return `${normalizePath(queryLink[1])}=`;
+      return `${queryLink.snakePath}=`;
 
     default:
       unreachable(queryLink[0]);
@@ -119,15 +138,15 @@ function linkIsInRecord<T extends AnyRecord>(
   record: T,
   queryLink: QueryLink<T>
 ) {
-  switch (queryLink[0]) {
+  switch (queryLink.type) {
     case QueryLinkType.LINK:
       throw new Error("TODO: Implement local link detection.");
 
     case QueryLinkType.PATH_LINK:
-      return recordHasLinkAtPath(queryLink[1], queryLink[2], record);
+      return recordHasLinkAtPath(queryLink.path, queryLink.value, record);
 
     case QueryLinkType.EMPTY_PATH_LINK:
-      return recordHasEmptyPathLink(queryLink[1], record);
+      return recordHasEmptyPathLink(queryLink.path, record);
 
     default:
       unreachable(queryLink[0]);
@@ -138,25 +157,25 @@ function queryLinkIsSuperset(
   link1: QueryLink<AnyRecord>,
   link2: QueryLink<AnyRecord>
 ) {
-  switch (link1[0]) {
+  switch (link1.type) {
     case QueryLinkType.LINK:
       return (
-        (link2[0] === QueryLinkType.LINK &&
-          QueryLinkValue.match(link1[1], link2[1])) ||
-        (link2[0] === QueryLinkType.PATH_LINK &&
-          QueryLinkValue.match(link1[1], link2[2]))
+        (link2.type === QueryLinkType.LINK ||
+          link2.type === QueryLinkType.PATH_LINK) &&
+        QueryLinkValue.match(link1.value, link2.value)
       );
 
     case QueryLinkType.PATH_LINK:
       return (
-        link2[0] === QueryLinkType.PATH_LINK &&
-        link1[1] === link2[1] &&
-        QueryLinkValue.match(link1[2], link2[2])
+        link2.type === QueryLinkType.PATH_LINK &&
+        link1.path === link2.path &&
+        QueryLinkValue.match(link1.value, link2.value)
       );
 
     case QueryLinkType.EMPTY_PATH_LINK:
       return (
-        link2[0] === QueryLinkType.EMPTY_PATH_LINK && link1[1] === link2[1]
+        link2.type === QueryLinkType.EMPTY_PATH_LINK &&
+        link1.path === link2.path
       );
 
     default:
