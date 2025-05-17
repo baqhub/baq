@@ -16,7 +16,7 @@ import {
   UnknownRecord,
 } from "../records/record.js";
 import {RecordKey} from "../records/recordKey.js";
-import {normalizePath} from "./pathHelpers.js";
+import {normalizeSnakePath} from "./pathHelpers.js";
 import {QueryDate} from "./queryDate.js";
 import {Q, QueryFilter} from "./queryFilter.js";
 import {QuerySort, QuerySortDirection, QuerySortProperty} from "./querySort.js";
@@ -185,7 +185,7 @@ function queryToQueryString<T extends AnyRecord>(query: Query<T>) {
     ["max", query.max && QueryDate.toString(query.max)],
     ["page_start", query.pageStart && QueryDate.toString(query.pageStart)],
     ["page_size", (query.pageSize || Constants.defaultPageSize).toString()],
-    ["distinct", query.distinct && normalizePath(query.distinct)],
+    ["distinct", query.distinct && normalizeSnakePath(query.distinct)],
     ["sources", query.sources?.join(",")],
     ...(filterStrings || []).map(f => ["filter", f] as const),
     ["include_links", includeLinksToString(query.includeLinks)],
@@ -230,7 +230,7 @@ function includeLinksToString(
       return link;
     }
 
-    return normalizePath(link);
+    return normalizeSnakePath(link);
   }
 
   return includeLinks?.map(includeLinkToString).join(",");

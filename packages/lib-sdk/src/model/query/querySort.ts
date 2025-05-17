@@ -1,6 +1,6 @@
 import {JSONPath} from "jsonpath-plus";
 import {AnyRecord, NoContentRecord} from "../records/record.js";
-import {normalizePath} from "./pathHelpers.js";
+import {normalizeSnakePath} from "./pathHelpers.js";
 
 //
 // Model.
@@ -43,7 +43,7 @@ const querySortSyncDefault: QuerySort = [
 ];
 
 function querySortToString(querySort: QuerySort) {
-  const property = normalizePath(querySort[0]);
+  const property = normalizeSnakePath(querySort[0]);
   const direction = querySortDirectionMap[querySort[1]];
 
   return `${property}+${direction}`;
