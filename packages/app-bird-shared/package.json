@@ -14,14 +14,14 @@
     "@baqhub/cli": "*",
     "@baqhub/sdk": "*",
     "@baqhub/sdk-react": "*",
-    "linkifyjs": "4.2.0",
+    "linkifyjs": "4.3.1",
     "lodash": "4.17.21",
-    "react": "19.0.0"
+    "react": "19.1.0"
   },
   "devDependencies": {
-    "@types/lodash": "4.17.15",
-    "@types/react": "19.0.10",
-    "typescript": "5.7.3",
-    "vitest": "3.0.7"
+    "@types/lodash": "4.17.16",
+    "@types/react": "19.1.4",
+    "typescript": "5.8.3",
+    "vitest": "3.1.3"
   }
 }
