@@ -40,7 +40,7 @@ import {
   useMemo,
   useRef,
 } from "react";
-import {useSyncExternalStoreWithSelector} from "use-sync-external-store/with-selector.js";
+import {useSyncExternalStoreWithSelector} from "use-sync-external-store/with-selector";
 import {isReferenceEqual, isShallowEqual} from "../../helpers/equality.js";
 import {
   abortable,
