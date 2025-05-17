@@ -1,6 +1,6 @@
 const linkHeaderRegexp = /<([^>]+)>;\srel="([^"]+)"/g;
 
-export function findLink(headers: Headers, rel: string) {
+function findLink(headers: Headers, rel: string) {
   const linkHeader = headers.get("Link");
   if (!linkHeader) {
     return undefined;
@@ -14,3 +14,12 @@ export function findLink(headers: Headers, rel: string) {
 
   return firstLink;
 }
+
+function buildLink(value: string, rel: string) {
+  return `<${value}>; rel="${rel}"`;
+}
+
+export const Headers = {
+  findLink,
+  buildLink,
+};

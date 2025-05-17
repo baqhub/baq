@@ -14,6 +14,8 @@ export interface EntityLink {
 // Runtime model.
 //
 
+export const REntityLinkName = "EntityLink";
+
 export class REntityLinkClass extends IO.Type<EntityLink, unknown, unknown> {
   constructor() {
     const model = IO.dualObject(
@@ -26,7 +28,7 @@ export class REntityLinkClass extends IO.Type<EntityLink, unknown, unknown> {
       }
     );
 
-    super("EntityLink", model.is, model.validate, model.encode);
+    super(REntityLinkName, model.is, model.validate, model.encode);
   }
 }
 

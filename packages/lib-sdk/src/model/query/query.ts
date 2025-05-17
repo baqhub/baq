@@ -13,6 +13,7 @@ import {
   NoContentRecord,
   RecordMode,
   RecordSource,
+  UnknownRecord,
 } from "../records/record.js";
 import {RecordKey} from "../records/recordKey.js";
 import {normalizePath} from "./pathHelpers.js";
@@ -100,6 +101,67 @@ function queryOfKey<T extends AnyRecord>(
     pageSize: 1,
     filter: Q.and(Q.author(entity), Q.id(recordId)),
   } as Query<T>;
+}
+
+type Params = Record<string, string[]>;
+type Parser<T> = (value: string) => T | undefined;
+
+function readSingle<T>(
+  params: Params,
+  key: string,
+  parser: Parser<T>
+): T | undefined {
+  const values = params[key];
+  if (!values) {
+    return undefined;
+  }
+
+  const first = values[0];
+  if (typeof first === "undefined") {
+    return undefined;
+  }
+
+  return parser(first);
+}
+
+function readInt(params: Params, key: string) {
+  const parser = (value: string) => {
+    const num = Number(value);
+    return Number.isSafeInteger(num) ? num : undefined;
+  };
+
+  return readSingle(params, key, parser);
+}
+
+function readBoolean(params: Params, key: string) {
+  const parser = (value: string) => {
+    return value.toLowerCase() === "true";
+  };
+
+  return readSingle(params, key, parser);
+}
+
+function queryOfQueryParams(queryParams: Params): Query<UnknownRecord> {
+  const pageSize = readInt(queryParams, "page_size");
+  const filterStrings = queryParams["filter"];
+
+  return {
+    pageSize: Number.isSafeInteger(pageSize)
+      ? pageSize
+      : Constants.defaultPageSize,
+    includeDeleted: readBoolean(queryParams, "include_deleted"),
+    filter: filterStrings && QueryFilter.ofStrings(filterStrings),
+  };
+}
+
+function queryOfQueryString(queryString: string): Query<UnknownRecord> {
+  const params = Str.parseQuery(queryString).reduce((state, [key, value]) => {
+    const values = state[key] || (state[key] = []);
+    values.push(value);
+    return state;
+  }, {} as Params);
+
+  return queryOfQueryParams(params);
 }
 
 function querySingleToQueryString(query: SingleQuery | undefined) {
@@ -355,32 +417,6 @@ function queryFilter<R extends AnyRecord, T extends R>(
   return flow(sort(), distinct(), filter(), pageSize())(records);
 }
 
-function queryIsMatch(query1: Query<AnyRecord>, query2: Query<AnyRecord>) {
-  const {["filter"]: filter1, ...q1} = query1;
-  const {["filter"]: filter2, ...q2} = query2;
-
-  if (!isEqual(q1, q2)) {
-    return false;
-  }
-
-  if (filter1 && filter2) {
-    return (
-      QueryFilter.isSuperset(filter1, filter2) &&
-      QueryFilter.isSuperset(filter2, filter1)
-    );
-  }
-
-  return !filter1 && !filter2;
-}
-
-function queryIsSuperset(query1: Query<AnyRecord>, query2: Query<AnyRecord>) {
-  if (query1.distinct !== query2.distinct) {
-    return false;
-  }
-
-  return queryIsSyncSuperset(query1, query2);
-}
-
 function queryIsSyncSuperset(
   query1: Query<AnyRecord>,
   query2: Query<AnyRecord>
@@ -405,20 +441,48 @@ function queryIsSyncSuperset(
     return QueryFilter.isSuperset(query1.filter, query2.filter);
   }
 
-  return !query1.filter && !query2.filter;
+  return !query1.filter;
+}
+
+function queryIsSuperset(query1: Query<AnyRecord>, query2: Query<AnyRecord>) {
+  if (query1.distinct !== query2.distinct) {
+    return false;
+  }
+
+  return queryIsSyncSuperset(query1, query2);
+}
+
+function queryIsMatch(query1: Query<AnyRecord>, query2: Query<AnyRecord>) {
+  const {["filter"]: filter1, ...q1} = query1;
+  const {["filter"]: filter2, ...q2} = query2;
+
+  if (!isEqual(q1, q2)) {
+    return false;
+  }
+
+  if (filter1 && filter2) {
+    return (
+      QueryFilter.isSuperset(filter1, filter2) &&
+      QueryFilter.isSuperset(filter2, filter1)
+    );
+  }
+
+  return !filter1 && !filter2;
 }
 
 export const Query = {
   new: queryNew,
   ofKey: queryOfKey,
+  ofQueryParams: queryOfQueryParams,
+  ofQueryString: queryOfQueryString,
   singleToQueryString: querySingleToQueryString,
   toQueryString: queryToQueryString,
   toSync: queryToSync,
   findBoundary: queryFindBoundary,
   filter: queryFilter,
-  isMatch: queryIsMatch,
-  isSuperset: queryIsSuperset,
   isSyncSuperset: queryIsSyncSuperset,
+  isSuperset: queryIsSuperset,
+  isMatch: queryIsMatch,
   defaultIncludeLinks,
   defaultSources,
 };

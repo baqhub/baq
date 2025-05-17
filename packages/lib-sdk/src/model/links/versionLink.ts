@@ -4,6 +4,8 @@ import * as IO from "../../helpers/io.js";
 // Model.
 //
 
+export const RVersionLinkName = "VersionLink";
+
 const RVersionLinkRaw = IO.dualObject(
   {
     entity: IO.string,
@@ -12,7 +14,8 @@ const RVersionLinkRaw = IO.dualObject(
   },
   {
     originalEntity: IO.string,
-  }
+  },
+  RVersionLinkName
 );
 
 export interface VersionLink extends IO.TypeOf<typeof RVersionLinkRaw> {}
