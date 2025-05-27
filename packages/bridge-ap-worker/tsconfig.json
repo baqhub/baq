@@ -1,0 +1,33 @@
+{
+  "extends": [
+    "../../tsconfig.base"
+  ],
+  "compilerOptions": {
+    "outDir": "./build/esm",
+    "baseUrl": "./src",
+    "declaration": true,
+    "target": "ESNext",
+    "lib": [
+      "ESNext"
+    ],
+    "module": "es2022",
+    "moduleResolution": "Bundler",
+    "types": [
+      "@cloudflare/workers-types"
+    ],
+    "noEmit": true,
+  },
+  "include": [
+    "src",
+    "worker-configuration.d.ts",
+    "vitest.config.ts"
+  ],
+  "references": [
+    {
+      "path": "../lib-sdk"
+    },
+    {
+      "path": "../lib-server"
+    }
+  ]
+}

@@ -7,6 +7,12 @@ export function usePostState(post: PostRecord) {
   const {entity, proxyEntity, updateRecords} = useRecordHelpers();
   const author = useFindEntityRecord(post.author.entity);
 
+  if (
+    "linkPreview" in post.content &&
+    typeof post.content.linkPreview !== "undefined"
+  ) {
+  }
+
   if (!("text" in post.content)) {
     throw new Error("Not supported.");
   }

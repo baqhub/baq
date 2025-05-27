@@ -19,6 +19,7 @@ export * from "./helpers/uuid.js";
 //
 // Model.
 //
+export * from "./model/core/entity.js";
 export * from "./model/core/httpStatusCode.js";
 export * from "./model/core/schema.js";
 export * from "./model/links/blobLink.js";
