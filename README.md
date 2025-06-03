@@ -14,7 +14,7 @@ This is the monorepo for all the core open-source BAQ projects:
 | [@baqhub/sdk-react-native](packages/lib-sdk-react-native) | BAQ React Native SDK  | [![react-native sdk version](https://img.shields.io/npm/v/@baqhub/sdk-react-native.svg?label=%20&color=)](https://www.npmjs.com/package/@baqhub/sdk-react-native) |
 | [@baqhub/sdk-expo](packages/lib-sdk-expo)                 | BAQ Expo SDK          | [![expo sdk version](https://img.shields.io/npm/v/@baqhub/sdk-expo.svg?label=%20&color=)](https://www.npmjs.com/package/@baqhub/sdk-expo)                         |
 | [files-web](packages/app-files-web)                       | Files demo web app    | [Web app](https://files.baq.dev)                                                                                                                                  |
-| [messages-web](packages/app-files-web)                    | Messages demo web app | [Web app](https://messages.baq.dev)                                                                                                                               |
+| [messages-web](packages/app-messages-web)                    | Messages demo web app | [Web app](https://messages.baq.dev)                                                                                                                               |
 | [bird-web](packages/app-bird-web)                         | Bird demo web app     | [Web app](https://bird.baq.dev)                                                                                                                                   |
 
 ## Getting started
